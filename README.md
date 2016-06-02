@@ -12,7 +12,7 @@ Visit https://www.etsms.com/docs/hosted-payments
 ## Customize Payment Acceptance Types
 ![Acceptance Types](https://camo.githubusercontent.com/805042a42f8e6396a37569ddd002748510c4268a/687474703a2f2f696d322e657a6769662e636f6d2f746d702f657a6769662d333832313537303331392e676966)
 
-## Sample Callback Response (success)
+### Sample Callback Response (success)
 
 | Name                                   | Value                                                                 |
 |----------------------------------------|-----------------------------------------------------------------------|
@@ -42,6 +42,16 @@ Visit https://www.etsms.com/docs/hosted-payments
 | application\_identifier                | <span class="string">Hosted Payments</span>                           |
 | application\_response\_code            | <span class="string"></span>                                          |
 | application\_issuer\_data              | <span class="string"></span>                                          |
+
+### Sample Callback Response (error)
+
+| Name        | Value                                                                                          |
+|-------------|------------------------------------------------------------------------------------------------|
+| status      | <span class="string">Error</span>                                                              |
+| message     | <span class="string">ERROR – No response from gateway script. The response code is Z10.</span> |
+| created\_on | <span class="string">2016-06-02T19:53:34.286Z</span>                                           |
+| token       | <span class="string">7a3e3977-b378-4dea-8e77-7f63c9<wbr>1fc938</span>                          |
+
 
 ## Support
 Visit https://www.etsms.com/support
