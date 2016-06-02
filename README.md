@@ -1,4 +1,4 @@
-![Hosted Payments](https://i.imgsafe.org/04cb2dc5cd.png)
+![Hosted Payments](http://im2.ezgif.com/tmp/ezgif-2684665854.gif)
 
 # Hosted Payments
 Hosted Payments is a comprehensive, browser-based financial transaction toolset,
