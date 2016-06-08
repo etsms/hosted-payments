@@ -22,51 +22,51 @@
 // Closure
 (function(){
 
-    /**
-     * Decimal adjustment of a number.
-     *
-     * @param   {String}    type    The type of adjustment.
-     * @param   {Number}    value   The number.
-     * @param   {Integer}   exp     The exponent (the 10 logarithm of the adjustment base).
-     * @returns {Number}            The adjusted value.
-     */
-    function decimalAdjust(type, value, exp) {
-        // If the exp is undefined or zero...
-        if (typeof exp === 'undefined' || +exp === 0) {
-            return Math[type](value);
-        }
-        value = +value;
-        exp = +exp;
-        // If the value is not a number or the exp is not an integer...
-        if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
-            return NaN;
-        }
-        // Shift
-        value = value.toString().split('e');
-        value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
-        // Shift back
-        value = value.toString().split('e');
-        return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
-    }
+	/**
+	 * Decimal adjustment of a number.
+	 *
+	 * @param	{String}	type	The type of adjustment.
+	 * @param	{Number}	value	The number.
+	 * @param	{Integer}	exp		The exponent (the 10 logarithm of the adjustment base).
+	 * @returns	{Number}			The adjusted value.
+	 */
+	function decimalAdjust(type, value, exp) {
+		// If the exp is undefined or zero...
+		if (typeof exp === 'undefined' || +exp === 0) {
+			return Math[type](value);
+		}
+		value = +value;
+		exp = +exp;
+		// If the value is not a number or the exp is not an integer...
+		if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+			return NaN;
+		}
+		// Shift
+		value = value.toString().split('e');
+		value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+		// Shift back
+		value = value.toString().split('e');
+		return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+	}
 
-    // Decimal round
-    if (!Math.round10) {
-        Math.round10 = function(value, exp) {
-            return decimalAdjust('round', value, exp);
-        };
-    }
-    // Decimal floor
-    if (!Math.floor10) {
-        Math.floor10 = function(value, exp) {
-            return decimalAdjust('floor', value, exp);
-        };
-    }
-    // Decimal ceil
-    if (!Math.ceil10) {
-        Math.ceil10 = function(value, exp) {
-            return decimalAdjust('ceil', value, exp);
-        };
-    }
+	// Decimal round
+	if (!Math.round10) {
+		Math.round10 = function(value, exp) {
+			return decimalAdjust('round', value, exp);
+		};
+	}
+	// Decimal floor
+	if (!Math.floor10) {
+		Math.floor10 = function(value, exp) {
+			return decimalAdjust('floor', value, exp);
+		};
+	}
+	// Decimal ceil
+	if (!Math.ceil10) {
+		Math.ceil10 = function(value, exp) {
+			return decimalAdjust('ceil', value, exp);
+		};
+	}
 
 })();
 /* jquery.signalR.core.js */
@@ -3994,6 +3994,28 @@
 
         };
 
+        var isTrackAccount = function(req) {
+
+            if (isBankAccount(req)) {
+                return false;
+            }
+
+            if (isEMoney(req)) {
+                return false;
+            }
+
+            if (isCreditCard(req)) {
+                return false;
+            }
+
+            if (typeof req.properties !== "undefined" && (typeof req.properties.trackOne !== "undefined" || typeof req.properties.trackTwo !== "undefined" || typeof req.properties.trackThree !== "undefined")) {
+                return true;
+            }
+
+            return false;
+
+        };
+
         if (typeof response.splice === "function") {
 
             var responses = [],
@@ -4015,7 +4037,8 @@
                     payload = payment.__request,
                     isAch = isBankAccount(payload),
                     isEm = isEMoney(payload),
-                    isCC = isCreditCard(payload);
+                    isCC = isCreditCard(payload),
+                    isTrack = isTrackAccount(payload);
 
                 // For BANK ACCOUNT objects
                 if (isAch) {
@@ -4079,7 +4102,7 @@
                     "instrument_last_four": lastFour,
                     "instrument_expiration_date": expirationDate,
                     "instrument_verification_method": "",
-                    "instrument_entry_mode": "MANUAL",
+                    "instrument_entry_mode": isTrack ? "MAGNETIC STRIPE" : "MANUAL ENTRY",
                     "instrument_verification_results": "",
                     "created_on": createdOn,
                     "customer_name": name,
@@ -4117,14 +4140,14 @@
                     hp.Utils.makeRequest(statusRequest).then(function(statusResponse) {
 
                         if (statusResponse.type === "Transaction" && typeof statusResponse.properties !== "undefined") {
-
                             var isACH = statusResponse.properties.accountType === "BankAccount";
-
                             responses[currentCount].transaction_approval_code = isACH ? "" : statusResponse.properties.approvalCode;
                             responses[currentCount].transaction_avs_postal_code_passed = isACH ? true : statusResponse.properties.postalCodeCheck;
                             responses[currentCount].transaction_avs_street_passed = isACH ? true : statusResponse.properties.addressLine1Check;
                             responses[currentCount].customer_signature = (statusResponse.properties.signatureRef === null || statusResponse.properties.signatureRef === undefined || statusResponse.properties.signatureRef === "") ? "https://images.pmoney.com/00000000" : statusResponse.properties.signatureRef;
                             responses[currentCount].message = (responses[currentCount].message + " " + (statusResponse.properties.message + ".")).toLowerCase().replace(" .", "");
+                            responses[currentCount].instrument_verification_results = isACH ? false : true;
+                            responses[currentCount].instrument_verification_method = isACH ? "" : "SIGNATURE";
                         }
 
                         currentCount = currentCount + 1;
@@ -4716,27 +4739,27 @@
 })(jQuery, window, document);
 
 (function($, window, document, undefined) {
-    
-    "use strict";
+	
+	"use strict";
 
     /*
      * Export "hp"
      */
     window.hp = hp || {};
 
-    function Success($element) {
+	function Success($element) {
         this.context = null;
         this.$parent = null;
         this.$content = null;
-        this.$element = $element;
+    	this.$element = $element;
         this.formData = { _isValid: false };
     }
 
-    Success.prototype.init = function () { 
+	Success.prototype.init = function () { 
 
         var context = hp.Utils.handleLegacyCssClassApplication("success", this.$element),
-            $parent = context.parent,
-            $content = context.content;
+        	$parent = context.parent,
+        	$content = context.content;
 
         $parent
             .find(".icon.success")
@@ -4747,19 +4770,19 @@
         this.$parent = $parent;
         this.$content = $content;
 
-    };
+	};
 
-    Success.prototype.createTemplate = function() {
+	Success.prototype.createTemplate = function() {
 
-        var $html = [
-            '<div class="hp-success-visual"></div>',
-            '<h2>{{successLabel}}</h2>',
-            '<p class="text-muted">{{redirectLabel}}</p>'
-        ].join("");
+		var $html = [
+			'<div class="hp-success-visual"></div>',
+			'<h2>{{successLabel}}</h2>',
+			'<p class="text-muted">{{redirectLabel}}</p>'
+		].join("");
 
-        return $html;
+		return $html;
 
-    };
+	};
 
     Success.prototype.showSuccess = function(delay) {
         return hp.Utils.showSuccessPage(delay);
@@ -6104,7 +6127,7 @@
 
     Code.prototype.createTemplate = function(defaultCardCharacters, defaultNameOnCardName, defaultDateCharacters) {
 
-        if (hp.Utils.defaults.paymentTypeOrder.indexOf(3) < 0) {
+        if (hp.Utils.defaults.paymentTypeOrder.indexOf(2) < 0) {
             return "";
         }
 
@@ -7487,6 +7510,7 @@
                     } else {
                         name = $.trim(name.replace(/\//gi, " ").replace(/\W+/gi, " "));
                     }
+
 
                     if (name.split(" ").length > 2) {
                         name = name.split(" ")[1] + " " + name.split(" ")[2] + " " + name.split(" ")[0];
