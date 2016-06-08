@@ -3440,6 +3440,28 @@
         };
     }
 
+    if (!Function.prototype.clone) {
+
+        Function.prototype.clone = function() {
+            var cloneObj = this;
+            if (this.__isClone) {
+                cloneObj = this.__clonedFrom;
+            }
+
+            var temp = function() {
+                return cloneObj.apply(this, arguments); };
+            for (var key in this) {
+                temp[key] = this[key];
+            }
+
+            temp.__isClone = true;
+            temp.__clonedFrom = cloneObj;
+
+            return temp;
+        };
+
+    }
+
     if (!String.prototype.startsWith) {
 
         String.prototype.startsWith = function(searchString, position) {
@@ -3534,7 +3556,7 @@
 
     };
 
-    var refresh = function () {
+    var refresh = function() {
 
         // Reset defaults
         hp.Utils.defaults = jQuery.extend(true, {}, hp.Utils.__original);
@@ -3611,7 +3633,7 @@
     };
 
     var showLoader = function() {
-        
+
         if ($(".hp-error-container").is(":visible")) {
             hideError();
         }
@@ -3624,15 +3646,15 @@
     };
 
     var showError = function(message) {
-        
+
         if ($(".hp-loading-container").is(":visible")) {
             hideLoader();
         }
 
         $(".hp-error-container").addClass("hp-error-container-active");
-        
+
         var $message = $(".hp-error-container .hp-error-message"),
-            isArray = typeof message !== "undefined" && typeof message.push !== "undefined", 
+            isArray = typeof message !== "undefined" && typeof message.push !== "undefined",
             list = "<p>Please review the following errors: </p><ul class=\"hp-error-message-list\">{{errors}}</ul>";
 
         if (isArray) {
@@ -3648,7 +3670,7 @@
             $message.html(list);
 
         } else {
-            $message.text(message);            
+            $message.text(message);
         }
 
         $(".hp-error-container .hp-error-disclaimer a").on("click", hideError);
@@ -3667,14 +3689,14 @@
         var $wrapper = [
             '<div class="hp hp-form">',
             '<div class="hp-loading-container">',
-                '<span class="hp-loading-text">Loading</span>',
-                '<div class="hp-loading"><span></span><span></span><span></span><span></span></div>',
+            '<span class="hp-loading-text">Loading</span>',
+            '<div class="hp-loading"><span></span><span></span><span></span><span></span></div>',
             '</div>',
             '<div class="hp-error-container">',
-                '<span class="hp-error-text">{{error}} </span>',
-                '<div class="hp-error-message"></div>',
-                '<hr />',
-                '<div class="hp-error-disclaimer">If you feel that the above error was made by a mistake please contact our support at {{phone}}. <br /><br /><a href="javascript:;">&times; Dismiss error</a></div>',
+            '<span class="hp-error-text">{{error}} </span>',
+            '<div class="hp-error-message"></div>',
+            '<hr />',
+            '<div class="hp-error-disclaimer">If you feel that the above error was made by a mistake please contact our support at {{phone}}. <br /><br /><a href="javascript:;">&times; Dismiss error</a></div>',
             '</div>',
             '<div class="hp-row">',
             '<div class="hp-col hp-col-left">',
@@ -3713,8 +3735,8 @@
             $wrapper
             .replace("{{success}}", hp.Utils.plugins.Success
                 .createTemplate()
-                    .replace("{{redirectLabel}}", hp.Utils.defaults.defaultRedirectLabel)
-                    .replace("{{successLabel}}", hp.Utils.defaults.defaultSuccessLabel)
+                .replace("{{redirectLabel}}", hp.Utils.defaults.defaultRedirectLabel)
+                .replace("{{successLabel}}", hp.Utils.defaults.defaultSuccessLabel)
             )
             .replace(/{{phone}}/gi, hp.Utils.defaults.defaultPhone)
             .replace("{{error}}", hp.Utils.defaults.defaultErrorLabel)
@@ -3786,11 +3808,11 @@
             hp.Utils.hideError();
             hp.Utils.hideLoader();
             hp.Utils.plugins.Success.init();
-            
+
             $(".hp-col-left .hp-type")
                 .off("click")
                 .removeClass("hp-active");
-                
+
             deferred.resolve();
         }, delay || 150);
         return deferred;
@@ -4035,10 +4057,12 @@
                     isError = res.isException ? true : false,
                     status = "Success",
                     payload = payment.__request,
+                    swipe = payment.__request.__swipe,
                     isAch = isBankAccount(payload),
                     isEm = isEMoney(payload),
                     isCC = isCreditCard(payload),
-                    isTrack = isTrackAccount(payload);
+                    isTrack = isTrackAccount(payload),
+                    isScan = (typeof swipe !== "undefined");
 
                 // For BANK ACCOUNT objects
                 if (isAch) {
@@ -4083,6 +4107,15 @@
 
                 if (isError) {
                     status = "Error";
+                }
+
+                if (isScan) {
+
+                    lastFour = swipe.cardNumber.substr(swipe.cardNumber.length - 4);
+                    name = swipe.nameOnCard;
+                    type = $.payment.cardType(swipe.cardNumber).toUpperCase();
+                    expirationDate = swipe.expMonth + "/" + swipe.expYear;
+
                 }
 
                 var successResponse = {
@@ -6159,6 +6192,7 @@
         this.$parent.off("hp.swipped");
         this.$parent.trigger("hp.notify");
         $(document).off("hp.global_swipped");
+        $(window).off("keydown");
 
     };
 
@@ -6183,9 +6217,9 @@
         });
 
         // Kills spacebar page-down event
-        window.onkeydown = function(e) {
+        $(window).on("keydown",function(e) {
             return e.keyCode != 32;
-        };
+        });
 
     };
 
@@ -6320,7 +6354,8 @@
                     "billingAddress": {
                         "addressLine1": hp.Utils.defaults.billingAddress.addressLine1,
                         "postalCode": hp.Utils.defaults.billingAddress.postalCode
-                    }
+                    },
+                    "__swipe" : $this.formData
                 }
             }
         }).then(function(res) {
