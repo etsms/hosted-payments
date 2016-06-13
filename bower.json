@@ -1,0 +1,7 @@
+{
+  "name": "hosted-payments",
+  "author": "ETS Corporation <@etsms> (etsms.com)",
+  "description": "A comprehensive, browser-based financial transaction jQuery plugin",
+  "keywords": [ "transaction", "jquery", "payments", "secure", "credit cards", "ach", "bank accounts", "gift cards" ],
+  "main":"./dist/jquery.hosted-payments.min.js"
+}
