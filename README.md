@@ -30,6 +30,7 @@ Visit https://www.etsms.com/docs/hosted-payments
 | instrument\_id                         | <span class="string">16c61db5-6b02-48bd-ab32-9d401d<wbr>0eeb92</span> |
 | instrument\_type                       | <span class="string">VISA</span>                                      |
 | instrument\_last\_four                 | <span class="string">1111</span>                                      |
+| instrument\_routing\_last\_four                 | <span class="string">0017</span>                                      |
 | instrument\_expiration\_date           | <span class="string">05/2017</span>                                   |
 | instrument\_verification\_method       | <span class="string"></span>                                          |
 | instrument\_entry\_mode                | <span class="string">MANUAL</span>                                    |
