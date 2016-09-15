@@ -12,6 +12,9 @@ Visit https://www.etsms.com/docs/hosted-payments
 ## Swipes & Barcode Scans
 ![Acceptance Types](https://github.com/etsms/hosted-payments/blob/gh-pages/CreditCardSwipe.gif?raw=true)
 
+## Choose from many payment methods
+![Payment Methods](https://github.com/etsms/hosted-payments/blob/gh-pages/PaymentFlowWithTransvault.gif?raw=true)
+
 ### Sample Callback Response (success)
 
 | Name                                   | Value                                                                 |
