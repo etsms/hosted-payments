@@ -1060,7 +1060,7 @@ div.fancy-select ul.options li.hover {
 .hp .hp-col-left {
   width: 185px;
   margin: 0 0 13px 0;
-  min-height: 472px;
+  min-height: 460px;
 }
 @media screen and (max-width: 656px) {
   .hp .hp-col-left {
@@ -1209,6 +1209,11 @@ div.fancy-select ul.options li.hover {
     display: none;
   }
 }
+.hp .hp-col-left .hp-version,
+.hp .hp-col-left .hp-support,
+.hp .hp-col-left .hp-secure {
+  font-size: 11px !important;
+}
 .hp .hp-col-left .hp-secure {
   position: absolute;
   z-index: 9;
@@ -1216,16 +1221,16 @@ div.fancy-select ul.options li.hover {
 }
 .hp .hp-col-left .hp-secure img {
   margin-top: 15px;
-  width: 82px;
+  width: 72px;
 }
 .hp .hp-col-left .hp-secure .hp-cards {
   width: 185px;
 }
 .hp .hp-col-left .hp-secure .hp-cards-icons {
-  width: 34px;
+  width: 23px;
   display: inline-block;
   margin-right: 4px;
-  margin-bottom: 0;
+  margin-bottom: 3px;
   margin-top: 0;
 }
 .hp .hp-col-left .hp-secure .hp-version-refund {
@@ -1249,7 +1254,7 @@ div.fancy-select ul.options li.hover {
   display: none;
   border-left: 1px solid #9CA3B3;
   padding: 22px 13px;
-  min-height: 500px;
+  min-height: 470px;
 }
 @media screen and (max-width: 656px) {
   .hp .hp-col-right .hp-content {

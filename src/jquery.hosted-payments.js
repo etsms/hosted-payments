@@ -69,77 +69,6 @@
 	}
 
 })();
-/**
- * Debounce and throttle function's decorator plugin 1.0.5
- *
- * Copyright (c) 2009 Filatov Dmitry (alpha@zforms.ru)
- * Dual licensed under the MIT and GPL licenses:
- * http://www.opensource.org/licenses/mit-license.php
- * http://www.gnu.org/licenses/gpl.html
- *
- */
-
-(function($) {
-
-    $.extend({
-
-        debounce: function(fn, timeout, invokeAsap, ctx) {
-
-            if (arguments.length == 3 && typeof invokeAsap != 'boolean') {
-                ctx = invokeAsap;
-                invokeAsap = false;
-            }
-
-            var timer;
-
-            return function() {
-
-                var args = arguments;
-                ctx = ctx || this;
-
-                invokeAsap && !timer && fn.apply(ctx, args);
-
-                clearTimeout(timer);
-
-                timer = setTimeout(function() {
-                    !invokeAsap && fn.apply(ctx, args);
-                    timer = null;
-                }, timeout);
-
-            };
-
-        },
-
-        throttle: function(fn, timeout, ctx) {
-
-            var timer, args, needInvoke;
-
-            return function() {
-
-                args = arguments;
-                needInvoke = true;
-                ctx = ctx || this;
-
-                if (!timer) {
-                    (function() {
-                        if (needInvoke) {
-                            fn.apply(ctx, args);
-                            needInvoke = false;
-                            timer = setTimeout(arguments.callee, timeout);
-                        } else {
-                            timer = null;
-                        }
-                    })();
-                }
-
-            };
-
-        }
-
-    });
-
-})(jQuery);
-
 /* jquery.signalR.core.js */
 /*global window:false */
 /*!
@@ -3095,6 +3024,7 @@
 (function ($, undefined) {
     $.signalR.version = "2.2.1";
 }(window.jQuery));
+
 /*!
  * ASP.NET SignalR JavaScript Library v2.2.0
  * http://signalr.net/
@@ -3562,6 +3492,145 @@
 
     }
 
+    if (!window.Base64) {
+
+        var Base64 = {
+
+            // private property
+            _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+
+            // public method for encoding
+            encode: function(input) {
+                var output = "";
+                var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+                var i = 0;
+
+                input = Base64._utf8_encode(input);
+
+                while (i < input.length) {
+
+                    chr1 = input.charCodeAt(i++);
+                    chr2 = input.charCodeAt(i++);
+                    chr3 = input.charCodeAt(i++);
+
+                    enc1 = chr1 >> 2;
+                    enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+                    enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+                    enc4 = chr3 & 63;
+
+                    if (isNaN(chr2)) {
+                        enc3 = enc4 = 64;
+                    } else if (isNaN(chr3)) {
+                        enc4 = 64;
+                    }
+
+                    output = output +
+                        this._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +
+                        this._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);
+
+                }
+
+                return output;
+            },
+
+            // public method for decoding
+            decode: function(input) {
+                var output = "";
+                var chr1, chr2, chr3;
+                var enc1, enc2, enc3, enc4;
+                var i = 0;
+
+                input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+
+                while (i < input.length) {
+
+                    enc1 = this._keyStr.indexOf(input.charAt(i++));
+                    enc2 = this._keyStr.indexOf(input.charAt(i++));
+                    enc3 = this._keyStr.indexOf(input.charAt(i++));
+                    enc4 = this._keyStr.indexOf(input.charAt(i++));
+
+                    chr1 = (enc1 << 2) | (enc2 >> 4);
+                    chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+                    chr3 = ((enc3 & 3) << 6) | enc4;
+
+                    output = output + String.fromCharCode(chr1);
+
+                    if (enc3 != 64) {
+                        output = output + String.fromCharCode(chr2);
+                    }
+                    if (enc4 != 64) {
+                        output = output + String.fromCharCode(chr3);
+                    }
+
+                }
+
+                output = Base64._utf8_decode(output);
+
+                return output;
+
+            },
+
+            // private method for UTF-8 encoding
+            _utf8_encode: function(string) {
+                string = string.replace(/\r\n/g, "\n");
+                var utftext = "";
+
+                for (var n = 0; n < string.length; n++) {
+
+                    var c = string.charCodeAt(n);
+
+                    if (c < 128) {
+                        utftext += String.fromCharCode(c);
+                    } else if ((c > 127) && (c < 2048)) {
+                        utftext += String.fromCharCode((c >> 6) | 192);
+                        utftext += String.fromCharCode((c & 63) | 128);
+                    } else {
+                        utftext += String.fromCharCode((c >> 12) | 224);
+                        utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+                        utftext += String.fromCharCode((c & 63) | 128);
+                    }
+
+                }
+
+                return utftext;
+            },
+
+            // private method for UTF-8 decoding
+            _utf8_decode: function(utftext) {
+                var string = "";
+                var i = 0;
+                var c = c1;
+                var c1 = c2;
+                var c2 = 0;
+
+                while (i < utftext.length) {
+
+                    c = utftext.charCodeAt(i);
+
+                    if (c < 128) {
+                        string += String.fromCharCode(c);
+                        i++;
+                    } else if ((c > 191) && (c < 224)) {
+                        c2 = utftext.charCodeAt(i + 1);
+                        string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+                        i += 2;
+                    } else {
+                        c2 = utftext.charCodeAt(i + 1);
+                        c3 = utftext.charCodeAt(i + 2);
+                        string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+                        i += 3;
+                    }
+
+                }
+
+                return string;
+            }
+
+        };
+
+    }
+
+
     if (!window.sessionStorage) {
 
         window.sessionStorage = {
@@ -3682,7 +3751,7 @@
     };
 
     var setPaymentService = function(serivceType) {
-        
+
         var result = hp.PaymentService.EFT;
 
         serivceType = serivceType.toString().toLowerCase().replace(/_/gi, "");
@@ -3780,8 +3849,8 @@
                     if (i > 0) {
                         prep = "";
                     }
-                
-                    args[i] =  prep + val;
+
+                    args[i] = prep + val;
                 }
 
             }
@@ -3909,50 +3978,50 @@
         // Create wrapping HTML
         var $wrapper = [
             '<div class="hp hp-form">',
-                '<div class="hp-loading-container">',
-                    '<span class="hp-loading-text">Loading</span>',
-                    '<div class="hp-loading"><span></span><span></span><span></span><span></span></div>',
-                '</div>',
-                '<div class="hp-error-container">',
-                    '<span class="hp-error-text">{{error}} </span>',
-                    '<div class="hp-error-message"></div>',
-                    '<hr />',
-                    '<div class="hp-error-disclaimer">If you feel that the above error was made by a mistake please contact our support at {{phone}}. <br /><br /><a href="javascript:;">&times; Dismiss error</a></div>',
-                '</div>',
-                '<div class="hp-row">',
-                    '<div class="hp-col hp-col-left">',
-                        '<ul class="hp-nav">',
-                        '{{nav}}',
-                        '</ul>',
-                        '<div class="hp-support">',
-                            '<strong>Help &amp; support</strong>',
-                            '<p>Having issues with your payments? Call us at {{phone}}.</p>',
-                        '</div>',
-                        '<div class="hp-secure">',
-                            '<div class="hp-cards">',
-                                '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/106383645ba54667a82be0a6af599d8c/raw/18bfa3c78067a3104ce0025911900b2813442da2/amex-card-icon.svg" alt="AMEX" />',
-                                '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/6928189390fabc35274fb4c5e050d97a/raw/5ace5093fbd78be1f2ec1b1b3a98cf8a9ae847b8/diners-card-icon.svg" alt="Diners" />',
-                                '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/97bdce0c2be41b5e3e7d42f665d7e579/raw/94e5724101103c8c427192cdf5e5e04581240b1f/discover-card-icon.svg" alt="Discover" />',
-                                '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/4df8161921e2349011bd7129a647be60/raw/cd7984e257825f010ebd38448bcad762b353f216/jcb-card-icon.svg" alt="JCB" />',
-                                '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/25c8538814ffa61a43cb86bd71601f92/raw/cd7c9ff69acd3cb77be6dca4e9ff65aa5e3b8d36/mastercard-card-icon.svg" alt="Master Card" />',
-                                '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/8f367f38b7ffb77b1a1a7e13de9c2731/raw/086944f18033f96996e18aa03e1393565b0b16dc/visa-card-icon.svg" alt="VISA" />',
-                                '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/c2568c3f7343be79032ac7a717fa80de/raw/7923fdf2aacffbc6baf62454cc4213b46b943596/emoney-card-icon.svg" alt="EMoney" />',
-                                '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/cd2abb29142a84bb16fbeb3d07a7aefa/raw/a17760bdd23cf1d90c22c8a2235f8d6e6753663e/gift-card-icon.svg" alt="Gift Cards" />',
-                            '</div>',
-                            '<a class="hp-secure-icon" href="https://www.etsms.com/" target="_blank" title="ETS - Electronic Transaction Systems">',
-                                '<img src="https://cdn.rawgit.com/etsms/a5b6be8ebd898748ec829538bd4b603e/raw/df1b8a1e296ea12b90742328d036848af19fef1f/secure-icon.svg" alt="Secured by ETS" />',
-                            '</a>',
-                            '<small class="hp-version">',
-                                '<span class="' + (hp.Utils.getAmount() === 0 || hp.Utils.defaults.ignoreSubmission === true ? "hide " : "") + (hp.Utils.defaults.paymentType === hp.PaymentType.CHARGE ? "hp-version-charge" : "hp-version-refund") + '">' + (hp.Utils.defaults.paymentType === hp.PaymentType.CHARGE ? "Charge" : "Refund") + ' amount: <span class="hp-version-amount">' + hp.Utils.formatCurrency(hp.Utils.getAmount()) + '</span></span><br />',
-                                'Hosted Payments ' + hp.Utils.getVersion(),
-                            '</small>',
-                        '</div>',
-                    '</div>',
-                    '<div class="hp-col hp-col-right">',
-                        '{{order}}',
-                        '<div class="hp-content hp-content-success">{{success}}</div>',
-                    '</div>',
-                '</div>',
+            '<div class="hp-loading-container">',
+            '<span class="hp-loading-text">Loading</span>',
+            '<div class="hp-loading"><span></span><span></span><span></span><span></span></div>',
+            '</div>',
+            '<div class="hp-error-container">',
+            '<span class="hp-error-text">{{error}} </span>',
+            '<div class="hp-error-message"></div>',
+            '<hr />',
+            '<div class="hp-error-disclaimer">If you feel that the above error was made by a mistake please contact our support at {{phone}}. <br /><br /><a href="javascript:;">&times; Dismiss error</a></div>',
+            '</div>',
+            '<div class="hp-row">',
+            '<div class="hp-col hp-col-left">',
+            '<ul class="hp-nav">',
+            '{{nav}}',
+            '</ul>',
+            '<div class="hp-support">',
+            '<strong>Help &amp; support</strong>',
+            '<p>Having issues with your payments? Call us at {{phone}}.</p>',
+            '</div>',
+            '<div class="hp-secure">',
+            '<div class="hp-cards">',
+            '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/106383645ba54667a82be0a6af599d8c/raw/18bfa3c78067a3104ce0025911900b2813442da2/amex-card-icon.svg" alt="AMEX" />',
+            '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/6928189390fabc35274fb4c5e050d97a/raw/5ace5093fbd78be1f2ec1b1b3a98cf8a9ae847b8/diners-card-icon.svg" alt="Diners" />',
+            '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/97bdce0c2be41b5e3e7d42f665d7e579/raw/94e5724101103c8c427192cdf5e5e04581240b1f/discover-card-icon.svg" alt="Discover" />',
+            '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/4df8161921e2349011bd7129a647be60/raw/cd7984e257825f010ebd38448bcad762b353f216/jcb-card-icon.svg" alt="JCB" />',
+            '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/25c8538814ffa61a43cb86bd71601f92/raw/cd7c9ff69acd3cb77be6dca4e9ff65aa5e3b8d36/mastercard-card-icon.svg" alt="Master Card" />',
+            '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/8f367f38b7ffb77b1a1a7e13de9c2731/raw/086944f18033f96996e18aa03e1393565b0b16dc/visa-card-icon.svg" alt="VISA" />',
+            '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/c2568c3f7343be79032ac7a717fa80de/raw/7923fdf2aacffbc6baf62454cc4213b46b943596/emoney-card-icon.svg" alt="EMoney" />',
+            '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/cd2abb29142a84bb16fbeb3d07a7aefa/raw/a17760bdd23cf1d90c22c8a2235f8d6e6753663e/gift-card-icon.svg" alt="Gift Cards" />',
+            '</div>',
+            '<a class="hp-secure-icon" href="https://www.etsms.com/" target="_blank" title="ETS - Electronic Transaction Systems">',
+            '<img src="https://cdn.rawgit.com/etsms/a5b6be8ebd898748ec829538bd4b603e/raw/df1b8a1e296ea12b90742328d036848af19fef1f/secure-icon.svg" alt="Secured by ETS" />',
+            '</a>',
+            '<small class="hp-version">',
+            '<span class="' + (hp.Utils.getAmount() === 0 || hp.Utils.defaults.ignoreSubmission === true ? "hide " : "") + (hp.Utils.defaults.paymentType === hp.PaymentType.CHARGE ? "hp-version-charge" : "hp-version-refund") + '">' + (hp.Utils.defaults.paymentType === hp.PaymentType.CHARGE ? "Charge" : "Refund") + ' amount: <span class="hp-version-amount">' + hp.Utils.formatCurrency(hp.Utils.getAmount()) + '</span></span><br />',
+            'Hosted Payments ' + hp.Utils.getVersion(),
+            '</small>',
+            '</div>',
+            '</div>',
+            '<div class="hp-col hp-col-right">',
+            '{{order}}',
+            '<div class="hp-content hp-content-success">{{success}}</div>',
+            '</div>',
+            '</div>',
             '</div>'
         ].join("");
 
@@ -4040,13 +4109,11 @@
     // success page
     var showSuccessPage = function(delay) {
 
-        var deferred = jQuery.Deferred(), 
+        var deferred = jQuery.Deferred(),
             timeout = typeof delay === "undefined" ? 0 : delay;
 
         setTimeout(function() {
 
-            hp.Utils.hideError();
-            hp.Utils.hideLoader();
             hp.Utils.plugins.Success.init();
 
             $(".hp-col-left .hp-type")
@@ -4155,7 +4222,7 @@
         }
 
         if (defaultAreas.indexOf(4) >= 0) {
-            giftcard = '<div class="hp-content hp-content-gc">{{giftcard}}</div>'.replace("{{giftcard}}", hp.Utils.plugins.GiftCard.createTemplate(hp.Utils.defaults.defaultCardCharacters, hp.Utils.defaults.defaultNameOnCardName, ( +(new Date().getFullYear().toString().substring(2,4)) + 3 ) ));
+            giftcard = '<div class="hp-content hp-content-gc">{{giftcard}}</div>'.replace("{{giftcard}}", hp.Utils.plugins.GiftCard.createTemplate(hp.Utils.defaults.defaultCardCharacters, hp.Utils.defaults.defaultNameOnCardName, (+(new Date().getFullYear().toString().substring(2, 4)) + 3)));
         }
 
         for (var i = 0; i < defaultAreas.length; i++) {
@@ -4307,6 +4374,7 @@
                     message = "Transaction processed.",
                     session = getSession(),
                     lastFour = "",
+                    routingLastFour = "",
                     name = "",
                     type = "",
                     expirationDate = "",
@@ -4325,6 +4393,7 @@
 
                     message = "Transaction pending.";
                     lastFour = payload.properties.accountNumber.substr(payload.properties.accountNumber.length - 4) + "";
+                    routingLastFour = payload.properties.routingNumber.substr(payload.properties.routingNumber.length - 4) + "";
                     name = payload.name;
                     type = "ACH";
 
@@ -4402,6 +4471,7 @@
                     "instrument_type": type,
                     "instrument_method": "Other",
                     "instrument_last_four": lastFour,
+                    "instrument_routing_last_four": routingLastFour,
                     "instrument_expiration_date": expirationDate,
                     "instrument_verification_method": "",
                     "instrument_entry_type": hp.Utils.defaults.entryType,
@@ -4632,39 +4702,39 @@
 
             var template = [
                 '<div class="hp-avs-prompt">',
-                    '<div class="hp-avs-prompt-container">',
-                        '<p>Billing Address</p>',
-                        '<div class="hp-avs-prompt-left">',
-                            '<label class="hp-label-avs" for="avsStreet">Address <span class="hp-avs-required">*</span></label>',
-                            '<div class="hp-input hp-input-avs hp-input-avs-street">',
-                                '<input placeholder="Street Address" value="' + hp.Utils.defaults.billingAddress.addressLine1 + '" name="avsStreet" id="avsStreet" autocomplete="on" type="text" pattern="\\d*">',
-                            '</div>',
-                        '</div>',
-                        '<div class="hp-avs-prompt-right">',
-                            '<div class="hp-pull-left">',
-                                '<label class="hp-label-avs" for="avsZip">City</label>',
-                                '<div class="hp-input hp-input-avs hp-input-avs-city">',
-                                    '<input placeholder="City" autocomplete="on" type="text">',
-                                '</div>',
-                            '</div>',
-                            '<div class="hp-pull-left">',
-                                '<label class="hp-label-avs" for="avsZip">State</label>',
-                                '<div class="hp-input hp-input-avs hp-input-avs-state">',
-                                    '<input placeholder="State" autocomplete="on" type="text">',
-                                '</div>',
-                            '</div>',
-                            '<div class="hp-pull-left">',
-                                '<label class="hp-label-avs" for="avsZip">Zip <span class="hp-avs-required">*</span></label>',
-                                '<div class="hp-input hp-input-avs hp-input-avs-zip">',
-                                    '<input placeholder="Zipcode" value="' + hp.Utils.defaults.billingAddress.postalCode + '" name="avsZip" id="avsZip" autocomplete="on" type="text" pattern="\\d*">',
-                                '</div>',
-                            '</div>',
-                        '</div>',
-                        '<br class="hp-break" />',
-                        '<hr>',
-                        '<button class="hp-submit hp-avs-submit">Submit Payment</button>',
-                        hp.Utils.defaults.allowAvsSkip ? '<a class="hp-avs-skip" href="javascript:;">Skip \'Address Verification\'</a>' : '',
-                    '</div>',
+                '<div class="hp-avs-prompt-container">',
+                '<p>Billing Address</p>',
+                '<div class="hp-avs-prompt-left">',
+                '<label class="hp-label-avs" for="avsStreet">Address <span class="hp-avs-required">*</span></label>',
+                '<div class="hp-input hp-input-avs hp-input-avs-street">',
+                '<input placeholder="Street Address" value="' + hp.Utils.defaults.billingAddress.addressLine1 + '" name="avsStreet" id="avsStreet" autocomplete="on" type="text" pattern="\\d*">',
+                '</div>',
+                '</div>',
+                '<div class="hp-avs-prompt-right">',
+                '<div class="hp-pull-left">',
+                '<label class="hp-label-avs" for="avsZip">City</label>',
+                '<div class="hp-input hp-input-avs hp-input-avs-city">',
+                '<input placeholder="City" autocomplete="on" type="text">',
+                '</div>',
+                '</div>',
+                '<div class="hp-pull-left">',
+                '<label class="hp-label-avs" for="avsZip">State</label>',
+                '<div class="hp-input hp-input-avs hp-input-avs-state">',
+                '<input placeholder="State" autocomplete="on" type="text">',
+                '</div>',
+                '</div>',
+                '<div class="hp-pull-left">',
+                '<label class="hp-label-avs" for="avsZip">Zip <span class="hp-avs-required">*</span></label>',
+                '<div class="hp-input hp-input-avs hp-input-avs-zip">',
+                '<input placeholder="Zipcode" value="' + hp.Utils.defaults.billingAddress.postalCode + '" name="avsZip" id="avsZip" autocomplete="on" type="text" pattern="\\d*">',
+                '</div>',
+                '</div>',
+                '</div>',
+                '<br class="hp-break" />',
+                '<hr>',
+                '<button class="hp-submit hp-avs-submit">Submit Payment</button>',
+                hp.Utils.defaults.allowAvsSkip ? '<a class="hp-avs-skip" href="javascript:;">Skip \'Address Verification\'</a>' : '',
+                '</div>',
                 '</div>'
             ].join("");
 
@@ -4683,7 +4753,7 @@
                 $avsPrompt.removeClass("active");
                 deferred.resolve();
 
-                setTimeout(function(){
+                setTimeout(function() {
                     $element.find(".hp-avs-prompt").remove();
                 }, 0);
             };
@@ -4701,7 +4771,7 @@
                 }
 
                 var keycode = (e.keyCode ? e.keyCode : e.which);
-                                
+
                 if (keycode === 13) {
                     handleSubmit(e);
                 }
@@ -4719,7 +4789,7 @@
                     $avsPrompt.removeClass("active");
                     deferred.resolve();
 
-                    setTimeout(function(){
+                    setTimeout(function() {
                         $element.find(".hp-avs-prompt").remove();
                     }, 0);
 
@@ -4786,7 +4856,7 @@
     };
 
     var reset = function(options) {
-        
+
         hp.Utils.log("Checking options to reset with...", options);
 
         if (typeof options === "undefined") {
@@ -4803,7 +4873,7 @@
 
         try {
             $.connection.hub.stop();
-        } catch (e) { }
+        } catch (e) {}
 
         hp.Utils.log("Emptying the container element...");
 
@@ -4835,7 +4905,7 @@
 
         element.data(options);
 
-        setTimeout(function(){
+        setTimeout(function() {
             hp.Utils.log("Reinitialized plugin with new options!");
             hp.Utils.__instance.init();
             hp.Utils.__instance = hp.Utils.__instance;
@@ -4843,13 +4913,14 @@
 
     };
 
-    var signIn = function() {
+    var signIn = function(bypassSessionStorage) {
 
         var deferred = jQuery.Deferred(),
             createdOn = (new Date()).toISOString(),
             sessionId = getSession().sessionToken,
             apiKey = getSession().apiKey,
-            sessionSpan = 1800;
+            sessionSpan = 1800, 
+            shouldBypassSessionStorage = (typeof bypassSessionStorage === "undefined") ? true : bypassSessionStorage;
 
         /*
          * Skip sign in
@@ -4857,27 +4928,38 @@
         if (hp.Utils.defaults.paymentService === hp.PaymentService.TEST) {
             hp.Utils.log("Sign In: Bypassed.");
             hp.Utils.setSession(apiKey);
-            deferred.resolve();
+            deferred.resolve(apiKey);
             return deferred;
         }
 
         /*
          * Handle refresh
          */
-        if (sessionStorage.getItem("hp.sessionToken") !== null && sessionStorage.getItem("hp.sessionTokenTS") !== null) {
+        if (!shouldBypassSessionStorage && (sessionStorage.getItem("hp.sessionToken") !== null && sessionStorage.getItem("hp.sessionTokenTS") !== null)) {
 
             var sessionTokenTS = new Date(sessionStorage.getItem("hp.sessionTokenTS"));
             var now = new Date(createdOn);
             var timeSpan = Math.floor((now.getTime() - sessionTokenTS.getTime()) / (1000));
 
             if (timeSpan < sessionSpan) {
-                hp.Utils.log("Sign In: Total time span " + timeSpan + ".");
-                hp.Utils.log("Sign In: Retrieved from sessionStorage.");
-                hp.Utils.setSession(sessionStorage.getItem("hp.sessionToken"));
-                deferred.resolve();
-                return deferred;
+
+                var sessionHash = sessionStorage.getItem("hp.sessionToken");
+                var sessionDecoded = Base64.decode(sessionHash);
+                var sessionToken = sessionDecoded.split("|")[0];
+                var sessionHref = sessionDecoded.split("|")[1];
+                var sessionBaseUrl = sessionDecoded.split("|")[2];
+
+                if (sessionHref === location.href && sessionBaseUrl === hp.Utils.defaults.baseUrl) {
+                    hp.Utils.log("Sign In: Total time span " + timeSpan + ".");
+                    hp.Utils.log("Sign In: Retrieved from sessionStorage.", sessionToken);
+                    hp.Utils.setSession(sessionToken);
+                    deferred.resolve(sessionToken);
+                    return deferred;
+                }
+
             } else {
                 hp.Utils.log("Sign In: Session expired. Generating new session.");
+                sessionStorage.clear();
             }
 
         }
@@ -4889,11 +4971,17 @@
                 }
             }
         }).then(function(res) {
+
             hp.Utils.setSession(res.token);
             deferred.resolve(res);
-            sessionStorage.setItem("hp.sessionToken", res.token);
-            sessionStorage.setItem("hp.sessionTokenTS", createdOn);
+
+            if (!shouldBypassSessionStorage) {
+                sessionStorage.setItem("hp.sessionToken", Base64.encode(res.token + "|" + location.href + "|" + hp.Utils.defaults.baseUrl));
+                sessionStorage.setItem("hp.sessionTokenTS", createdOn);
+            }
+
             hp.Utils.log("Sign In: Retrieved from server.");
+
         }, function(res) {
 
             var errorResponse = {
@@ -5448,7 +5536,9 @@
 
                         try {
                             $.connection.hub.stop();
-                        } catch (e) { }
+                        } catch (ex) {
+                            hp.Utils.log(ex);
+                        }
 
                     });
 
@@ -6087,13 +6177,8 @@
     };
 
     CreditCard.prototype.handleSuccess = function(res) {
-        
         hp.Utils.handleSuccess(res);
-
-        if (typeof hp.Utils.defaults.successCallback !== "function") {
-            this.showSuccess();
-        }
-
+        this.showSuccess();
     };
 
     CreditCard.prototype.handleError = function(res) {
@@ -7126,10 +7211,7 @@
 
     BankAccount.prototype.handleSuccess = function(res) {
         hp.Utils.handleSuccess(res);
-
-        if (typeof hp.Utils.defaults.successCallback !== "function") {
-            this.showSuccess();
-        }
+        this.showSuccess();
     };
 
     BankAccount.prototype.handleError = function(res) {
@@ -7211,27 +7293,27 @@
     };
 
     BankAccount.prototype.isCreditCard = function() {
-        return false; 
+        return false;
     };
 
     BankAccount.prototype.isBankAccount = function() {
-        return true; 
+        return true;
     };
 
     BankAccount.prototype.isEMoney = function() {
-        return false; 
+        return false;
     };
 
     BankAccount.prototype.isSuccessPage = function() {
-        return false; 
+        return false;
     };
 
     BankAccount.prototype.isCode = function() {
-        return false; 
+        return false;
     };
 
     BankAccount.prototype.isTransvault = function() {
-        return false; 
+        return false;
     };
 
     BankAccount.prototype.isGiftCard = function() {
@@ -7339,15 +7421,15 @@
 
         var $html = [
             '<div class="hp-code-title">To begin: Swipe a card or scan a barcode.</div>',
-                '<div class="hp-code-image"></div>',
-                '<div class="hp-card-visual hp-card-visual-flat">',
-                    '<div class="hp-card-visual-number">' + defaultCardCharacters + '</div>',
-                    '<div class="hp-card-visual-name">' + defaultNameOnCardName + '</div>',
-                    '<div class="hp-card-visual-expiry">',
-                    '<span class="hp-card-visual-expiry-label">Month/Year</span>',
-                    '<span class="hp-card-visual-expiry-label-alt">Valid Thru</span>',
-                    '<span class="hp-card-visual-expiry-value"><span class="hp-card-visual-expiry-month">' + defaultDateCharacters + '</span><span>/</span><span class="hp-card-visual-expiry-year">' + defaultDateCharacters + '</span></span>',
-                '</div>',
+            '<div class="hp-code-image"></div>',
+            '<div class="hp-card-visual hp-card-visual-flat">',
+            '<div class="hp-card-visual-number">' + defaultCardCharacters + '</div>',
+            '<div class="hp-card-visual-name">' + defaultNameOnCardName + '</div>',
+            '<div class="hp-card-visual-expiry">',
+            '<span class="hp-card-visual-expiry-label">Month/Year</span>',
+            '<span class="hp-card-visual-expiry-label-alt">Valid Thru</span>',
+            '<span class="hp-card-visual-expiry-value"><span class="hp-card-visual-expiry-month">' + defaultDateCharacters + '</span><span>/</span><span class="hp-card-visual-expiry-year">' + defaultDateCharacters + '</span></span>',
+            '</div>',
             '</div>'
         ].join("");
 
@@ -7381,12 +7463,12 @@
             hp.Utils.defaults.onSwipeEndCallback(data);
 
             if (!hp.Utils.defaults.ignoreSubmission) {
-                $this.handleSubmit(data);                
+                $this.handleSubmit(data);
             }
         });
 
         // Kills spacebar page-down event
-        $(window).on("keydown",function(e) {
+        $(window).on("keydown", function(e) {
             return e.keyCode != 32;
         });
 
@@ -7417,7 +7499,7 @@
                         "transactionId": res.transactionId,
                         "instrumentId": res.instrumentId,
                         "amount": hp.Utils.getAmount(),
-                        "entryType" : hp.Utils.defaults.entryType,
+                        "entryType": hp.Utils.defaults.entryType,
                         "__request": res.request
                     }
                 }
@@ -7435,7 +7517,7 @@
                         "transactionId": res.transactionId,
                         "instrumentId": res.instrumentId,
                         "amount": hp.Utils.getAmount(),
-                        "entryType" : hp.Utils.defaults.entryType,
+                        "entryType": hp.Utils.defaults.entryType,
                         "__request": res.request
                     }
                 }
@@ -7540,7 +7622,7 @@
             };
         }
 
-        hp.Utils.promptAvs().then(function(){
+        hp.Utils.promptAvs().then(function() {
 
             return hp.Utils.makeRequest({
                 "createPaymentInstrument": {
@@ -7553,7 +7635,7 @@
                             "addressLine1": hp.Utils.defaults.billingAddress.addressLine1,
                             "postalCode": hp.Utils.defaults.billingAddress.postalCode
                         },
-                        "__swipe" : $this.formData
+                        "__swipe": $this.formData
                     }
                 }
             });
@@ -7599,10 +7681,7 @@
 
     Code.prototype.handleSuccess = function(res) {
         hp.Utils.handleSuccess(res);
-
-        if (typeof hp.Utils.defaults.successCallback !== "function") {
-            this.showSuccess();
-        }
+        this.showSuccess();
     };
 
     Code.prototype.handleError = function(res) {
@@ -7688,10 +7767,16 @@
 
     var getMessage = function(event) {
 
-        var eventName = (typeof event.STATE !== "undefined") ? event.STATE : event.INFO;
+        var eventName = "Idle";
 
-        if (typeof eventName === "undefined") {
-            eventName = "Idle";
+        if (event !== undefined && event !== null) {
+            if (event.STATE !== undefined && event.STATE !== null) {
+                eventName = event.STATE;
+            }
+
+            if (event.INFO !== undefined && event.INFO !== null) {
+                eventName = event.INFO;
+            }
         }
 
         eventName = eventName.replace(/\s/gi, "");
@@ -7735,6 +7820,7 @@
         this.transvaultHub = $.connection.transvaultHub;
         this.shouldConnect = true;
         this.$btn = null;
+        this.displayFormCount = 0;
 
         this.terminalId = hp.Utils.getTerminalId();
         this.connectionId = "0";
@@ -7750,13 +7836,13 @@
 
         var $html = [
             '<div class="hp-transvault-visual">',
-                '<div class="hp-transvault-visual-image {{isAlt}}">',
-                    '<img class="event event-default" src="https://cdn.rawgit.com/etsms/786cb7bdd1d077acc10d7d7e08a4241f/raw/58a2ec726610c18c21716ae6023f7c6d776b5a71/terminal-loading.svg" alt="Status" />',
-                '</div>',
-                '<p class="hp-input-transvault-message {{isAlt}}">',
-                    'Disconnected <span></span>',
-                '</p>',
-                '<button class="hp-submit hp-submit-danger">Cancel Request</button>',
+            '<div class="hp-transvault-visual-image {{isAlt}}">',
+            '<img class="event event-default" src="https://cdn.rawgit.com/etsms/786cb7bdd1d077acc10d7d7e08a4241f/raw/58a2ec726610c18c21716ae6023f7c6d776b5a71/terminal-loading.svg" alt="Status" />',
+            '</div>',
+            '<p class="hp-input-transvault-message {{isAlt}}">',
+            'Disconnected <span></span>',
+            '</p>',
+            '<button class="hp-submit hp-submit-danger">Cancel Request</button>',
             '</div>'
         ].join("");
 
@@ -7772,6 +7858,8 @@
         this.$parent.off("hp.transvaultProgress");
         this.$parent.find(".hp-submit").off();
         this.$parent.trigger("hp.notify");
+        this.displayFormCount = 0;
+        this.transvaultHub.connection.stop();
     };
 
     Transvault.prototype.attachEvents = function() {
@@ -7783,7 +7871,7 @@
         $this.transvaultHub.connection.url = hp.Utils.defaults.baseUrl + "/transvault";
         $this.setupWebockets();
 
-        $this.$parent.find(".hp-submit").on("click", function(e){
+        $this.$parent.find(".hp-submit").on("click", function(e) {
             e.preventDefault();
             $this.cancelTransaction();
             $(this).attr("disabled", "disabled").text("Canceling...");
@@ -7796,7 +7884,7 @@
 
         var $this = this,
             props = response.Properties;
-            
+
         hp.Utils.log("Trasvault Event: ", response);
 
         if (!props.ACCT) {
@@ -7824,7 +7912,9 @@
         if (!props.CRDT) {
             props.CRDT = "";
         } else {
-            props.CRDT = props.CRDT.toUpperCase().replace("ETS", "");
+            props.CRDT = props.CRDT
+                .toUpperCase()
+                .replace("ETS", "");
         }
 
         if (!props.RD) {
@@ -8011,6 +8101,7 @@
             "instrument_type": props.CRDT,
             "instrument_method": props.PM,
             "instrument_last_four": props.AN,
+            "instrument_routing_last_four": "",
             "instrument_expiration_date": props.ED,
             "instrument_verification_method": props.CVMD,
             "instrument_entry_type": props.CEM,
@@ -8033,8 +8124,8 @@
     };
 
     Transvault.prototype.onError = function(response) {
-        var $this = this;
-        $this.$parent.trigger("hp.transvaultError", response);
+        this.$parent.trigger("hp.transvaultError", response);
+        this.transvaultHub.connection.stop();
         hp.Utils.log("Trasvault Error: ", response);
     };
 
@@ -8044,20 +8135,26 @@
 
     Transvault.prototype.onEvent = function(response) {
 
+        hp.Utils.log("Trasvault Event: ", response);
+
         var $this = this,
             msg = getMessage(response);
 
         $this.setMessage(msg);
 
         $this.$parent.trigger("hp.transvaultEvent", msg);
-        hp.Utils.log("Trasvault Event: ", response);
+
+        if (typeof response !== "undefined" && (response.STATE === "DisplayForm" || response.INFO === "DisplayForm")) {
+            $this.$parent.find(".hp-submit").fadeOut(250);
+            $this.displayFormCount = $this.displayFormCount + 1;
+        }
 
         if (typeof response !== "undefined" && (response.STATE === "DownloadingSignature" || response.INFO === "DownloadingSignature")) {
             hp.Utils.showLoader();
         }
 
         if (typeof response !== "undefined" && (response.STATE === "Cancelled")) {
-           $this.onCancelled();
+            $this.onCancelled();
         }
 
     };
@@ -8069,15 +8166,36 @@
 
         if (this.transvaultHub && this.transvaultHub.server && this.transvaultHub.server.cancelTransaction) {
             this.transvaultHub.server.cancelTransaction(token, correlationId);
-            this.onCancelled();    
+            this.onCancelled();
         }
 
     };
 
     Transvault.prototype.onCancelled = function() {
+
         this.$parent.find(".event-default").hide();
         this.$parent.find(".hp-submit").hide();
-        setTimeout(hp.Utils.reset, 4000);
+        this.displayFormCount = 0;
+
+        setTimeout(function() {
+
+            var createdOn = (new Date()).toISOString();
+            var sessionId = hp.Utils.getSession().sessionId;
+            hp.Utils.showError("Transaction Cancelled.");
+
+            if (!hp.Utils.shouldErrorPostBack()) {
+                hp.Utils.defaults.errorCallback({
+                    "status": "Error",
+                    "message": "Transaction Cancelled.",
+                    "created_on": createdOn,
+                    "token": sessionId
+                });
+            }
+
+        }, 250);
+
+        this.transvaultHub.connection.stop();
+
     };
 
     Transvault.prototype.setupWebockets = function(amount) {
@@ -8097,6 +8215,7 @@
                 return;
             }
 
+            $this.transvaultHub.connection.stop();
             $this.onError(res);
         };
 
@@ -8117,10 +8236,14 @@
 
         $message.off("click").removeClass("hp-input-transvault-message-btn").text("Connecting");
 
+        var token = hp.Utils.getSession().sessionToken;
+
         hp.Utils.log("Transvault: Addding events...");
+
         $this.transvaultHub.off("onSuccess").on("onSuccess", successHandle);
         $this.transvaultHub.off("onError").on("onError", errorHandler);
         $this.transvaultHub.off("onEvent").on("onEvent", eventHandle);
+        $this.transvaultHub.logging = true;
 
         $this.transvaultHub.connection.start({
                 withCredentials: false,
@@ -8128,41 +8251,46 @@
             })
             .done(function() {
 
-                var token = hp.Utils.getSession().sessionToken;
+                $(".hp-input-transvault-message")
+                    .text("Connected...")
+                    .css("color", "#50AF00");
 
-                $this.transvaultHub.server.registerClientWithApiKey(token)
-                    .done(function() {
+                hp.Utils.log("Your connection ID: " + $.connection.hub.id);
 
-                        hp.Utils.makeRequest({
-                            "transvault": {
-                                "transvaultRequest": {
-                                    "token": token,
-                                    "amount": amount,
-                                    "transactionId": $this.transactionId,
-                                    "correlationId": $this.correlationId,
-                                    "entryType": hp.Utils.defaults.entryType,
-                                    "terminalId": $this.terminalId,
-                                    "action": hp.Utils.defaults.paymentType
-                                }
-                            }
-                        }).then(function(res) {
+                hp.Utils.log("Sign in and bypass sessionStorage.");
 
-                            $this.$parent.trigger("hp.transvaultProgress");
+                hp.Utils.makeRequest({
+                    "transvault": {
+                        "transvaultRequest": {
+                            "token": token,
+                            "amount": amount,
+                            "transactionId": $this.transactionId,
+                            "correlationId": $this.correlationId,
+                            "entryType": hp.Utils.defaults.entryType,
+                            "terminalId": $this.terminalId,
+                            "action": hp.Utils.defaults.paymentType,
+                            "browserId" : $.connection.hub.id
+                        }
+                    }
+                }).then(function(res) {
 
-                        }, function(err) {
+                    $this.$parent.trigger("hp.transvaultProgress");
 
-                            $this.$parent.trigger("hp.transvaultError", err.responseJSON);
+                }, function(err) {
 
-                            $message.css("color", "#FC5F45").text("Could not connect!");
+                    $this.$parent.trigger("hp.transvaultError", err.responseJSON);
 
-                        });
-                    });
+                    $message.css("color", "#FC5F45").text("Could not connect!");
+
+                });
+
             })
             .fail(function(err) {
 
                 $message.css("color", "#FC5F45").text("Could not connect!");
 
             });
+
 
         $this.$parent.trigger("hp.notify");
 
@@ -9186,7 +9314,7 @@
     defaults.defaultName = "Full Name";
     defaults.defaultPhone = "800-834-7790";
     defaults.defaultErrorLabel = "Declined";
-    defaults.defaultRedirectLabel = "You are being redirected...";
+    defaults.defaultRedirectLabel = "";
     defaults.defaultSuccessLabel = "Transaction Complete!";
     defaults.paymentTypeOrder = [0, 1];
     defaults.paymentService = hp.PaymentService.EFT; // EFT, EMONEY, TEST
@@ -9363,8 +9491,10 @@
         $element.attr("data-ets-key", hp.Utils.generateGuild());
 
         hp.Utils.setPaymentInstrument();
-        hp.Utils.signIn();
-        hp.Utils.setupPluginInstances($element);
+        
+        hp.Utils.signIn().then(function(){
+            hp.Utils.setupPluginInstances($element);
+        });
 
     };
 
