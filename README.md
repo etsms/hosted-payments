@@ -4,13 +4,19 @@ Hosted Payments is a comprehensive, browser-based financial transaction toolset,
 ## Get Started
 Visit https://www.etsms.com/docs/hosted-payments
 ## Credit Cards
-![Credit Cards](https://camo.githubusercontent.com/17eb87d57b135fcb669da3fc17c706dece83e3e4/687474703a2f2f696d322e657a6769662e636f6d2f746d702f657a6769662d323638343636353835342e676966)
+![Credit Cards](https://github.com/etsms/hosted-payments/blob/gh-pages/CreditCardManualEntry.gif?raw=true)
 
 ## Bank Accounts
-![Bank Accounts](https://camo.githubusercontent.com/d64451bc76e02c6b38b9d6cf27d97789ed7151b0/687474703a2f2f696d322e657a6769662e636f6d2f746d702f657a6769662d313630373331393631302e676966)
+![Bank Accounts](https://github.com/etsms/hosted-payments/blob/gh-pages/ACHManualEntry.gif?raw=true)
 
-## Customize Payment Acceptance Types
-![Acceptance Types](https://camo.githubusercontent.com/805042a42f8e6396a37569ddd002748510c4268a/687474703a2f2f696d322e657a6769662e636f6d2f746d702f657a6769662d333832313537303331392e676966)
+## Swipes & Barcode Scans
+![Acceptance Types](https://github.com/etsms/hosted-payments/blob/gh-pages/CreditCardSwipe.gif?raw=true)
+
+## Choose from many payment methods
+![Payment Methods](https://github.com/etsms/hosted-payments/blob/gh-pages/PaymentFlowWithTransvault.gif?raw=true)
+
+## Customize and order your payment options
+![Payment Options](https://github.com/etsms/hosted-payments/blob/gh-pages/PaymentFlowChangeCroped.gif?raw=true)
 
 ### Sample Callback Response (success)
 
@@ -30,6 +36,7 @@ Visit https://www.etsms.com/docs/hosted-payments
 | instrument\_id                         | <span class="string">16c61db5-6b02-48bd-ab32-9d401d<wbr>0eeb92</span> |
 | instrument\_type                       | <span class="string">VISA</span>                                      |
 | instrument\_last\_four                 | <span class="string">1111</span>                                      |
+| instrument\_routing\_last\_four        | <span class="string">0017</span>                                      |
 | instrument\_expiration\_date           | <span class="string">05/2017</span>                                   |
 | instrument\_verification\_method       | <span class="string"></span>                                          |
 | instrument\_entry\_mode                | <span class="string">MANUAL</span>                                    |
