@@ -1219,9 +1219,26 @@ div.fancy-select ul.options li.hover {
   z-index: 9;
   bottom: 14px;
 }
-.hp .hp-col-left .hp-secure img {
+.hp .hp-col-left .hp-secure .hp-secure-icon {
+  overflow: hidden;
+  *zoom: 1;
   margin-top: 15px;
-  width: 72px;
+  display: block;
+  width: 128px;
+  border: 1px solid #6C5893;
+  padding: 12px;
+  border-radius: 8px;
+}
+.hp .hp-col-left .hp-secure .hp-secure-icon img {
+  width: 30px;
+  float: left;
+  display: block;
+}
+.hp .hp-col-left .hp-secure .hp-secure-icon span {
+  float: left;
+  display: block;
+  margin: 0 10px 0;
+  color: #6C5893;
 }
 .hp .hp-col-left .hp-secure .hp-cards {
   width: 185px;
@@ -1462,6 +1479,28 @@ div.fancy-select ul.options li.hover {
 }
 .hp .hp-col-right .hp-content-transvault .hp-transvault-visual-image img.event {
   width: 106px;
+}
+.hp .hp-col-right .hp-content-transvault .hp-submit-refresh {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+  opacity: 0.8;
+  -moz-border-radius: 7px;
+  -webkit-border-radius: 7px;
+  border-radius: 7px;
+  cursor: pointer;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 4px;
+  border: 1px solid #50AF00;
+  height: 24px;
+  width: 24px;
+  background: rgba(80, 175, 0, 0.1);
+}
+.hp .hp-col-right .hp-content-transvault .hp-submit-refresh:hover {
+  background: rgba(80, 175, 0, 0.2);
+}
+.hp .hp-col-right .hp-content-transvault .hp-submit-refresh img.hp-submit-refresh-img {
+  width: 100%;
 }
 .hp .hp-col-right .hp-content-transvault .hp-submit {
   position: absolute;

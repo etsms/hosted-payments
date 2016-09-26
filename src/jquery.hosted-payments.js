@@ -3467,15 +3467,6 @@
 
     }
 
-    if (!String.prototype.startsWith) {
-
-        String.prototype.startsWith = function(searchString, position) {
-            position = position || 0;
-            return this.indexOf(searchString, position) === position;
-        };
-
-    }
-
     if (!Date.prototype.toISOString) {
 
         var pad = function(number) {
@@ -4009,7 +4000,8 @@
             '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/cd2abb29142a84bb16fbeb3d07a7aefa/raw/a17760bdd23cf1d90c22c8a2235f8d6e6753663e/gift-card-icon.svg" alt="Gift Cards" />',
             '</div>',
             '<a class="hp-secure-icon" href="https://www.etsms.com/" target="_blank" title="ETS - Electronic Transaction Systems">',
-            '<img src="https://cdn.rawgit.com/etsms/a5b6be8ebd898748ec829538bd4b603e/raw/df1b8a1e296ea12b90742328d036848af19fef1f/secure-icon.svg" alt="Secured by ETS" />',
+                '<img src="https://cdn.rawgit.com/etsms/a5b6be8ebd898748ec829538bd4b603e/raw/9691ef92d11b5a1608a73f5f46c427c4c494d0b9/secure-icon.svg" alt="Secured by ETS" />',
+                '<span>Secured by <br />ETS Corporation</span>',
             '</a>',
             '<small class="hp-version">',
             '<span class="' + (hp.Utils.getAmount() === 0 || hp.Utils.defaults.ignoreSubmission === true ? "hide " : "") + (hp.Utils.defaults.paymentType === hp.PaymentType.CHARGE ? "hp-version-charge" : "hp-version-refund") + '">' + (hp.Utils.defaults.paymentType === hp.PaymentType.CHARGE ? "Charge" : "Refund") + ' amount: <span class="hp-version-amount">' + hp.Utils.formatCurrency(hp.Utils.getAmount()) + '</span></span><br />',
@@ -7836,13 +7828,16 @@
 
         var $html = [
             '<div class="hp-transvault-visual">',
-            '<div class="hp-transvault-visual-image {{isAlt}}">',
-            '<img class="event event-default" src="https://cdn.rawgit.com/etsms/786cb7bdd1d077acc10d7d7e08a4241f/raw/58a2ec726610c18c21716ae6023f7c6d776b5a71/terminal-loading.svg" alt="Status" />',
-            '</div>',
-            '<p class="hp-input-transvault-message {{isAlt}}">',
-            'Disconnected <span></span>',
-            '</p>',
-            '<button class="hp-submit hp-submit-danger">Cancel Request</button>',
+                '<a class="hp-submit-refresh" href="javascript:;" title="Refresh Transvault">',
+                    '<img class="hp-submit-refresh-img" src="https://cdn.rawgit.com/etsms/0f62d83b5d3bf18ba57cb14648d913ac/raw/c5f48f7882ad1f48196450fa296caf05f674f48b/refresh-icon.svg" alt="Refresh Transvault Button" />',
+                '</a>',
+                '<div class="hp-transvault-visual-image {{isAlt}}">',
+                    '<img class="event event-default" src="https://cdn.rawgit.com/etsms/786cb7bdd1d077acc10d7d7e08a4241f/raw/58a2ec726610c18c21716ae6023f7c6d776b5a71/terminal-loading.svg" alt="Status" />',
+                '</div>',
+                '<p class="hp-input-transvault-message {{isAlt}}">',
+                    'Disconnected <span></span>',
+                '</p>',
+                '<button class="hp-submit hp-submit-danger">Cancel Request</button>',
             '</div>'
         ].join("");
 
@@ -7858,6 +7853,7 @@
         this.$parent.off("hp.transvaultProgress");
         this.$parent.find(".hp-submit").off();
         this.$parent.trigger("hp.notify");
+        this.$parent.find(".hp-submit-refresh").off();
         this.displayFormCount = 0;
         this.transvaultHub.connection.stop();
     };
@@ -7870,6 +7866,7 @@
 
         $this.transvaultHub.connection.url = hp.Utils.defaults.baseUrl + "/transvault";
         $this.setupWebockets();
+        $this.$parent.find(".hp-submit-refresh").on("click", hp.Utils.reset);
 
         $this.$parent.find(".hp-submit").on("click", function(e) {
             e.preventDefault();
@@ -8198,6 +8195,24 @@
 
     };
 
+    Transvault.prototype.checkConnection = function() {
+
+        hp.Utils.log("Trasvault Connection: Checking connection in " + (hp.Utils.defaults.transvaultConnectionTimeout / 1000) + " seconds...");
+
+        var $this = this;
+
+        setTimeout(function(){
+
+            hp.Utils.log("Trasvault Connection: State (" + $this.$parent.find(".hp-input-transvault-message").text() + ")");
+
+            if ($this.$parent.find(".hp-input-transvault-message").text().startsWith("Connect")) {
+                hp.Utils.log("Trasvault Connection: Plugin still 'connecting'. Restting plugin...");
+                hp.Utils.reset();
+            }
+
+        }, hp.Utils.defaults.transvaultConnectionTimeout);
+    };
+
     Transvault.prototype.setupWebockets = function(amount) {
 
         var $this = this,
@@ -8275,6 +8290,8 @@
                 }).then(function(res) {
 
                     $this.$parent.trigger("hp.transvaultProgress");
+
+                    $this.checkConnection();
 
                 }, function(err) {
 
@@ -9304,7 +9321,7 @@
     var pluginName = "hp",
         defaults = {};
 
-    defaults.version = "v3";
+    defaults.version = "v3.5.39";
     defaults.amount = 0;
     defaults.baseUrl = "https://www.etsemoney.com/hp/v3/adapters";
     defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
@@ -9341,6 +9358,7 @@
     defaults.customerName = "";
     defaults.promptForAvs = false;
     defaults.allowAvsSkip = true;
+    defaults.transvaultConnectionTimeout = 5000; // In seconds
 
     function Plugin(element, options) {
 
@@ -9394,6 +9412,10 @@
             }
 
             hp.Utils.setSession(apiKey, true);
+        }
+        
+        if (typeof $element.data("transvaultConnectionTimeout") !== "undefined") {
+            hp.Utils.defaults.transvaultConnectionTimeout = +($element.data("transvaultConnectionTimeout").toString());
         }
         
         if (typeof $element.data("avsStreet") !== "undefined") {
