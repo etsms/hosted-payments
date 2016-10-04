@@ -3969,51 +3969,56 @@
         // Create wrapping HTML
         var $wrapper = [
             '<div class="hp hp-form">',
-            '<div class="hp-loading-container">',
-            '<span class="hp-loading-text">Loading</span>',
-            '<div class="hp-loading"><span></span><span></span><span></span><span></span></div>',
-            '</div>',
-            '<div class="hp-error-container">',
-            '<span class="hp-error-text">{{error}} </span>',
-            '<div class="hp-error-message"></div>',
-            '<hr />',
-            '<div class="hp-error-disclaimer">If you feel that the above error was made by a mistake please contact our support at {{phone}}. <br /><br /><a href="javascript:;">&times; Dismiss error</a></div>',
-            '</div>',
-            '<div class="hp-row">',
-            '<div class="hp-col hp-col-left">',
-            '<ul class="hp-nav">',
-            '{{nav}}',
-            '</ul>',
-            '<div class="hp-support">',
-            '<strong>Help &amp; support</strong>',
-            '<p>Having issues with your payments? Call us at {{phone}}.</p>',
-            '</div>',
-            '<div class="hp-secure">',
-            '<div class="hp-cards">',
-            '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/106383645ba54667a82be0a6af599d8c/raw/18bfa3c78067a3104ce0025911900b2813442da2/amex-card-icon.svg" alt="AMEX" />',
-            '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/6928189390fabc35274fb4c5e050d97a/raw/5ace5093fbd78be1f2ec1b1b3a98cf8a9ae847b8/diners-card-icon.svg" alt="Diners" />',
-            '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/97bdce0c2be41b5e3e7d42f665d7e579/raw/94e5724101103c8c427192cdf5e5e04581240b1f/discover-card-icon.svg" alt="Discover" />',
-            '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/4df8161921e2349011bd7129a647be60/raw/cd7984e257825f010ebd38448bcad762b353f216/jcb-card-icon.svg" alt="JCB" />',
-            '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/25c8538814ffa61a43cb86bd71601f92/raw/cd7c9ff69acd3cb77be6dca4e9ff65aa5e3b8d36/mastercard-card-icon.svg" alt="Master Card" />',
-            '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/8f367f38b7ffb77b1a1a7e13de9c2731/raw/086944f18033f96996e18aa03e1393565b0b16dc/visa-card-icon.svg" alt="VISA" />',
-            '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/c2568c3f7343be79032ac7a717fa80de/raw/7923fdf2aacffbc6baf62454cc4213b46b943596/emoney-card-icon.svg" alt="EMoney" />',
-            '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/cd2abb29142a84bb16fbeb3d07a7aefa/raw/a17760bdd23cf1d90c22c8a2235f8d6e6753663e/gift-card-icon.svg" alt="Gift Cards" />',
-            '</div>',
-            '<a class="hp-secure-icon" href="https://www.etsms.com/" target="_blank" title="ETS - Electronic Transaction Systems">',
-                '<img src="https://cdn.rawgit.com/etsms/a5b6be8ebd898748ec829538bd4b603e/raw/9691ef92d11b5a1608a73f5f46c427c4c494d0b9/secure-icon.svg" alt="Secured by ETS" />',
-                '<span>Secured by <br />ETS Corporation</span>',
-            '</a>',
-            '<small class="hp-version">',
-            '<span class="' + (hp.Utils.getAmount() === 0 || hp.Utils.defaults.ignoreSubmission === true ? "hide " : "") + (hp.Utils.defaults.paymentType === hp.PaymentType.CHARGE ? "hp-version-charge" : "hp-version-refund") + '">' + (hp.Utils.defaults.paymentType === hp.PaymentType.CHARGE ? "Charge" : "Refund") + ' amount: <span class="hp-version-amount">' + hp.Utils.formatCurrency(hp.Utils.getAmount()) + '</span></span><br />',
-            'Hosted Payments ' + hp.Utils.getVersion(),
-            '</small>',
-            '</div>',
-            '</div>',
-            '<div class="hp-col hp-col-right">',
-            '{{order}}',
-            '<div class="hp-content hp-content-success">{{success}}</div>',
-            '</div>',
-            '</div>',
+                '<div class="hp-loading-container">',
+                    '<span class="hp-loading-text">Loading</span>',
+                    '<div class="hp-loading"><span></span><span></span><span></span><span></span></div>',
+                '</div>',
+                '<div class="hp-error-container">',
+                    '<span class="hp-error-text">{{error}} </span>',
+                    '<div class="hp-error-message"></div>',
+                    '<hr />',
+                    '<div class="hp-error-disclaimer">If you feel that the above error was made by a mistake please contact our support at {{phone}}. <br /><br /><a href="javascript:;">&times; Dismiss error</a></div>',
+                '</div>',
+                '<div class="hp-row">',
+                    '<div class="hp-col hp-col-left">',
+                        '<ul class="hp-nav">',
+                        '{{nav}}',
+                        '</ul>',
+                        '<div class="hp-secure">',
+                            '<div class="hp-support">',
+                                '<strong>Help &amp; support</strong>',
+                                '<p>Having issues with your payments? Call us at <a href="tel:{{phone}}">{{phone}}</a>.</p>',
+                                '<br />',
+                            '</div>',
+                            '<div class="hp-cards">',
+                                '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/amex.svg" alt="AMEX" />',
+                                '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/diners.svg" alt="Diners" />',
+                                '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/discover.svg" alt="Discover" />',
+                                '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/jcb.svg" alt="JCB" />',
+                                '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/mastercard.svg" alt="Master Card" />',
+                                '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/visa.svg" alt="VISA" />',
+                                '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/c2568c3f7343be79032ac7a717fa80de/raw/7923fdf2aacffbc6baf62454cc4213b46b943596/emoney-card-icon.svg" alt="EMoney" />',
+                                '<img class="hp-cards-icons" src="https://cdn.rawgit.com/etsms/cd2abb29142a84bb16fbeb3d07a7aefa/raw/a17760bdd23cf1d90c22c8a2235f8d6e6753663e/gift-card-icon.svg" alt="Gift Cards" />',
+                            '</div>',
+                            '<a class="hp-secure-icon" href="https://www.etsms.com/" target="_blank" title="ETS - Electronic Transaction Systems">',
+                                '<img src="https://cdn.rawgit.com/etsms/a5b6be8ebd898748ec829538bd4b603e/raw/9691ef92d11b5a1608a73f5f46c427c4c494d0b9/secure-icon.svg" alt="Secured by ETS" />',
+                                '<span>Secured by <br />ETS Corporation</span>',
+                            '</a>',
+                            '<div class="hp-secure-bottom">',
+                                '<div class="hp-secure-bottom-left">',
+                                    '<span class="' + (hp.Utils.getAmount() === 0 || hp.Utils.defaults.ignoreSubmission === true ? "hide " : "") + (hp.Utils.defaults.paymentType === hp.PaymentType.CHARGE ? "hp-version-charge" : "hp-version-refund") + '">' + (hp.Utils.defaults.paymentType === hp.PaymentType.CHARGE ? "Charge" : "Refund") + ': <span class="hp-version-amount">' + hp.Utils.formatCurrency(hp.Utils.getAmount()) + '</span></span><br />',
+                                '</div>',
+                                '<div class="hp-secure-bottom-right">',
+                                    hp.Utils.getVersion(),
+                                '</div>',
+                            '</div>',
+                        '</div>',
+                    '</div>',
+                    '<div class="hp-col hp-col-right">',
+                        '{{order}}',
+                        '<div class="hp-content hp-content-success">{{success}}</div>',
+                    '</div>',
+                '</div>',
             '</div>'
         ].join("");
 
@@ -4269,18 +4274,6 @@
         currentSession.apiKey = hp.Utils.defaults.session ? (hp.Utils.defaults.session.apiKey ? hp.Utils.defaults.session.apiKey : "") : "";
 
         return currentSession;
-    };
-
-    var isEMoneyCardNumber = function(cardNumber) {
-
-        if (typeof String.prototype.startsWith != 'function') {
-            String.prototype.startsWith = function(str) {
-                return this.slice(0, str.length) == str;
-            };
-        }
-
-        return cardNumber.startsWith("627571");
-
     };
 
     var buildResultObjectByType = function(response) {
@@ -5015,8 +5008,10 @@
             hasChecked = true;
         }
 
-        if (location.protocol !== "https:" && !hasChecked) {
-            hp.Utils.showError("This connection is untrusted. Make sure you're visting this website using 'HTTPS'!");
+        if (!hp.Utils.defaults.allowHttpsSkip) {
+            if (location.protocol !== "https:" && !hasChecked) {
+                hp.Utils.showError("This connection is untrusted. Make sure you're visting this website using 'HTTPS'!");
+            }
         }
 
     };
@@ -5458,7 +5453,7 @@
                 $submit = $this.find(".hp-submit"),
                 $all = $this.find(".hp-input"),
                 clearInputs = $.noop();
-
+            
             hp.Utils.checkHttpsConnection();
 
             instance.init();
@@ -5943,7 +5938,7 @@
 
         var cardType = $.payment.cardType(cardNumber);
 
-        if (cardType === null && this.wasOnceEMoney) {
+        if ((cardType === null || cardType !== "emoney") && this.wasOnceEMoney) {
             var date = new Date();
             $name.val("").trigger("keyup").removeAttr("readonly");
             $month.removeAttr("readonly").val(date.getMonth() <= 9 ? "0" + date.getMonth() : date.getMonth()).trigger("change");
@@ -6405,7 +6400,7 @@
     window.hp = hp || {};
 
     /*
-     * Credit Card Class
+     * Gift Card Class
      */
     function GiftCard($element) {
         this.context = null;
@@ -7329,7 +7324,7 @@
     window.hp = hp || {};
 
     /*
-     * Bank Account Class
+     * Code Class
      */
     function Code($element) {
         this.context = null;
@@ -7448,6 +7443,7 @@
         $(document).pos();
 
         $(document).on("hp.global_swipped_start", function(event, data) {
+            hp.Utils.showLoader();
             hp.Utils.defaults.onSwipeStartCallback();
         });
 
@@ -7461,7 +7457,9 @@
 
         // Kills spacebar page-down event
         $(window).on("keydown", function(e) {
-            return e.keyCode != 32;
+            if (e.target == document.body) {
+                return e.keyCode != 32;
+            }
         });
 
     };
@@ -8154,6 +8152,10 @@
             $this.onCancelled();
         }
 
+        if (typeof response !== "undefined" && (response === "Operation Cancelled by User")) {
+            $this.onCancelled();
+        }
+
     };
 
     Transvault.prototype.cancelTransaction = function() {
@@ -8162,8 +8164,23 @@
             correlationId = hp.Utils.getCorrelationId();
 
         if (this.transvaultHub && this.transvaultHub.server && this.transvaultHub.server.cancelTransaction) {
-            this.transvaultHub.server.cancelTransaction(token, correlationId);
-            this.onCancelled();
+
+            var $this = this;
+
+            hp.Utils.makeRequest({
+                "transvault": {
+                    "transvaultRequest": {
+                        "token": token,
+                        "amount": hp.Utils.getAmount(),
+                        "transactionId": $this.transactionId,
+                        "terminalId": $this.terminalId,
+                        "action": "CANCEL",
+                        "browserId": $.connection.hub.id
+                    }
+                }
+            }).then(function(){
+                $this.onCancelled();
+            });
         }
 
     };
@@ -8173,6 +8190,8 @@
         this.$parent.find(".event-default").hide();
         this.$parent.find(".hp-submit").hide();
         this.displayFormCount = 0;
+
+        var $this = this;
 
         setTimeout(function() {
 
@@ -8189,9 +8208,10 @@
                 });
             }
 
+            $this.transvaultHub.connection.stop();
+
         }, 250);
 
-        this.transvaultHub.connection.stop();
 
     };
 
@@ -8355,11 +8375,11 @@
 
 // Generated by CoffeeScript 1.7.1
 (function() {
-  var $, cardFromNumber, cardFromType, cards, defaultFormat, formatBackCardNumber, formatBackExpiry, formatCardNumber, formatExpiry, formatForwardExpiry, formatForwardSlashAndSpace, hasTextSelected, luhnCheck, reFormatCardNumber, reFormatExpiry, restrictCVC, restrictCardNumber, restrictExpiry, restrictNumeric, setCardType,
+  var $, cardFromNumber, cardFromType, cards, defaultFormat, formatBackCardNumber, formatBackExpiry, formatCardNumber, formatExpiry, formatForwardExpiry, formatForwardSlashAndSpace, hasTextSelected, luhnCheck, reFormatCVC, reFormatCardNumber, reFormatExpiry, reFormatNumeric, replaceFullWidthChars, restrictCVC, restrictCardNumber, restrictExpiry, restrictNumeric, safeVal, setCardType,
     __slice = [].slice,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  $ = jQuery;
+  $ = window.jQuery || window.Zepto || window.$;
 
   $.payment = {};
 
@@ -8373,80 +8393,87 @@
 
   defaultFormat = /(\d{1,4})/g;
 
-  cards = [
+  $.payment.cards = cards = [
     {
-      type: 'visaelectron',
-      pattern: /^4(026|17500|405|508|844|91[37])/,
+      type: 'elo',
+      patterns: [401178, 401179, 431274, 438935, 451416, 457393, 457631, 457632, 504175, 506699, 5067, 509, 627780, 636297, 636368, 650, 6516, 6550],
       format: defaultFormat,
       length: [16],
       cvcLength: [3],
       luhn: true
     }, {
       type: 'maestro',
-      pattern: /^(5(018|0[23]|[68])|6(39|7))/,
+      patterns: [5018, 502, 503, 506, 56, 58, 639, 6220, 67],
       format: defaultFormat,
       length: [12, 13, 14, 15, 16, 17, 18, 19],
       cvcLength: [3],
       luhn: true
     }, {
       type: 'forbrugsforeningen',
-      pattern: /^600/,
+      patterns: [600],
       format: defaultFormat,
       length: [16],
       cvcLength: [3],
       luhn: true
     }, {
       type: 'dankort',
-      pattern: /^5019/,
+      patterns: [5019],
       format: defaultFormat,
       length: [16],
       cvcLength: [3],
       luhn: true
     }, {
       type: 'visa',
-      pattern: /^4/,
+      patterns: [4],
       format: defaultFormat,
       length: [13, 16],
       cvcLength: [3],
       luhn: true
     }, {
+      type: 'emoney',
+      patterns: [627571],
+      format: defaultFormat,
+      length: [16],
+      cvcLength: [3],
+      luhn: true
+    }, {
       type: 'mastercard',
-      pattern: /^5[0-5]/,
+      patterns: [51, 52, 53, 54, 55, 22, 23, 24, 25, 26, 27],
       format: defaultFormat,
       length: [16],
       cvcLength: [3],
       luhn: true
     }, {
       type: 'amex',
-      pattern: /^3[47]/,
+      patterns: [34, 37],
       format: /(\d{1,4})(\d{1,6})?(\d{1,5})?/,
       length: [15],
       cvcLength: [3, 4],
       luhn: true
     }, {
       type: 'dinersclub',
-      pattern: /^3[0689]/,
-      format: defaultFormat,
+      patterns: [30, 36, 38, 39],
+      format: /(\d{1,4})(\d{1,6})?(\d{1,4})?/,
       length: [14],
       cvcLength: [3],
       luhn: true
     }, {
       type: 'discover',
-      pattern: /^6([045]|22)/,
+      patterns: [60, 64, 65, 622],
       format: defaultFormat,
       length: [16],
       cvcLength: [3],
       luhn: true
+    }, {
+      type: 'unionpay',
+      patterns: [62, 88],
+      format: defaultFormat,
+      length: [16, 17, 18, 19],
+      cvcLength: [3],
+      luhn: false
     }, {
       type: 'jcb',
-      pattern: /^35/,
-      format: defaultFormat,
-      length: [16],
-      cvcLength: [3],
-      luhn: true
-    }, {
-      type: 'emoney',
-      pattern: /^627571/,
+      patterns: [35],
       format: defaultFormat,
       length: [16],
       cvcLength: [3],
@@ -8455,12 +8482,17 @@
   ];
 
   cardFromNumber = function(num) {
-    var card, _i, _len;
+    var card, p, pattern, _i, _j, _len, _len1, _ref;
     num = (num + '').replace(/\D/g, '');
     for (_i = 0, _len = cards.length; _i < _len; _i++) {
       card = cards[_i];
-      if (card.pattern.test(num)) {
-        return card;
+      _ref = card.patterns;
+      for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+        pattern = _ref[_j];
+        p = pattern + '';
+        if (num.substr(0, p.length) === p) {
+          return card;
+        }
       }
     }
   };
@@ -8499,19 +8531,82 @@
     if (($target.prop('selectionStart') != null) && $target.prop('selectionStart') !== $target.prop('selectionEnd')) {
       return true;
     }
-    if (typeof document !== "undefined" && document !== null ? (_ref = document.selection) != null ? typeof _ref.createRange === "function" ? _ref.createRange().text : void 0 : void 0 : void 0) {
-      return true;
+    if ((typeof document !== "undefined" && document !== null ? (_ref = document.selection) != null ? _ref.createRange : void 0 : void 0) != null) {
+      if (document.selection.createRange().text) {
+        return true;
+      }
     }
     return false;
   };
 
-  reFormatCardNumber = function(e) {
+  safeVal = function(value, $target) {
+    var currPair, cursor, digit, error, last, prevPair;
+    try {
+      cursor = $target.prop('selectionStart');
+    } catch (_error) {
+      error = _error;
+      cursor = null;
+    }
+    last = $target.val();
+    $target.val(value);
+    if (cursor !== null && $target.is(":focus")) {
+      if (cursor === last.length) {
+        cursor = value.length;
+      }
+      if (last !== value) {
+        prevPair = last.slice(cursor - 1, +cursor + 1 || 9e9);
+        currPair = value.slice(cursor - 1, +cursor + 1 || 9e9);
+        digit = value[cursor];
+        if (/\d/.test(digit) && prevPair === ("" + digit + " ") && currPair === (" " + digit)) {
+          cursor = cursor + 1;
+        }
+      }
+      $target.prop('selectionStart', cursor);
+      return $target.prop('selectionEnd', cursor);
+    }
+  };
+
+  replaceFullWidthChars = function(str) {
+    var chars, chr, fullWidth, halfWidth, idx, value, _i, _len;
+    if (str == null) {
+      str = '';
+    }
+    fullWidth = '\uff10\uff11\uff12\uff13\uff14\uff15\uff16\uff17\uff18\uff19';
+    halfWidth = '0123456789';
+    value = '';
+    chars = str.split('');
+    for (_i = 0, _len = chars.length; _i < _len; _i++) {
+      chr = chars[_i];
+      idx = fullWidth.indexOf(chr);
+      if (idx > -1) {
+        chr = halfWidth[idx];
+      }
+      value += chr;
+    }
+    return value;
+  };
+
+  reFormatNumeric = function(e) {
+    var $target;
+    $target = $(e.currentTarget);
     return setTimeout(function() {
-      var $target, value;
-      $target = $(e.currentTarget);
+      var value;
       value = $target.val();
+      value = replaceFullWidthChars(value);
+      value = value.replace(/\D/g, '');
+      return safeVal(value, $target);
+    });
+  };
+
+  reFormatCardNumber = function(e) {
+    var $target;
+    $target = $(e.currentTarget);
+    return setTimeout(function() {
+      var value;
+      value = $target.val();
+      value = replaceFullWidthChars(value);
       value = $.payment.formatCardNumber(value);
-      return $target.val(value);
+      return safeVal(value, $target);
     });
   };
 
@@ -8571,18 +8666,20 @@
     } else if (/\s\d?$/.test(value)) {
       e.preventDefault();
       return setTimeout(function() {
-        return $target.val(value.replace(/\s\d?$/, ''));
+        return $target.val(value.replace(/\d$/, ''));
       });
     }
   };
 
   reFormatExpiry = function(e) {
+    var $target;
+    $target = $(e.currentTarget);
     return setTimeout(function() {
-      var $target, value;
-      $target = $(e.currentTarget);
+      var value;
       value = $target.val();
+      value = replaceFullWidthChars(value);
       value = $.payment.formatExpiry(value);
-      return $target.val(value);
+      return safeVal(value, $target);
     });
   };
 
@@ -8602,7 +8699,14 @@
     } else if (/^\d\d$/.test(val)) {
       e.preventDefault();
       return setTimeout(function() {
-        return $target.val("" + val + " / ");
+        var m1, m2;
+        m1 = parseInt(val[0], 10);
+        m2 = parseInt(val[1], 10);
+        if (m2 > 2 && m1 !== 0) {
+          return $target.val("0" + m1 + " / " + m2);
+        } else {
+          return $target.val("" + val + " / ");
+        }
       });
     }
   };
@@ -8643,12 +8747,24 @@
     if (($target.prop('selectionStart') != null) && $target.prop('selectionStart') !== value.length) {
       return;
     }
-    if (/\s\/\s\d?$/.test(value)) {
+    if (/\d\s\/\s$/.test(value)) {
       e.preventDefault();
       return setTimeout(function() {
-        return $target.val(value.replace(/\s\/\s\d?$/, ''));
+        return $target.val(value.replace(/\d\s\/\s$/, ''));
       });
     }
+  };
+
+  reFormatCVC = function(e) {
+    var $target;
+    $target = $(e.currentTarget);
+    return setTimeout(function() {
+      var value;
+      value = $target.val();
+      value = replaceFullWidthChars(value);
+      value = value.replace(/\D/g, '').slice(0, 4);
+      return safeVal(value, $target);
+    });
   };
 
   restrictNumeric = function(e) {
@@ -8743,13 +8859,16 @@
   };
 
   $.payment.fn.formatCardCVC = function() {
-    this.payment('restrictNumeric');
+    this.on('keypress', restrictNumeric);
     this.on('keypress', restrictCVC);
+    this.on('paste', reFormatCVC);
+    this.on('change', reFormatCVC);
+    this.on('input', reFormatCVC);
     return this;
   };
 
   $.payment.fn.formatCardExpiry = function() {
-    this.payment('restrictNumeric');
+    this.on('keypress', restrictNumeric);
     this.on('keypress', restrictExpiry);
     this.on('keypress', formatExpiry);
     this.on('keypress', formatForwardSlashAndSpace);
@@ -8761,7 +8880,7 @@
   };
 
   $.payment.fn.formatCardNumber = function() {
-    this.payment('restrictNumeric');
+    this.on('keypress', restrictNumeric);
     this.on('keypress', restrictCardNumber);
     this.on('keypress', formatCardNumber);
     this.on('keydown', formatBackCardNumber);
@@ -8775,6 +8894,9 @@
 
   $.payment.fn.restrictNumeric = function() {
     this.on('keypress', restrictNumeric);
+    this.on('paste', reFormatNumeric);
+    this.on('change', reFormatNumeric);
+    this.on('input', reFormatNumeric);
     return this;
   };
 
@@ -8784,8 +8906,7 @@
 
   $.payment.cardExpiryVal = function(value) {
     var month, prefix, year, _ref;
-    value = value.replace(/\s/g, '');
-    _ref = value.split('/', 2), month = _ref[0], year = _ref[1];
+    _ref = value.split(/[\s\/]+/, 2), month = _ref[0], year = _ref[1];
     if ((year != null ? year.length : void 0) === 2 && /^\d+$/.test(year)) {
       prefix = (new Date).getFullYear();
       prefix = prefix.toString().slice(0, 2);
@@ -8872,12 +8993,12 @@
 
   $.payment.formatCardNumber = function(num) {
     var card, groups, upperLength, _ref;
+    num = num.replace(/\D/g, '');
     card = cardFromNumber(num);
     if (!card) {
       return num;
     }
     upperLength = card.length[card.length.length - 1];
-    num = num.replace(/\D/g, '');
     num = num.slice(0, upperLength);
     if (card.format.global) {
       return (_ref = num.match(card.format)) != null ? _ref.join(' ') : void 0;
@@ -8903,10 +9024,14 @@
     mon = parts[1] || '';
     sep = parts[2] || '';
     year = parts[3] || '';
-    if (year.length > 0 || (sep.length > 0 && !(/\ \/?\ ?/.test(sep)))) {
+    if (year.length > 0) {
       sep = ' / ';
-    }
-    if (mon.length === 1 && (mon !== '0' && mon !== '1')) {
+    } else if (sep === ' /') {
+      mon = mon.substring(0, 1);
+      sep = '';
+    } else if (mon.length === 2 || sep.length > 0) {
+      sep = ' / ';
+    } else if (mon.length === 1 && (mon !== '0' && mon !== '1')) {
       mon = "0" + mon;
       sep = ' / ';
     }
@@ -9321,7 +9446,7 @@
     var pluginName = "hp",
         defaults = {};
 
-    defaults.version = "v3.5.39";
+    defaults.version = "v3.6.7";
     defaults.amount = 0;
     defaults.baseUrl = "https://www.etsemoney.com/hp/v3/adapters";
     defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
@@ -9358,6 +9483,7 @@
     defaults.customerName = "";
     defaults.promptForAvs = false;
     defaults.allowAvsSkip = true;
+    defaults.allowHttpsSkip = false;
     defaults.transvaultConnectionTimeout = 5000; // In seconds
 
     function Plugin(element, options) {
@@ -9444,6 +9570,10 @@
 
         if (typeof $element.data("allowAvsSkip") !== "undefined") {
             hp.Utils.defaults.allowAvsSkip = $element.data("allowAvsSkip").toString().toLowerCase() == "false" ? false : true;
+        }
+
+        if (typeof $element.data("allowHttpsSkip") !== "undefined") {
+            hp.Utils.defaults.allowHttpsSkip = $element.data("allowHttpsSkip").toString().toLowerCase() == "false" ? false : true;
         }
 
         if (typeof $element.data("correlationId") !== "undefined") {

@@ -1074,6 +1074,25 @@ div.fancy-select ul.options li.hover {
 .hp .hp-col-left .hp-nav {
   list-style: none;
 }
+@media screen and (max-width: 656px) {
+  .hp .hp-col-left .hp-nav {
+    margin: 0;
+  }
+  .hp .hp-col-left .hp-nav li.hp-type {
+    margin: 0;
+    text-align: center;
+  }
+  .hp .hp-col-left .hp-nav li.hp-type a {
+    text-indent: 0px !important;
+    border-bottom: 1px solid #9CA3B3;
+    padding: 14px;
+  }
+  .hp .hp-col-left .hp-nav li.hp-type a > img {
+    display: block;
+    position: static !important;
+    margin: 0 auto;
+  }
+}
 .hp .hp-col-left .hp-nav .hp-type.hp-active a {
   background: #f3f3f3;
 }
@@ -1148,86 +1167,32 @@ div.fancy-select ul.options li.hover {
   width: 33px;
   margin-top: -12px;
 }
-@media screen and (max-width: 656px) {
-  .hp .hp-col-left .hp-support,
-  .hp .hp-col-left .hp-secure,
-  .hp .hp-col-left .hp-nav {
-    margin: 0;
-  }
-  .hp .hp-col-left .hp-support li.hp-type,
-  .hp .hp-col-left .hp-secure li.hp-type,
-  .hp .hp-col-left .hp-nav li.hp-type {
-    margin: 0;
-    text-align: center;
-  }
-  .hp .hp-col-left .hp-support li.hp-type a,
-  .hp .hp-col-left .hp-secure li.hp-type a,
-  .hp .hp-col-left .hp-nav li.hp-type a {
-    text-indent: 0px !important;
-    border-bottom: 1px solid #9CA3B3;
-    padding: 14px;
-  }
-  .hp .hp-col-left .hp-support li.hp-type a > img,
-  .hp .hp-col-left .hp-secure li.hp-type a > img,
-  .hp .hp-col-left .hp-nav li.hp-type a > img {
-    display: block;
-    position: static !important;
-    margin: 0 auto;
-  }
-}
-.hp .hp-col-left .hp-support strong,
-.hp .hp-col-left .hp-secure strong,
-.hp .hp-col-left .hp-nav strong {
-  color: #2E3037;
-  display: block;
-  font-weight: 600;
-  margin-bottom: 7px;
-  margin-top: 14px;
-}
-.hp .hp-col-left .hp-support a,
-.hp .hp-col-left .hp-secure a,
-.hp .hp-col-left .hp-nav a {
-  font-weight: 600;
-  display: block;
-}
-.hp .hp-col-left .hp-support small,
-.hp .hp-col-left .hp-secure small,
-.hp .hp-col-left .hp-nav small {
-  color: #007aff;
-  font-size: 11px;
-  margin: 20px 0 0;
-  padding: 0;
-  display: block;
-}
-.hp .hp-col-left .hp-support,
 .hp .hp-col-left .hp-secure {
-  padding: 0 12px;
+  width: 160px;
+  position: absolute;
+  bottom: 22px;
+  left: 12px;
+  font-size: 11px;
 }
 @media screen and (max-width: 656px) {
-  .hp .hp-col-left .hp-support,
   .hp .hp-col-left .hp-secure {
     display: none;
   }
 }
-.hp .hp-col-left .hp-version,
-.hp .hp-col-left .hp-support,
-.hp .hp-col-left .hp-secure {
-  font-size: 11px !important;
-}
-.hp .hp-col-left .hp-secure {
-  position: absolute;
-  z-index: 9;
-  bottom: 14px;
-}
-.hp .hp-col-left .hp-secure .hp-secure-icon {
+.hp .hp-col-left .hp-secure .hp-secure-icon,
+.hp .hp-col-left .hp-secure .hp-secure-bottom {
   overflow: hidden;
   *zoom: 1;
-  margin-top: 15px;
   display: block;
-  width: 128px;
-  border: 1px solid #6C5893;
   padding: 12px;
-  border-radius: 8px;
+  border: 1px solid #6C5893;
+}
+.hp .hp-col-left .hp-secure .hp-secure-icon {
+  margin-top: 15px;
+  border-radius: 8px 8px 0 0;
+  border-bottom: 0 none;
+  color: #6C5893;
+  font-weight: bold;
 }
 .hp .hp-col-left .hp-secure .hp-secure-icon img {
   width: 30px;
@@ -1238,13 +1203,32 @@ div.fancy-select ul.options li.hover {
   float: left;
   display: block;
   margin: 0 10px 0;
-  color: #6C5893;
+}
+.hp .hp-col-left .hp-secure .hp-secure-bottom {
+  background: #6C5893;
+  color: #fff;
+  border-radius: 0 0 8px 8px;
+  padding-top: 4px;
+  padding-bottom: 5px;
+  -moz-box-shadow: inset 0px 2px 5px #604d86;
+  -webkit-box-shadow: inset 0px 2px 5px #604d86;
+  box-shadow: inset 0px 2px 5px #604d86;
+  border-top: 1px solid #3d2173;
+}
+.hp .hp-col-left .hp-secure .hp-secure-bottom > div {
+  font-weight: bold;
+}
+.hp .hp-col-left .hp-secure .hp-secure-bottom .hp-secure-bottom-left {
+  float: left;
+}
+.hp .hp-col-left .hp-secure .hp-secure-bottom .hp-secure-bottom-right {
+  float: right;
 }
 .hp .hp-col-left .hp-secure .hp-cards {
   width: 185px;
 }
 .hp .hp-col-left .hp-secure .hp-cards-icons {
-  width: 23px;
+  width: 37px;
   display: inline-block;
   margin-right: 4px;
   margin-bottom: 3px;
@@ -1310,7 +1294,7 @@ div.fancy-select ul.options li.hover {
   border: 0 none;
   display: block;
   height: 236px;
-  width: 400px;
+  width: 398px;
   position: relative;
   margin: 0 auto 0;
 }
