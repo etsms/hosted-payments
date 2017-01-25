@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2016 ETS Corporation
+ * Copyright (c) 2017 ETS Corporation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -3026,12 +3026,11 @@
 }(window.jQuery));
 
 /*!
- * ASP.NET SignalR JavaScript Library v2.2.0
+ * ASP.NET SignalR JavaScript Library v2.2.1
  * http://signalr.net/
  *
- * Copyright Microsoft Open Technologies, Inc. All rights reserved.
- * Licensed under the Apache 2.0
- * https://github.com/SignalR/SignalR/blob/master/LICENSE.md
+ * Copyright (c) .NET Foundation. All rights reserved.
+ * Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
  *
  */
 
@@ -3108,19 +3107,15 @@
         proxies['transvaultHub'] = this.createHubProxy('transvaultHub'); 
         proxies['transvaultHub'].client = { };
         proxies['transvaultHub'].server = {
-            cancelTransaction: function (apiKey, correlationId) {
-                return proxies['transvaultHub'].invoke.apply(proxies['transvaultHub'], $.merge(["CancelTransaction"], $.makeArray(arguments)));
-             },
-
-            registerClientWithApiKey: function (apiKey) {
-                return proxies['transvaultHub'].invoke.apply(proxies['transvaultHub'], $.merge(["RegisterClientWithApiKey"], $.makeArray(arguments)));
+            sendMessage: function (data) {
+                return proxies['transvaultHub'].invoke.apply(proxies['transvaultHub'], $.merge(["SendMessage"], $.makeArray(arguments)));
              }
         };
 
         return proxies;
     };
 
-    signalR.hub = $.hubConnection("/hp/v3/adapters/transvault", { useDefaultPath: false });
+    signalR.hub = $.hubConnection("/hosted-payments/v3/adapters/transvault", { useDefaultPath: false });
     $.extend(signalR, signalR.hub.createHubProxies());
 
 }(window.jQuery, window));
@@ -3810,6 +3805,9 @@
             case "refund":
                 result = hp.PaymentType.REFUND;
                 break;
+            case "createinstrument":
+                result = hp.PaymentType.CREATE_INSTRUMENT;
+                break;
             default:
                 result = hp.PaymentType.CHARGE;
         }
@@ -3959,6 +3957,7 @@
         $(".hp-error-container .hp-error-disclaimer a").off("click");
 
         hp.Utils.defaults.onErrorDismissCallback();
+
         hp.Utils.reset();
 
     };
@@ -4006,7 +4005,7 @@
                             '</a>',
                             '<div class="hp-secure-bottom">',
                                 '<div class="hp-secure-bottom-left">',
-                                    '<span class="' + (hp.Utils.getAmount() === 0 || hp.Utils.defaults.ignoreSubmission === true ? "hide " : "") + (hp.Utils.defaults.paymentType === hp.PaymentType.CHARGE ? "hp-version-charge" : "hp-version-refund") + '">' + (hp.Utils.defaults.paymentType === hp.PaymentType.CHARGE ? "Charge" : "Refund") + ': <span class="hp-version-amount">' + hp.Utils.formatCurrency(hp.Utils.getAmount()) + '</span></span><br />',
+                                    '<span class="' + (hp.Utils.getAmount() === 0 || hp.Utils.defaults.ignoreSubmission === true ? "hide " : "") + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "hp-version-refund" : "hp-version-charge") + '">' + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "Refund" : "Charge") + ': <span class="hp-version-amount">' + hp.Utils.formatCurrency(hp.Utils.getAmount()) + '</span></span><br />',
                                 '</div>',
                                 '<div class="hp-secure-bottom-right">',
                                     hp.Utils.getVersion(),
@@ -4248,6 +4247,18 @@
         return html;
     };
 
+    var setIpAddress = function(ipAddress) {
+
+        if (typeof ipAddress !== "undefined" && ipAddress !== null && ipAddress !== "") {
+            hp.Utils.defaults.ipAddress = ipAddress;
+        }
+
+    };
+
+    var getIpAddress = function() {
+        return hp.Utils.defaults.ipAddress + "";
+    };
+
     var setSession = function(session, isApiKey) {
 
         var currentSession = getSession();
@@ -4274,6 +4285,45 @@
         currentSession.apiKey = hp.Utils.defaults.session ? (hp.Utils.defaults.session.apiKey ? hp.Utils.defaults.session.apiKey : "") : "";
 
         return currentSession;
+    };
+
+    var buildSuccessResultObject = function() {
+        return {
+            "status": "Success",
+            "amount": getAmount(),
+            "message": "Transaction processed",
+            "token": getSession().sessionToken,
+            "transaction_id": "",
+            "transaction_approval_code": "",
+            "transaction_avs_street_passed": false,
+            "transaction_avs_postal_code_passed": false,
+            "transaction_currency": "USD$",
+            "transaction_status_indicator": "",
+            "transaction_type": hp.Utils.defaults.paymentType,
+            "transaction_tax": 0,
+            "transaction_surcharge": 0,
+            "transaction_gratuity": 0,
+            "transaction_cashback": 0,
+            "transaction_total": getAmount(),
+            "correlation_id": getCorrelationId(),
+            "instrument_id": "",
+            "instrument_type": "",
+            "instrument_method": "Other",
+            "instrument_last_four": "",
+            "instrument_routing_last_four": "",
+            "instrument_expiration_date": "",
+            "instrument_verification_method": "",
+            "instrument_entry_type": hp.Utils.defaults.entryType,
+            "instrument_entry_type_description": "KEY_ENTRY",
+            "instrument_verification_results": "",
+            "created_on": (new Date()).toISOString(),
+            "customer_name": "",
+            "customer_signature": "https://images.pmoney.com/00000000",
+            "anti_forgery_token": hp.Utils.defaults.antiForgeryToken,
+            "application_identifier": "Hosted Payments",
+            "application_response_code": "",
+            "application_issuer_data": ""
+        };
     };
 
     var buildResultObjectByType = function(response) {
@@ -4366,7 +4416,7 @@
                     isError = res.isException ? true : false,
                     status = "Success",
                     payload = payment.__request,
-                    swipe = payment.__request.__swipe,
+                    swipe = payload ? payload.__swipe : undefined,
                     isAch = isBankAccount(payload),
                     isEm = isEMoney(payload),
                     isCC = isCreditCard(payload),
@@ -4434,42 +4484,20 @@
                     message = "Transaction refunded.";
                 }
 
-                var successResponse = {
-                    "status": status,
-                    "amount": payment.amount,
-                    "message": (isError ? res.description : message),
-                    "token": session.sessionToken,
-                    "transaction_id": res.transactionId,
-                    "transaction_approval_code": "",
-                    "transaction_avs_street_passed": false,
-                    "transaction_avs_postal_code_passed": false,
-                    "transaction_currency": "USD$",
-                    "transaction_status_indicator": "",
-                    "transaction_type": hp.Utils.defaults.paymentType,
-                    "transaction_tax": 0,
-                    "transaction_surcharge": 0,
-                    "transaction_gratuity": 0,
-                    "transaction_cashback": 0,
-                    "transaction_total": payment.amount,
-                    "correlation_id": getCorrelationId(),
-                    "instrument_id": payment.instrumentId,
-                    "instrument_type": type,
-                    "instrument_method": "Other",
-                    "instrument_last_four": lastFour,
-                    "instrument_routing_last_four": routingLastFour,
-                    "instrument_expiration_date": expirationDate,
-                    "instrument_verification_method": "",
-                    "instrument_entry_type": hp.Utils.defaults.entryType,
-                    "instrument_entry_type_description": isTrack ? "MAGNETIC_SWIPE" : "KEY_ENTRY",
-                    "instrument_verification_results": "",
-                    "created_on": createdOn,
-                    "customer_name": name,
-                    "customer_signature": "https://images.pmoney.com/00000000",
-                    "anti_forgery_token": hp.Utils.defaults.antiForgeryToken,
-                    "application_identifier": "Hosted Payments",
-                    "application_response_code": "",
-                    "application_issuer_data": ""
-                };
+                var successResponse = buildSuccessResultObject();
+
+                successResponse.status = status;
+                successResponse.amount = payment.amount;
+                successResponse.message = (isError ? res.description : message);
+                successResponse.transaction_id = res.transactionId;
+                successResponse.transaction_total = payment.amount;
+                successResponse.instrument_id = payment.instrumentId;
+                successResponse.instrument_type = type;
+                successResponse.instrument_last_four = lastFour;
+                successResponse.instrument_routing_last_four = routingLastFour;
+                successResponse.instrument_expiration_date = expirationDate;
+                successResponse.instrument_entry_type_description = isTrack ? "MAGNETIC_SWIPE" : "KEY_ENTRY";
+                successResponse.customer_name = name;
 
                 responses.push(successResponse);
 
@@ -4529,6 +4557,52 @@
 
         return deferred;
 
+    };
+
+    var retrieveTransactionStatus = function(transactionId) {
+
+        var deferred = jQuery.Deferred();
+
+        var successResponse = buildSuccessResultObject();
+
+        var statusRequest = {
+            "status": {
+                "statusRequest": {
+                    "token": getSession().sessionToken,
+                    "transactionId": transactionId
+                }
+            }
+        };
+
+        hp.Utils.makeRequest(statusRequest).then(function(statusResponse) {
+
+            if (statusResponse.type === "Transaction" && typeof statusResponse.properties !== "undefined") {
+
+                var isACH = statusResponse.properties.accountType === "BankAccount";
+
+                successResponse.transaction_approval_code = isACH ? "" : statusResponse.properties.approvalCode;
+                successResponse.transaction_avs_postal_code_passed = isACH ? true : statusResponse.properties.postalCodeCheck;
+                successResponse.transaction_avs_street_passed = isACH ? true : statusResponse.properties.addressLine1Check;
+                successResponse.customer_signature = (statusResponse.properties.signatureRef === null || statusResponse.properties.signatureRef === undefined || statusResponse.properties.signatureRef === "") ? "https://images.pmoney.com/00000000" : statusResponse.properties.signatureRef;
+                successResponse.message = (successResponse.message + " " + (statusResponse.properties.message + ".")).toLowerCase().replace(" .", "");
+                successResponse.instrument_verification_results = isACH ? false : true;
+                successResponse.instrument_verification_method = isACH ? "" : "SIGNATURE";
+                successResponse.instrument_method = (typeof statusResponse.properties.accountType !== "undefined") ? statusResponse.properties.accountType : "CreditCard";
+                successResponse.customer_name = statusResponse.properties.nameOnAccount;
+                successResponse.instrument_id = statusResponse.properties.instrumentId;
+                successResponse.instrument_last_four = statusResponse.properties.accountNumber;
+                successResponse.instrument_type = statusResponse.properties.cardType;
+                successResponse.transaction_id = transactionId;
+                successResponse.transaction_avs_postal_code_passed = statusResponse.properties.postalCodeCheck;
+                successResponse.transaction_avs_street_passed = statusResponse.properties.addressLine1Check;
+
+            }
+
+            deferred.resolve(successResponse);
+
+        }, deferred.reject);
+
+        return deferred;
     };
 
     var requestTypes = {};
@@ -4809,17 +4883,11 @@
             data: JSON.stringify(data)
         };
 
-        if (hp.Utils.defaults.paymentService.toLowerCase() === "emoney") {
-            requestObject.headers = {
-                'X-EMoney-Manager': generateGuild()
-            };
-        }
-
         if (isSync) {
             requestObject.async = false;
         }
 
-        $.ajax(requestObject).success(function(res) {
+        $.ajax(requestObject).done(function(res) {
 
             var requestData = getObjectResponseFromData(data);
 
@@ -4834,7 +4902,9 @@
 
             deferred.resolve(result);
 
-        }).error(deferred.reject);
+        })
+        .fail(deferred.reject)
+        .catch(deferred.reject);
 
         return deferred;
 
@@ -4855,10 +4925,6 @@
         hp.Utils.log("Getting instance element...", hp.Utils.__instance.element);
 
         var element = $(hp.Utils.__instance.element);
-
-        try {
-            $.connection.hub.stop();
-        } catch (e) {}
 
         hp.Utils.log("Emptying the container element...");
 
@@ -4958,6 +5024,8 @@
         }).then(function(res) {
 
             hp.Utils.setSession(res.token);
+            hp.Utils.setIpAddress(res.ipAddress);
+
             deferred.resolve(res);
 
             if (!shouldBypassSessionStorage) {
@@ -4968,6 +5036,11 @@
             hp.Utils.log("Sign In: Retrieved from server.");
 
         }, function(res) {
+
+            if (typeof res === "undefined" || res === null || res === "") {
+                hp.Utils.reset();
+                return;
+            }
 
             var errorResponse = {
                 "status": "Error",
@@ -5036,18 +5109,13 @@
                 async: false
             };
 
-        if (hp.Utils.defaults.paymentService.toString().toLowerCase() === "emoney") {
-            settings.headers = {
-                'X-EMoney-Manager': generateGuild()
-            };
-        }
+        $.ajax(settings).done(function(res) {
 
-        $.ajax(settings).success(function(res) {
-
-            if (res.balanceResponse)
+            if (res.balanceResponse) {
                 balance = res.balanceResponse.balance;
+            }
 
-        }).error(function() {
+        }).fail(function() {
             balance = 0;
         });
 
@@ -5408,6 +5476,8 @@
 
     var handleSuccess = function(res) {
 
+        console.log(res);
+
         var errorResponse = {
             "status": "Error",
             "message": "Your session is no longer valid. Please refresh your page and try again.",
@@ -5490,7 +5560,7 @@
                         var message = "";
                         var bypass = false;
                         var createdOn = (new Date()).toISOString();
-                        var sessionId = hp.Utils.getSession().sessionId;
+                        var sessionId = hp.Utils.getSession().sessionToken;
 
                         if (typeof data !== "undefined" && typeof data.error !== "undefined") {
                             message = data.error.description;
@@ -5522,6 +5592,7 @@
                         }
 
                         try {
+                            hp.Utils.plugins.Transvault.cancelTransaction(true);
                             $.connection.hub.stop();
                         } catch (ex) {
                             hp.Utils.log(ex);
@@ -5586,6 +5657,8 @@
     hp.Utils.setAmount = setAmount;
     hp.Utils.getSession = getSession;
     hp.Utils.setSession = setSession;
+    hp.Utils.setIpAddress = setIpAddress;
+    hp.Utils.getIpAddress = getIpAddress;
     hp.Utils.getBalance = getBalance;
     hp.Utils.formatCurrency = formatCurrency;
     hp.Utils.buildResultObjectByType = buildResultObjectByType;
@@ -5616,6 +5689,7 @@
     hp.Utils.setupPluginInstances = setupPluginInstances;
     hp.Utils.reset = reset;
     hp.Utils.setPaymentService = setPaymentService;
+    hp.Utils.retrieveTransactionStatus = retrieveTransactionStatus;
 
 })(jQuery, window, document);
 
@@ -5785,6 +5859,8 @@
         $fancy.fancySelect({
             includeBlank: true
         });
+
+        this.transactionId = hp.Utils.defaults.transactionId;
     };
 
     CreditCard.prototype.clearInputs = function() {
@@ -6109,6 +6185,7 @@
                     "createPaymentInstrument": {
                         "createPaymentInstrumentRequest": {
                             "correlationId": hp.Utils.getCorrelationId(),
+                            "transactionId": that.transactionId,
                             "token": hp.Utils.getSession().sessionToken,
                             "name": that.formData.name,
                             "properties": {
@@ -6139,7 +6216,7 @@
                 }
 
                 that.instrumentId = res.instrumentId;
-                that.transactionId = res.transactionId;
+                that.transactionId = (typeof res.transactionId !== "undefined") ? res.transactionId : that.transactionId;
 
                 that.$parent.trigger("hp.submit", {
                     "type": 0,
@@ -6412,6 +6489,7 @@
             _isValid: false
         };
         this.currrentPage = 0;
+        this.transactionId = "";
     }
 
     var sessionId = "",
@@ -6436,6 +6514,7 @@
         this.$content = $content;
         this.totalPages = $content.find(".hp-page").length;
         this.currrentPage = 0;
+        this.transactionId = hp.Utils.defaults.transactionId;
     };
 
     GiftCard.prototype.clearInputs = function() {
@@ -6650,7 +6729,7 @@
             }
 
             that.instrumentId = res.instrumentId;
-            that.transactionId = res.transactionId;
+            that.transactionId = (typeof res.transactionId !== "undefined") ? res.transactionId : that.transactionId;
 
             that.$parent.trigger("hp.submit", {
                 "type": 0,
@@ -6846,6 +6925,7 @@
         this.requestTypes.createPaymentInstrument = 0;
         this.requestTypes.charge = 1;
         this.requestTypes.error = 9;
+        this.transactionId = "";
     }
 
     var $fullname = null,
@@ -6888,6 +6968,7 @@
         $submit = this.$content.find(".hp-submit");
         $all = this.$content.find(".hp-input");
 
+        this.transactionId = hp.Utils.defaults.transactionId;
     };
 
     BankAccount.prototype.clearInputs = function() {
@@ -7229,6 +7310,7 @@
             "createPaymentInstrument": {
                 "createPaymentInstrumentRequest": {
                     "correlationId": hp.Utils.getCorrelationId(),
+                    "transactionId": $this.transactionId,
                     "token": hp.Utils.getSession().sessionToken,
                     "name": $this.formData.name,
                     "properties": {
@@ -7255,7 +7337,7 @@
             }
 
             $this.instrumentId = res.instrumentId;
-            $this.transactionId = res.transactionId;
+            $this.transactionId = (typeof res.transactionId !== "undefined") ? res.transactionId : $this.transactionId;
 
             $this.$parent.trigger("hp.submit", {
                 "type": 0,
@@ -7380,6 +7462,7 @@
         $visualcode = this.$content.find(".hp-card-visual.hp-card-visual-flat");
         $all = this.$content.find(".hp-input");
 
+        this.transactionId = hp.Utils.defaults.transactionId;
     };
 
     Code.prototype.clearInputs = function() {
@@ -7618,6 +7701,7 @@
                 "createPaymentInstrument": {
                     "createPaymentInstrumentRequest": {
                         "correlationId": hp.Utils.getCorrelationId(),
+                        "transactionId": $this.transactionId,
                         "token": hp.Utils.getSession().sessionToken,
                         "name": $this.formData.nameOnCard,
                         "properties": cardProperties,
@@ -7643,7 +7727,7 @@
             }
 
             $this.instrumentId = res.instrumentId;
-            $this.transactionId = res.transactionId;
+            $this.transactionId = (typeof res.transactionId !== "undefined") ? res.transactionId : $this.transactionId;
 
             hp.Utils.showLoader();
 
@@ -7712,7 +7796,7 @@
     };
 
     /*
-     * Export "Bank Account"
+     * Export "Code"
      */
     hp.Code = Code;
 
@@ -7727,39 +7811,54 @@
      */
     window.hp = hp || {};
 
+    /*
+     * The default message shown when transactions are in progress...
+     */
+    var transactionInProgressMessage = "Transaction in progress... Don't refresh!",
+        authorizationInProgressMessage = "Authorization in progress... Don't refresh!",
+        terminalActiveMessage = "Terminal active... Don't refresh!",
+        waitingForSignatureMessage = "Waiting for signature... Don't refresh!",
+        errorMessage = "Declined... Please try again.",
+        cancelMessage = "Cancelled... Please try again.";
+
     var messages = {
-        "AuthorizationResponse": "Authorizing",
-        "BeginSale": "Terminal active",
-        "LoginSuccess": "Terminal active",
-        "Login Success": "Terminal active",
-        "ExecuteCommand": "Terminal active",
-        "DisplayAmount": "Waiting for customer",
-        "DisplayForm": "Waiting for customer",
-        "FindTermsAndConditions": "Waiting for customer",
-        "InsertOrSwipe": "Waiting for customer",
-        "Idle": "Waiting for customer",
-        "Offline": "Terminal offline",
-        "ProcessingError": "Declined",
-        "ReadCardRequest": "Waiting for customer",
-        "SetEmvPaymentType": "Checking EMV card type",
-        "Gratuity": "Waiting for tip/gratuity",
-        "CardInserted": "Perfoming EMV",
-        "CardRemoved": "EMV Complete",
-        "WaitingForSignature": "Waiting for signature",
-        "DownloadingSignature": "Waiting for signature",
-        "Signature": "Waiting for signature",
-        "SignatureBlocks": "Waiting for signature",
-        "StopTransaction": "Authorizing",
-        "TermsAndConditions": "Waiting for TOC acceptance",
-        "Operation Cancelled by User": "Transaction cancelled",
-        "Cancelled": "Operation Cancelled by User"
+        "AuthorizationResponse": authorizationInProgressMessage,
+        "BeginSale": transactionInProgressMessage,
+        "Login": terminalActiveMessage,
+        "LoginSuccess": terminalActiveMessage,
+        "ExecuteCommand": terminalActiveMessage,
+        "DisplayAmount": transactionInProgressMessage,
+        "DisplayForm": transactionInProgressMessage,
+        "FindTermsAndConditions": transactionInProgressMessage,
+        "InsertOrSwipe": transactionInProgressMessage,
+        "Idle": transactionInProgressMessage,
+        "Offline": errorMessage,
+        "ProcessingError": errorMessage,
+        "ReadCardRequest": transactionInProgressMessage,
+        "SetEmvPaymentType": authorizationInProgressMessage,
+        "Gratuity": waitingForSignatureMessage,
+        "CardInserted": authorizationInProgressMessage,
+        "CardRemoved": authorizationInProgressMessage,
+        "WaitingForSignature": waitingForSignatureMessage,
+        "DownloadingSignature": waitingForSignatureMessage,
+        "Signature": waitingForSignatureMessage,
+        "SignatureBlocks": waitingForSignatureMessage,
+        "StopTransaction": authorizationInProgressMessage,
+        "TermsAndConditions": authorizationInProgressMessage,
+        "Cancelled": cancelMessage,
+        "Connected": terminalActiveMessage,
+        "Declined" : errorMessage,
+        "Error" : errorMessage
     };
 
     var getMessage = function(event) {
 
         var eventName = "Idle";
+        var eventValue = "";
+        var eventMessage = "";
 
         if (event !== undefined && event !== null) {
+
             if (event.STATE !== undefined && event.STATE !== null) {
                 eventName = event.STATE;
             }
@@ -7767,18 +7866,85 @@
             if (event.INFO !== undefined && event.INFO !== null) {
                 eventName = event.INFO;
             }
+
+            if (event.Message !== undefined && event.Message !== null) {
+                eventName = event.Message;
+            }
+
+            if (event.GA !== undefined && event.GA !== null) {
+                eventName = "Gratuity";
+            }
+
+            if (event.OR !== undefined && event.OR !== null) {
+
+                eventName = event.OR;
+
+                if (eventName === "SUCCESS") {
+                    eventName = "AuthorizationResponse";
+                }
+
+                if (eventName === "DECLINED") {
+                    eventName = "Declined";
+                }
+
+                if (eventName === "CANCELLED") {
+                    eventName = "Cancelled";
+                }
+
+                if (eventName === "ERROR") {
+                    eventName = "Error";
+                }
+            }
+
+            if (event.RD !== undefined && event.RD !== null) {
+                eventMessage = event.RD;
+            }
+
         }
 
         eventName = eventName.replace(/\s/gi, "");
+        eventValue = messages[eventName];
 
-        var msg = messages[eventName];
+        hp.Utils.log(eventName, eventValue);
 
-        if (msg !== null && typeof message !== "undefined") {
-            msg = messages.Idle;
+        return {
+            key: eventName,
+            value: eventValue, 
+            message: eventMessage
+        };
+
+    };
+
+
+
+    var getMessageKeyColor = function(message) {
+
+        var result = "";
+
+        switch (message) {
+            case transactionInProgressMessage:
+                result = "red";
+                break;
+            case authorizationInProgressMessage:
+                result = "red";
+                break;
+            case terminalActiveMessage:
+                result = "#0062CC";
+                break;
+            case waitingForSignatureMessage:
+                result = "#0062CC";
+                break;
+            case errorMessage:
+                result = "red";
+                break;
+            default:
+                result = "#000000";
         }
 
-        return msg;
+        return result;
+
     };
+
 
     /*
      * Transvault Class
@@ -7788,6 +7954,9 @@
         this.$parent = null;
         this.$content = null;
         this.$element = $element;
+        this.hasSuccess = false;
+        this.browserId = null;
+        this.transactionId = "";
         this.formData = {
             _isValid: false
         };
@@ -7810,12 +7979,11 @@
         this.transvaultHub = $.connection.transvaultHub;
         this.shouldConnect = true;
         this.$btn = null;
-        this.displayFormCount = 0;
 
         this.terminalId = hp.Utils.getTerminalId();
         this.connectionId = "0";
         this.correlationId = "";
-        this.transactionId = hp.Utils.generateGuild();
+        this.transactionId = hp.Utils.defaults.transactionId;
     };
 
     Transvault.prototype.createTemplate = function() {
@@ -7852,8 +8020,10 @@
         this.$parent.find(".hp-submit").off();
         this.$parent.trigger("hp.notify");
         this.$parent.find(".hp-submit-refresh").off();
-        this.displayFormCount = 0;
-        this.transvaultHub.connection.stop();
+
+        try { this.transvaultHub.connection.stop(); } 
+        catch (e) { }
+        
     };
 
     Transvault.prototype.attachEvents = function() {
@@ -7875,12 +8045,42 @@
 
     };
 
+    Transvault.prototype.onMessage = function(response) {
+
+        var messageObject = getMessage(response);
+        var eventKey = messageObject.key;
+        var eventMessage = messageObject.value;
+
+        var el = this.setMessage(eventMessage);
+
+        el.css("color", getMessageKeyColor(eventMessage));
+
+        if (eventKey === "AuthorizationResponse") {
+            this.onSuccess(response);
+            return;
+        } 
+
+        if (eventMessage === waitingForSignatureMessage) {
+            hp.Utils.showLoader();
+            return;
+        }
+
+        if (eventMessage === cancelMessage) {
+            this.onCancelled();
+            return;
+        }
+
+        if (eventMessage === errorMessage) {
+            this.onError(messageObject);
+            return;
+        }
+
+    };
+
     Transvault.prototype.onSuccess = function(response) {
 
         var $this = this,
-            props = response.Properties;
-
-        hp.Utils.log("Trasvault Event: ", response);
+            props = response;
 
         if (!props.ACCT) {
             props.ACCT = "";
@@ -8112,76 +8312,68 @@
         };
 
         $this.$parent.trigger("hp.transvaultSuccess", successResponse);
+        $this.hasSuccess = true;
 
-        hp.Utils.log("Sign In: Session cleared.");
         sessionStorage.clear();
 
     };
 
-    Transvault.prototype.onError = function(response) {
-        this.$parent.trigger("hp.transvaultError", response);
-        this.transvaultHub.connection.stop();
-        hp.Utils.log("Trasvault Error: ", response);
-    };
-
     Transvault.prototype.setMessage = function(message) {
-        this.$parent.find(".hp-input-transvault-message").text(message);
+
+        var el = this.$parent.find(".hp-input-transvault-message");
+        el.text(message);
+
+        return el;
+        
     };
 
-    Transvault.prototype.onEvent = function(response) {
 
-        hp.Utils.log("Trasvault Event: ", response);
-
-        var $this = this,
-            msg = getMessage(response);
-
-        $this.setMessage(msg);
-
-        $this.$parent.trigger("hp.transvaultEvent", msg);
-
-        if (typeof response !== "undefined" && (response.STATE === "DisplayForm" || response.INFO === "DisplayForm")) {
-            $this.$parent.find(".hp-submit").fadeOut(250);
-            $this.displayFormCount = $this.displayFormCount + 1;
-        }
-
-        if (typeof response !== "undefined" && (response.STATE === "DownloadingSignature" || response.INFO === "DownloadingSignature")) {
-            hp.Utils.showLoader();
-        }
-
-        if (typeof response !== "undefined" && (response.STATE === "Cancelled")) {
-            $this.onCancelled();
-        }
-
-        if (typeof response !== "undefined" && (response === "Operation Cancelled by User")) {
-            $this.onCancelled();
-        }
-
-    };
-
-    Transvault.prototype.cancelTransaction = function() {
+    Transvault.prototype.cancelTransaction = function(shouldNotNotify) {
 
         var token = hp.Utils.getSession().sessionToken,
-            correlationId = hp.Utils.getCorrelationId();
+            correlationId = hp.Utils.getCorrelationId(),
+            deferred = jQuery.Deferred(),
+            amount = hp.Utils.getAmount();
 
-        if (this.transvaultHub && this.transvaultHub.server && this.transvaultHub.server.cancelTransaction) {
-
-            var $this = this;
-
-            hp.Utils.makeRequest({
-                "transvault": {
-                    "transvaultRequest": {
-                        "token": token,
-                        "amount": hp.Utils.getAmount(),
-                        "transactionId": $this.transactionId,
-                        "terminalId": $this.terminalId,
-                        "action": "CANCEL",
-                        "browserId": $.connection.hub.id
-                    }
-                }
-            }).then(function(){
-                $this.onCancelled();
-            });
+        if (typeof shouldNotNotify !== "undefined") {
+            shouldNotNotify = true;
         }
+
+        var $this = this;
+
+        if ($this.browserId === null) {
+
+            if (!shouldNotNotify) {
+                $this.onCancelled();
+            }
+
+            deferred.resolve();
+
+            return;
+        }
+
+        $this.sendMessage({
+            "transvault": {
+                "transvaultRequest": {
+                    "token": token,
+                    "amount": amount,
+                    "transactionId": $this.transactionId,
+                    "correlationId": "HP:FROM-GUI",
+                    "terminalId": $this.terminalId,
+                    "action": "CANCEL",
+                    "browserId": $this.browserId,
+                    "ipAddress": hp.Utils.getIpAddress()
+                }
+            }
+        });
+
+        if (!shouldNotNotify) {
+            $this.onCancelled();
+        }
+
+        deferred.resolve();
+
+        return deferred;
 
     };
 
@@ -8189,7 +8381,6 @@
 
         this.$parent.find(".event-default").hide();
         this.$parent.find(".hp-submit").hide();
-        this.displayFormCount = 0;
 
         var $this = this;
 
@@ -8197,70 +8388,73 @@
 
             var createdOn = (new Date()).toISOString();
             var sessionId = hp.Utils.getSession().sessionId;
+            var message = "Transaction Cancelled.";
+
             hp.Utils.showError("Transaction Cancelled.");
 
             if (!hp.Utils.shouldErrorPostBack()) {
                 hp.Utils.defaults.errorCallback({
                     "status": "Error",
-                    "message": "Transaction Cancelled.",
+                    "message": message,
                     "created_on": createdOn,
                     "token": sessionId
                 });
             }
 
-            $this.transvaultHub.connection.stop();
+            try {
+                $this.transvaultHub.connection.stop();
+            } catch (e) { }
 
-        }, 250);
-
+        }, 50);
 
     };
 
-    Transvault.prototype.checkConnection = function() {
+    Transvault.prototype.onError = function(messageObject) {
 
-        hp.Utils.log("Trasvault Connection: Checking connection in " + (hp.Utils.defaults.transvaultConnectionTimeout / 1000) + " seconds...");
+        this.$parent.find(".event-default").hide();
+        this.$parent.find(".hp-submit").hide();
 
         var $this = this;
 
-        setTimeout(function(){
+        setTimeout(function() {
 
-            hp.Utils.log("Trasvault Connection: State (" + $this.$parent.find(".hp-input-transvault-message").text() + ")");
+            var createdOn = (new Date()).toISOString();
+            var sessionId = hp.Utils.getSession().sessionId;
+            var message = "Transaction Declined.";
 
-            if ($this.$parent.find(".hp-input-transvault-message").text().startsWith("Connect")) {
-                hp.Utils.log("Trasvault Connection: Plugin still 'connecting'. Restting plugin...");
-                hp.Utils.reset();
+            if (messageObject.eventMessage !== "") {
+                message = messageObject.eventMessage;
             }
 
-        }, hp.Utils.defaults.transvaultConnectionTimeout);
+            hp.Utils.showError("Transaction Declined.");
+
+            if (!hp.Utils.shouldErrorPostBack()) {
+                hp.Utils.defaults.errorCallback({
+                    "status": "Error",
+                    "message": message,
+                    "created_on": createdOn,
+                    "token": sessionId
+                });
+            }
+
+            try {
+                $this.transvaultHub.connection.stop();
+            } catch (e) { }
+
+        }, 50);
+
+    };
+
+    Transvault.prototype.sendMessage = function(request) {
+        var requestStringified = JSON.stringify(request);
+        this.transvaultHub.server.sendMessage(requestStringified);
     };
 
     Transvault.prototype.setupWebockets = function(amount) {
 
         var $this = this,
-            $message = $this.$parent.find(".hp-input-transvault-message");
-
-        var errorHandler = function(res) {
-
-            if (res === "Operation Cancelled by User") {
-                $this.onEvent(res);
-                return;
-            }
-
-            if (res === "Success") {
-                $this.onEvent(res);
-                return;
-            }
-
-            $this.transvaultHub.connection.stop();
-            $this.onError(res);
-        };
-
-        var successHandle = function(res) {
-            $this.onSuccess(res);
-        };
-
-        var eventHandle = function(res) {
-            $this.onEvent(res);
-        };
+            $message = $this.$parent.find(".hp-input-transvault-message"),
+            token = hp.Utils.getSession().sessionToken;
 
         amount = amount || hp.Utils.getAmount();
         $this.correlationId = hp.Utils.getCorrelationId();
@@ -8269,70 +8463,87 @@
             return;
         }
 
-        $message.off("click").removeClass("hp-input-transvault-message-btn").text("Connecting");
+        var messageHandler = function(response) {
+            $this.onMessage(response);
+        };
 
-        var token = hp.Utils.getSession().sessionToken;
+        var reconnectHandler = function(response) {
+
+            hp.Utils.log("Transvault: Connection error!");
+
+            setTimeout(function() { 
+                hp.Utils.log("Transvault: Connection reconnecting...");
+                $message.css("color", "#FDFDFD").text("Reconnecting in 5 seconds...");
+                hp.Utils.reset();
+            }, 15000);
+
+        };
+
+        var errorHandler = function(response) {
+
+            if (response) {
+                $message.css("color", "#FC5F45").text(response);
+                return;
+            }
+
+            $message.css("color", "#FC5F45").text("Could not connect!");
+
+            reconnectHandler(response);
+        };
+
+        $message.off("click").removeClass("hp-input-transvault-message-btn").text("Connecting");
 
         hp.Utils.log("Transvault: Addding events...");
 
-        $this.transvaultHub.off("onSuccess").on("onSuccess", successHandle);
-        $this.transvaultHub.off("onError").on("onError", errorHandler);
-        $this.transvaultHub.off("onEvent").on("onEvent", eventHandle);
-        $this.transvaultHub.logging = true;
+        $this.transvaultHub.off("onMessage").on("onMessage", messageHandler);
 
-        $this.transvaultHub.connection.start({
-                withCredentials: false,
-                jsonp: true
-            })
-            .done(function() {
+        try {
 
-                $(".hp-input-transvault-message")
-                    .text("Connected...")
-                    .css("color", "#50AF00");
+            $this.transvaultHub.connection
+                .start({ 
+                    withCredentials: false, 
+                    jsonp: false,
+                    transport: ['webSockets'],
+                    waitForPageLoad: true
+                })
+                .done(function() {
 
-                hp.Utils.log("Your connection ID: " + $.connection.hub.id);
+                    $(".hp-input-transvault-message")
+                        .text("Connected (listening)...")
+                        .css("color", "#F4854A");
 
-                hp.Utils.log("Sign in and bypass sessionStorage.");
+                    hp.Utils.log("Your connection ID: " + $.connection.hub.id);
 
-                hp.Utils.makeRequest({
-                    "transvault": {
-                        "transvaultRequest": {
-                            "token": token,
-                            "amount": amount,
-                            "transactionId": $this.transactionId,
-                            "correlationId": $this.correlationId,
-                            "entryType": hp.Utils.defaults.entryType,
-                            "terminalId": $this.terminalId,
-                            "action": hp.Utils.defaults.paymentType,
-                            "browserId" : $.connection.hub.id
+                    $this.browserId = $.connection.hub.id;
+
+                    $this.sendMessage({
+                        "transvault": {
+                            "transvaultRequest": {
+                                "token": token,
+                                "amount": amount,
+                                "transactionId": $this.transactionId,
+                                "correlationId": $this.correlationId,
+                                "entryType": hp.Utils.defaults.entryType,
+                                "terminalId": $this.terminalId,
+                                "action": hp.Utils.defaults.paymentType,
+                                "browserId": $this.browserId,
+                                "ipAddress": hp.Utils.getIpAddress()
+                            }
                         }
-                    }
-                }).then(function(res) {
+                    });
 
-                    $this.$parent.trigger("hp.transvaultProgress");
+                })
+                .fail(errorHandler);
 
-                    $this.checkConnection();
+            $this.transvaultHub.connection.error(reconnectHandler);
+            $this.transvaultHub.connection.disconnected(reconnectHandler);
 
-                }, function(err) {
-
-                    $this.$parent.trigger("hp.transvaultError", err.responseJSON);
-
-                    $message.css("color", "#FC5F45").text("Could not connect!");
-
-                });
-
-            })
-            .fail(function(err) {
-
-                $message.css("color", "#FC5F45").text("Could not connect!");
-
-            });
-
+        } catch (error) {
+            reconnectHandler("An unknown exception occurred. Reconnecting...");
+        }
 
         $this.$parent.trigger("hp.notify");
-
     };
-
 
     Transvault.prototype.showSuccess = function(delay) {
         hp.Utils.showSuccessPage(delay);
@@ -9436,7 +9647,7 @@
 
 }).call(this);
 /*
- *  jQuery Hosted Payments - v3.1.0
+ *  jQuery Hosted Payments - v3.6.44
  *
  *  Made by Erik Zettersten
  *  Under MIT License
@@ -9446,16 +9657,16 @@
     var pluginName = "hp",
         defaults = {};
 
-    defaults.version = "v3.6.7";
+    defaults.version = "v3.6.44";
     defaults.amount = 0;
-    defaults.baseUrl = "https://www.etsemoney.com/hp/v3/adapters";
+    defaults.baseUrl = "https://htv.emoney.com/hp/v3/adapters";
     defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
     defaults.defaultDateCharacters = "&middot;&middot;";
     defaults.defaultNameOnCardName = "Name On Card";
     defaults.defaultNameOnCardNameSwipe = "Swipe/Scan Card";
     defaults.defaultName = "Full Name";
     defaults.defaultPhone = "800-834-7790";
-    defaults.defaultErrorLabel = "Declined";
+    defaults.defaultErrorLabel = "Error";
     defaults.defaultRedirectLabel = "";
     defaults.defaultSuccessLabel = "Transaction Complete!";
     defaults.paymentTypeOrder = [0, 1];
@@ -9471,9 +9682,10 @@
     defaults.onErrorDismissCallback = $.noop;
     defaults.ignoreSubmission = false;
     defaults.terminalId = "";
+    defaults.transactionId = hp.Utils.generateGuild();
     defaults.instrumentId = "";
     defaults.apiKey = "";
-    defaults.paymentType = hp.PaymentType.CHARGE; // "CHARGE", "REFUND"
+    defaults.paymentType = hp.PaymentType.CHARGE; // "CHARGE", "REFUND", "CREATE_INSTRUMENT"
     defaults.entryType = hp.EntryType.KEYED_CARD_NOT_PRESENT; // "DEVICE_CAPTURED", "KEYED_CARD_PRESENT", "KEYED_CARD_NOT_PRESENT"
     defaults.billingAddress = {};
     defaults.billingAddress.addressLine1 = "";
@@ -9484,7 +9696,7 @@
     defaults.promptForAvs = false;
     defaults.allowAvsSkip = true;
     defaults.allowHttpsSkip = false;
-    defaults.transvaultConnectionTimeout = 5000; // In seconds
+    defaults.ipAddress = "";
 
     function Plugin(element, options) {
 
@@ -9540,8 +9752,8 @@
             hp.Utils.setSession(apiKey, true);
         }
         
-        if (typeof $element.data("transvaultConnectionTimeout") !== "undefined") {
-            hp.Utils.defaults.transvaultConnectionTimeout = +($element.data("transvaultConnectionTimeout").toString());
+        if (typeof $element.data("transactionId") !== "undefined") {
+            hp.Utils.defaults.transactionId = $element.data("transactionId").toString();
         }
         
         if (typeof $element.data("avsStreet") !== "undefined") {
