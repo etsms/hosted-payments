@@ -486,7 +486,8 @@ div.fancy-select ul.options li.hover {
   display: block !important;
 }
 .hp .hp-loading-container,
-.hp .hp-error-container {
+.hp .hp-error-container,
+.hp .hp-app-link-container {
   -moz-box-shadow: inset 1px 1px 0 #f3f3f3, inset -1px -1px 0 #f3f3f3;
   -webkit-box-shadow: inset 1px 1px 0 #f3f3f3, inset -1px -1px 0 #f3f3f3;
   box-shadow: inset 1px 1px 0 #f3f3f3, inset -1px -1px 0 #f3f3f3;
@@ -494,9 +495,9 @@ div.fancy-select ul.options li.hover {
   display: none;
   z-index: 10;
 }
-.hp .hp-loading-container.hp-loading-container-active, .hp .hp-loading-container.hp-error-container-active,
-.hp .hp-error-container.hp-loading-container-active,
-.hp .hp-error-container.hp-error-container-active {
+.hp .hp-loading-container.hp-page-active,
+.hp .hp-error-container.hp-page-active,
+.hp .hp-app-link-container.hp-page-active {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -510,31 +511,36 @@ div.fancy-select ul.options li.hover {
   border: 1px solid #9CA3B3;
 }
 .hp .hp-loading-container .hp-error-text,
-.hp .hp-error-container .hp-error-text {
+.hp .hp-error-container .hp-error-text,
+.hp .hp-app-link-container .hp-error-text {
   font-size: 3em;
   color: #EA2D3F;
   margin: 30px 0 0 30px;
   display: block;
 }
 .hp .hp-loading-container .hp-error-disclaimer,
-.hp .hp-error-container .hp-error-disclaimer {
+.hp .hp-error-container .hp-error-disclaimer,
+.hp .hp-app-link-container .hp-error-disclaimer {
   width: 370px;
   margin: 30px;
 }
 @media screen and (max-width: 656px) {
   .hp .hp-loading-container .hp-error-disclaimer,
-  .hp .hp-error-container .hp-error-disclaimer {
+  .hp .hp-error-container .hp-error-disclaimer,
+  .hp .hp-app-link-container .hp-error-disclaimer {
     width: auto;
   }
 }
 .hp .hp-loading-container .hp-error-message,
-.hp .hp-error-container .hp-error-message {
+.hp .hp-error-container .hp-error-message,
+.hp .hp-app-link-container .hp-error-message {
   font-size: 2em;
   margin: 0 0 0 30px;
   color: #9CA3B3;
 }
 .hp .hp-loading-container .hp-loading-text,
-.hp .hp-error-container .hp-loading-text {
+.hp .hp-error-container .hp-loading-text,
+.hp .hp-app-link-container .hp-loading-text {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -547,12 +553,14 @@ div.fancy-select ul.options li.hover {
 }
 @media screen and (max-width: 656px) {
   .hp .hp-loading-container .hp-loading-text,
-  .hp .hp-error-container .hp-loading-text {
+  .hp .hp-error-container .hp-loading-text,
+  .hp .hp-app-link-container .hp-loading-text {
     display: none;
   }
 }
 .hp .hp-loading-container .hp-loading,
-.hp .hp-error-container .hp-loading {
+.hp .hp-error-container .hp-loading,
+.hp .hp-app-link-container .hp-loading {
   position: absolute;
   line-height: 40px;
   top: 50%;
@@ -561,7 +569,8 @@ div.fancy-select ul.options li.hover {
   margin-top: -35px;
 }
 .hp .hp-loading-container .hp-loading span,
-.hp .hp-error-container .hp-loading span {
+.hp .hp-error-container .hp-loading span,
+.hp .hp-app-link-container .hp-loading span {
   display: inline-block;
   vertical-align: middle;
   width: 8px;
@@ -575,21 +584,24 @@ div.fancy-select ul.options li.hover {
   animation: hp-loading 0.4s infinite alternate;
 }
 .hp .hp-loading-container .hp-loading span:nth-of-type(2),
-.hp .hp-error-container .hp-loading span:nth-of-type(2) {
+.hp .hp-error-container .hp-loading span:nth-of-type(2),
+.hp .hp-app-link-container .hp-loading span:nth-of-type(2) {
   background: #db4437;
   -moz-animation-delay: 0.2s;
   -webkit-animation-delay: 0.2s;
   animation-delay: 0.2s;
 }
 .hp .hp-loading-container .hp-loading span:nth-of-type(3),
-.hp .hp-error-container .hp-loading span:nth-of-type(3) {
+.hp .hp-error-container .hp-loading span:nth-of-type(3),
+.hp .hp-app-link-container .hp-loading span:nth-of-type(3) {
   background: #f4b400;
   -moz-animation-delay: 0.4s;
   -webkit-animation-delay: 0.4s;
   animation-delay: 0.4s;
 }
 .hp .hp-loading-container .hp-loading span:nth-of-type(4),
-.hp .hp-error-container .hp-loading span:nth-of-type(4) {
+.hp .hp-error-container .hp-loading span:nth-of-type(4),
+.hp .hp-app-link-container .hp-loading span:nth-of-type(4) {
   background: #0f9d58;
   -moz-animation-delay: 0.6s;
   -webkit-animation-delay: 0.6s;
@@ -681,6 +693,13 @@ div.fancy-select ul.options li.hover {
   outline: none;
   background: #ed4958;
   border: 1px solid #ea283b;
+}
+.hp .hp-submit.hp-submit-redirect {
+  padding: 16px 0;
+  display: block;
+  color: white;
+  width: 90%;
+  margin: 180px auto;
 }
 .hp .hp-submit.hp-submit-success {
   background: #57be00;
