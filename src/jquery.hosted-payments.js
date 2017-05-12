@@ -8633,9 +8633,9 @@
                         .text("Connected (listening)...")
                         .css("color", "#F4854A");
 
-                    hp.Utils.log("Your connection ID: " + $.connection.transvaultHub.connection.id);
+                    hp.Utils.log("Your connection ID: " + $this.transvaultHub.connection.id);
 
-                    $this.browserId = $.connection.transvaultHub.connection.id;
+                    $this.browserId = $this.transvaultHub.connection.id;
 
                     setTimeout(function(){
 
@@ -8681,7 +8681,7 @@
                         $this.showError("You've been disconnected!");
                     }
                     
-                    $.connection.transvaultHub.connection.start();
+                    $this.transvaultHub.connection.start();
 
                 }, 1000);
             });
