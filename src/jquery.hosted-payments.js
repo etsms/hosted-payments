@@ -3672,57 +3672,6 @@
     }
 
 
-    if (!window.sessionStorage) {
-
-        window.sessionStorage = {
-
-            length: 0,
-
-            setItem: function(key, value) {
-                document.cookie = key + '=' + value + '; path=/';
-                this.length++;
-            },
-
-            getItem: function(key) {
-                var keyEQ = key + '=';
-                var ca = document.cookie.split(';');
-                for (var i = 0, len = ca.length; i < len; i++) {
-                    var c = ca[i];
-                    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                    if (c.indexOf(keyEQ) === 0) return c.substring(keyEQ.length, c.length);
-                }
-                return null;
-            },
-
-            removeItem: function(key) {
-                this.setItem(key, '', -1);
-                this.length--;
-            },
-
-            clear: function() {
-                // Caution: will clear all persistent cookies as well
-                var ca = document.cookie.split(';');
-                for (var i = 0, len = ca.length; i < len; i++) {
-                    var c = ca[i];
-                    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                    var key = c.substring(0, c.indexOf('='));
-                    this.removeItem(key);
-                }
-                this.length = 0;
-            },
-
-            key: function(n) {
-                var ca = document.cookie.split(';');
-                if (n >= ca.length || isNaN(parseFloat(n)) || !isFinite(n)) return null;
-                var c = ca[n];
-                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                return c.substring(0, c.indexOf('='));
-            }
-
-        };
-    }
-
-
     /*
      * Export "hp"
      */
@@ -3988,8 +3937,6 @@
 
     var showError = function(message, showDismissalLink) {
         
-        var shouldBypassSessionStorage = (typeof hp.Utils.defaults.bypassSessionStorage === "undefined") ? true : hp.Utils.defaults.bypassSessionStorage;
-        
         if ($(".hp-loading-container").is(":visible")) {
             hideLoader();
         }
@@ -4019,10 +3966,6 @@
             .show()
             .on("click", hideError);
         
-        if (!shouldBypassSessionStorage) {
-            hp.Utils.log("Sign In: Session cleared.");
-            sessionStorage.clear();
-        }
 
         if (typeof showDismissalLink !== "undefined" && !showDismissalLink) {
             $(".hp-error-container .hp-error-disclaimer a")
@@ -5043,9 +4986,7 @@
         var deferred = jQuery.Deferred(),
             createdOn = (new Date()).toISOString(),
             sessionId = getSession().sessionToken,
-            apiKey = getSession().apiKey,
-            sessionSpan = 1800, 
-            shouldBypassSessionStorage = (typeof hp.Utils.defaults.bypassSessionStorage === "undefined") ? true : hp.Utils.defaults.bypassSessionStorage;
+            apiKey = getSession().apiKey;
 
         /*
          * Skip sign in
@@ -5055,38 +4996,6 @@
             hp.Utils.setSession(apiKey);
             deferred.resolve(apiKey);
             return deferred;
-        }
-
-        /*
-         * Handle refresh
-         */
-        if (!shouldBypassSessionStorage && (sessionStorage.getItem("hp.sessionToken") !== null && sessionStorage.getItem("hp.sessionTokenTS") !== null)) {
-
-            var sessionTokenTS = new Date(sessionStorage.getItem("hp.sessionTokenTS"));
-            var now = new Date(createdOn);
-            var timeSpan = Math.floor((now.getTime() - sessionTokenTS.getTime()) / (1000));
-
-            if (timeSpan < sessionSpan) {
-
-                var sessionHash = sessionStorage.getItem("hp.sessionToken");
-                var sessionDecoded = Base64.decode(sessionHash);
-                var sessionToken = sessionDecoded.split("|")[0];
-                var sessionHref = sessionDecoded.split("|")[1];
-                var sessionBaseUrl = sessionDecoded.split("|")[2];
-
-                if (sessionHref === location.href && sessionBaseUrl === hp.Utils.defaults.baseUrl) {
-                    hp.Utils.log("Sign In: Total time span " + timeSpan + ".");
-                    hp.Utils.log("Sign In: Retrieved from sessionStorage.", sessionToken);
-                    hp.Utils.setSession(sessionToken);
-                    deferred.resolve(sessionToken);
-                    return deferred;
-                }
-
-            } else {
-                hp.Utils.log("Sign In: Session expired. Generating new session.");
-                sessionStorage.clear();
-            }
-
         }
 
         verifyJQueryVersion().then(function(){
@@ -5102,11 +5011,6 @@
                 hp.Utils.setSession(res.token);
 
                 deferred.resolve(res);
-
-                if (!shouldBypassSessionStorage) {
-                    sessionStorage.setItem("hp.sessionToken", Base64.encode(res.token + "|" + location.href + "|" + hp.Utils.defaults.baseUrl));
-                    sessionStorage.setItem("hp.sessionTokenTS", createdOn);
-                }
 
                 hp.Utils.log("Sign In: Retrieved from server.");
 
@@ -8545,8 +8449,6 @@
         $this.hasSuccess = true;
         $this.removeAppRedirectLinkForm();
 
-        sessionStorage.clear();
-
     };
 
     Transvault.prototype.setMessage = function(message) {
@@ -9927,7 +9829,6 @@
     defaults.transactionId = hp.Utils.generateGuild();
     defaults.instrumentId = "";
     defaults.apiKey = "";
-    defaults.bypassSessionStorage = true;
     defaults.paymentType = hp.PaymentType.CHARGE; // "CHARGE", "REFUND", "CREATE_INSTRUMENT"
     defaults.entryType = hp.EntryType.KEYED_CARD_NOT_PRESENT; // "DEVICE_CAPTURED", "KEYED_CARD_PRESENT", "KEYED_CARD_NOT_PRESENT"
     defaults.billingAddress = {};
@@ -10009,14 +9910,6 @@
                 hp.Utils.defaults.debug = false;
             } else {
                 hp.Utils.defaults.debug = true;
-            }
-        }
-        
-        if (typeof $element.data("bypassSessionStorage") !== "undefined") {
-            if ($element.data("bypassSessionStorage").toString() === "false") {
-                hp.Utils.defaults.bypassSessionStorage = false;
-            } else if ($element.data("bypassSessionStorage").toString() === "true") {
-                hp.Utils.defaults.bypassSessionStorage = true;
             }
         }
         
