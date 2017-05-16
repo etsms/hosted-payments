@@ -20,53 +20,53 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 // Closure
-(function(){
+(function() {
 
-	/**
-	 * Decimal adjustment of a number.
-	 *
-	 * @param	{String}	type	The type of adjustment.
-	 * @param	{Number}	value	The number.
-	 * @param	{Integer}	exp		The exponent (the 10 logarithm of the adjustment base).
-	 * @returns	{Number}			The adjusted value.
-	 */
-	function decimalAdjust(type, value, exp) {
-		// If the exp is undefined or zero...
-		if (typeof exp === 'undefined' || +exp === 0) {
-			return Math[type](value);
-		}
-		value = +value;
-		exp = +exp;
-		// If the value is not a number or the exp is not an integer...
-		if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
-			return NaN;
-		}
-		// Shift
-		value = value.toString().split('e');
-		value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
-		// Shift back
-		value = value.toString().split('e');
-		return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
-	}
+    /**
+     * Decimal adjustment of a number.
+     *
+     * @param	{String}	type	The type of adjustment.
+     * @param	{Number}	value	The number.
+     * @param	{Integer}	exp		The exponent (the 10 logarithm of the adjustment base).
+     * @returns	{Number}			The adjusted value.
+     */
+    function decimalAdjust(type, value, exp) {
+        // If the exp is undefined or zero...
+        if (typeof exp === 'undefined' || +exp === 0) {
+            return Math[type](value);
+        }
+        value = +value;
+        exp = +exp;
+        // If the value is not a number or the exp is not an integer...
+        if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+            return NaN;
+        }
+        // Shift
+        value = value.toString().split('e');
+        value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+        // Shift back
+        value = value.toString().split('e');
+        return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+    }
 
-	// Decimal round
-	if (!Math.round10) {
-		Math.round10 = function(value, exp) {
-			return decimalAdjust('round', value, exp);
-		};
-	}
-	// Decimal floor
-	if (!Math.floor10) {
-		Math.floor10 = function(value, exp) {
-			return decimalAdjust('floor', value, exp);
-		};
-	}
-	// Decimal ceil
-	if (!Math.ceil10) {
-		Math.ceil10 = function(value, exp) {
-			return decimalAdjust('ceil', value, exp);
-		};
-	}
+    // Decimal round
+    if (!Math.round10) {
+        Math.round10 = function(value, exp) {
+            return decimalAdjust('round', value, exp);
+        };
+    }
+    // Decimal floor
+    if (!Math.floor10) {
+        Math.floor10 = function(value, exp) {
+            return decimalAdjust('floor', value, exp);
+        };
+    }
+    // Decimal ceil
+    if (!Math.ceil10) {
+        Math.ceil10 = function(value, exp) {
+            return decimalAdjust('ceil', value, exp);
+        };
+    }
 
 })();
 /* jquery.signalR.core.js */
@@ -82,7 +82,7 @@
 
 /// <reference path="Scripts/jquery-1.6.4.js" />
 /// <reference path="jquery.signalR.version.js" />
-(function ($, window, undefined) {
+(function($, window, undefined) {
 
     var resources = {
         nojQuery: "jQuery was not found. Please ensure jQuery is referenced before the SignalR client JavaScript file.",
@@ -112,7 +112,7 @@
         reconnectWindowTimeout: "The client has been inactive since {0} and it has exceeded the inactivity timeout of {1} ms. Stopping the connection."
     };
 
-    if (typeof ($) !== "function") {
+    if (typeof($) !== "function") {
         // no jQuery!
         throw new Error(resources.nojQuery);
     }
@@ -140,12 +140,12 @@
             global: false,
             cache: false
         },
-        log = function (msg, logging) {
+        log = function(msg, logging) {
             if (logging === false) {
                 return;
             }
             var m;
-            if (typeof (window.console) === "undefined") {
+            if (typeof(window.console) === "undefined") {
                 return;
             }
             m = "[" + new Date().toTimeString() + "] SignalR: " + msg;
@@ -156,7 +156,7 @@
             }
         },
 
-        changeState = function (connection, expectedState, newState) {
+        changeState = function(connection, expectedState, newState) {
             if (expectedState === connection.state) {
                 connection.state = newState;
 
@@ -167,39 +167,39 @@
             return false;
         },
 
-        isDisconnecting = function (connection) {
+        isDisconnecting = function(connection) {
             return connection.state === signalR.connectionState.disconnected;
         },
 
-        supportsKeepAlive = function (connection) {
+        supportsKeepAlive = function(connection) {
             return connection._.keepAliveData.activated &&
-                   connection.transport.supportsKeepAlive(connection);
+                connection.transport.supportsKeepAlive(connection);
         },
 
-        configureStopReconnectingTimeout = function (connection) {
+        configureStopReconnectingTimeout = function(connection) {
             var stopReconnectingTimeout,
                 onReconnectTimeout;
 
             // Check if this connection has already been configured to stop reconnecting after a specified timeout.
             // Without this check if a connection is stopped then started events will be bound multiple times.
             if (!connection._.configuredStopReconnectingTimeout) {
-                onReconnectTimeout = function (connection) {
+                onReconnectTimeout = function(connection) {
                     var message = signalR._.format(signalR.resources.reconnectTimeout, connection.disconnectTimeout);
                     connection.log(message);
                     $(connection).triggerHandler(events.onError, [signalR._.error(message, /* source */ "TimeoutException")]);
-                    connection.stop(/* async */ false, /* notifyServer */ false);
+                    connection.stop( /* async */ false, /* notifyServer */ false);
                 };
 
-                connection.reconnecting(function () {
+                connection.reconnecting(function() {
                     var connection = this;
 
                     // Guard against state changing in a previous user defined even handler
                     if (connection.state === signalR.connectionState.reconnecting) {
-                        stopReconnectingTimeout = window.setTimeout(function () { onReconnectTimeout(connection); }, connection.disconnectTimeout);
+                        stopReconnectingTimeout = window.setTimeout(function() { onReconnectTimeout(connection); }, connection.disconnectTimeout);
                     }
                 });
 
-                connection.stateChanged(function (data) {
+                connection.stateChanged(function(data) {
                     if (data.oldState === signalR.connectionState.reconnecting) {
                         // Clear the pending reconnect timeout check
                         window.clearTimeout(stopReconnectingTimeout);
@@ -210,7 +210,7 @@
             }
         };
 
-    signalR = function (url, qs, logging) {
+    signalR = function(url, qs, logging) {
         /// <summary>Creates a new SignalR connection for the given url</summary>
         /// <param name="url" type="String">The URL of the long polling endpoint</param>
         /// <param name="qs" type="Object">
@@ -229,7 +229,7 @@
     signalR._ = {
         defaultContentType: "application/x-www-form-urlencoded; charset=UTF-8",
 
-        ieVersion: (function () {
+        ieVersion: (function() {
             var version,
                 matches;
 
@@ -246,7 +246,7 @@
             return version;
         })(),
 
-        error: function (message, source, context) {
+        error: function(message, source, context) {
             var e = new Error(message);
             e.source = source;
 
@@ -257,13 +257,13 @@
             return e;
         },
 
-        transportError: function (message, transport, source, context) {
+        transportError: function(message, transport, source, context) {
             var e = this.error(message, source, context);
             e.transport = transport ? transport.name : undefined;
             return e;
         },
 
-        format: function () {
+        format: function() {
             /// <summary>Usage: format("Hi {0}, you are {1}!", "Foo", 100) </summary>
             var s = arguments[0];
             for (var i = 0; i < arguments.length - 1; i++) {
@@ -272,23 +272,23 @@
             return s;
         },
 
-        firefoxMajorVersion: function (userAgent) {
+        firefoxMajorVersion: function(userAgent) {
             // Firefox user agents: http://useragentstring.com/pages/Firefox/
             var matches = userAgent.match(/Firefox\/(\d+)/);
             if (!matches || !matches.length || matches.length < 2) {
                 return 0;
             }
-            return parseInt(matches[1], 10 /* radix */);
+            return parseInt(matches[1], 10 /* radix */ );
         },
 
-        configurePingInterval: function (connection) {
+        configurePingInterval: function(connection) {
             var config = connection._.config,
-                onFail = function (error) {
+                onFail = function(error) {
                     $(connection).triggerHandler(events.onError, [error]);
                 };
 
             if (config && !connection._.pingIntervalId && config.pingInterval) {
-                connection._.pingIntervalId = window.setInterval(function () {
+                connection._.pingIntervalId = window.setInterval(function() {
                     signalR.transports._logic.pingServer(connection).fail(onFail);
                 }, config.pingInterval);
             }
@@ -313,7 +313,7 @@
     };
 
     signalR.hub = {
-        start: function () {
+        start: function() {
             // This will get replaced with the real hub connection start method when hubs is referenced correctly
             throw new Error("SignalR: Error loading hubs. Ensure your hubs reference is correct, e.g. <script src='/signalr/js'></script>.");
         }
@@ -322,10 +322,9 @@
     // .on() was added in version 1.7.0, .load() was removed in version 3.0.0 so we fallback to .load() if .on() does
     // not exist to not break existing applications
     if (typeof _pageWindow.on == "function") {
-        _pageWindow.on("load", function () { _pageLoaded = true; });
-    }
-    else {
-        _pageWindow.load(function () { _pageLoaded = true; });
+        _pageWindow.on("load", function() { _pageLoaded = true; });
+    } else {
+        _pageWindow.load(function() { _pageLoaded = true; });
     }
 
     function validateTransport(requestedTransport, connection) {
@@ -383,7 +382,7 @@
         var that = this,
             buffer = [];
 
-        that.tryBuffer = function (message) {
+        that.tryBuffer = function(message) {
             if (connection.state === $.signalR.connectionState.connecting) {
                 buffer.push(message);
 
@@ -393,7 +392,7 @@
             return false;
         };
 
-        that.drain = function () {
+        that.drain = function() {
             // Ensure that the connection is connected when we drain (do not want to drain while a connection is not active)
             if (connection.state === $.signalR.connectionState.connected) {
                 while (buffer.length > 0) {
@@ -402,13 +401,13 @@
             }
         };
 
-        that.clear = function () {
+        that.clear = function() {
             buffer = [];
         };
     }
 
     signalR.fn = signalR.prototype = {
-        init: function (url, qs, logging) {
+        init: function(url, qs, logging) {
             var $connection = $(this);
 
             this.url = url;
@@ -416,7 +415,7 @@
             this.lastError = null;
             this._ = {
                 keepAliveData: {},
-                connectingMessageBuffer: new ConnectingMessageBuffer(this, function (message) {
+                connectingMessageBuffer: new ConnectingMessageBuffer(this, function(message) {
                     $connection.triggerHandler(events.onReceived, [message]);
                 }),
                 lastMessageAt: new Date().getTime(),
@@ -425,12 +424,12 @@
                 beatHandle: null,
                 totalTransportConnectTimeout: 0 // This will be the sum of the TransportConnectTimeout sent in response to negotiate and connection.transportConnectTimeout
             };
-            if (typeof (logging) === "boolean") {
+            if (typeof(logging) === "boolean") {
                 this.logging = logging;
             }
         },
 
-        _parseResponse: function (response) {
+        _parseResponse: function(response) {
             var that = this;
 
             if (!response) {
@@ -446,7 +445,7 @@
 
         json: window.JSON,
 
-        isCrossDomain: function (url, against) {
+        isCrossDomain: function(url, against) {
             /// <summary>Checks if url is cross domain</summary>
             /// <param name="url" type="String">The base URL</param>
             /// <param name="against" type="Object">
@@ -491,7 +490,7 @@
 
         keepAliveWarnAt: 2 / 3, // Warn user of slow connection if we breach the X% mark of the keep alive timeout
 
-        start: function (options, callback) {
+        start: function(options, callback) {
             /// <summary>Starts the connection</summary>
             /// <param name="options" type="Object">Options map</param>
             /// <param name="callback" type="Function">A callback function to execute when the connection has started</param>
@@ -538,7 +537,7 @@
             // Check to see if start is being called prior to page load
             // If waitForPageLoad is true we then want to re-direct function call to the window load event
             if (!_pageLoaded && config.waitForPageLoad === true) {
-                connection._.deferredStartHandler = function () {
+                connection._.deferredStartHandler = function() {
                     connection.start(options, callback);
                 };
                 _pageWindow.bind("load", connection._.deferredStartHandler);
@@ -550,8 +549,8 @@
             if (connection.state === signalR.connectionState.connecting) {
                 return deferred.promise();
             } else if (changeState(connection,
-                            signalR.connectionState.disconnected,
-                            signalR.connectionState.connecting) === false) {
+                    signalR.connectionState.disconnected,
+                    signalR.connectionState.connecting) === false) {
                 // We're not connecting so try and transition into connecting.
                 // If we fail to transition then we're either in connected or reconnecting.
 
@@ -598,7 +597,7 @@
                     config.transport = ["webSockets", "serverSentEvents", "longPolling"];
                 }
 
-                if (typeof (config.withCredentials) === "undefined") {
+                if (typeof(config.withCredentials) === "undefined") {
                     config.withCredentials = true;
                 }
 
@@ -620,7 +619,7 @@
 
             connection.ajaxDataType = config.jsonp ? "jsonp" : "text";
 
-            $(connection).bind(events.onStart, function (e, data) {
+            $(connection).bind(events.onStart, function(e, data) {
                 if ($.type(callback) === "function") {
                     callback.call(connection);
                 }
@@ -629,7 +628,7 @@
 
             connection._.initHandler = signalR.transports._logic.initHandler(connection);
 
-            initialize = function (transports, index) {
+            initialize = function(transports, index) {
                 var noTransportError = signalR._.error(resources.noTransportOnInit);
 
                 index = index || 0;
@@ -657,14 +656,14 @@
 
                 var transportName = transports[index],
                     transport = signalR.transports[transportName],
-                    onFallback = function () {
+                    onFallback = function() {
                         initialize(transports, index + 1);
                     };
 
                 connection.transport = transport;
 
                 try {
-                    connection._.initHandler.start(transport, function () { // success
+                    connection._.initHandler.start(transport, function() { // success
                         // Firefox 11+ doesn't allow sync XHR withCredentials: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest#withCredentials
                         var isFirefox11OrGreater = signalR._.firefoxMajorVersion(window.navigator.userAgent) >= 11,
                             asyncAbort = !!connection.withCredentials && isFirefox11OrGreater;
@@ -682,8 +681,8 @@
                         signalR._.configurePingInterval(connection);
 
                         if (!changeState(connection,
-                                            signalR.connectionState.connecting,
-                                            signalR.connectionState.connected)) {
+                                signalR.connectionState.connecting,
+                                signalR.connectionState.connected)) {
                             connection.log("WARNING! The connection was not in the connecting state.");
                         }
 
@@ -693,7 +692,7 @@
                         $(connection).triggerHandler(events.onStart);
 
                         // wire the stop handler for when the user leaves the page
-                        _pageWindow.bind("unload", function () {
+                        _pageWindow.bind("unload", function() {
                             connection.log("Window unloading, stopping the connection.");
 
                             connection.stop(asyncAbort);
@@ -702,24 +701,23 @@
                         if (isFirefox11OrGreater) {
                             // Firefox does not fire cross-domain XHRs in the normal unload handler on tab close.
                             // #2400
-                            _pageWindow.bind("beforeunload", function () {
+                            _pageWindow.bind("beforeunload", function() {
                                 // If connection.stop() runs runs in beforeunload and fails, it will also fail
                                 // in unload unless connection.stop() runs after a timeout.
-                                window.setTimeout(function () {
+                                window.setTimeout(function() {
                                     connection.stop(asyncAbort);
                                 }, 0);
                             });
                         }
                     }, onFallback);
-                }
-                catch (error) {
+                } catch (error) {
                     connection.log(transport.name + " transport threw '" + error.message + "' when attempting to start.");
                     onFallback();
                 }
             };
 
             var url = connection.url + "/negotiate",
-                onFailed = function (error, connection) {
+                onFailed = function(error, connection) {
                     var err = signalR._.error(resources.errorOnNegotiate, error, connection._.negotiateRequest);
 
                     $(connection).triggerHandler(events.onError, err);
@@ -737,16 +735,16 @@
             // Save the ajax negotiate request object so we can abort it if stop is called while the request is in flight.
             connection._.negotiateRequest = signalR.transports._logic.ajax(connection, {
                 url: url,
-                error: function (error, statusText) {
+                error: function(error, statusText) {
                     // We don't want to cause any errors if we're aborting our own negotiate request.
                     if (statusText !== _negotiateAbortText) {
                         onFailed(error, connection);
                     } else {
                         // This rejection will noop if the deferred has already been resolved or rejected.
-                        deferred.reject(signalR._.error(resources.stoppedWhileNegotiating, null /* error */, connection._.negotiateRequest));
+                        deferred.reject(signalR._.error(resources.stoppedWhileNegotiating, null /* error */ , connection._.negotiateRequest));
                     }
                 },
-                success: function (result) {
+                success: function(result) {
                     var res,
                         keepAliveData,
                         protocolError,
@@ -803,7 +801,7 @@
                         return;
                     }
 
-                    $.each(signalR.transports, function (key) {
+                    $.each(signalR.transports, function(key) {
                         if ((key.indexOf("_") === 0) || (key === "webSockets" && !res.TryWebSockets)) {
                             return true;
                         }
@@ -811,7 +809,7 @@
                     });
 
                     if ($.isArray(config.transport)) {
-                        $.each(config.transport, function (_, transport) {
+                        $.each(config.transport, function(_, transport) {
                             if ($.inArray(transport, supportedTransports) >= 0) {
                                 transports.push(transport);
                             }
@@ -829,18 +827,18 @@
             return deferred.promise();
         },
 
-        starting: function (callback) {
+        starting: function(callback) {
             /// <summary>Adds a callback that will be invoked before anything is sent over the connection</summary>
             /// <param name="callback" type="Function">A callback function to execute before the connection is fully instantiated.</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onStarting, function (e, data) {
+            $(connection).bind(events.onStarting, function(e, data) {
                 callback.call(connection);
             });
             return connection;
         },
 
-        send: function (data) {
+        send: function(data) {
             /// <summary>Sends data over the connection</summary>
             /// <param name="data" type="String">The data to send over the connection</param>
             /// <returns type="signalR" />
@@ -861,34 +859,34 @@
             return connection;
         },
 
-        received: function (callback) {
+        received: function(callback) {
             /// <summary>Adds a callback that will be invoked after anything is received over the connection</summary>
             /// <param name="callback" type="Function">A callback function to execute when any data is received on the connection</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onReceived, function (e, data) {
+            $(connection).bind(events.onReceived, function(e, data) {
                 callback.call(connection, data);
             });
             return connection;
         },
 
-        stateChanged: function (callback) {
+        stateChanged: function(callback) {
             /// <summary>Adds a callback that will be invoked when the connection state changes</summary>
             /// <param name="callback" type="Function">A callback function to execute when the connection state changes</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onStateChanged, function (e, data) {
+            $(connection).bind(events.onStateChanged, function(e, data) {
                 callback.call(connection, data);
             });
             return connection;
         },
 
-        error: function (callback) {
+        error: function(callback) {
             /// <summary>Adds a callback that will be invoked after an error occurs with the connection</summary>
             /// <param name="callback" type="Function">A callback function to execute when an error occurs on the connection</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onError, function (e, errorData, sendData) {
+            $(connection).bind(events.onError, function(e, errorData, sendData) {
                 connection.lastError = errorData;
                 // In practice 'errorData' is the SignalR built error object.
                 // In practice 'sendData' is undefined for all error events except those triggered by
@@ -898,52 +896,52 @@
             return connection;
         },
 
-        disconnected: function (callback) {
+        disconnected: function(callback) {
             /// <summary>Adds a callback that will be invoked when the client disconnects</summary>
             /// <param name="callback" type="Function">A callback function to execute when the connection is broken</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onDisconnect, function (e, data) {
+            $(connection).bind(events.onDisconnect, function(e, data) {
                 callback.call(connection);
             });
             return connection;
         },
 
-        connectionSlow: function (callback) {
+        connectionSlow: function(callback) {
             /// <summary>Adds a callback that will be invoked when the client detects a slow connection</summary>
             /// <param name="callback" type="Function">A callback function to execute when the connection is slow</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onConnectionSlow, function (e, data) {
+            $(connection).bind(events.onConnectionSlow, function(e, data) {
                 callback.call(connection);
             });
 
             return connection;
         },
 
-        reconnecting: function (callback) {
+        reconnecting: function(callback) {
             /// <summary>Adds a callback that will be invoked when the underlying transport begins reconnecting</summary>
             /// <param name="callback" type="Function">A callback function to execute when the connection enters a reconnecting state</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onReconnecting, function (e, data) {
+            $(connection).bind(events.onReconnecting, function(e, data) {
                 callback.call(connection);
             });
             return connection;
         },
 
-        reconnected: function (callback) {
+        reconnected: function(callback) {
             /// <summary>Adds a callback that will be invoked when the underlying transport reconnects</summary>
             /// <param name="callback" type="Function">A callback function to execute when the connection is restored</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onReconnect, function (e, data) {
+            $(connection).bind(events.onReconnect, function(e, data) {
                 callback.call(connection);
             });
             return connection;
         },
 
-        stop: function (async, notifyServer) {
+        stop: function(async, notifyServer) {
             /// <summary>Stops listening</summary>
             /// <param name="async" type="Boolean">Whether or not to asynchronously abort the connection</param>
             /// <param name="notifyServer" type="Boolean">Whether we want to notify the server that we are aborting the connection</param>
@@ -1029,14 +1027,14 @@
             return connection;
         },
 
-        log: function (msg) {
+        log: function(msg) {
             log(msg, this.logging);
         }
     };
 
     signalR.fn.init.prototype = signalR.fn;
 
-    signalR.noConflict = function () {
+    signalR.noConflict = function() {
         /// <summary>Reinstates the original value of $.connection and returns the signalR object for manual assignment</summary>
         /// <returns type="signalR" />
         if ($.connection === signalR) {
@@ -1059,7 +1057,7 @@
 /*global window:false */
 /// <reference path="jquery.signalR.core.js" />
 
-(function ($, window, undefined) {
+(function($, window, undefined) {
 
     var signalR = $.signalR,
         events = $.signalR.events,
@@ -1076,7 +1074,7 @@
 
         // Ensure that we successfully marked active before continuing the heartbeat.
         if (transportLogic.markActive(connection)) {
-            connection._.beatHandle = window.setTimeout(function () {
+            connection._.beatHandle = window.setTimeout(function() {
                 beat(connection);
             }, connection._.beatInterval);
         }
@@ -1128,7 +1126,7 @@
     }
 
     InitHandler.prototype = {
-        start: function (transport, onSuccess, onFallback) {
+        start: function(transport, onSuccess, onFallback) {
             var that = this,
                 connection = that.connection,
                 failCalled = false;
@@ -1140,11 +1138,11 @@
 
             connection.log(transport.name + " transport starting.");
 
-            transport.start(connection, function () {
+            transport.start(connection, function() {
                 if (!failCalled) {
                     that.initReceived(transport, onSuccess);
                 }
-            }, function (error) {
+            }, function(error) {
                 // Don't allow the same transport to cause onFallback to be called twice
                 if (!failCalled) {
                     failCalled = true;
@@ -1156,7 +1154,7 @@
                 return !that.startCompleted || that.connectionStopped;
             });
 
-            that.transportTimeoutHandle = window.setTimeout(function () {
+            that.transportTimeoutHandle = window.setTimeout(function() {
                 if (!failCalled) {
                     failCalled = true;
                     connection.log(transport.name + " transport timed out when trying to connect.");
@@ -1165,13 +1163,13 @@
             }, connection._.totalTransportConnectTimeout);
         },
 
-        stop: function () {
+        stop: function() {
             this.connectionStopped = true;
             window.clearTimeout(this.transportTimeoutHandle);
             signalR.transports._logic.tryAbortStartRequest(this.connection);
         },
 
-        initReceived: function (transport, onSuccess) {
+        initReceived: function(transport, onSuccess) {
             var that = this,
                 connection = that.connection;
 
@@ -1188,13 +1186,13 @@
             window.clearTimeout(that.transportTimeoutHandle);
 
             connection.log(transport.name + " transport connected. Initiating start request.");
-            signalR.transports._logic.ajaxStart(connection, function () {
+            signalR.transports._logic.ajaxStart(connection, function() {
                 that.startCompleted = true;
                 onSuccess();
             });
         },
 
-        transportFailed: function (transport, error, onFallback) {
+        transportFailed: function(transport, error, onFallback) {
             var connection = this.connection,
                 deferred = connection._deferral,
                 wrappedError;
@@ -1230,9 +1228,9 @@
     };
 
     transportLogic = signalR.transports._logic = {
-        ajax: function (connection, options) {
+        ajax: function(connection, options) {
             return $.ajax(
-                $.extend(/*deep copy*/ true, {}, $.signalR.ajaxDefaults, {
+                $.extend( /*deep copy*/ true, {}, $.signalR.ajaxDefaults, {
                     type: "GET",
                     data: {},
                     xhrFields: { withCredentials: connection.withCredentials },
@@ -1241,7 +1239,7 @@
                 }, options));
         },
 
-        pingServer: function (connection) {
+        pingServer: function(connection) {
             /// <summary>Pings the server</summary>
             /// <param name="connection" type="signalr">Connection associated with the server ping</param>
             /// <returns type="signalR" />
@@ -1256,13 +1254,12 @@
 
                 xhr = transportLogic.ajax(connection, {
                     url: url,
-                    success: function (result) {
+                    success: function(result) {
                         var data;
 
                         try {
                             data = connection._parseResponse(result);
-                        }
-                        catch (error) {
+                        } catch (error) {
                             deferral.reject(
                                 signalR._.transportError(
                                     signalR.resources.pingServerFailedParse,
@@ -1277,19 +1274,18 @@
 
                         if (data.Response === "pong") {
                             deferral.resolve();
-                        }
-                        else {
+                        } else {
                             deferral.reject(
                                 signalR._.transportError(
                                     signalR._.format(signalR.resources.pingServerFailedInvalidResponse, result),
                                     connection.transport,
-                                    null /* error */,
+                                    null /* error */ ,
                                     xhr
                                 )
                             );
                         }
                     },
-                    error: function (error) {
+                    error: function(error) {
                         if (error.status === 401 || error.status === 403) {
                             deferral.reject(
                                 signalR._.transportError(
@@ -1300,8 +1296,7 @@
                                 )
                             );
                             connection.stop();
-                        }
-                        else {
+                        } else {
                             deferral.reject(
                                 signalR._.transportError(
                                     signalR.resources.pingServerFailed,
@@ -1313,8 +1308,7 @@
                         }
                     }
                 });
-            }
-            else {
+            } else {
                 deferral.reject(
                     signalR._.transportError(
                         signalR.resources.noConnectionTransport,
@@ -1326,7 +1320,7 @@
             return deferral.promise();
         },
 
-        prepareQueryString: function (connection, url) {
+        prepareQueryString: function(connection, url) {
             var preparedUrl;
 
             // Use addQs to start since it handles the ?/& prefix for us
@@ -1346,7 +1340,7 @@
             return preparedUrl;
         },
 
-        addQs: function (url, qs) {
+        addQs: function(url, qs) {
             var appender = url.indexOf("?") !== -1 ? "&" : "?",
                 firstChar;
 
@@ -1354,11 +1348,11 @@
                 return url;
             }
 
-            if (typeof (qs) === "object") {
+            if (typeof(qs) === "object") {
                 return url + appender + $.param(qs);
             }
 
-            if (typeof (qs) === "string") {
+            if (typeof(qs) === "string") {
                 firstChar = qs.charAt(0);
 
                 if (firstChar === "?" || firstChar === "&") {
@@ -1372,7 +1366,7 @@
         },
 
         // BUG #2953: The url needs to be same otherwise it will cause a memory leak
-        getUrl: function (connection, transport, reconnecting, poll, ajaxPost) {
+        getUrl: function(connection, transport, reconnecting, poll, ajaxPost) {
             /// <summary>Gets the url for making a GET based connect request</summary>
             var baseUrl = transport === "webSockets" ? "" : connection.baseUrl,
                 url = baseUrl + connection.appRelativeUrl,
@@ -1406,35 +1400,35 @@
             return url;
         },
 
-        maximizePersistentResponse: function (minPersistentResponse) {
+        maximizePersistentResponse: function(minPersistentResponse) {
             return {
                 MessageId: minPersistentResponse.C,
                 Messages: minPersistentResponse.M,
-                Initialized: typeof (minPersistentResponse.S) !== "undefined" ? true : false,
-                ShouldReconnect: typeof (minPersistentResponse.T) !== "undefined" ? true : false,
+                Initialized: typeof(minPersistentResponse.S) !== "undefined" ? true : false,
+                ShouldReconnect: typeof(minPersistentResponse.T) !== "undefined" ? true : false,
                 LongPollDelay: minPersistentResponse.L,
                 GroupsToken: minPersistentResponse.G
             };
         },
 
-        updateGroups: function (connection, groupsToken) {
+        updateGroups: function(connection, groupsToken) {
             if (groupsToken) {
                 connection.groupsToken = groupsToken;
             }
         },
 
-        stringifySend: function (connection, message) {
-            if (typeof (message) === "string" || typeof (message) === "undefined" || message === null) {
+        stringifySend: function(connection, message) {
+            if (typeof(message) === "string" || typeof(message) === "undefined" || message === null) {
                 return message;
             }
             return connection.json.stringify(message);
         },
 
-        ajaxSend: function (connection, data) {
+        ajaxSend: function(connection, data) {
             var payload = transportLogic.stringifySend(connection, data),
                 url = getAjaxUrl(connection, "/send"),
                 xhr,
-                onFail = function (error, connection) {
+                onFail = function(error, connection) {
                     $(connection).triggerHandler(events.onError, [signalR._.transportError(signalR.resources.sendFailed, connection.transport, error, xhr), data]);
                 };
 
@@ -1446,14 +1440,13 @@
                 data: {
                     data: payload
                 },
-                success: function (result) {
+                success: function(result) {
                     var res;
 
                     if (result) {
                         try {
                             res = connection._parseResponse(result);
-                        }
-                        catch (error) {
+                        } catch (error) {
                             onFail(error, connection);
                             connection.stop();
                             return;
@@ -1462,7 +1455,7 @@
                         transportLogic.triggerReceived(connection, res);
                     }
                 },
-                error: function (error, textStatus) {
+                error: function(error, textStatus) {
                     if (textStatus === "abort" || textStatus === "parsererror") {
                         // The parsererror happens for sends that don't return any data, and hence
                         // don't write the jsonp callback to the response. This is harder to fix on the server
@@ -1477,13 +1470,13 @@
             return xhr;
         },
 
-        ajaxAbort: function (connection, async) {
-            if (typeof (connection.transport) === "undefined") {
+        ajaxAbort: function(connection, async) {
+            if (typeof(connection.transport) === "undefined") {
                 return;
             }
 
             // Async by default unless explicitly overidden
-            async = typeof async === "undefined" ? true : async;
+            async = typeof async === "undefined" ? true: async;
 
             var url = getAjaxUrl(connection, "/abort");
 
@@ -1497,14 +1490,14 @@
             connection.log("Fired ajax abort async = " + async + ".");
         },
 
-        ajaxStart: function (connection, onSuccess) {
-            var rejectDeferred = function (error) {
+        ajaxStart: function(connection, onSuccess) {
+            var rejectDeferred = function(error) {
                     var deferred = connection._deferral;
                     if (deferred) {
                         deferred.reject(error);
                     }
                 },
-                triggerStartError = function (error) {
+                triggerStartError = function(error) {
                     connection.log("The start request failed. Stopping the connection.");
                     $(connection).triggerHandler(events.onError, [error]);
                     rejectDeferred(error);
@@ -1513,7 +1506,7 @@
 
             connection._.startRequest = transportLogic.ajax(connection, {
                 url: getAjaxUrl(connection, "/start"),
-                success: function (result, statusText, xhr) {
+                success: function(result, statusText, xhr) {
                     var data;
 
                     try {
@@ -1530,10 +1523,10 @@
                     } else {
                         triggerStartError(signalR._.error(
                             signalR._.format(signalR.resources.invalidStartResponse, result),
-                            null /* error */, xhr));
+                            null /* error */ , xhr));
                     }
                 },
-                error: function (xhr, statusText, error) {
+                error: function(xhr, statusText, error) {
                     if (statusText !== startAbortText) {
                         triggerStartError(signalR._.error(
                             signalR.resources.errorDuringStartRequest,
@@ -1544,13 +1537,13 @@
                         connection.log("The start request aborted because connection.stop() was called.");
                         rejectDeferred(signalR._.error(
                             signalR.resources.stoppedDuringStartRequest,
-                            null /* error */, xhr));
+                            null /* error */ , xhr));
                     }
                 }
             });
         },
 
-        tryAbortStartRequest: function (connection) {
+        tryAbortStartRequest: function(connection) {
             if (connection._.startRequest) {
                 // If the start request has already completed this will noop.
                 connection._.startRequest.abort(startAbortText);
@@ -1558,7 +1551,7 @@
             }
         },
 
-        tryInitialize: function (connection, persistentResponse, onInitialized) {
+        tryInitialize: function(connection, persistentResponse, onInitialized) {
             if (persistentResponse.Initialized && onInitialized) {
                 onInitialized();
             } else if (persistentResponse.Initialized) {
@@ -1567,13 +1560,13 @@
 
         },
 
-        triggerReceived: function (connection, data) {
+        triggerReceived: function(connection, data) {
             if (!connection._.connectingMessageBuffer.tryBuffer(data)) {
                 $(connection).triggerHandler(events.onReceived, [data]);
             }
         },
 
-        processMessages: function (connection, minData, onInitialized) {
+        processMessages: function(connection, minData, onInitialized) {
             var data;
 
             // Update the last message time stamp
@@ -1589,7 +1582,7 @@
                 }
 
                 if (data.Messages) {
-                    $.each(data.Messages, function (index, message) {
+                    $.each(data.Messages, function(index, message) {
                         transportLogic.triggerReceived(connection, message);
                     });
 
@@ -1598,7 +1591,7 @@
             }
         },
 
-        monitorKeepAlive: function (connection) {
+        monitorKeepAlive: function(connection) {
             var keepAliveData = connection._.keepAliveData;
 
             // If we haven't initiated the keep alive timeouts then we need to
@@ -1608,7 +1601,7 @@
                 transportLogic.markLastMessage(connection);
 
                 // Save the function so we can unbind it on stop
-                connection._.keepAliveData.reconnectKeepAliveUpdate = function () {
+                connection._.keepAliveData.reconnectKeepAliveUpdate = function() {
                     // Mark a new message so that keep alive doesn't time out connections
                     transportLogic.markLastMessage(connection);
                 };
@@ -1622,7 +1615,7 @@
             }
         },
 
-        stopMonitoringKeepAlive: function (connection) {
+        stopMonitoringKeepAlive: function(connection) {
             var keepAliveData = connection._.keepAliveData;
 
             // Only attempt to stop the keep alive monitoring if its being monitored
@@ -1639,16 +1632,16 @@
             }
         },
 
-        startHeartbeat: function (connection) {
+        startHeartbeat: function(connection) {
             connection._.lastActiveAt = new Date().getTime();
             beat(connection);
         },
 
-        markLastMessage: function (connection) {
+        markLastMessage: function(connection) {
             connection._.lastMessageAt = new Date().getTime();
         },
 
-        markActive: function (connection) {
+        markActive: function(connection) {
             if (transportLogic.verifyLastActive(connection)) {
                 connection._.lastActiveAt = new Date().getTime();
                 return true;
@@ -1657,40 +1650,40 @@
             return false;
         },
 
-        isConnectedOrReconnecting: function (connection) {
+        isConnectedOrReconnecting: function(connection) {
             return connection.state === signalR.connectionState.connected ||
-                   connection.state === signalR.connectionState.reconnecting;
+                connection.state === signalR.connectionState.reconnecting;
         },
 
-        ensureReconnectingState: function (connection) {
+        ensureReconnectingState: function(connection) {
             if (changeState(connection,
-                        signalR.connectionState.connected,
-                        signalR.connectionState.reconnecting) === true) {
+                    signalR.connectionState.connected,
+                    signalR.connectionState.reconnecting) === true) {
                 $(connection).triggerHandler(events.onReconnecting);
             }
             return connection.state === signalR.connectionState.reconnecting;
         },
 
-        clearReconnectTimeout: function (connection) {
+        clearReconnectTimeout: function(connection) {
             if (connection && connection._.reconnectTimeout) {
                 window.clearTimeout(connection._.reconnectTimeout);
                 delete connection._.reconnectTimeout;
             }
         },
 
-        verifyLastActive: function (connection) {
+        verifyLastActive: function(connection) {
             if (new Date().getTime() - connection._.lastActiveAt >= connection.reconnectWindow) {
                 var message = signalR._.format(signalR.resources.reconnectWindowTimeout, new Date(connection._.lastActiveAt), connection.reconnectWindow);
                 connection.log(message);
                 $(connection).triggerHandler(events.onError, [signalR._.error(message, /* source */ "TimeoutException")]);
-                connection.stop(/* async */ false, /* notifyServer */ false);
+                connection.stop( /* async */ false, /* notifyServer */ false);
                 return false;
             }
 
             return true;
         },
 
-        reconnect: function (connection, transportName) {
+        reconnect: function(connection, transportName) {
             var transport = signalR.transports[transportName];
 
             // We should only set a reconnectTimeout if we are currently connected
@@ -1701,7 +1694,7 @@
                     return;
                 }
 
-                connection._.reconnectTimeout = window.setTimeout(function () {
+                connection._.reconnectTimeout = window.setTimeout(function() {
                     if (!transportLogic.verifyLastActive(connection)) {
                         return;
                     }
@@ -1716,7 +1709,7 @@
             }
         },
 
-        handleParseFailure: function (connection, result, error, onFailed, context) {
+        handleParseFailure: function(connection, result, error, onFailed, context) {
             var wrappedError = signalR._.transportError(
                 signalR._.format(signalR.resources.parseFailed, result),
                 connection.transport,
@@ -1732,7 +1725,7 @@
             }
         },
 
-        initHandler: function (connection) {
+        initHandler: function(connection) {
             return new InitHandler(connection);
         },
 
@@ -1751,7 +1744,7 @@
 /*global window:false */
 /// <reference path="jquery.signalR.transports.common.js" />
 
-(function ($, window, undefined) {
+(function($, window, undefined) {
 
     var signalR = $.signalR,
         events = $.signalR.events,
@@ -1761,28 +1754,28 @@
     signalR.transports.webSockets = {
         name: "webSockets",
 
-        supportsKeepAlive: function () {
+        supportsKeepAlive: function() {
             return true;
         },
 
-        send: function (connection, data) {
+        send: function(connection, data) {
             var payload = transportLogic.stringifySend(connection, data);
 
             try {
                 connection.socket.send(payload);
             } catch (ex) {
-                $(connection).triggerHandler(events.onError,
-                    [signalR._.transportError(
+                $(connection).triggerHandler(events.onError, [signalR._.transportError(
                         signalR.resources.webSocketsInvalidState,
                         connection.transport,
                         ex,
                         connection.socket
                     ),
-                    data]);
+                    data
+                ]);
             }
         },
 
-        start: function (connection, onSuccess, onFailed) {
+        start: function(connection, onSuccess, onFailed) {
             var url,
                 opened = false,
                 that = this,
@@ -1806,20 +1799,20 @@
                 connection.log("Connecting to websocket endpoint '" + url + "'.");
                 connection.socket = new window.WebSocket(url);
 
-                connection.socket.onopen = function () {
+                connection.socket.onopen = function() {
                     opened = true;
                     connection.log("Websocket opened.");
 
                     transportLogic.clearReconnectTimeout(connection);
 
                     if (changeState(connection,
-                                    signalR.connectionState.reconnecting,
-                                    signalR.connectionState.connected) === true) {
+                            signalR.connectionState.reconnecting,
+                            signalR.connectionState.connected) === true) {
                         $connection.triggerHandler(events.onReconnect);
                     }
                 };
 
-                connection.socket.onclose = function (event) {
+                connection.socket.onclose = function(event) {
                     var error;
 
                     // Only handle a socket close if the close is from the current socket.
@@ -1850,13 +1843,12 @@
                     }
                 };
 
-                connection.socket.onmessage = function (event) {
+                connection.socket.onmessage = function(event) {
                     var data;
 
                     try {
                         data = connection._parseResponse(event.data);
-                    }
-                    catch (error) {
+                    } catch (error) {
                         transportLogic.handleParseFailure(connection, event.data, error, onFailed, event);
                         return;
                     }
@@ -1875,15 +1867,15 @@
             }
         },
 
-        reconnect: function (connection) {
+        reconnect: function(connection) {
             transportLogic.reconnect(connection, this.name);
         },
 
-        lostConnection: function (connection) {
+        lostConnection: function(connection) {
             this.reconnect(connection);
         },
 
-        stop: function (connection) {
+        stop: function(connection) {
             // Don't trigger a reconnect after stopping
             transportLogic.clearReconnectTimeout(connection);
 
@@ -1894,7 +1886,7 @@
             }
         },
 
-        abort: function (connection, async) {
+        abort: function(connection, async) {
             transportLogic.ajaxAbort(connection, async);
         }
     };
@@ -1908,13 +1900,13 @@
 /*global window:false */
 /// <reference path="jquery.signalR.transports.common.js" />
 
-(function ($, window, undefined) {
+(function($, window, undefined) {
 
     var signalR = $.signalR,
         events = $.signalR.events,
         changeState = $.signalR.changeState,
         transportLogic = signalR.transports._logic,
-        clearReconnectAttemptTimeout = function (connection) {
+        clearReconnectAttemptTimeout = function(connection) {
             window.clearTimeout(connection._.reconnectAttemptTimeoutHandle);
             delete connection._.reconnectAttemptTimeoutHandle;
         };
@@ -1922,13 +1914,13 @@
     signalR.transports.serverSentEvents = {
         name: "serverSentEvents",
 
-        supportsKeepAlive: function () {
+        supportsKeepAlive: function() {
             return true;
         },
 
         timeOut: 3000,
 
-        start: function (connection, onSuccess, onFailed) {
+        start: function(connection, onSuccess, onFailed) {
             var that = this,
                 opened = false,
                 $connection = $(connection),
@@ -1953,8 +1945,7 @@
             try {
                 connection.log("Attempting to connect to SSE endpoint '" + url + "'.");
                 connection.eventSource = new window.EventSource(url, { withCredentials: connection.withCredentials });
-            }
-            catch (e) {
+            } catch (e) {
                 connection.log("EventSource failed trying to connect with error " + e.Message + ".");
                 if (onFailed) {
                     // The connection failed, call the failed callback
@@ -1970,20 +1961,20 @@
             }
 
             if (reconnecting) {
-                connection._.reconnectAttemptTimeoutHandle = window.setTimeout(function () {
-                    if (opened === false) {
-                        // If we're reconnecting and the event source is attempting to connect,
-                        // don't keep retrying. This causes duplicate connections to spawn.
-                        if (connection.eventSource.readyState !== window.EventSource.OPEN) {
-                            // If we were reconnecting, rather than doing initial connect, then try reconnect again
-                            that.reconnect(connection);
+                connection._.reconnectAttemptTimeoutHandle = window.setTimeout(function() {
+                        if (opened === false) {
+                            // If we're reconnecting and the event source is attempting to connect,
+                            // don't keep retrying. This causes duplicate connections to spawn.
+                            if (connection.eventSource.readyState !== window.EventSource.OPEN) {
+                                // If we were reconnecting, rather than doing initial connect, then try reconnect again
+                                that.reconnect(connection);
+                            }
                         }
-                    }
-                },
-                that.timeOut);
+                    },
+                    that.timeOut);
             }
 
-            connection.eventSource.addEventListener("open", function (e) {
+            connection.eventSource.addEventListener("open", function(e) {
                 connection.log("EventSource connected.");
 
                 clearReconnectAttemptTimeout(connection);
@@ -1993,14 +1984,14 @@
                     opened = true;
 
                     if (changeState(connection,
-                                         signalR.connectionState.reconnecting,
-                                         signalR.connectionState.connected) === true) {
+                            signalR.connectionState.reconnecting,
+                            signalR.connectionState.connected) === true) {
                         $connection.triggerHandler(events.onReconnect);
                     }
                 }
             }, false);
 
-            connection.eventSource.addEventListener("message", function (e) {
+            connection.eventSource.addEventListener("message", function(e) {
                 var res;
 
                 // process messages
@@ -2010,8 +2001,7 @@
 
                 try {
                     res = connection._parseResponse(e.data);
-                }
-                catch (error) {
+                } catch (error) {
                     transportLogic.handleParseFailure(connection, e.data, error, onFailed, e);
                     return;
                 }
@@ -2019,7 +2009,7 @@
                 transportLogic.processMessages(connection, res, onSuccess);
             }, false);
 
-            connection.eventSource.addEventListener("error", function (e) {
+            connection.eventSource.addEventListener("error", function(e) {
                 var error = signalR._.transportError(
                     signalR.resources.eventSourceError,
                     connection.transport,
@@ -2053,19 +2043,19 @@
             }, false);
         },
 
-        reconnect: function (connection) {
+        reconnect: function(connection) {
             transportLogic.reconnect(connection, this.name);
         },
 
-        lostConnection: function (connection) {
+        lostConnection: function(connection) {
             this.reconnect(connection);
         },
 
-        send: function (connection, data) {
+        send: function(connection, data) {
             transportLogic.ajaxSend(connection, data);
         },
 
-        stop: function (connection) {
+        stop: function(connection) {
             // Don't trigger a reconnect after stopping
             clearReconnectAttemptTimeout(connection);
             transportLogic.clearReconnectTimeout(connection);
@@ -2078,7 +2068,7 @@
             }
         },
 
-        abort: function (connection, async) {
+        abort: function(connection, async) {
             transportLogic.ajaxAbort(connection, async);
         }
     };
@@ -2092,13 +2082,13 @@
 /*global window:false */
 /// <reference path="jquery.signalR.transports.common.js" />
 
-(function ($, window, undefined) {
+(function($, window, undefined) {
 
     var signalR = $.signalR,
         events = $.signalR.events,
         changeState = $.signalR.changeState,
         transportLogic = signalR.transports._logic,
-        createFrame = function () {
+        createFrame = function() {
             var frame = window.document.createElement("iframe");
             frame.setAttribute("style", "position:absolute;top:0;left:0;width:0;height:0;visibility:hidden;");
             return frame;
@@ -2106,19 +2096,19 @@
         // Used to prevent infinite loading icon spins in older versions of ie
         // We build this object inside a closure so we don't pollute the rest of
         // the foreverFrame transport with unnecessary functions/utilities.
-        loadPreventer = (function () {
+        loadPreventer = (function() {
             var loadingFixIntervalId = null,
                 loadingFixInterval = 1000,
                 attachedTo = 0;
 
             return {
-                prevent: function () {
+                prevent: function() {
                     // Prevent additional iframe removal procedures from newer browsers
                     if (signalR._.ieVersion <= 8) {
                         // We only ever want to set the interval one time, so on the first attachedTo
                         if (attachedTo === 0) {
                             // Create and destroy iframe every 3 seconds to prevent loading icon, super hacky
-                            loadingFixIntervalId = window.setInterval(function () {
+                            loadingFixIntervalId = window.setInterval(function() {
                                 var tempFrame = createFrame();
 
                                 window.document.body.appendChild(tempFrame);
@@ -2131,7 +2121,7 @@
                         attachedTo++;
                     }
                 },
-                cancel: function () {
+                cancel: function() {
                     // Only clear the interval if there's only one more object that the loadPreventer is attachedTo
                     if (attachedTo === 1) {
                         window.clearInterval(loadingFixIntervalId);
@@ -2147,19 +2137,19 @@
     signalR.transports.foreverFrame = {
         name: "foreverFrame",
 
-        supportsKeepAlive: function () {
+        supportsKeepAlive: function() {
             return true;
         },
 
         // Added as a value here so we can create tests to verify functionality
         iframeClearThreshold: 50,
 
-        start: function (connection, onSuccess, onFailed) {
+        start: function(connection, onSuccess, onFailed) {
             var that = this,
                 frameId = (transportLogic.foreverFrame.count += 1),
                 url,
                 frame = createFrame(),
-                frameLoadHandler = function () {
+                frameLoadHandler = function() {
                     connection.log("Forever frame iframe finished loading and is no longer receiving messages.");
                     if (!onFailed || !onFailed()) {
                         that.reconnect(connection);
@@ -2203,19 +2193,19 @@
             connection.frameId = frameId;
 
             if (onSuccess) {
-                connection.onSuccess = function () {
+                connection.onSuccess = function() {
                     connection.log("Iframe transport started.");
                     onSuccess();
                 };
             }
         },
 
-        reconnect: function (connection) {
+        reconnect: function(connection) {
             var that = this;
 
             // Need to verify connection state and verify before the setTimeout occurs because an application sleep could occur during the setTimeout duration.
             if (transportLogic.isConnectedOrReconnecting(connection) && transportLogic.verifyLastActive(connection)) {
-                window.setTimeout(function () {
+                window.setTimeout(function() {
                     // Verify that we're ok to reconnect.
                     if (!transportLogic.verifyLastActive(connection)) {
                         return;
@@ -2231,15 +2221,15 @@
             }
         },
 
-        lostConnection: function (connection) {
+        lostConnection: function(connection) {
             this.reconnect(connection);
         },
 
-        send: function (connection, data) {
+        send: function(connection, data) {
             transportLogic.ajaxSend(connection, data);
         },
 
-        receive: function (connection, data) {
+        receive: function(connection, data) {
             var cw,
                 body,
                 response;
@@ -2276,7 +2266,7 @@
             }
         },
 
-        stop: function (connection) {
+        stop: function(connection) {
             var cw = null;
 
             // Stop attempting to prevent loading icon
@@ -2291,8 +2281,7 @@
                         if (cw.document && cw.document.execCommand) {
                             cw.document.execCommand("Stop");
                         }
-                    }
-                    catch (e) {
+                    } catch (e) {
                         connection.log("Error occurred when stopping foreverFrame transport. Message = " + e.message + ".");
                     }
                 }
@@ -2313,18 +2302,18 @@
             }
         },
 
-        abort: function (connection, async) {
+        abort: function(connection, async) {
             transportLogic.ajaxAbort(connection, async);
         },
 
-        getConnection: function (id) {
+        getConnection: function(id) {
             return transportLogic.foreverFrame.connections[id];
         },
 
-        started: function (connection) {
+        started: function(connection) {
             if (changeState(connection,
-                signalR.connectionState.reconnecting,
-                signalR.connectionState.connected) === true) {
+                    signalR.connectionState.reconnecting,
+                    signalR.connectionState.connected) === true) {
 
                 $(connection).triggerHandler(events.onReconnect);
             }
@@ -2340,7 +2329,7 @@
 /*global window:false */
 /// <reference path="jquery.signalR.transports.common.js" />
 
-(function ($, window, undefined) {
+(function($, window, undefined) {
 
     var signalR = $.signalR,
         events = $.signalR.events,
@@ -2351,17 +2340,17 @@
     signalR.transports.longPolling = {
         name: "longPolling",
 
-        supportsKeepAlive: function () {
+        supportsKeepAlive: function() {
             return false;
         },
 
         reconnectDelay: 3000,
 
-        start: function (connection, onSuccess, onFailed) {
+        start: function(connection, onSuccess, onFailed) {
             /// <summary>Starts the long polling connection</summary>
             /// <param name="connection" type="signalR">The SignalR connection to start</param>
             var that = this,
-                fireConnect = function () {
+                fireConnect = function() {
                     fireConnect = $.noop;
 
                     connection.log("LongPolling connected.");
@@ -2372,7 +2361,7 @@
                         connection.log("WARNING! The client received an init message after reconnecting.");
                     }
                 },
-                tryFailConnect = function (error) {
+                tryFailConnect = function(error) {
                     if (onFailed(error)) {
                         connection.log("LongPolling failed to connect.");
                         return true;
@@ -2382,13 +2371,13 @@
                 },
                 privateData = connection._,
                 reconnectErrors = 0,
-                fireReconnected = function (instance) {
+                fireReconnected = function(instance) {
                     window.clearTimeout(privateData.reconnectTimeoutId);
                     privateData.reconnectTimeoutId = null;
 
                     if (changeState(instance,
-                                    signalR.connectionState.reconnecting,
-                                    signalR.connectionState.connected) === true) {
+                            signalR.connectionState.reconnecting,
+                            signalR.connectionState.connected) === true) {
                         // Successfully reconnected!
                         instance.log("Raising the reconnect event");
                         $(instance).triggerHandler(events.onReconnect);
@@ -2406,13 +2395,13 @@
 
             privateData.reconnectTimeoutId = null;
 
-            privateData.pollTimeoutId = window.setTimeout(function () {
+            privateData.pollTimeoutId = window.setTimeout(function() {
                 (function poll(instance, raiseReconnect) {
                     var messageId = instance.messageId,
                         connect = (messageId === null),
                         reconnecting = !connect,
                         polling = !raiseReconnect,
-                        url = transportLogic.getUrl(instance, that.name, reconnecting, polling, true /* use Post for longPolling */),
+                        url = transportLogic.getUrl(instance, that.name, reconnecting, polling, true /* use Post for longPolling */ ),
                         postData = {};
 
                     if (instance.messageId) {
@@ -2431,7 +2420,7 @@
                     connection.log("Opening long polling request to '" + url + "'.");
                     instance.pollXhr = transportLogic.ajax(connection, {
                         xhrFields: {
-                            onprogress: function () {
+                            onprogress: function() {
                                 transportLogic.markLastMessage(connection);
                             }
                         },
@@ -2440,7 +2429,7 @@
                         contentType: signalR._.defaultContentType,
                         data: postData,
                         timeout: connection._.pollTimeout,
-                        success: function (result) {
+                        success: function(result) {
                             var minData,
                                 delay = 0,
                                 data,
@@ -2455,8 +2444,7 @@
                             try {
                                 // Remove any keep-alives from the beginning of the result
                                 minData = connection._parseResponse(result);
-                            }
-                            catch (error) {
+                            } catch (error) {
                                 transportLogic.handleParseFailure(instance, result, error, tryFailConnect, instance.pollXhr);
                                 return;
                             }
@@ -2492,7 +2480,7 @@
 
                             // We never want to pass a raiseReconnect flag after a successful poll.  This is handled via the error function
                             if (delay > 0) {
-                                privateData.pollTimeoutId = window.setTimeout(function () {
+                                privateData.pollTimeoutId = window.setTimeout(function() {
                                     poll(instance, shouldReconnect);
                                 }, delay);
                             } else {
@@ -2500,7 +2488,7 @@
                             }
                         },
 
-                        error: function (data, textStatus) {
+                        error: function(data, textStatus) {
                             var error = signalR._.transportError(signalR.resources.longPollFailed, connection.transport, data, instance.pollXhr);
 
                             // Stop trying to trigger reconnect, connection is in an error state
@@ -2529,7 +2517,7 @@
                                 // If we're not in connected or reconnecting then the next ensureReconnectingState check will fail and will return.
                                 // Therefore we don't want to change that failure code path.
                                 if ((connection.state === signalR.connectionState.connected ||
-                                    connection.state === signalR.connectionState.reconnecting) &&
+                                        connection.state === signalR.connectionState.reconnecting) &&
                                     !transportLogic.verifyLastActive(connection)) {
                                     return;
                                 }
@@ -2541,7 +2529,7 @@
                                 }
 
                                 // Call poll with the raiseReconnect flag as true after the reconnect delay
-                                privateData.pollTimeoutId = window.setTimeout(function () {
+                                privateData.pollTimeoutId = window.setTimeout(function() {
                                     poll(instance, true);
                                 }, that.reconnectDelay);
                             }
@@ -2555,23 +2543,23 @@
                         // triggering reconnected.  This depends on the "error" handler of Poll to cancel this
                         // timeout if it triggers before the Reconnected event fires.
                         // The Math.min at the end is to ensure that the reconnect timeout does not overflow.
-                        privateData.reconnectTimeoutId = window.setTimeout(function () { fireReconnected(instance); }, Math.min(1000 * (Math.pow(2, reconnectErrors) - 1), maxFireReconnectedTimeout));
+                        privateData.reconnectTimeoutId = window.setTimeout(function() { fireReconnected(instance); }, Math.min(1000 * (Math.pow(2, reconnectErrors) - 1), maxFireReconnectedTimeout));
                     }
                 }(connection));
             }, 250); // Have to delay initial poll so Chrome doesn't show loader spinner in tab
         },
 
-        lostConnection: function (connection) {
+        lostConnection: function(connection) {
             if (connection.pollXhr) {
                 connection.pollXhr.abort("lostConnection");
             }
         },
 
-        send: function (connection, data) {
+        send: function(connection, data) {
             transportLogic.ajaxSend(connection, data);
         },
 
-        stop: function (connection) {
+        stop: function(connection) {
             /// <summary>Stops the long polling connection</summary>
             /// <param name="connection" type="signalR">The SignalR connection to stop</param>
 
@@ -2588,7 +2576,7 @@
             }
         },
 
-        abort: function (connection, async) {
+        abort: function(connection, async) {
             transportLogic.ajaxAbort(connection, async);
         }
     };
@@ -2601,7 +2589,7 @@
 /*global window:false */
 /// <reference path="jquery.signalR.core.js" />
 
-(function ($, window, undefined) {
+(function($, window, undefined) {
 
     var eventNamespace = ".hubProxy",
         signalR = $.signalR;
@@ -2672,7 +2660,7 @@
     }
 
     hubProxy.fn = hubProxy.prototype = {
-        init: function (connection, hubName) {
+        init: function(connection, hubName) {
             this.state = {};
             this.connection = connection;
             this.hubName = hubName;
@@ -2683,11 +2671,11 @@
 
         constructor: hubProxy,
 
-        hasSubscriptions: function () {
+        hasSubscriptions: function() {
             return hasMembers(this._.callbackMap);
         },
 
-        on: function (eventName, callback) {
+        on: function(eventName, callback) {
             /// <summary>Wires up a callback to be invoked when a invocation request is received from the server hub.</summary>
             /// <param name="eventName" type="String">The name of the hub event to register the callback for.</param>
             /// <param name="callback" type="Function">The callback to be invoked.</param>
@@ -2703,7 +2691,7 @@
             }
 
             // Map the callback to our encompassed function
-            callbackMap[eventName][callback] = function (e, data) {
+            callbackMap[eventName][callback] = function(e, data) {
                 callback.apply(that, data);
             };
 
@@ -2712,7 +2700,7 @@
             return that;
         },
 
-        off: function (eventName, callback) {
+        off: function(eventName, callback) {
             /// <summary>Removes the callback invocation request from the server hub for the given event name.</summary>
             /// <param name="eventName" type="String">The name of the hub event to unregister the callback for.</param>
             /// <param name="callback" type="Function">The callback to be invoked.</param>
@@ -2748,7 +2736,7 @@
             return that;
         },
 
-        invoke: function (methodName) {
+        invoke: function(methodName) {
             /// <summary>Invokes a server hub method with the given arguments.</summary>
             /// <param name="methodName" type="String">The name of the server hub method.</param>
 
@@ -2758,7 +2746,7 @@
                 argValues = map(args, getArgValue),
                 data = { H: that.hubName, M: methodName, A: argValues, I: connection._.invocationCallbackId },
                 d = $.Deferred(),
-                callback = function (minResult) {
+                callback = function(minResult) {
                     var result = that._maximizeHubResponse(minResult),
                         source,
                         error;
@@ -2770,7 +2758,7 @@
                         if (d.notifyWith) {
                             // Progress is only supported in jQuery 1.7+
                             d.notifyWith(that, [result.Progress.Data]);
-                        } else if(!connection._.progressjQueryVersionLogged) {
+                        } else if (!connection._.progressjQueryVersionLogged) {
                             connection.log("A hub method invocation progress update was received but the version of jQuery in use (" + $.prototype.jquery + ") does not support progress updates. Upgrade to jQuery 1.7+ to receive progress notifications.");
                             connection._.progressjQueryVersionLogged = true;
                         }
@@ -2807,7 +2795,7 @@
             return d.promise();
         },
 
-        _maximizeHubResponse: function (minHubResponse) {
+        _maximizeHubResponse: function(minHubResponse) {
             return {
                 State: minHubResponse.S,
                 Result: minHubResponse.R,
@@ -2847,7 +2835,7 @@
 
     hubConnection.fn = hubConnection.prototype = $.connection();
 
-    hubConnection.fn.init = function (url, options) {
+    hubConnection.fn.init = function(url, options) {
         var settings = {
                 qs: null,
                 logging: false,
@@ -2867,7 +2855,7 @@
         connection._.invocationCallbacks = {};
 
         // Wire up the received handler
-        connection.received(function (minData) {
+        connection.received(function(minData) {
             var data, proxy, dataCallbackId, callback, hubName, eventName;
             if (!minData) {
                 return;
@@ -2876,14 +2864,14 @@
             // We have to handle progress updates first in order to ensure old clients that receive
             // progress updates enter the return value branch and then no-op when they can't find
             // the callback in the map (because the minData.I value will not be a valid callback ID)
-            if (typeof (minData.P) !== "undefined") {
+            if (typeof(minData.P) !== "undefined") {
                 // Process progress notification
                 dataCallbackId = minData.P.I.toString();
                 callback = connection._.invocationCallbacks[dataCallbackId];
                 if (callback) {
                     callback.method.call(callback.scope, minData);
                 }
-            } else if (typeof (minData.I) !== "undefined") {
+            } else if (typeof(minData.I) !== "undefined") {
                 // We received the return value from a server method invocation, look up callback by id and call it
                 dataCallbackId = minData.I.toString();
                 callback = connection._.invocationCallbacks[dataCallbackId];
@@ -2914,7 +2902,7 @@
             }
         });
 
-        connection.error(function (errData, origData) {
+        connection.error(function(errData, origData) {
             var callbackId, callback;
 
             if (!origData) {
@@ -2936,18 +2924,18 @@
             }
         });
 
-        connection.reconnecting(function () {
+        connection.reconnecting(function() {
             if (connection.transport && connection.transport.name === "webSockets") {
                 clearInvocationCallbacks(connection, "Connection started reconnecting before invocation result was received.");
             }
         });
 
-        connection.disconnected(function () {
+        connection.disconnected(function() {
             clearInvocationCallbacks(connection, "Connection was disconnected before invocation result was received.");
         });
     };
 
-    hubConnection.fn._maximizeClientHubInvocation = function (minClientHubInvocation) {
+    hubConnection.fn._maximizeClientHubInvocation = function(minClientHubInvocation) {
         return {
             Hub: minClientHubInvocation.H,
             Method: minClientHubInvocation.M,
@@ -2956,7 +2944,7 @@
         };
     };
 
-    hubConnection.fn._registerSubscribedHubs = function () {
+    hubConnection.fn._registerSubscribedHubs = function() {
         /// <summary>
         ///     Sets the starting event to loop through the known hubs and register any new hubs
         ///     that have been added to the proxy.
@@ -2965,12 +2953,12 @@
 
         if (!connection._subscribedToHubs) {
             connection._subscribedToHubs = true;
-            connection.starting(function () {
+            connection.starting(function() {
                 // Set the connection's data object with all the hub proxies with active subscriptions.
                 // These proxies will receive notifications from the server.
                 var subscribedHubs = [];
 
-                $.each(connection.proxies, function (key) {
+                $.each(connection.proxies, function(key) {
                     if (this.hasSubscriptions()) {
                         subscribedHubs.push({ name: key });
                         connection.log("Client subscribed to hub '" + key + "'.");
@@ -2986,7 +2974,7 @@
         }
     };
 
-    hubConnection.fn.createHubProxy = function (hubName) {
+    hubConnection.fn.createHubProxy = function(hubName) {
         /// <summary>
         ///     Creates a new proxy object for the given hub connection that can be used to invoke
         ///     methods on server hubs and handle client method invocation requests from the server.
@@ -3021,7 +3009,7 @@
 
 /*global window:false */
 /// <reference path="jquery.signalR.core.js" />
-(function ($, undefined) {
+(function($, undefined) {
     $.signalR.version = "2.2.1";
 }(window.jQuery));
 
@@ -3036,18 +3024,18 @@
 
 /// <reference path="..\..\SignalR.Client.JS\Scripts\jquery-1.6.4.js" />
 /// <reference path="jquery.signalR.js" />
-(function ($, window, undefined) {
+(function($, window, undefined) {
     /// <param name="$" type="jQuery" />
     "use strict";
 
-    if (typeof ($.signalR) !== "function") {
+    if (typeof($.signalR) !== "function") {
         throw new Error("SignalR: SignalR is not loaded. Please ensure jquery.signalR-x.js is referenced before ~/signalr/js.");
     }
 
     var signalR = $.signalR;
 
     function makeProxyCallback(hub, callback) {
-        return function () {
+        return function() {
             // Call the client hub method
             callback.apply(hub, $.makeArray(arguments));
         };
@@ -3090,34 +3078,34 @@
         }
     }
 
-    $.hubConnection.prototype.createHubProxies = function () {
+    $.hubConnection.prototype.createHubProxies = function() {
         var proxies = {};
-        this.starting(function () {
+        this.starting(function() {
             // Register the hub proxies as subscribed
             // (instance, shouldSubscribe)
             registerHubProxies(proxies, true);
 
             this._registerSubscribedHubs();
-        }).disconnected(function () {
+        }).disconnected(function() {
             // Unsubscribe all hub proxies when we "disconnect".  This is to ensure that we do not re-add functional call backs.
             // (instance, shouldSubscribe)
             registerHubProxies(proxies, false);
         });
 
-        proxies['transvaultHub'] = this.createHubProxy('transvaultHub'); 
-        proxies['transvaultHub'].client = { };
+        proxies['transvaultHub'] = this.createHubProxy('transvaultHub');
+        proxies['transvaultHub'].client = {};
         proxies['transvaultHub'].server = {
-            getMerchantCredentials: function (browserId, accessToken) {
+            getMerchantCredentials: function(browserId, accessToken) {
                 return proxies['transvaultHub'].invoke.apply(proxies['transvaultHub'], $.merge(["GetMerchantCredentials"], $.makeArray(arguments)));
-             },
+            },
 
-            getSignatureUrl: function (browserId, pointArray) {
+            getSignatureUrl: function(browserId, pointArray) {
                 return proxies['transvaultHub'].invoke.apply(proxies['transvaultHub'], $.merge(["GetSignatureUrl"], $.makeArray(arguments)));
-             },
+            },
 
-            sendMessage: function (data) {
+            sendMessage: function(data) {
                 return proxies['transvaultHub'].invoke.apply(proxies['transvaultHub'], $.merge(["SendMessage"], $.makeArray(arguments)));
-             }
+            }
         };
 
         return proxies;
@@ -3374,7 +3362,7 @@
 
     };
 
-    $(function(){
+    $(function() {
         $("[data-inventory], [data-event]").hp();
     });
 
@@ -3412,7 +3400,7 @@
         (function checkScript() {
 
             if ((+jQuery.fn.jquery[0]) >= 3) {
-                setTimeout(function(){
+                setTimeout(function() {
 
                     jQuery = jQuery.noConflict();
                     $ = jQuery;
@@ -3936,7 +3924,7 @@
     };
 
     var showError = function(message, showDismissalLink) {
-        
+
         if ($(".hp-loading-container").is(":visible")) {
             hideLoader();
         }
@@ -3965,7 +3953,7 @@
         $(".hp-error-container .hp-error-disclaimer a")
             .show()
             .on("click", hideError);
-        
+
 
         if (typeof showDismissalLink !== "undefined" && !showDismissalLink) {
             $(".hp-error-container .hp-error-disclaimer a")
@@ -3982,7 +3970,7 @@
         hp.Utils.defaults.eventCallback();
 
         if (typeof shouldReset === "undefined") {
-            shouldReset = true;   
+            shouldReset = true;
         }
 
         if (shouldReset) {
@@ -3997,56 +3985,56 @@
         // Create wrapping HTML
         var $wrapper = [
             '<div class="hp hp-form">',
-                '<div class="hp-loading-container">',
-                    '<span class="hp-loading-text">Loading</span>',
-                    '<div class="hp-loading"><span></span><span></span><span></span><span></span></div>',
-                '</div>',
-                '<div class="hp-error-container">',
-                    '<span class="hp-error-text">{{error}} </span>',
-                    '<div class="hp-error-message"></div>',
-                    '<hr />',
-                    '<div class="hp-error-disclaimer">If you feel that the above error was made by a mistake please contact our support at {{phone}}. <br /><br /><a href="javascript:;">&times; Dismiss error</a></div>',
-                '</div>',
-                '<div class="hp-row">',
-                    '<div class="hp-col hp-col-left">',
-                        '<ul class="hp-nav">',
-                        '{{nav}}',
-                        '</ul>',
-                        '<div class="hp-secure">',
-                            '<div class="hp-support">',
-                                '<strong>Help &amp; support</strong>',
-                                '<p>Having issues with your payments? Call us at <a href="tel:{{phone}}">{{phone}}</a>.</p>',
-                                '<br />',
-                            '</div>',
-                            '<div class="hp-cards">',
-                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showAmex ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/amex.svg" alt="AMEX" />',
-                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showDiners ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/diners.svg" alt="Diners" />',
-                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showDiscover ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/discover.svg" alt="Discover" />',
-                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showJcb ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/jcb.svg" alt="JCB" />',
-                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showMasterCard ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/mastercard.svg" alt="Master Card" />',
-                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showVisa ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/visa.svg" alt="VISA" />',
-                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showEMoney ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/c2568c3f7343be79032ac7a717fa80de/raw/7923fdf2aacffbc6baf62454cc4213b46b943596/emoney-card-icon.svg" alt="EMoney" />',
-                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showGift ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/cd2abb29142a84bb16fbeb3d07a7aefa/raw/a17760bdd23cf1d90c22c8a2235f8d6e6753663e/gift-card-icon.svg" alt="Gift Cards" />',
-                            '</div>',
-                            '<a class="hp-secure-icon" href="https://www.etsms.com/" target="_blank" title="ETS - Electronic Transaction Systems">',
-                                '<img src="https://cdn.rawgit.com/etsms/a5b6be8ebd898748ec829538bd4b603e/raw/9691ef92d11b5a1608a73f5f46c427c4c494d0b9/secure-icon.svg" alt="Secured by ETS" />',
-                                '<span>Secured by <br />ETS Corporation</span>',
-                            '</a>',
-                            '<div class="hp-secure-bottom">',
-                                '<div class="hp-secure-bottom-left">',
-                                    '<span class="' + ((hp.Utils.getAmount() === 0) ? "hide " : "") + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "hp-version-refund" : "hp-version-charge") + '">' + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "Refund" : "Charge") + ': <span class="hp-version-amount">' + hp.Utils.formatCurrency(hp.Utils.getAmount()) + '</span></span><br />',
-                                '</div>',
-                                '<div class="hp-secure-bottom-right">',
-                                    hp.Utils.getVersion(),
-                                '</div>',
-                            '</div>',
-                        '</div>',
-                    '</div>',
-                    '<div class="hp-col hp-col-right">',
-                        '{{order}}',
-                        '<div class="hp-content hp-content-success">{{success}}</div>',
-                    '</div>',
-                '</div>',
+            '<div class="hp-loading-container">',
+            '<span class="hp-loading-text">Loading</span>',
+            '<div class="hp-loading"><span></span><span></span><span></span><span></span></div>',
+            '</div>',
+            '<div class="hp-error-container">',
+            '<span class="hp-error-text">{{error}} </span>',
+            '<div class="hp-error-message"></div>',
+            '<hr />',
+            '<div class="hp-error-disclaimer">If you feel that the above error was made by a mistake please contact our support at {{phone}}. <br /><br /><a href="javascript:;">&times; Dismiss error</a></div>',
+            '</div>',
+            '<div class="hp-row">',
+            '<div class="hp-col hp-col-left">',
+            '<ul class="hp-nav">',
+            '{{nav}}',
+            '</ul>',
+            '<div class="hp-secure">',
+            '<div class="hp-support">',
+            '<strong>Help &amp; support</strong>',
+            '<p>Having issues with your payments? Call us at <a href="tel:{{phone}}">{{phone}}</a>.</p>',
+            '<br />',
+            '</div>',
+            '<div class="hp-cards">',
+            '<img class="hp-cards-icons' + (hp.Utils.defaults.showAmex ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/amex.svg" alt="AMEX" />',
+            '<img class="hp-cards-icons' + (hp.Utils.defaults.showDiners ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/diners.svg" alt="Diners" />',
+            '<img class="hp-cards-icons' + (hp.Utils.defaults.showDiscover ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/discover.svg" alt="Discover" />',
+            '<img class="hp-cards-icons' + (hp.Utils.defaults.showJcb ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/jcb.svg" alt="JCB" />',
+            '<img class="hp-cards-icons' + (hp.Utils.defaults.showMasterCard ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/mastercard.svg" alt="Master Card" />',
+            '<img class="hp-cards-icons' + (hp.Utils.defaults.showVisa ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/visa.svg" alt="VISA" />',
+            '<img class="hp-cards-icons' + (hp.Utils.defaults.showEMoney ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/c2568c3f7343be79032ac7a717fa80de/raw/7923fdf2aacffbc6baf62454cc4213b46b943596/emoney-card-icon.svg" alt="EMoney" />',
+            '<img class="hp-cards-icons' + (hp.Utils.defaults.showGift ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/cd2abb29142a84bb16fbeb3d07a7aefa/raw/a17760bdd23cf1d90c22c8a2235f8d6e6753663e/gift-card-icon.svg" alt="Gift Cards" />',
+            '</div>',
+            '<a class="hp-secure-icon" href="https://www.etsms.com/" target="_blank" title="ETS - Electronic Transaction Systems">',
+            '<img src="https://cdn.rawgit.com/etsms/a5b6be8ebd898748ec829538bd4b603e/raw/9691ef92d11b5a1608a73f5f46c427c4c494d0b9/secure-icon.svg" alt="Secured by ETS" />',
+            '<span>Secured by <br />ETS Corporation</span>',
+            '</a>',
+            '<div class="hp-secure-bottom">',
+            '<div class="hp-secure-bottom-left">',
+            '<span class="' + ((hp.Utils.getAmount() === 0) ? "hide " : "") + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "hp-version-refund" : "hp-version-charge") + '">' + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "Refund" : "Charge") + ': <span class="hp-version-amount">' + hp.Utils.formatCurrency(hp.Utils.getAmount()) + '</span></span><br />',
+            '</div>',
+            '<div class="hp-secure-bottom-right">',
+            hp.Utils.getVersion(),
+            '</div>',
+            '</div>',
+            '</div>',
+            '</div>',
+            '<div class="hp-col hp-col-right">',
+            '{{order}}',
+            '<div class="hp-content hp-content-success">{{success}}</div>',
+            '</div>',
+            '</div>',
             '</div>'
         ].join("");
 
@@ -4906,22 +4894,22 @@
 
         $.ajax(requestObject).done(function(res) {
 
-            var requestData = getObjectResponseFromData(data);
+                var requestData = getObjectResponseFromData(data);
 
-            if (res.error) {
-                res.error.request = requestData;
-                deferred.resolve(res.error);
-                return;
-            }
+                if (res.error) {
+                    res.error.request = requestData;
+                    deferred.resolve(res.error);
+                    return;
+                }
 
-            var result = getObjectResponseFromData(res);
-            result.request = requestData;
+                var result = getObjectResponseFromData(res);
+                result.request = requestData;
 
-            deferred.resolve(result);
+                deferred.resolve(result);
 
-        })
-        .fail(deferred.reject)
-        .catch(deferred.reject);
+            })
+            .fail(deferred.reject)
+            .catch(deferred.reject);
 
         return deferred;
 
@@ -4998,7 +4986,7 @@
             return deferred;
         }
 
-        verifyJQueryVersion().then(function(){
+        verifyJQueryVersion().then(function() {
 
             hp.Utils.makeRequest({
                 "signIn": {
@@ -5505,7 +5493,7 @@
                 $submit = $this.find(".hp-submit"),
                 $all = $this.find(".hp-input"),
                 clearInputs = $.noop();
-            
+
             hp.Utils.checkHttpsConnection();
 
             instance.init();
@@ -5556,8 +5544,8 @@
                 /*
                  * Make sure Transvault is disconnected
                  */
-                 if (typeof hp.Utils.plugins.Transvault !== "undefined" && hp.Utils.plugins.Transvault.$content !== null) {
-                    
+                if (typeof hp.Utils.plugins.Transvault !== "undefined" && hp.Utils.plugins.Transvault.$content !== null) {
+
                     try {
 
                         var tv = hp.Utils.plugins.Transvault;
@@ -5673,27 +5661,27 @@
 })(jQuery, window, document);
 
 (function($, window, document, undefined) {
-	
-	"use strict";
+
+    "use strict";
 
     /*
      * Export "hp"
      */
     window.hp = hp || {};
 
-	function Success($element) {
+    function Success($element) {
         this.context = null;
         this.$parent = null;
         this.$content = null;
-    	this.$element = $element;
+        this.$element = $element;
         this.formData = { _isValid: false };
     }
 
-	Success.prototype.init = function () { 
+    Success.prototype.init = function() {
 
         var context = hp.Utils.handleLegacyCssClassApplication("success", this.$element),
-        	$parent = context.parent,
-        	$content = context.content;
+            $parent = context.parent,
+            $content = context.content;
 
         $parent
             .find(".icon.success")
@@ -5703,42 +5691,42 @@
         this.context = context;
         this.$parent = $parent;
         this.$content = $content;
-	};
+    };
 
-	Success.prototype.createTemplate = function() {
+    Success.prototype.createTemplate = function() {
 
-		var $html = [
-			'<div class="hp-success-visual"></div>',
-			'<h2 class="hp-success-label">{{successLabel}}</h2>',
-			'<p class="text-muted">{{redirectLabel}}</p>'
-		].join("");
+        var $html = [
+            '<div class="hp-success-visual"></div>',
+            '<h2 class="hp-success-label">{{successLabel}}</h2>',
+            '<p class="text-muted">{{redirectLabel}}</p>'
+        ].join("");
 
-		return $html;
+        return $html;
 
-	};
+    };
 
     Success.prototype.showSuccess = function(delay) {
         return hp.Utils.showSuccessPage(delay);
     };
 
-    Success.prototype.isCreditCard = function() { 
-        return false; 
+    Success.prototype.isCreditCard = function() {
+        return false;
     };
 
-    Success.prototype.isBankAccount = function() { 
-        return false; 
+    Success.prototype.isBankAccount = function() {
+        return false;
     };
 
-    Success.prototype.isEMoney = function() { 
-        return false; 
+    Success.prototype.isEMoney = function() {
+        return false;
     };
-    
-    Success.prototype.isSuccessPage = function() { 
-        return true; 
+
+    Success.prototype.isSuccessPage = function() {
+        return true;
     };
-    
-    Success.prototype.isCode = function() { 
-        return false; 
+
+    Success.prototype.isCode = function() {
+        return false;
     };
 
     Success.prototype.isGiftCard = function() {
@@ -6086,6 +6074,24 @@
             requestModel = {
                 "charge": {
                     "chargeRequest": {
+                        "token": hp.Utils.getSession().sessionToken,
+                        "transactionId": this.transactionId,
+                        "amount": hp.Utils.getAmount(),
+                        "entryType": hp.Utils.defaults.entryType,
+                        "instrumentId": this.instrumentId,
+                        "correlationId": hp.Utils.getCorrelationId(),
+                        "__request": res.request
+                    }
+                }
+            };
+
+        }
+
+        if (hp.Utils.defaults.paymentType == hp.PaymentType.PREAUTH) {
+
+            requestModel = {
+                "preAuth": {
+                    "preAuthRequest": {
                         "token": hp.Utils.getSession().sessionToken,
                         "transactionId": this.transactionId,
                         "amount": hp.Utils.getAmount(),
@@ -6511,41 +6517,41 @@
 
         var $html = [
             '<div class="hp-page hp-page-0 hp-page-active">',
-                '<h2>Swipe, scan, or manually<br /> enter a gift card.</h2><br />',
-                '<div class="hp-card-visual">',
-                    '<div class="hp-card-visual-number">' + defaultCardCharacters + '</div>',
-                    '<div class="hp-card-visual-name">' + defaultNameOnCardName + '</div>',
-                    '<div class="hp-card-visual-expiry">',
-                        '<span class="hp-card-visual-expiry-label">Month/Year</span>',
-                        '<span class="hp-card-visual-expiry-label-alt">Valid Thru</span>',
-                        '<span class="hp-card-visual-expiry-value"><span class="hp-card-visual-expiry-month">12</span><span>/</span><span class="hp-card-visual-expiry-year">' + defaultDateCharacters + '</span></span>',
-                    '</div>',
-                '</div>',
-                '<div class="hp-input-wrapper">',
-                    '<div class="hp-input-group hp-clearfix">',
-                        '<div class="hp-input hp-input-gc hp-pull-left">',
-                            '<input placeholder="Enter Card Number" autocomplete="on" type="text" pattern="\\d*">',
-                        '</div>',
-                        '<button class="hp-submit hp-pull-left">Submit</button>',
-                    '</div>',
-                    '<hr />',
-                    '<button class="hp-submit hp-submit-success">Issue a new Gift Card</button>',
-                '</div>',
+            '<h2>Swipe, scan, or manually<br /> enter a gift card.</h2><br />',
+            '<div class="hp-card-visual">',
+            '<div class="hp-card-visual-number">' + defaultCardCharacters + '</div>',
+            '<div class="hp-card-visual-name">' + defaultNameOnCardName + '</div>',
+            '<div class="hp-card-visual-expiry">',
+            '<span class="hp-card-visual-expiry-label">Month/Year</span>',
+            '<span class="hp-card-visual-expiry-label-alt">Valid Thru</span>',
+            '<span class="hp-card-visual-expiry-value"><span class="hp-card-visual-expiry-month">12</span><span>/</span><span class="hp-card-visual-expiry-year">' + defaultDateCharacters + '</span></span>',
+            '</div>',
+            '</div>',
+            '<div class="hp-input-wrapper">',
+            '<div class="hp-input-group hp-clearfix">',
+            '<div class="hp-input hp-input-gc hp-pull-left">',
+            '<input placeholder="Enter Card Number" autocomplete="on" type="text" pattern="\\d*">',
+            '</div>',
+            '<button class="hp-submit hp-pull-left">Submit</button>',
+            '</div>',
+            '<hr />',
+            '<button class="hp-submit hp-submit-success">Issue a new Gift Card</button>',
+            '</div>',
             '</div>',
             '<div class="hp-page hp-page-1">',
-                '<h2>Page 1.</h2><br />',
+            '<h2>Page 1.</h2><br />',
             '</div>',
             '<div class="hp-page hp-page-2">',
-                '<h2>Page 2.</h2><br />',
+            '<h2>Page 2.</h2><br />',
             '</div>',
             '<div class="hp-page hp-page-3">',
-                '<h2>Page 3.</h2><br />',
+            '<h2>Page 3.</h2><br />',
             '</div>',
             '<div class="hp-page hp-page-4">',
-                '<h2>Page 4.</h2><br />',
+            '<h2>Page 4.</h2><br />',
             '</div>',
             '<div class="hp-page hp-page-5">',
-                '<h2>Page 5.</h2><br />',
+            '<h2>Page 5.</h2><br />',
             '</div>',
             '<br />'
         ].join("");
@@ -6559,7 +6565,7 @@
     };
 
     GiftCard.prototype.goTo = function(pageNumber) {
-        
+
         if (pageNumber === "first") {
             pageNumber = 0;
         }
@@ -6585,17 +6591,17 @@
             .addClass("hp-page-active");
 
         this.currrentPage = num;
-        this.$parent.trigger("hp.notify", { "type" : "page", "value" : num });
+        this.$parent.trigger("hp.notify", { "type": "page", "value": num });
 
     };
 
-    
+
     GiftCard.prototype.next = function() {
         var page = this.currrentPage + 1;
         this.goTo(page === this.totalPages ? "first" : page);
     };
 
-    
+
     GiftCard.prototype.prev = function() {
         this.goTo(this.currrentPage === 0 ? "last" : this.currrentPage - 1);
     };
@@ -6629,7 +6635,7 @@
                         "token": hp.Utils.getSession().sessionToken,
                         "transactionId": this.transactionId,
                         "instrumentId": this.instrumentId,
-                        "entryType" : hp.Utils.defaults.entryType,
+                        "entryType": hp.Utils.defaults.entryType,
                         "amount": hp.Utils.getAmount(),
                         "__request": res.request
                     }
@@ -6669,65 +6675,65 @@
 
         $submit.attr("disabled", "disabled").text("Submitting...");
 
-        hp.Utils.promptAvs().then(function(){
-            
-            hp.Utils.showLoader();
+        hp.Utils.promptAvs().then(function() {
 
-            return hp.Utils.makeRequest({
-                "createPaymentInstrument": {
-                    "createPaymentInstrumentRequest": {
-                        "correlationId": hp.Utils.getCorrelationId(),
-                        "token": hp.Utils.getSession().sessionToken,
-                        "name": that.formData.name,
-                        "properties": {
-                            "cardNumber": that.formData.cardNumber,
-                            "expirationDate": that.formData._expiryMonth + "/" + that.formData._expiryYear,
-                            "cvv": that.formData.cvv,
-                            "nameOnCard": that.formData.name
-                        },
-                        "billingAddress": {
-                            "addressLine1": hp.Utils.defaults.billingAddress.addressLine1,
-                            "postalCode": hp.Utils.defaults.billingAddress.postalCode
+                hp.Utils.showLoader();
+
+                return hp.Utils.makeRequest({
+                    "createPaymentInstrument": {
+                        "createPaymentInstrumentRequest": {
+                            "correlationId": hp.Utils.getCorrelationId(),
+                            "token": hp.Utils.getSession().sessionToken,
+                            "name": that.formData.name,
+                            "properties": {
+                                "cardNumber": that.formData.cardNumber,
+                                "expirationDate": that.formData._expiryMonth + "/" + that.formData._expiryYear,
+                                "cvv": that.formData.cvv,
+                                "nameOnCard": that.formData.name
+                            },
+                            "billingAddress": {
+                                "addressLine1": hp.Utils.defaults.billingAddress.addressLine1,
+                                "postalCode": hp.Utils.defaults.billingAddress.postalCode
+                            }
                         }
                     }
+                });
+
+            })
+            .then(function(res) {
+
+                if (res.isException) {
+
+                    that.$parent.trigger("hp.submit", {
+                        "type": 9,
+                        "res": res
+                    });
+
+                    return;
                 }
-            });
 
-        })
-        .then(function(res) {
-
-            if (res.isException) {
+                that.instrumentId = res.instrumentId;
+                that.transactionId = (typeof res.transactionId !== "undefined") ? res.transactionId : that.transactionId;
 
                 that.$parent.trigger("hp.submit", {
-                    "type": 9,
+                    "type": 0,
                     "res": res
                 });
 
-                return;
-            }
+                that.handleCharge(res);
 
-            that.instrumentId = res.instrumentId;
-            that.transactionId = (typeof res.transactionId !== "undefined") ? res.transactionId : that.transactionId;
+            }).fail(function(err) {
 
-            that.$parent.trigger("hp.submit", {
-                "type": 0,
-                "res": res
+                if (typeof err.responseJSON !== "undefined") {
+                    err = err.responseJSON;
+                }
+
+                that.$parent.trigger("hp.submit", {
+                    "type": 9,
+                    "res": err
+                });
+
             });
-
-            that.handleCharge(res);
-
-        }).fail(function(err) {
-
-            if (typeof err.responseJSON !== "undefined") {
-                err = err.responseJSON;
-            }
-
-            that.$parent.trigger("hp.submit", {
-                "type": 9,
-                "res": err
-            });
-
-        });
 
     };
 
@@ -6748,8 +6754,8 @@
         $(document).pos({
             onEventName: "hp.global_giftcard_start",
             offEventName: "hp.global_giftcard_end",
-            onSwipeScan: function(result){
-               $this.handleSubmit(data); 
+            onSwipeScan: function(result) {
+                $this.handleSubmit(data);
             }
         });
     };
@@ -6759,7 +6765,7 @@
         var $this = this;
 
         $this.$parent.on("hp.notify", function(e, args) {
-            
+
             if (typeof args === "undefined") {
                 return;
             }
@@ -6781,10 +6787,10 @@
 
             $this[pageFunc]($this.getCurrentPageElement());
 
-        }); 
+        });
 
         $this.handlePage0Events($this.getCurrentPageElement());
-        $this.handleNotify();    
+        $this.handleNotify();
     };
 
     GiftCard.prototype.handlePage0Events = function(container) {
@@ -6798,7 +6804,7 @@
         container
             .find(".hp-input-gc .hp-submit")
             .off()
-            .on("click", function(e){
+            .on("click", function(e) {
 
             });
 
@@ -7823,8 +7829,8 @@
         "TermsAndConditions": authorizationInProgressMessage,
         "Cancelled": cancelMessage,
         "Connected": terminalActiveMessage,
-        "Declined" : errorMessage,
-        "Error" : errorMessage,
+        "Declined": errorMessage,
+        "Error": errorMessage,
         "GetMerchantCredentials": buildingLinkMessage
     };
 
@@ -7848,8 +7854,8 @@
                 eventKey = event.Message;
 
                 if (event.Name !== undefined && event.Name !== null) {
-                    eventKey = event.Name;      
-                    eventMessage = event.Message;    
+                    eventKey = event.Name;
+                    eventMessage = event.Message;
                     eventValue = messages[eventKey];
                 }
             }
@@ -7900,7 +7906,7 @@
 
         var messageObject = {
             key: eventKey,
-            value: eventValue, 
+            value: eventValue,
             message: eventMessage
         };
 
@@ -8038,16 +8044,16 @@
 
         var $html = [
             '<div class="hp-transvault-visual">',
-                '<a class="hp-submit-refresh" href="javascript:;" title="Refresh Transvault">',
-                    '<img class="hp-submit-refresh-img" src="https://cdn.rawgit.com/etsms/0f62d83b5d3bf18ba57cb14648d913ac/raw/c5f48f7882ad1f48196450fa296caf05f674f48b/refresh-icon.svg" alt="Refresh Transvault Button" />',
-                '</a>',
-                '<div class="hp-transvault-visual-image {{isAlt}}">',
-                    '<img class="event event-default" src="https://cdn.rawgit.com/etsms/786cb7bdd1d077acc10d7d7e08a4241f/raw/58a2ec726610c18c21716ae6023f7c6d776b5a71/terminal-loading.svg" alt="Status" />',
-                '</div>',
-                '<p class="hp-input-transvault-message {{isAlt}}">',
-                    'Disconnected <span></span>',
-                '</p>',
-                '<button class="hp-submit hp-submit-danger">Cancel Request</button>',
+            '<a class="hp-submit-refresh" href="javascript:;" title="Refresh Transvault">',
+            '<img class="hp-submit-refresh-img" src="https://cdn.rawgit.com/etsms/0f62d83b5d3bf18ba57cb14648d913ac/raw/c5f48f7882ad1f48196450fa296caf05f674f48b/refresh-icon.svg" alt="Refresh Transvault Button" />',
+            '</a>',
+            '<div class="hp-transvault-visual-image {{isAlt}}">',
+            '<img class="event event-default" src="https://cdn.rawgit.com/etsms/786cb7bdd1d077acc10d7d7e08a4241f/raw/58a2ec726610c18c21716ae6023f7c6d776b5a71/terminal-loading.svg" alt="Status" />',
+            '</div>',
+            '<p class="hp-input-transvault-message {{isAlt}}">',
+            'Disconnected <span></span>',
+            '</p>',
+            '<button class="hp-submit hp-submit-danger">Cancel Request</button>',
             '</div>'
         ].join("");
 
@@ -8067,7 +8073,7 @@
         this.$parent.off("hp.notify");
         this.transvaultHub.off("onMessage");
         this.$parent.removeClass("hp-form-transvault-app-link");
-        
+
     };
 
     Transvault.prototype.attachEvents = function() {
@@ -8090,9 +8096,9 @@
     };
 
     Transvault.prototype.onMessage = function(response) {
-        
+
         var hostUrl = hp.Utils.defaults.baseUrl;
-        
+
         if (response.Url !== undefined && response.Url !== null) {
             hostUrl = response.Url;
         }
@@ -8109,7 +8115,7 @@
 
             hp.Utils.showError("Reauthenticating. Please wait...");
 
-            setTimeout(function(){
+            setTimeout(function() {
                 $this.cancelTransaction(false).then(function() {
                     setTimeout(hp.Utils.reset, 5000);
                 });
@@ -8148,16 +8154,16 @@
             messageObject.message = "Transaction voided.";
             $this.onError(messageObject);
             return;
-            
+
         } else if (eventKey === "GetMerchantCredentials") {
 
             var emoneyMobileAppUrl = hp.Utils.buildEMoneyMobileAppUrl(
-                hp.Utils.defaults.paymentType, 
-                messageObject.message, 
-                this.transactionId, 
-                hp.Utils.getSession().sessionToken, 
-                this.browserId, 
-                hp.Utils.getCorrelationId(), 
+                hp.Utils.defaults.paymentType,
+                messageObject.message,
+                this.transactionId,
+                hp.Utils.getSession().sessionToken,
+                this.browserId,
+                hp.Utils.getCorrelationId(),
                 hp.Utils.getAmount(),
                 hostUrl
             );
@@ -8194,9 +8200,9 @@
 
         var html = [
             '<div class="hp-app-link-container hp-page-active">',
-                '<div>',
-                    '<a target="_parent" class="hp-submit hp-submit-redirect" href="' + emoneyMobileAppUrl + '">Start Transaction</a>',
-                '</div>',
+            '<div>',
+            '<a target="_parent" class="hp-submit hp-submit-redirect" href="' + emoneyMobileAppUrl + '">Start Transaction</a>',
+            '</div>',
             '</div>'
         ].join("");
 
@@ -8457,7 +8463,7 @@
         el.text(message);
 
         return el;
-        
+
     };
 
 
@@ -8518,8 +8524,7 @@
 
         this.showError("Transaction cancelled.");
 
-        try { this.transvaultHub.connection.stop(); } 
-        catch (e) { }
+        try { this.transvaultHub.connection.stop(); } catch (e) {}
 
     };
 
@@ -8537,11 +8542,11 @@
             if (messageObject.key === "HoldCall") {
 
                 hp.Utils.makeRequest({
-                    "void" : {
-                        "voidRequest" : {
-                            "token" : hp.Utils.getSession().sessionToken,
-                            "transactionId" : $this.transactionId,
-                            "amount" :  hp.Utils.getAmount()
+                    "void": {
+                        "voidRequest": {
+                            "token": hp.Utils.getSession().sessionToken,
+                            "transactionId": $this.transactionId,
+                            "amount": hp.Utils.getAmount()
                         }
                     }
                 }).then(hp.Utils.log, hp.Utils.log);
@@ -8550,7 +8555,7 @@
 
             $this.transvaultHub.connection.stop();
 
-        } catch (e) { }
+        } catch (e) {}
 
     };
 
@@ -8592,7 +8597,7 @@
 
             hp.Utils.log("Transvault: Connection error!");
 
-            setTimeout(function() { 
+            setTimeout(function() {
                 hp.Utils.log("Transvault: Connection reconnecting...");
                 $message.css("color", "#FDFDFD").text("Reconnecting in 5 seconds...");
                 hp.Utils.reset();
@@ -8621,8 +8626,8 @@
         try {
 
             $this.transvaultHub.connection
-                .start({ 
-                    withCredentials: false, 
+                .start({
+                    withCredentials: false,
                     jsonp: false,
                     transport: ['webSockets'],
                     waitForPageLoad: true
@@ -8637,7 +8642,7 @@
 
                     $this.browserId = $this.transvaultHub.connection.id;
 
-                    setTimeout(function(){
+                    setTimeout(function() {
 
                         if ($this.isMobile && ($this.terminalId === undefined || $this.terminalId === null || $this.terminalId === "")) {
                             $this.requestAppRedirectLinkForm();
@@ -8666,8 +8671,8 @@
 
             $this.transvaultHub.connection.error(reconnectHandler);
 
-            $this.transvaultHub.connection.disconnected(function(err){
-                setTimeout(function(){
+            $this.transvaultHub.connection.disconnected(function(err) {
+                setTimeout(function() {
 
                     if ($this.wasCancelled) {
                         return;
@@ -8680,7 +8685,7 @@
                     if (!$this.hasSuccess) {
                         $this.showError("You've been disconnected!");
                     }
-                    
+
                     $this.transvaultHub.connection.start();
 
                 }, 1000);
@@ -8734,668 +8739,666 @@
 
 // Generated by CoffeeScript 1.7.1
 (function() {
-  var $, cardFromNumber, cardFromType, cards, defaultFormat, formatBackCardNumber, formatBackExpiry, formatCardNumber, formatExpiry, formatForwardExpiry, formatForwardSlashAndSpace, hasTextSelected, luhnCheck, reFormatCVC, reFormatCardNumber, reFormatExpiry, reFormatNumeric, replaceFullWidthChars, restrictCVC, restrictCardNumber, restrictExpiry, restrictNumeric, safeVal, setCardType,
-    __slice = [].slice,
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+    var $, cardFromNumber, cardFromType, cards, defaultFormat, formatBackCardNumber, formatBackExpiry, formatCardNumber, formatExpiry, formatForwardExpiry, formatForwardSlashAndSpace, hasTextSelected, luhnCheck, reFormatCVC, reFormatCardNumber, reFormatExpiry, reFormatNumeric, replaceFullWidthChars, restrictCVC, restrictCardNumber, restrictExpiry, restrictNumeric, safeVal, setCardType,
+        __slice = [].slice,
+        __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  $ = window.jQuery || window.Zepto || window.$;
+    $ = window.jQuery || window.Zepto || window.$;
 
-  $.payment = {};
+    $.payment = {};
 
-  $.payment.fn = {};
+    $.payment.fn = {};
 
-  $.fn.payment = function() {
-    var args, method;
-    method = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    return $.payment.fn[method].apply(this, args);
-  };
-
-  defaultFormat = /(\d{1,4})/g;
-
-  $.payment.cards = cards = [
-    {
-      type: 'elo',
-      patterns: [401178, 401179, 431274, 438935, 451416, 457393, 457631, 457632, 504175, 506699, 5067, 509, 627780, 636297, 636368, 650, 6516, 6550],
-      format: defaultFormat,
-      length: [16],
-      cvcLength: [3],
-      luhn: true
-    }, {
-      type: 'maestro',
-      patterns: [5018, 502, 503, 506, 56, 58, 639, 6220, 67],
-      format: defaultFormat,
-      length: [12, 13, 14, 15, 16, 17, 18, 19],
-      cvcLength: [3],
-      luhn: true
-    }, {
-      type: 'forbrugsforeningen',
-      patterns: [600],
-      format: defaultFormat,
-      length: [16],
-      cvcLength: [3],
-      luhn: true
-    }, {
-      type: 'dankort',
-      patterns: [5019],
-      format: defaultFormat,
-      length: [16],
-      cvcLength: [3],
-      luhn: true
-    }, {
-      type: 'visa',
-      patterns: [4],
-      format: defaultFormat,
-      length: [13, 16],
-      cvcLength: [3],
-      luhn: true
-    }, {
-      type: 'emoney',
-      patterns: [627571],
-      format: defaultFormat,
-      length: [16],
-      cvcLength: [3],
-      luhn: true
-    }, {
-      type: 'mastercard',
-      patterns: [51, 52, 53, 54, 55, 22, 23, 24, 25, 26, 27],
-      format: defaultFormat,
-      length: [16],
-      cvcLength: [3],
-      luhn: true
-    }, {
-      type: 'amex',
-      patterns: [34, 37],
-      format: /(\d{1,4})(\d{1,6})?(\d{1,5})?/,
-      length: [15],
-      cvcLength: [3, 4],
-      luhn: true
-    }, {
-      type: 'dinersclub',
-      patterns: [30, 36, 38, 39],
-      format: /(\d{1,4})(\d{1,6})?(\d{1,4})?/,
-      length: [14],
-      cvcLength: [3],
-      luhn: true
-    }, {
-      type: 'discover',
-      patterns: [60, 64, 65, 622],
-      format: defaultFormat,
-      length: [16],
-      cvcLength: [3],
-      luhn: true
-    }, {
-      type: 'unionpay',
-      patterns: [62, 88],
-      format: defaultFormat,
-      length: [16, 17, 18, 19],
-      cvcLength: [3],
-      luhn: false
-    }, {
-      type: 'jcb',
-      patterns: [35],
-      format: defaultFormat,
-      length: [16],
-      cvcLength: [3],
-      luhn: true
-    }
-  ];
-
-  cardFromNumber = function(num) {
-    var card, p, pattern, _i, _j, _len, _len1, _ref;
-    num = (num + '').replace(/\D/g, '');
-    for (_i = 0, _len = cards.length; _i < _len; _i++) {
-      card = cards[_i];
-      _ref = card.patterns;
-      for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-        pattern = _ref[_j];
-        p = pattern + '';
-        if (num.substr(0, p.length) === p) {
-          return card;
-        }
-      }
-    }
-  };
-
-  cardFromType = function(type) {
-    var card, _i, _len;
-    for (_i = 0, _len = cards.length; _i < _len; _i++) {
-      card = cards[_i];
-      if (card.type === type) {
-        return card;
-      }
-    }
-  };
-
-  luhnCheck = function(num) {
-    var digit, digits, odd, sum, _i, _len;
-    odd = true;
-    sum = 0;
-    digits = (num + '').split('').reverse();
-    for (_i = 0, _len = digits.length; _i < _len; _i++) {
-      digit = digits[_i];
-      digit = parseInt(digit, 10);
-      if ((odd = !odd)) {
-        digit *= 2;
-      }
-      if (digit > 9) {
-        digit -= 9;
-      }
-      sum += digit;
-    }
-    return sum % 10 === 0;
-  };
-
-  hasTextSelected = function($target) {
-    var _ref;
-    if (($target.prop('selectionStart') != null) && $target.prop('selectionStart') !== $target.prop('selectionEnd')) {
-      return true;
-    }
-    if ((typeof document !== "undefined" && document !== null ? (_ref = document.selection) != null ? _ref.createRange : void 0 : void 0) != null) {
-      if (document.selection.createRange().text) {
-        return true;
-      }
-    }
-    return false;
-  };
-
-  safeVal = function(value, $target) {
-    var currPair, cursor, digit, error, last, prevPair;
-    try {
-      cursor = $target.prop('selectionStart');
-    } catch (_error) {
-      error = _error;
-      cursor = null;
-    }
-    last = $target.val();
-    $target.val(value);
-    if (cursor !== null && $target.is(":focus")) {
-      if (cursor === last.length) {
-        cursor = value.length;
-      }
-      if (last !== value) {
-        prevPair = last.slice(cursor - 1, +cursor + 1 || 9e9);
-        currPair = value.slice(cursor - 1, +cursor + 1 || 9e9);
-        digit = value[cursor];
-        if (/\d/.test(digit) && prevPair === ("" + digit + " ") && currPair === (" " + digit)) {
-          cursor = cursor + 1;
-        }
-      }
-      $target.prop('selectionStart', cursor);
-      return $target.prop('selectionEnd', cursor);
-    }
-  };
-
-  replaceFullWidthChars = function(str) {
-    var chars, chr, fullWidth, halfWidth, idx, value, _i, _len;
-    if (str == null) {
-      str = '';
-    }
-    fullWidth = '\uff10\uff11\uff12\uff13\uff14\uff15\uff16\uff17\uff18\uff19';
-    halfWidth = '0123456789';
-    value = '';
-    chars = str.split('');
-    for (_i = 0, _len = chars.length; _i < _len; _i++) {
-      chr = chars[_i];
-      idx = fullWidth.indexOf(chr);
-      if (idx > -1) {
-        chr = halfWidth[idx];
-      }
-      value += chr;
-    }
-    return value;
-  };
-
-  reFormatNumeric = function(e) {
-    var $target;
-    $target = $(e.currentTarget);
-    return setTimeout(function() {
-      var value;
-      value = $target.val();
-      value = replaceFullWidthChars(value);
-      value = value.replace(/\D/g, '');
-      return safeVal(value, $target);
-    });
-  };
-
-  reFormatCardNumber = function(e) {
-    var $target;
-    $target = $(e.currentTarget);
-    return setTimeout(function() {
-      var value;
-      value = $target.val();
-      value = replaceFullWidthChars(value);
-      value = $.payment.formatCardNumber(value);
-      return safeVal(value, $target);
-    });
-  };
-
-  formatCardNumber = function(e) {
-    var $target, card, digit, length, re, upperLength, value;
-    digit = String.fromCharCode(e.which);
-    if (!/^\d+$/.test(digit)) {
-      return;
-    }
-    $target = $(e.currentTarget);
-    value = $target.val();
-    card = cardFromNumber(value + digit);
-    length = (value.replace(/\D/g, '') + digit).length;
-    upperLength = 16;
-    if (card) {
-      upperLength = card.length[card.length.length - 1];
-    }
-    if (length >= upperLength) {
-      return;
-    }
-    if (($target.prop('selectionStart') != null) && $target.prop('selectionStart') !== value.length) {
-      return;
-    }
-    if (card && card.type === 'amex') {
-      re = /^(\d{4}|\d{4}\s\d{6})$/;
-    } else {
-      re = /(?:^|\s)(\d{4})$/;
-    }
-    if (re.test(value)) {
-      e.preventDefault();
-      return setTimeout(function() {
-        return $target.val(value + ' ' + digit);
-      });
-    } else if (re.test(value + digit)) {
-      e.preventDefault();
-      return setTimeout(function() {
-        return $target.val(value + digit + ' ');
-      });
-    }
-  };
-
-  formatBackCardNumber = function(e) {
-    var $target, value;
-    $target = $(e.currentTarget);
-    value = $target.val();
-    if (e.which !== 8) {
-      return;
-    }
-    if (($target.prop('selectionStart') != null) && $target.prop('selectionStart') !== value.length) {
-      return;
-    }
-    if (/\d\s$/.test(value)) {
-      e.preventDefault();
-      return setTimeout(function() {
-        return $target.val(value.replace(/\d\s$/, ''));
-      });
-    } else if (/\s\d?$/.test(value)) {
-      e.preventDefault();
-      return setTimeout(function() {
-        return $target.val(value.replace(/\d$/, ''));
-      });
-    }
-  };
-
-  reFormatExpiry = function(e) {
-    var $target;
-    $target = $(e.currentTarget);
-    return setTimeout(function() {
-      var value;
-      value = $target.val();
-      value = replaceFullWidthChars(value);
-      value = $.payment.formatExpiry(value);
-      return safeVal(value, $target);
-    });
-  };
-
-  formatExpiry = function(e) {
-    var $target, digit, val;
-    digit = String.fromCharCode(e.which);
-    if (!/^\d+$/.test(digit)) {
-      return;
-    }
-    $target = $(e.currentTarget);
-    val = $target.val() + digit;
-    if (/^\d$/.test(val) && (val !== '0' && val !== '1')) {
-      e.preventDefault();
-      return setTimeout(function() {
-        return $target.val("0" + val + " / ");
-      });
-    } else if (/^\d\d$/.test(val)) {
-      e.preventDefault();
-      return setTimeout(function() {
-        var m1, m2;
-        m1 = parseInt(val[0], 10);
-        m2 = parseInt(val[1], 10);
-        if (m2 > 2 && m1 !== 0) {
-          return $target.val("0" + m1 + " / " + m2);
-        } else {
-          return $target.val("" + val + " / ");
-        }
-      });
-    }
-  };
-
-  formatForwardExpiry = function(e) {
-    var $target, digit, val;
-    digit = String.fromCharCode(e.which);
-    if (!/^\d+$/.test(digit)) {
-      return;
-    }
-    $target = $(e.currentTarget);
-    val = $target.val();
-    if (/^\d\d$/.test(val)) {
-      return $target.val("" + val + " / ");
-    }
-  };
-
-  formatForwardSlashAndSpace = function(e) {
-    var $target, val, which;
-    which = String.fromCharCode(e.which);
-    if (!(which === '/' || which === ' ')) {
-      return;
-    }
-    $target = $(e.currentTarget);
-    val = $target.val();
-    if (/^\d$/.test(val) && val !== '0') {
-      return $target.val("0" + val + " / ");
-    }
-  };
-
-  formatBackExpiry = function(e) {
-    var $target, value;
-    $target = $(e.currentTarget);
-    value = $target.val();
-    if (e.which !== 8) {
-      return;
-    }
-    if (($target.prop('selectionStart') != null) && $target.prop('selectionStart') !== value.length) {
-      return;
-    }
-    if (/\d\s\/\s$/.test(value)) {
-      e.preventDefault();
-      return setTimeout(function() {
-        return $target.val(value.replace(/\d\s\/\s$/, ''));
-      });
-    }
-  };
-
-  reFormatCVC = function(e) {
-    var $target;
-    $target = $(e.currentTarget);
-    return setTimeout(function() {
-      var value;
-      value = $target.val();
-      value = replaceFullWidthChars(value);
-      value = value.replace(/\D/g, '').slice(0, 4);
-      return safeVal(value, $target);
-    });
-  };
-
-  restrictNumeric = function(e) {
-    var input;
-    if (e.metaKey || e.ctrlKey) {
-      return true;
-    }
-    if (e.which === 32) {
-      return false;
-    }
-    if (e.which === 0) {
-      return true;
-    }
-    if (e.which < 33) {
-      return true;
-    }
-    input = String.fromCharCode(e.which);
-    return !!/[\d\s]/.test(input);
-  };
-
-  restrictCardNumber = function(e) {
-    var $target, card, digit, value;
-    $target = $(e.currentTarget);
-    digit = String.fromCharCode(e.which);
-    if (!/^\d+$/.test(digit)) {
-      return;
-    }
-    if (hasTextSelected($target)) {
-      return;
-    }
-    value = ($target.val() + digit).replace(/\D/g, '');
-    card = cardFromNumber(value);
-    if (card) {
-      return value.length <= card.length[card.length.length - 1];
-    } else {
-      return value.length <= 16;
-    }
-  };
-
-  restrictExpiry = function(e) {
-    var $target, digit, value;
-    $target = $(e.currentTarget);
-    digit = String.fromCharCode(e.which);
-    if (!/^\d+$/.test(digit)) {
-      return;
-    }
-    if (hasTextSelected($target)) {
-      return;
-    }
-    value = $target.val() + digit;
-    value = value.replace(/\D/g, '');
-    if (value.length > 6) {
-      return false;
-    }
-  };
-
-  restrictCVC = function(e) {
-    var $target, digit, val;
-    $target = $(e.currentTarget);
-    digit = String.fromCharCode(e.which);
-    if (!/^\d+$/.test(digit)) {
-      return;
-    }
-    if (hasTextSelected($target)) {
-      return;
-    }
-    val = $target.val() + digit;
-    return val.length <= 4;
-  };
-
-  setCardType = function(e) {
-    var $target, allTypes, card, cardType, val;
-    $target = $(e.currentTarget);
-    val = $target.val();
-    cardType = $.payment.cardType(val) || 'unknown';
-    if (!$target.hasClass(cardType)) {
-      allTypes = (function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = cards.length; _i < _len; _i++) {
-          card = cards[_i];
-          _results.push(card.type);
-        }
-        return _results;
-      })();
-      $target.removeClass('unknown');
-      $target.removeClass(allTypes.join(' '));
-      $target.addClass(cardType);
-      $target.toggleClass('identified', cardType !== 'unknown');
-      return $target.trigger('payment.cardType', cardType);
-    }
-  };
-
-  $.payment.fn.formatCardCVC = function() {
-    this.on('keypress', restrictNumeric);
-    this.on('keypress', restrictCVC);
-    this.on('paste', reFormatCVC);
-    this.on('change', reFormatCVC);
-    this.on('input', reFormatCVC);
-    return this;
-  };
-
-  $.payment.fn.formatCardExpiry = function() {
-    this.on('keypress', restrictNumeric);
-    this.on('keypress', restrictExpiry);
-    this.on('keypress', formatExpiry);
-    this.on('keypress', formatForwardSlashAndSpace);
-    this.on('keypress', formatForwardExpiry);
-    this.on('keydown', formatBackExpiry);
-    this.on('change', reFormatExpiry);
-    this.on('input', reFormatExpiry);
-    return this;
-  };
-
-  $.payment.fn.formatCardNumber = function() {
-    this.on('keypress', restrictNumeric);
-    this.on('keypress', restrictCardNumber);
-    this.on('keypress', formatCardNumber);
-    this.on('keydown', formatBackCardNumber);
-    this.on('keyup', setCardType);
-    this.on('paste', reFormatCardNumber);
-    this.on('change', reFormatCardNumber);
-    this.on('input', reFormatCardNumber);
-    this.on('input', setCardType);
-    return this;
-  };
-
-  $.payment.fn.restrictNumeric = function() {
-    this.on('keypress', restrictNumeric);
-    this.on('paste', reFormatNumeric);
-    this.on('change', reFormatNumeric);
-    this.on('input', reFormatNumeric);
-    return this;
-  };
-
-  $.payment.fn.cardExpiryVal = function() {
-    return $.payment.cardExpiryVal($(this).val());
-  };
-
-  $.payment.cardExpiryVal = function(value) {
-    var month, prefix, year, _ref;
-    _ref = value.split(/[\s\/]+/, 2), month = _ref[0], year = _ref[1];
-    if ((year != null ? year.length : void 0) === 2 && /^\d+$/.test(year)) {
-      prefix = (new Date).getFullYear();
-      prefix = prefix.toString().slice(0, 2);
-      year = prefix + year;
-    }
-    month = parseInt(month, 10);
-    year = parseInt(year, 10);
-    return {
-      month: month,
-      year: year
+    $.fn.payment = function() {
+        var args, method;
+        method = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+        return $.payment.fn[method].apply(this, args);
     };
-  };
 
-  $.payment.validateCardNumber = function(num) {
-    var card, _ref;
-    num = (num + '').replace(/\s+|-/g, '');
-    if (!/^\d+$/.test(num)) {
-      return false;
-    }
-    card = cardFromNumber(num);
-    if (!card) {
-      return false;
-    }
-    return (_ref = num.length, __indexOf.call(card.length, _ref) >= 0) && (card.luhn === false || luhnCheck(num));
-  };
+    defaultFormat = /(\d{1,4})/g;
 
-  $.payment.validateCardExpiry = function(month, year) {
-    var currentTime, expiry, _ref;
-    if (typeof month === 'object' && 'month' in month) {
-      _ref = month, month = _ref.month, year = _ref.year;
-    }
-    if (!(month && year)) {
-      return false;
-    }
-    month = $.trim(month);
-    year = $.trim(year);
-    if (!/^\d+$/.test(month)) {
-      return false;
-    }
-    if (!/^\d+$/.test(year)) {
-      return false;
-    }
-    if (!((1 <= month && month <= 12))) {
-      return false;
-    }
-    if (year.length === 2) {
-      if (year < 70) {
-        year = "20" + year;
-      } else {
-        year = "19" + year;
-      }
-    }
-    if (year.length !== 4) {
-      return false;
-    }
-    expiry = new Date(year, month);
-    currentTime = new Date;
-    expiry.setMonth(expiry.getMonth() - 1);
-    expiry.setMonth(expiry.getMonth() + 1, 1);
-    return expiry > currentTime;
-  };
+    $.payment.cards = cards = [{
+        type: 'elo',
+        patterns: [401178, 401179, 431274, 438935, 451416, 457393, 457631, 457632, 504175, 506699, 5067, 509, 627780, 636297, 636368, 650, 6516, 6550],
+        format: defaultFormat,
+        length: [16],
+        cvcLength: [3],
+        luhn: true
+    }, {
+        type: 'maestro',
+        patterns: [5018, 502, 503, 506, 56, 58, 639, 6220, 67],
+        format: defaultFormat,
+        length: [12, 13, 14, 15, 16, 17, 18, 19],
+        cvcLength: [3],
+        luhn: true
+    }, {
+        type: 'forbrugsforeningen',
+        patterns: [600],
+        format: defaultFormat,
+        length: [16],
+        cvcLength: [3],
+        luhn: true
+    }, {
+        type: 'dankort',
+        patterns: [5019],
+        format: defaultFormat,
+        length: [16],
+        cvcLength: [3],
+        luhn: true
+    }, {
+        type: 'visa',
+        patterns: [4],
+        format: defaultFormat,
+        length: [13, 16],
+        cvcLength: [3],
+        luhn: true
+    }, {
+        type: 'emoney',
+        patterns: [627571],
+        format: defaultFormat,
+        length: [16],
+        cvcLength: [3],
+        luhn: true
+    }, {
+        type: 'mastercard',
+        patterns: [51, 52, 53, 54, 55, 22, 23, 24, 25, 26, 27],
+        format: defaultFormat,
+        length: [16],
+        cvcLength: [3],
+        luhn: true
+    }, {
+        type: 'amex',
+        patterns: [34, 37],
+        format: /(\d{1,4})(\d{1,6})?(\d{1,5})?/,
+        length: [15],
+        cvcLength: [3, 4],
+        luhn: true
+    }, {
+        type: 'dinersclub',
+        patterns: [30, 36, 38, 39],
+        format: /(\d{1,4})(\d{1,6})?(\d{1,4})?/,
+        length: [14],
+        cvcLength: [3],
+        luhn: true
+    }, {
+        type: 'discover',
+        patterns: [60, 64, 65, 622],
+        format: defaultFormat,
+        length: [16],
+        cvcLength: [3],
+        luhn: true
+    }, {
+        type: 'unionpay',
+        patterns: [62, 88],
+        format: defaultFormat,
+        length: [16, 17, 18, 19],
+        cvcLength: [3],
+        luhn: false
+    }, {
+        type: 'jcb',
+        patterns: [35],
+        format: defaultFormat,
+        length: [16],
+        cvcLength: [3],
+        luhn: true
+    }];
 
-  $.payment.validateCardCVC = function(cvc, type) {
-    var card, _ref;
-    cvc = $.trim(cvc);
-    if (!/^\d+$/.test(cvc)) {
-      return false;
-    }
-    card = cardFromType(type);
-    if (card != null) {
-      return _ref = cvc.length, __indexOf.call(card.cvcLength, _ref) >= 0;
-    } else {
-      return cvc.length >= 3 && cvc.length <= 4;
-    }
-  };
+    cardFromNumber = function(num) {
+        var card, p, pattern, _i, _j, _len, _len1, _ref;
+        num = (num + '').replace(/\D/g, '');
+        for (_i = 0, _len = cards.length; _i < _len; _i++) {
+            card = cards[_i];
+            _ref = card.patterns;
+            for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+                pattern = _ref[_j];
+                p = pattern + '';
+                if (num.substr(0, p.length) === p) {
+                    return card;
+                }
+            }
+        }
+    };
 
-  $.payment.cardType = function(num) {
-    var _ref;
-    if (!num) {
-      return null;
-    }
-    return ((_ref = cardFromNumber(num)) != null ? _ref.type : void 0) || null;
-  };
+    cardFromType = function(type) {
+        var card, _i, _len;
+        for (_i = 0, _len = cards.length; _i < _len; _i++) {
+            card = cards[_i];
+            if (card.type === type) {
+                return card;
+            }
+        }
+    };
 
-  $.payment.formatCardNumber = function(num) {
-    var card, groups, upperLength, _ref;
-    num = num.replace(/\D/g, '');
-    card = cardFromNumber(num);
-    if (!card) {
-      return num;
-    }
-    upperLength = card.length[card.length.length - 1];
-    num = num.slice(0, upperLength);
-    if (card.format.global) {
-      return (_ref = num.match(card.format)) != null ? _ref.join(' ') : void 0;
-    } else {
-      groups = card.format.exec(num);
-      if (groups == null) {
-        return;
-      }
-      groups.shift();
-      groups = $.grep(groups, function(n) {
-        return n;
-      });
-      return groups.join(' ');
-    }
-  };
+    luhnCheck = function(num) {
+        var digit, digits, odd, sum, _i, _len;
+        odd = true;
+        sum = 0;
+        digits = (num + '').split('').reverse();
+        for (_i = 0, _len = digits.length; _i < _len; _i++) {
+            digit = digits[_i];
+            digit = parseInt(digit, 10);
+            if ((odd = !odd)) {
+                digit *= 2;
+            }
+            if (digit > 9) {
+                digit -= 9;
+            }
+            sum += digit;
+        }
+        return sum % 10 === 0;
+    };
 
-  $.payment.formatExpiry = function(expiry) {
-    var mon, parts, sep, year;
-    parts = expiry.match(/^\D*(\d{1,2})(\D+)?(\d{1,4})?/);
-    if (!parts) {
-      return '';
-    }
-    mon = parts[1] || '';
-    sep = parts[2] || '';
-    year = parts[3] || '';
-    if (year.length > 0) {
-      sep = ' / ';
-    } else if (sep === ' /') {
-      mon = mon.substring(0, 1);
-      sep = '';
-    } else if (mon.length === 2 || sep.length > 0) {
-      sep = ' / ';
-    } else if (mon.length === 1 && (mon !== '0' && mon !== '1')) {
-      mon = "0" + mon;
-      sep = ' / ';
-    }
-    return mon + sep + year;
-  };
+    hasTextSelected = function($target) {
+        var _ref;
+        if (($target.prop('selectionStart') != null) && $target.prop('selectionStart') !== $target.prop('selectionEnd')) {
+            return true;
+        }
+        if ((typeof document !== "undefined" && document !== null ? (_ref = document.selection) != null ? _ref.createRange : void 0 : void 0) != null) {
+            if (document.selection.createRange().text) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    safeVal = function(value, $target) {
+        var currPair, cursor, digit, error, last, prevPair;
+        try {
+            cursor = $target.prop('selectionStart');
+        } catch (_error) {
+            error = _error;
+            cursor = null;
+        }
+        last = $target.val();
+        $target.val(value);
+        if (cursor !== null && $target.is(":focus")) {
+            if (cursor === last.length) {
+                cursor = value.length;
+            }
+            if (last !== value) {
+                prevPair = last.slice(cursor - 1, +cursor + 1 || 9e9);
+                currPair = value.slice(cursor - 1, +cursor + 1 || 9e9);
+                digit = value[cursor];
+                if (/\d/.test(digit) && prevPair === ("" + digit + " ") && currPair === (" " + digit)) {
+                    cursor = cursor + 1;
+                }
+            }
+            $target.prop('selectionStart', cursor);
+            return $target.prop('selectionEnd', cursor);
+        }
+    };
+
+    replaceFullWidthChars = function(str) {
+        var chars, chr, fullWidth, halfWidth, idx, value, _i, _len;
+        if (str == null) {
+            str = '';
+        }
+        fullWidth = '\uff10\uff11\uff12\uff13\uff14\uff15\uff16\uff17\uff18\uff19';
+        halfWidth = '0123456789';
+        value = '';
+        chars = str.split('');
+        for (_i = 0, _len = chars.length; _i < _len; _i++) {
+            chr = chars[_i];
+            idx = fullWidth.indexOf(chr);
+            if (idx > -1) {
+                chr = halfWidth[idx];
+            }
+            value += chr;
+        }
+        return value;
+    };
+
+    reFormatNumeric = function(e) {
+        var $target;
+        $target = $(e.currentTarget);
+        return setTimeout(function() {
+            var value;
+            value = $target.val();
+            value = replaceFullWidthChars(value);
+            value = value.replace(/\D/g, '');
+            return safeVal(value, $target);
+        });
+    };
+
+    reFormatCardNumber = function(e) {
+        var $target;
+        $target = $(e.currentTarget);
+        return setTimeout(function() {
+            var value;
+            value = $target.val();
+            value = replaceFullWidthChars(value);
+            value = $.payment.formatCardNumber(value);
+            return safeVal(value, $target);
+        });
+    };
+
+    formatCardNumber = function(e) {
+        var $target, card, digit, length, re, upperLength, value;
+        digit = String.fromCharCode(e.which);
+        if (!/^\d+$/.test(digit)) {
+            return;
+        }
+        $target = $(e.currentTarget);
+        value = $target.val();
+        card = cardFromNumber(value + digit);
+        length = (value.replace(/\D/g, '') + digit).length;
+        upperLength = 16;
+        if (card) {
+            upperLength = card.length[card.length.length - 1];
+        }
+        if (length >= upperLength) {
+            return;
+        }
+        if (($target.prop('selectionStart') != null) && $target.prop('selectionStart') !== value.length) {
+            return;
+        }
+        if (card && card.type === 'amex') {
+            re = /^(\d{4}|\d{4}\s\d{6})$/;
+        } else {
+            re = /(?:^|\s)(\d{4})$/;
+        }
+        if (re.test(value)) {
+            e.preventDefault();
+            return setTimeout(function() {
+                return $target.val(value + ' ' + digit);
+            });
+        } else if (re.test(value + digit)) {
+            e.preventDefault();
+            return setTimeout(function() {
+                return $target.val(value + digit + ' ');
+            });
+        }
+    };
+
+    formatBackCardNumber = function(e) {
+        var $target, value;
+        $target = $(e.currentTarget);
+        value = $target.val();
+        if (e.which !== 8) {
+            return;
+        }
+        if (($target.prop('selectionStart') != null) && $target.prop('selectionStart') !== value.length) {
+            return;
+        }
+        if (/\d\s$/.test(value)) {
+            e.preventDefault();
+            return setTimeout(function() {
+                return $target.val(value.replace(/\d\s$/, ''));
+            });
+        } else if (/\s\d?$/.test(value)) {
+            e.preventDefault();
+            return setTimeout(function() {
+                return $target.val(value.replace(/\d$/, ''));
+            });
+        }
+    };
+
+    reFormatExpiry = function(e) {
+        var $target;
+        $target = $(e.currentTarget);
+        return setTimeout(function() {
+            var value;
+            value = $target.val();
+            value = replaceFullWidthChars(value);
+            value = $.payment.formatExpiry(value);
+            return safeVal(value, $target);
+        });
+    };
+
+    formatExpiry = function(e) {
+        var $target, digit, val;
+        digit = String.fromCharCode(e.which);
+        if (!/^\d+$/.test(digit)) {
+            return;
+        }
+        $target = $(e.currentTarget);
+        val = $target.val() + digit;
+        if (/^\d$/.test(val) && (val !== '0' && val !== '1')) {
+            e.preventDefault();
+            return setTimeout(function() {
+                return $target.val("0" + val + " / ");
+            });
+        } else if (/^\d\d$/.test(val)) {
+            e.preventDefault();
+            return setTimeout(function() {
+                var m1, m2;
+                m1 = parseInt(val[0], 10);
+                m2 = parseInt(val[1], 10);
+                if (m2 > 2 && m1 !== 0) {
+                    return $target.val("0" + m1 + " / " + m2);
+                } else {
+                    return $target.val("" + val + " / ");
+                }
+            });
+        }
+    };
+
+    formatForwardExpiry = function(e) {
+        var $target, digit, val;
+        digit = String.fromCharCode(e.which);
+        if (!/^\d+$/.test(digit)) {
+            return;
+        }
+        $target = $(e.currentTarget);
+        val = $target.val();
+        if (/^\d\d$/.test(val)) {
+            return $target.val("" + val + " / ");
+        }
+    };
+
+    formatForwardSlashAndSpace = function(e) {
+        var $target, val, which;
+        which = String.fromCharCode(e.which);
+        if (!(which === '/' || which === ' ')) {
+            return;
+        }
+        $target = $(e.currentTarget);
+        val = $target.val();
+        if (/^\d$/.test(val) && val !== '0') {
+            return $target.val("0" + val + " / ");
+        }
+    };
+
+    formatBackExpiry = function(e) {
+        var $target, value;
+        $target = $(e.currentTarget);
+        value = $target.val();
+        if (e.which !== 8) {
+            return;
+        }
+        if (($target.prop('selectionStart') != null) && $target.prop('selectionStart') !== value.length) {
+            return;
+        }
+        if (/\d\s\/\s$/.test(value)) {
+            e.preventDefault();
+            return setTimeout(function() {
+                return $target.val(value.replace(/\d\s\/\s$/, ''));
+            });
+        }
+    };
+
+    reFormatCVC = function(e) {
+        var $target;
+        $target = $(e.currentTarget);
+        return setTimeout(function() {
+            var value;
+            value = $target.val();
+            value = replaceFullWidthChars(value);
+            value = value.replace(/\D/g, '').slice(0, 4);
+            return safeVal(value, $target);
+        });
+    };
+
+    restrictNumeric = function(e) {
+        var input;
+        if (e.metaKey || e.ctrlKey) {
+            return true;
+        }
+        if (e.which === 32) {
+            return false;
+        }
+        if (e.which === 0) {
+            return true;
+        }
+        if (e.which < 33) {
+            return true;
+        }
+        input = String.fromCharCode(e.which);
+        return !!/[\d\s]/.test(input);
+    };
+
+    restrictCardNumber = function(e) {
+        var $target, card, digit, value;
+        $target = $(e.currentTarget);
+        digit = String.fromCharCode(e.which);
+        if (!/^\d+$/.test(digit)) {
+            return;
+        }
+        if (hasTextSelected($target)) {
+            return;
+        }
+        value = ($target.val() + digit).replace(/\D/g, '');
+        card = cardFromNumber(value);
+        if (card) {
+            return value.length <= card.length[card.length.length - 1];
+        } else {
+            return value.length <= 16;
+        }
+    };
+
+    restrictExpiry = function(e) {
+        var $target, digit, value;
+        $target = $(e.currentTarget);
+        digit = String.fromCharCode(e.which);
+        if (!/^\d+$/.test(digit)) {
+            return;
+        }
+        if (hasTextSelected($target)) {
+            return;
+        }
+        value = $target.val() + digit;
+        value = value.replace(/\D/g, '');
+        if (value.length > 6) {
+            return false;
+        }
+    };
+
+    restrictCVC = function(e) {
+        var $target, digit, val;
+        $target = $(e.currentTarget);
+        digit = String.fromCharCode(e.which);
+        if (!/^\d+$/.test(digit)) {
+            return;
+        }
+        if (hasTextSelected($target)) {
+            return;
+        }
+        val = $target.val() + digit;
+        return val.length <= 4;
+    };
+
+    setCardType = function(e) {
+        var $target, allTypes, card, cardType, val;
+        $target = $(e.currentTarget);
+        val = $target.val();
+        cardType = $.payment.cardType(val) || 'unknown';
+        if (!$target.hasClass(cardType)) {
+            allTypes = (function() {
+                var _i, _len, _results;
+                _results = [];
+                for (_i = 0, _len = cards.length; _i < _len; _i++) {
+                    card = cards[_i];
+                    _results.push(card.type);
+                }
+                return _results;
+            })();
+            $target.removeClass('unknown');
+            $target.removeClass(allTypes.join(' '));
+            $target.addClass(cardType);
+            $target.toggleClass('identified', cardType !== 'unknown');
+            return $target.trigger('payment.cardType', cardType);
+        }
+    };
+
+    $.payment.fn.formatCardCVC = function() {
+        this.on('keypress', restrictNumeric);
+        this.on('keypress', restrictCVC);
+        this.on('paste', reFormatCVC);
+        this.on('change', reFormatCVC);
+        this.on('input', reFormatCVC);
+        return this;
+    };
+
+    $.payment.fn.formatCardExpiry = function() {
+        this.on('keypress', restrictNumeric);
+        this.on('keypress', restrictExpiry);
+        this.on('keypress', formatExpiry);
+        this.on('keypress', formatForwardSlashAndSpace);
+        this.on('keypress', formatForwardExpiry);
+        this.on('keydown', formatBackExpiry);
+        this.on('change', reFormatExpiry);
+        this.on('input', reFormatExpiry);
+        return this;
+    };
+
+    $.payment.fn.formatCardNumber = function() {
+        this.on('keypress', restrictNumeric);
+        this.on('keypress', restrictCardNumber);
+        this.on('keypress', formatCardNumber);
+        this.on('keydown', formatBackCardNumber);
+        this.on('keyup', setCardType);
+        this.on('paste', reFormatCardNumber);
+        this.on('change', reFormatCardNumber);
+        this.on('input', reFormatCardNumber);
+        this.on('input', setCardType);
+        return this;
+    };
+
+    $.payment.fn.restrictNumeric = function() {
+        this.on('keypress', restrictNumeric);
+        this.on('paste', reFormatNumeric);
+        this.on('change', reFormatNumeric);
+        this.on('input', reFormatNumeric);
+        return this;
+    };
+
+    $.payment.fn.cardExpiryVal = function() {
+        return $.payment.cardExpiryVal($(this).val());
+    };
+
+    $.payment.cardExpiryVal = function(value) {
+        var month, prefix, year, _ref;
+        _ref = value.split(/[\s\/]+/, 2), month = _ref[0], year = _ref[1];
+        if ((year != null ? year.length : void 0) === 2 && /^\d+$/.test(year)) {
+            prefix = (new Date).getFullYear();
+            prefix = prefix.toString().slice(0, 2);
+            year = prefix + year;
+        }
+        month = parseInt(month, 10);
+        year = parseInt(year, 10);
+        return {
+            month: month,
+            year: year
+        };
+    };
+
+    $.payment.validateCardNumber = function(num) {
+        var card, _ref;
+        num = (num + '').replace(/\s+|-/g, '');
+        if (!/^\d+$/.test(num)) {
+            return false;
+        }
+        card = cardFromNumber(num);
+        if (!card) {
+            return false;
+        }
+        return (_ref = num.length, __indexOf.call(card.length, _ref) >= 0) && (card.luhn === false || luhnCheck(num));
+    };
+
+    $.payment.validateCardExpiry = function(month, year) {
+        var currentTime, expiry, _ref;
+        if (typeof month === 'object' && 'month' in month) {
+            _ref = month, month = _ref.month, year = _ref.year;
+        }
+        if (!(month && year)) {
+            return false;
+        }
+        month = $.trim(month);
+        year = $.trim(year);
+        if (!/^\d+$/.test(month)) {
+            return false;
+        }
+        if (!/^\d+$/.test(year)) {
+            return false;
+        }
+        if (!((1 <= month && month <= 12))) {
+            return false;
+        }
+        if (year.length === 2) {
+            if (year < 70) {
+                year = "20" + year;
+            } else {
+                year = "19" + year;
+            }
+        }
+        if (year.length !== 4) {
+            return false;
+        }
+        expiry = new Date(year, month);
+        currentTime = new Date;
+        expiry.setMonth(expiry.getMonth() - 1);
+        expiry.setMonth(expiry.getMonth() + 1, 1);
+        return expiry > currentTime;
+    };
+
+    $.payment.validateCardCVC = function(cvc, type) {
+        var card, _ref;
+        cvc = $.trim(cvc);
+        if (!/^\d+$/.test(cvc)) {
+            return false;
+        }
+        card = cardFromType(type);
+        if (card != null) {
+            return _ref = cvc.length, __indexOf.call(card.cvcLength, _ref) >= 0;
+        } else {
+            return cvc.length >= 3 && cvc.length <= 4;
+        }
+    };
+
+    $.payment.cardType = function(num) {
+        var _ref;
+        if (!num) {
+            return null;
+        }
+        return ((_ref = cardFromNumber(num)) != null ? _ref.type : void 0) || null;
+    };
+
+    $.payment.formatCardNumber = function(num) {
+        var card, groups, upperLength, _ref;
+        num = num.replace(/\D/g, '');
+        card = cardFromNumber(num);
+        if (!card) {
+            return num;
+        }
+        upperLength = card.length[card.length.length - 1];
+        num = num.slice(0, upperLength);
+        if (card.format.global) {
+            return (_ref = num.match(card.format)) != null ? _ref.join(' ') : void 0;
+        } else {
+            groups = card.format.exec(num);
+            if (groups == null) {
+                return;
+            }
+            groups.shift();
+            groups = $.grep(groups, function(n) {
+                return n;
+            });
+            return groups.join(' ');
+        }
+    };
+
+    $.payment.formatExpiry = function(expiry) {
+        var mon, parts, sep, year;
+        parts = expiry.match(/^\D*(\d{1,2})(\D+)?(\d{1,4})?/);
+        if (!parts) {
+            return '';
+        }
+        mon = parts[1] || '';
+        sep = parts[2] || '';
+        year = parts[3] || '';
+        if (year.length > 0) {
+            sep = ' / ';
+        } else if (sep === ' /') {
+            mon = mon.substring(0, 1);
+            sep = '';
+        } else if (mon.length === 2 || sep.length > 0) {
+            sep = ' / ';
+        } else if (mon.length === 1 && (mon !== '0' && mon !== '1')) {
+            mon = "0" + mon;
+            sep = ' / ';
+        }
+        return mon + sep + year;
+    };
 
 }).call(this);
 (function($) {
@@ -9577,7 +9580,7 @@
 
                     $this.trigger($this.options.offEventName, result);
                     $this.options.onScanSwipe(result);
-                    
+
                     data.swipe = '';
                 }
 
@@ -9590,212 +9593,212 @@
 
 // Generated by CoffeeScript 1.4.0
 (function() {
-  var $;
+    var $;
 
-  $ = window.jQuery || window.Zepto || window.$;
+    $ = window.jQuery || window.Zepto || window.$;
 
-  $.fn.fancySelect = function(opts) {
-    var isiOS, settings;
-    if (opts == null) {
-      opts = {};
-    }
-    settings = $.extend({
-      forceiOS: false,
-      includeBlank: false,
-      optionTemplate: function(optionEl) {
-        return optionEl.text();
-      },
-      triggerTemplate: function(optionEl) {
-        return optionEl.text();
-      }
-    }, opts);
-    isiOS = !!navigator.userAgent.match(/iP(hone|od|ad)/i);
-    return this.each(function() {
-      var copyOptionsToList, disabled, options, sel, trigger, updateTriggerText, wrapper;
-      sel = $(this);
-      if (sel.hasClass('fancified') || sel[0].tagName !== 'SELECT') {
-        return;
-      }
-      sel.addClass('fancified');
-      sel.css({
-        width: 1,
-        height: 1,
-        display: 'block',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        opacity: 0
-      });
-      sel.wrap('<div class="fancy-select">');
-      wrapper = sel.parent();
-      if (sel.data('class')) {
-        wrapper.addClass(sel.data('class'));
-      }
-      wrapper.append('<div class="trigger">');
-      if (!(isiOS && !settings.forceiOS)) {
-        wrapper.append('<ul class="options">');
-      }
-      trigger = wrapper.find('.trigger');
-      options = wrapper.find('.options');
-      disabled = sel.prop('disabled');
-      if (disabled) {
-        wrapper.addClass('disabled');
-      }
-      updateTriggerText = function() {
-        var triggerHtml;
-        triggerHtml = settings.triggerTemplate(sel.find(':selected'));
-        return trigger.html(triggerHtml);
-      };
-      sel.on('blur.fs', function() {
-        if (trigger.hasClass('open')) {
-          return setTimeout(function() {
-            return trigger.trigger('close.fs');
-          }, 120);
+    $.fn.fancySelect = function(opts) {
+        var isiOS, settings;
+        if (opts == null) {
+            opts = {};
         }
-      });
-      trigger.on('close.fs', function() {
-        trigger.removeClass('open');
-        return options.removeClass('open');
-      });
-      trigger.on('click.fs', function() {
-        var offParent, parent;
-        if (!disabled) {
-          trigger.toggleClass('open');
-          if (isiOS && !settings.forceiOS) {
-            if (trigger.hasClass('open')) {
-              return sel.focus();
+        settings = $.extend({
+            forceiOS: false,
+            includeBlank: false,
+            optionTemplate: function(optionEl) {
+                return optionEl.text();
+            },
+            triggerTemplate: function(optionEl) {
+                return optionEl.text();
             }
-          } else {
-            if (trigger.hasClass('open')) {
-              parent = trigger.parent();
-              offParent = parent.offsetParent();
-              if ((parent.offset().top + parent.outerHeight() + options.outerHeight() + 20) > $(window).height() + $(window).scrollTop()) {
-                options.addClass('overflowing');
-              } else {
-                options.removeClass('overflowing');
-              }
+        }, opts);
+        isiOS = !!navigator.userAgent.match(/iP(hone|od|ad)/i);
+        return this.each(function() {
+            var copyOptionsToList, disabled, options, sel, trigger, updateTriggerText, wrapper;
+            sel = $(this);
+            if (sel.hasClass('fancified') || sel[0].tagName !== 'SELECT') {
+                return;
             }
-            options.toggleClass('open');
-            if (!isiOS) {
-              return sel.focus();
+            sel.addClass('fancified');
+            sel.css({
+                width: 1,
+                height: 1,
+                display: 'block',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                opacity: 0
+            });
+            sel.wrap('<div class="fancy-select">');
+            wrapper = sel.parent();
+            if (sel.data('class')) {
+                wrapper.addClass(sel.data('class'));
             }
-          }
-        }
-      });
-      sel.on('enable', function() {
-        sel.prop('disabled', false);
-        wrapper.removeClass('disabled');
-        disabled = false;
-        return copyOptionsToList();
-      });
-      sel.on('disable', function() {
-        sel.prop('disabled', true);
-        wrapper.addClass('disabled');
-        return disabled = true;
-      });
-      sel.on('change.fs', function(e) {
-        if (e.originalEvent && e.originalEvent.isTrusted) {
-          return e.stopPropagation();
-        } else {
-          return updateTriggerText();
-        }
-      });
-      sel.on('keydown', function(e) {
-        var hovered, newHovered, w;
-        w = e.which;
-        hovered = options.find('.hover');
-        hovered.removeClass('hover');
-        if (!options.hasClass('open')) {
-          if (w === 13 || w === 32 || w === 38 || w === 40) {
-            e.preventDefault();
-            return trigger.trigger('click.fs');
-          }
-        } else {
-          if (w === 38) {
-            e.preventDefault();
-            if (hovered.length && hovered.index() > 0) {
-              hovered.prev().addClass('hover');
-            } else {
-              options.find('li:last-child').addClass('hover');
+            wrapper.append('<div class="trigger">');
+            if (!(isiOS && !settings.forceiOS)) {
+                wrapper.append('<ul class="options">');
             }
-          } else if (w === 40) {
-            e.preventDefault();
-            if (hovered.length && hovered.index() < options.find('li').length - 1) {
-              hovered.next().addClass('hover');
-            } else {
-              options.find('li:first-child').addClass('hover');
+            trigger = wrapper.find('.trigger');
+            options = wrapper.find('.options');
+            disabled = sel.prop('disabled');
+            if (disabled) {
+                wrapper.addClass('disabled');
             }
-          } else if (w === 27) {
-            e.preventDefault();
-            trigger.trigger('click.fs');
-          } else if (w === 13 || w === 32) {
-            e.preventDefault();
-            hovered.trigger('mousedown.fs');
-          } else if (w === 9) {
-            if (trigger.hasClass('open')) {
-              trigger.trigger('close.fs');
-            }
-          }
-          newHovered = options.find('.hover');
-          if (newHovered.length) {
-            options.scrollTop(0);
-            return options.scrollTop(newHovered.position().top - 12);
-          }
-        }
-      });
-      options.on('mousedown.fs', 'li', function(e) {
-        var clicked;
-        clicked = $(this);
-        sel.val(clicked.data('raw-value'));
-        if (!isiOS) {
-          sel.trigger('blur.fs').trigger('focus.fs');
-        }
-        options.find('.selected').removeClass('selected');
-        clicked.addClass('selected');
-        trigger.addClass('selected');
-        return sel.val(clicked.data('raw-value')).trigger('change.fs').trigger('blur.fs').trigger('focus.fs');
-      });
-      options.on('mouseenter.fs', 'li', function() {
-        var hovered, nowHovered;
-        nowHovered = $(this);
-        hovered = options.find('.hover');
-        hovered.removeClass('hover');
-        return nowHovered.addClass('hover');
-      });
-      options.on('mouseleave.fs', 'li', function() {
-        return options.find('.hover').removeClass('hover');
-      });
-      copyOptionsToList = function() {
-        var selOpts;
-        updateTriggerText();
-        if (isiOS && !settings.forceiOS) {
-          return;
-        }
-        selOpts = sel.find('option');
-        return sel.find('option').each(function(i, opt) {
-          var optHtml;
-          opt = $(opt);
-          if (!opt.prop('disabled') && (opt.val() || settings.includeBlank)) {
-            optHtml = settings.optionTemplate(opt);
-            if (opt.prop('selected')) {
-              return options.append("<li data-raw-value=\"" + (opt.val()) + "\" class=\"selected\">" + optHtml + "</li>");
-            } else {
-              return options.append("<li data-raw-value=\"" + (opt.val()) + "\">" + optHtml + "</li>");
-            }
-          }
+            updateTriggerText = function() {
+                var triggerHtml;
+                triggerHtml = settings.triggerTemplate(sel.find(':selected'));
+                return trigger.html(triggerHtml);
+            };
+            sel.on('blur.fs', function() {
+                if (trigger.hasClass('open')) {
+                    return setTimeout(function() {
+                        return trigger.trigger('close.fs');
+                    }, 120);
+                }
+            });
+            trigger.on('close.fs', function() {
+                trigger.removeClass('open');
+                return options.removeClass('open');
+            });
+            trigger.on('click.fs', function() {
+                var offParent, parent;
+                if (!disabled) {
+                    trigger.toggleClass('open');
+                    if (isiOS && !settings.forceiOS) {
+                        if (trigger.hasClass('open')) {
+                            return sel.focus();
+                        }
+                    } else {
+                        if (trigger.hasClass('open')) {
+                            parent = trigger.parent();
+                            offParent = parent.offsetParent();
+                            if ((parent.offset().top + parent.outerHeight() + options.outerHeight() + 20) > $(window).height() + $(window).scrollTop()) {
+                                options.addClass('overflowing');
+                            } else {
+                                options.removeClass('overflowing');
+                            }
+                        }
+                        options.toggleClass('open');
+                        if (!isiOS) {
+                            return sel.focus();
+                        }
+                    }
+                }
+            });
+            sel.on('enable', function() {
+                sel.prop('disabled', false);
+                wrapper.removeClass('disabled');
+                disabled = false;
+                return copyOptionsToList();
+            });
+            sel.on('disable', function() {
+                sel.prop('disabled', true);
+                wrapper.addClass('disabled');
+                return disabled = true;
+            });
+            sel.on('change.fs', function(e) {
+                if (e.originalEvent && e.originalEvent.isTrusted) {
+                    return e.stopPropagation();
+                } else {
+                    return updateTriggerText();
+                }
+            });
+            sel.on('keydown', function(e) {
+                var hovered, newHovered, w;
+                w = e.which;
+                hovered = options.find('.hover');
+                hovered.removeClass('hover');
+                if (!options.hasClass('open')) {
+                    if (w === 13 || w === 32 || w === 38 || w === 40) {
+                        e.preventDefault();
+                        return trigger.trigger('click.fs');
+                    }
+                } else {
+                    if (w === 38) {
+                        e.preventDefault();
+                        if (hovered.length && hovered.index() > 0) {
+                            hovered.prev().addClass('hover');
+                        } else {
+                            options.find('li:last-child').addClass('hover');
+                        }
+                    } else if (w === 40) {
+                        e.preventDefault();
+                        if (hovered.length && hovered.index() < options.find('li').length - 1) {
+                            hovered.next().addClass('hover');
+                        } else {
+                            options.find('li:first-child').addClass('hover');
+                        }
+                    } else if (w === 27) {
+                        e.preventDefault();
+                        trigger.trigger('click.fs');
+                    } else if (w === 13 || w === 32) {
+                        e.preventDefault();
+                        hovered.trigger('mousedown.fs');
+                    } else if (w === 9) {
+                        if (trigger.hasClass('open')) {
+                            trigger.trigger('close.fs');
+                        }
+                    }
+                    newHovered = options.find('.hover');
+                    if (newHovered.length) {
+                        options.scrollTop(0);
+                        return options.scrollTop(newHovered.position().top - 12);
+                    }
+                }
+            });
+            options.on('mousedown.fs', 'li', function(e) {
+                var clicked;
+                clicked = $(this);
+                sel.val(clicked.data('raw-value'));
+                if (!isiOS) {
+                    sel.trigger('blur.fs').trigger('focus.fs');
+                }
+                options.find('.selected').removeClass('selected');
+                clicked.addClass('selected');
+                trigger.addClass('selected');
+                return sel.val(clicked.data('raw-value')).trigger('change.fs').trigger('blur.fs').trigger('focus.fs');
+            });
+            options.on('mouseenter.fs', 'li', function() {
+                var hovered, nowHovered;
+                nowHovered = $(this);
+                hovered = options.find('.hover');
+                hovered.removeClass('hover');
+                return nowHovered.addClass('hover');
+            });
+            options.on('mouseleave.fs', 'li', function() {
+                return options.find('.hover').removeClass('hover');
+            });
+            copyOptionsToList = function() {
+                var selOpts;
+                updateTriggerText();
+                if (isiOS && !settings.forceiOS) {
+                    return;
+                }
+                selOpts = sel.find('option');
+                return sel.find('option').each(function(i, opt) {
+                    var optHtml;
+                    opt = $(opt);
+                    if (!opt.prop('disabled') && (opt.val() || settings.includeBlank)) {
+                        optHtml = settings.optionTemplate(opt);
+                        if (opt.prop('selected')) {
+                            return options.append("<li data-raw-value=\"" + (opt.val()) + "\" class=\"selected\">" + optHtml + "</li>");
+                        } else {
+                            return options.append("<li data-raw-value=\"" + (opt.val()) + "\">" + optHtml + "</li>");
+                        }
+                    }
+                });
+            };
+            sel.on('update.fs', function() {
+                wrapper.find('.options').empty();
+                return copyOptionsToList();
+            });
+            return copyOptionsToList();
         });
-      };
-      sel.on('update.fs', function() {
-        wrapper.find('.options').empty();
-        return copyOptionsToList();
-      });
-      return copyOptionsToList();
-    });
-  };
+    };
 
 }).call(this);
 /*
- *  jQuery Hosted Payments - v3.8.2
+ *  jQuery Hosted Payments - v3.8.3
  *
  *  Made by Erik Zettersten
  *  Under MIT License
@@ -9805,7 +9808,7 @@
     var pluginName = "hp",
         defaults = {};
 
-    defaults.version = "v3.8.2";
+    defaults.version = "v3.8.3";
     defaults.amount = 0;
     defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
     defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
@@ -9904,7 +9907,7 @@
 
             hp.Utils.setSession(apiKey, true);
         }
-        
+
         if (typeof $element.data("debug") !== "undefined") {
             if ($element.data("debug").toString() === "false") {
                 hp.Utils.defaults.debug = false;
@@ -9912,7 +9915,7 @@
                 hp.Utils.defaults.debug = true;
             }
         }
-        
+
         if (typeof $element.data("showAmex") !== "undefined") {
             if ($element.data("showAmex").toString() === "false") {
                 hp.Utils.defaults.showAmex = false;
@@ -9920,7 +9923,7 @@
                 hp.Utils.defaults.showAmex = true;
             }
         }
-        
+
         if (typeof $element.data("showVisa") !== "undefined") {
             if ($element.data("showVisa").toString() === "false") {
                 hp.Utils.defaults.showVisa = false;
@@ -9928,7 +9931,7 @@
                 hp.Utils.defaults.showVisa = true;
             }
         }
-        
+
         if (typeof $element.data("showDiscover") !== "undefined") {
             if ($element.data("showDiscover").toString() === "false") {
                 hp.Utils.defaults.showDiscover = false;
@@ -9936,7 +9939,7 @@
                 hp.Utils.defaults.showDiscover = true;
             }
         }
-        
+
         if (typeof $element.data("showDiners") !== "undefined") {
             if ($element.data("showDiners").toString() === "false") {
                 hp.Utils.defaults.showDiners = false;
@@ -9944,7 +9947,7 @@
                 hp.Utils.defaults.showDiners = true;
             }
         }
-        
+
         if (typeof $element.data("showJcb") !== "undefined") {
             if ($element.data("showJcb").toString() === "false") {
                 hp.Utils.defaults.showJcb = false;
@@ -9952,7 +9955,7 @@
                 hp.Utils.defaults.showJcb = true;
             }
         }
-        
+
         if (typeof $element.data("showMasterCard") !== "undefined") {
             if ($element.data("showMasterCard").toString() === "false") {
                 hp.Utils.defaults.showMasterCard = false;
@@ -9960,7 +9963,7 @@
                 hp.Utils.defaults.showMasterCard = true;
             }
         }
-        
+
         if (typeof $element.data("showEMoney") !== "undefined") {
             if ($element.data("showEMoney").toString() === "false") {
                 hp.Utils.defaults.showEMoney = false;
@@ -9968,7 +9971,7 @@
                 hp.Utils.defaults.showEMoney = true;
             }
         }
-        
+
         if (typeof $element.data("showGift") !== "undefined") {
             if ($element.data("showGift").toString() === "false") {
                 hp.Utils.defaults.showGift = false;
@@ -9976,15 +9979,15 @@
                 hp.Utils.defaults.showGift = true;
             }
         }
-        
+
         if (typeof $element.data("transactionId") !== "undefined") {
             hp.Utils.defaults.transactionId = $element.data("transactionId").toString();
         }
-        
+
         if (typeof $element.data("appUrlScheme") !== "undefined") {
             hp.Utils.defaults.appUrlScheme = $element.data("appUrlScheme").toString();
         }
-        
+
         if (typeof $element.data("avsStreet") !== "undefined") {
             hp.Utils.defaults.billingAddress.addressLine1 = $element.data("avsStreet").toString();
         }
@@ -10055,8 +10058,8 @@
 
         if (typeof $element.data("paymentTypeOrder") !== "undefined") {
             hp.Utils.defaults.paymentTypeOrder = $.trim($element.data("paymentTypeOrder")
-                .toString()
-                .replace(" ", ""))
+                    .toString()
+                    .replace(" ", ""))
                 .split(",")
                 .map(function(item) {
                     return +item;
@@ -10080,8 +10083,8 @@
         $element.attr("data-ets-key", hp.Utils.generateGuild());
 
         hp.Utils.setPaymentInstrument();
-        
-        hp.Utils.signIn().then(function(){
+
+        hp.Utils.signIn().then(function() {
             hp.Utils.setupPluginInstances($element);
         });
 
