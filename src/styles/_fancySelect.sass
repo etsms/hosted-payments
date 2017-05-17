@@ -1,0 +1,74 @@
+div.fancy-select
+	position: relative
+
+	&.disabled
+		opacity: 0.5
+
+	div.trigger
+		+transition(all 40ms ease-out)
+		cursor: pointer
+		padding: 12px 20px 14px 14px
+		white-space: nowrap
+		overflow: hidden
+		text-overflow: ellipsis
+		position: relative
+
+		&:after
+			content: ""
+			display: block
+			position: absolute
+			width: 0
+			height: 0
+			border: 5px solid transparent
+			border-top-color: #4B5468
+			top: 20px
+			right: 9px
+
+	ul.options
+		+box-shadow(0 1px 2px rgba(0, 0, 0, 0.2))
+		+transition(opacity 150ms ease-out, top 150ms ease-out, visibility 150ms ease-out)
+		+border-radius(4px)
+		list-style: none
+		margin: 0
+		position: absolute
+		top: 40px
+		left: 0
+		visibility: hidden
+		opacity: 0
+		z-index: 50
+		max-height: 200px
+		overflow: auto
+		background: $white
+		border: 1px solid $gray
+		min-width: 100px
+
+		&.open
+			+transition(opacity 150ms ease-out, top 150ms ease-out)
+			visibility: visible
+			top: 50px
+			opacity: 1
+
+		&.overflowing
+			+transition(opacity 150ms ease-out, bottom 150ms ease-out, visibility 150ms ease-out)
+			top: auto
+			bottom: 40px
+
+			&.open
+				+transition(opacity 150ms ease-out, bottom 150ms ease-out)
+				top: auto
+				bottom: 50px
+
+		li
+			padding: 6px 10px
+			color: #000
+			cursor: pointer
+			white-space: nowrap
+			+transition(all 150ms ease-out)
+
+			&.selected
+				background: $blue
+				color: $white
+
+			&.hover
+				background: lighten($blue, 15%)
+				color: $white

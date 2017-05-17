@@ -1,0 +1,1292 @@
+@import "compass/utilities"
+@import "compass/reset/utilities"
+@import "compass/css3"
+@import "compass/css3/animation"
+@import "breakpoint"
+
+$black: #2E3037
+$white: #f3f3f3
+$orange: #FC5F45
+$blue: #007aff
+$red: #EA2D3F
+$green: #50AF00
+$darkBlue: darken($blue, 10%)
+$gray: #9CA3B3
+$lightGray: #FDFDFD
+$sidebarWidth: 185px
+$sidebarWidthMobile: 64px
+
+$breakpoint-default-feature: 'max-width'
+$mobile: "screen" 420px
+$mobilePortrait: "screen" 656px
+$cardSize: "screen" 500px
+$tablet: "screen" 768px
+$desktop: "screen" 992px
+$tv: "screen" 1200px
+
+@import "styles/_fancySelect"
+
++keyframes(hinge)
+	0%
+		+transform-origin(top left)
+		+animation-timing-function(ease-in-out)
+	20%, 60%
+		+transform(rotate3d(0, 0, 1, 80deg))
+		+transform-origin(top left)
+		+animation-timing-function(ease-in-out)
+	40%, 80%
+		+transform(rotate3d(0, 0, 1, 60deg))
+		+transform-origin(top left)
+		+animation-timing-function(ease-in-out)
+		opacity: 1
+	100%
+		+transform(translate3d(0, 700px, 0))
+		opacity: 0
+
+.hinge
+	+animation-name(hinge)
+	+animation-delay(200ms)
+
+
++keyframes(hp-loading)
+	0%
+		transform: scale(0)
+
+	100%
+		transform: scale(1)
+
+
++keyframes(shake)
+	0%, 100%
+		+transform(translateX(0))
+
+	10%, 30%, 50%, 70%, 90%
+		+transform(translateX(-10px))
+
+	20%, 40%, 60%, 80%
+		+transform(translateX(10px))
+
++keyframes(fadeInDown)
+	0%
+		opacity: 0
+		+transform(translate3d(0, -100%, 0))
+
+	100%
+		opacity: 1
+		transform: none
+
++keyframes(fadeOutUp)
+	0%
+		opacity: 1
+
+	100%
+		opacity: 0
+		+transform(translate3d(0, -100%, 0))
+ 
+.fadeOutUp, .fadeOut, .fade.out
+	+animation-name(fadeOutUp)
+
+.fadeInDown, .fadeIn, .fade.in
+	+animation-name(fadeInDown)
+
+.animated-fast
+	+animation-duration(300ms)
+	+animation-fill-mode(both)
+	+animation-timing-function(linear-ease-out)
+
+.animated
+	+animation-duration(1s)
+	+animation-fill-mode(both)
+	+animation-timing-function(linear-ease-out)
+
+.shake, .hp-card-invalid, .hp-bank-invalid, .hp-em-invalid
+	+animation-name(shake)
+
+.hp
+	+nested-reset()
+	+box-sizing(border-box)
+	+user-select(none)
+	+border-radius(3px)
+	font-family: "Segoe UI Light", "Segoe UI", "Selawik Light", "Arial", sans-serif
+	font-weight: 400
+	font-size: 16px!important
+	background: $lightGray
+	max-width: 644px
+	position: relative
+	border: 1px solid $white
+
+	hr
+		margin: 30px
+		padding: 0
+		border: 0 none
+		height: 1px
+		background: lighten($gray, 25%)
+
+	.hide,
+	.hp-page
+		display: none!important
+
+	.show,
+	.hp-page-active
+		display: block!important
+
+	.hp-loading-container, 
+	.hp-error-container,
+	.hp-app-link-container
+		+box-shadow(inset 1px 1px 0 $white, inset -1px -1px 0 $white)
+		position: absolute
+		display: none
+		z-index: 10
+
+		&.hp-loading-container-active,
+		&.hp-error-container-active
+		&.hp-page-active
+			+box-sizing(border-box)
+			+border-radius(3px)
+			display: block
+			width: 100%
+			height: 100%
+			background: rgba(#fff, .93)
+			border: 1px solid $gray
+		
+		.hp-error-text
+			font-size: 3em
+			color: $red
+			margin: 30px 0 0 30px
+			display: block
+
+		.hp-error-disclaimer
+			width: 370px
+			margin: 30px
+
+			+breakpoint($mobilePortrait)
+				width: auto
+
+		.hp-error-message
+			font-size: 2em
+			margin: 0 0 0 30px
+			color: $gray
+
+		.hp-loading-text
+			position: absolute
+			top: 50%
+			left: 50%
+			font-weight: bold
+			width: 200px	
+			margin-left: -100px
+			text-align: center
+			text-transform: uppercase
+			color: $blue
+
+			+breakpoint($mobilePortrait)
+				display: none
+
+		.hp-loading
+			$size: 8px
+			$margin: $size / 3
+			$width: ($size * 4) + (($margin * 4) * 2) + 4px
+
+			position: absolute
+			line-height: 40px  
+			top: 50%
+			left: 50%
+			margin-left: -($width / 2)
+			margin-top: -35px
+
+			span
+				display: inline-block
+				vertical-align: middle
+				width: $size
+				height: $size
+				margin: $margin
+				border-radius: 50%
+				z-index: 10
+				background: #4285f4
+				+animation(hp-loading .4s infinite alternate)
+
+				&:nth-of-type(2)
+					background: #db4437
+					+animation-delay(.2s)
+
+				&:nth-of-type(3)
+					background: #f4b400
+					+animation-delay(.4s)
+
+				&:nth-of-type(4)
+					background: #0f9d58
+					+animation-delay(.6s)
+
+
+	.slider-container
+		clear: both
+		width: 100%
+		display: block
+		margin: 0
+		padding: 25px 0 7px
+		overflow: hidden
+
+		.slider
+			float: left
+			width: 70%
+
+		.slider-value
+			+border-radius(4px)
+			+box-sizing(border-box)
+			float: right
+			width: 20%
+			text-align: center
+			color: #3FB8AF
+			text-shadow: 0 1px 0 #fff
+			margin-top: -10px
+			background: #fff
+			padding: 10px 0
+			border: 1px solid $gray
+	
+
+	.hp-submit
+		+reset-box-model()
+		+border-radius(4px)
+		+text-shadow(0 1px 1px $darkBlue)
+		background: $blue
+		border: 1px solid $darkBlue
+		color: $white
+		display: block
+		padding: 12px 24px
+		font-size: 18px
+		cursor: pointer
+		width: 100%
+		text-transform: uppercase
+		text-align: center
+		outline: none
+		position: relative
+		top: 0
+		margin-top: 8px
+
+		+breakpoint($mobilePortrait)
+			font-size: 12px
+
+		&:focus, &:hover
+			outline: none
+			background: lighten($blue, 3%)
+			border: 1px solid lighten($darkBlue, 3%)
+
+		&:active
+			+box-shadow(inset 0 2px 6px rgba(0, 0, 0, .25))
+			top: 1px
+
+		&:disabled
+			+opacity(.7)
+			+box-shadow(inset 0 1px 0 rgba(255, 255, 255, .25))
+			top: 1px
+			cursor: default
+
+		&.hp-submit-danger
+			background: lighten($red, 3%)
+			border: 1px solid darken($red, 3%)
+			text-shadow: 0 1px 1px darken($red, 3%)
+
+			&:focus, &:hover
+				outline: none
+				background: lighten($red, 6%)
+				border: 1px solid darken($red, 1%)
+
+		&.hp-submit-success
+			background: lighten($green, 3%)
+			border: 1px solid darken($green, 3%)
+			text-shadow: 0 1px 1px darken($green, 3%)
+
+			&:focus, &:hover
+				outline: none
+				background: lighten($green, 6%)
+				border: 1px solid darken($green, 1%)
+	
+	.hp-input-wrapper
+		margin: 24px auto 0
+		position: relative
+		max-width: 400px
+
+	.hp-input-code-message
+		background: #fff
+		padding: 10px 14px
+		color: #FF2400 !important
+		border: 1px solid #FF2400
+		border-top: 3px solid #FF2400
+		font-size: 100% !important
+
+		strong
+			font-weight: bold!important
+
+		+breakpoint($mobilePortrait)
+			margin-top: 0!important
+	
+	.hp-input-container
+		overflow: hidden
+		position: relative
+		display: inline-block
+
+		&.hp-input-container-date
+			+pie-clearfix()
+			overflow: visible
+			width: 50%
+
+			+breakpoint($mobilePortrait)
+				width: 100%
+				margin-top: 6px
+
+			.hp-input-month,
+			.hp-input-year
+				overflow: visible
+				+pie-clearfix()
+
+				&.hp-input-active
+					background: lighten(gold, 46%)
+
+
+	.hp-input
+		+border-radius(4px)
+		+box-sizing(border-box)
+		+box-shadow(0 1px 1px #fff)
+		margin-top: 6px
+		overflow: hidden
+		border: 1px solid $gray
+		display: inline-block
+		background: #fff
+		position: relative
+		height: 48px
+
+		> input, 
+		> select
+			+reset-box-model()
+			position: relative
+			display: block
+			border: 0 none
+			background: $white
+			min-height: 100%
+			font-size: 16px
+			font-family: "Segoe UI Light", "Segoe UI", "Selawik Light", "Arial", sans-serif
+			text-indent: 14px
+
+			&:hover, 
+			&:focus
+				outline: none
+
+		> input
+			&:hover, 
+			&:focus
+				background: lighten(gold, 46%)
+				outline: none
+
+		> select
+			&:hover,
+			&:focus
+				cursor: pointer
+
+		&.hp-input-fullname
+			width: 100%
+
+			&.hp-error
+				border-color: red
+				+box-shadow(inset 0px 0px 1px red, 0px 0px 1px red!important)
+
+			> input
+				width: 100%
+
+		&.hp-input-email, &.hp-input-password, &.hp-input-code
+			width: 100%
+			display: block
+			margin: 7px auto 0
+
+			&.hp-error
+				border-color: red
+				+box-shadow(inset 0px 0px 1px red, 0px 0px 1px red!important)
+
+			> input
+				width: 100%
+
+		&.hp-input-account
+			+border-radius(4px 0 0 4px)
+			width: 50%
+			float: left
+			border-right: 0 none 
+
+			&.hp-error
+				border-color: red
+				+box-shadow(inset 0px 0px 1px red, 0px 0px 1px red!important)
+
+			> input
+				width: 100%
+
+		&.hp-input-routing
+			+border-radius(0 4px 4px 0)
+			width: 50%
+			float: left
+
+			&.hp-error
+				border-color: red
+				+box-shadow(inset 0px 0px 1px red, 0px 0px 1px red!important)
+
+			> input
+				width: 100%
+
+		&.hp-input-cc
+			width: 50%
+
+			+breakpoint($mobilePortrait)
+				+border-radius(4px)
+				width: 100%
+				border: 1px solid $gray
+
+			+border-radius(4px 0 0 4px)
+			border-right: 0 none
+
+			> input, 
+			> select
+				width: 100%
+
+			&.hp-error
+				border-color: red
+				+box-shadow(inset 0px 0px 1px red, 0px 0px 1px red!important)
+
+		&.hp-input-name
+			width: 50%
+
+			+breakpoint($mobilePortrait)
+				+border-radius(4px)
+				width: 100%
+				border: 1px solid $gray
+
+			+border-radius(0 4px 4px 0)
+
+			> input, 
+			> select
+				width: 100%
+
+			&.hp-error
+				border-color: red
+				+box-shadow(inset 0px 0px 1px red, 0px 0px 1px red!important)
+
+		&.hp-input-month
+			width: 49%
+			margin-top: 0
+
+			+breakpoint($mobilePortrait)
+				width: 50%
+
+			&:hover,
+			&:focus,
+			&:active
+				+background(lighten(gold, 46%))
+			
+			+background(#f3f3f3)
+			+border-radius(4px 0 0 4px)
+			border-right: 0 none
+
+			> input, 
+			> select
+				width: 100%
+
+			&.hp-error
+				border-color: red
+				+box-shadow(inset 0px 0px 1px red, 0px 0px 1px red!important)
+
+		&.hp-input-year
+			width: 49%
+			margin-top: 0
+
+			+breakpoint($mobilePortrait)
+				width: 50%
+
+			&:hover,
+			&:focus,
+			&:active
+				+background(lighten(gold, 46%))
+			
+			+background(#f3f3f3)
+			+border-radius(0 4px 4px 0)
+
+			> input, 
+			> select
+				width: 100%
+
+			&.hp-error
+				border-color: red
+				+box-shadow(inset 0px 0px 1px red, 0px 0px 1px red!important)
+
+		&.hp-input-cvv
+			width: 50%
+
+			+breakpoint($mobilePortrait)
+				width: 100%
+				margin-top: 6px
+
+			> input, 
+			> select
+				width: 100%
+
+			&.hp-error
+				border-color: red
+				+box-shadow(inset 0px 0px 1px red, 0px 0px 1px red!important)
+
+	&.hp-active
+		display: block
+
+	h3
+		+box-sizing(border-box)
+		font-weight: 400
+		font-size: 18px
+		text-transform: uppercase
+		padding: 17px 11px 15px
+
+	h2
+		color: $black
+		font-size: 30px
+		text-align: center
+		font-weight: 600
+		text-transform: none
+		position: relative
+
+	.text-muted
+		color: $gray
+		font-size: 17px
+		text-align: center
+		font-weight: 300
+		position: relative
+		margin: 14px 0
+		line-height: normal
+
+	a, 
+	a:link, 
+	a:focus, 
+	a:visited
+		color: $blue
+		text-decoration: none
+
+		&:hover
+			color: $darkBlue
+
+	.hp-row
+		+pie-clearfix()
+		+box-sizing(border-box)
+		+border-radius(3px)
+		background: transparent
+		border: 1px solid $gray
+
+		&:after
+			clear: both
+	
+	.hp-pull-left
+		float: left
+
+	.hp-pull-right
+		float: right
+
+	.hp-clearfix
+		+clearfix()
+
+	.hp-col
+		+box-sizing(border-box)
+		float: left
+
+	.hp-break
+		+clearfix()
+		clear: both
+
+	.hp-col-left
+		width: $sidebarWidth
+		margin: 0 0 13px 0
+		min-height: 460px
+
+		+breakpoint($mobilePortrait)
+			width: $sidebarWidthMobile
+			margin: 0
+
+		p
+			color: $gray
+
+		.hp-nav
+			list-style: none
+
+			+breakpoint($mobilePortrait)
+				margin: 0
+				
+				li.hp-type
+					margin: 0
+					text-align: center
+
+					a
+						text-indent: 0px!important
+						border-bottom: 1px solid $gray
+						padding: 14px
+
+						> img
+							display: block
+							position: static!important
+							margin: 0 auto
+
+			.hp-type
+
+				&.hp-active
+
+					a
+						background: #f3f3f3
+
+				&:last-child a
+					border-bottom: 1px solid $gray
+
+				&:first-child a
+					+border-radius(3px 0 0 0)
+
+				a
+					$size: 46px
+					position: relative
+					display: block
+					height: $size
+					line-height: $size
+					font-weight: 600
+					padding: 0
+					margin: 0
+					border-bottom: 1px solid #e9e9e9
+					text-indent: $size
+
+					+breakpoint($mobilePortrait)
+						overflow: hidden!important
+						height: auto!important
+
+					span
+						display: block
+
+					+breakpoint($mobilePortrait)
+						$size: 22px
+						height: $size
+						line-height: $size
+						text-indent: $size
+
+						img
+							margin: 0!important
+
+
+					+breakpoint($mobilePortrait)
+						span
+							display: none
+
+					img
+						width: 32px
+						position: absolute
+						left: 7px
+						top: 50%
+
+				&.hp-transvault img 
+					width: auto
+					height: 28px
+					margin-top: -14px
+					margin-left: 4px
+
+				&.hp-cc img 
+					width: 30px
+					margin-top: -11px
+
+				&.hp-gc img 
+					width: 31px
+					margin-top: -9px
+					left: 8px
+
+				&.hp-bank img
+					margin-top: -9px
+
+				&.hp-code img
+					width: 33px
+					margin-top: -12px
+
+		.hp-secure
+			width: 160px
+			position: absolute
+			bottom: 22px
+			left: 12px
+			font-size: 11px
+
+			+breakpoint($mobilePortrait)
+				display: none
+			
+			.hp-secure-icon, 
+			.hp-secure-bottom
+				+clearfix()
+				display: block
+				padding: 12px
+				border: 1px solid #6C5893
+
+			.hp-secure-icon
+				margin-top: 15px
+				border-radius: 8px 8px 0 0
+				border-bottom: 0 none
+				color: #6C5893
+				font-weight: bold
+
+				img
+					width: 30px
+					float: left
+					display: block
+
+				span 
+					float: left
+					display: block
+					margin: 0 10px 0
+
+			.hp-secure-bottom
+				background: #6C5893
+				color: #fff
+				border-radius: 0 0 8px 8px
+				padding-top: 4px
+				padding-bottom: 5px
+				+box-shadow(inset 0px 2px 5px rgb(96, 77, 134))
+				border-top: 1px solid #3d2173
+
+				> div
+					font-weight: bold
+
+				.hp-secure-bottom-left
+					float: left
+
+				.hp-secure-bottom-right
+					float: right
+			
+			.hp-cards
+				width: $sidebarWidth
+
+			.hp-cards-icons
+				width: 37px
+				display: inline-block
+				margin-right: 4px
+				margin-bottom: 3px
+				margin-top: 0
+
+			.hp-version-refund
+				color: $red
+
+
+	.hp-col-right
+		width: 100%
+		margin-left: -$sidebarWidth
+		padding-left: $sidebarWidth
+
+		+breakpoint($mobilePortrait)
+			margin-left: -$sidebarWidthMobile
+			padding-left: $sidebarWidthMobile
+
+		.hp-content
+			+box-sizing(border-box)
+			display: none
+			border-left: 1px solid $gray
+			padding: 22px 13px
+			min-height: 470px
+
+			+breakpoint($mobilePortrait)
+				padding-top: 14px
+
+			&.hp-content-active
+				display: block
+	
+		.hp-content-card-mastercard
+
+			.hp-card-visual
+				background: url("https://cdn.rawgit.com/etsms/06c4abb2eb1d2f96d92b6892d2a43f27/raw/0460bf4278b8edef61e8473f714d7ae4b47ba278/card-mastercard-icon.svg")
+
+		.hp-content-card-jcb
+
+			.hp-card-visual
+				background: url("https://cdn.rawgit.com/etsms/b8a752ef3d34b40d53b1b562a776c47b/raw/89ca2d943aca117b027c59e471a2043c36e88340/card-jcb-icon.svg")
+
+		.hp-content-card-visa
+
+			.hp-card-visual
+				background: url("https://cdn.rawgit.com/etsms/1571151ad4067e266702bb4c3c871c02/raw/77a2144d53e4ed1877e2b08013f458811b0f4779/card-visa-icon.svg")
+
+		.hp-content-card-discover
+
+			.hp-card-visual
+				background: url("https://cdn.rawgit.com/etsms/182b0859a18bc74343497b6976eb3927/raw/91d44da3831c30bfe03abd1ae0eb8822f64260f4/card-discover-icon.svg")
+
+		.hp-content-card-amex
+
+			.hp-card-visual
+				background: url("https://cdn.rawgit.com/etsms/0767ed5dcb6f4be147a8bf4415369878/raw/16db87eb2570886baff4bc7a1b3c9f9af73c8a24/card-amex-icon.svg")
+
+		.hp-content-card-emoney
+
+			.hp-card-visual
+				background: url("https://cdn.rawgit.com/etsms/e727d5dc9d0f07040bc8386396c2c3f2/raw/68040df254f3ac57234dff942e5fac5f38846a84/card-emoney-icon.svg")
+
+
+		.hp-card-visual
+
+			@extend .animated
+
+			+box-sizing(border-box)
+			+border-radius(30px)
+			background-color: $gray
+			border: 0 none
+			display: block
+			height: 236px
+			width: 398px
+			position: relative
+			margin: 0 auto 0
+
+			+breakpoint($mobilePortrait)
+				+background-size(cover!important)
+
+			+breakpoint($mobile)
+				+border-radius(12px)
+				+background-size(cover!important)
+				height: 127px
+				width: 100%
+				font-size: 14px
+
+				.hp-card-visual-name
+					bottom: 34px!important
+					font-size: 14px!important
+					left: 25px!important
+
+				.hp-card-visual-number
+					font-size: 14px!important
+					top: 50px!important
+					left: 25px!important
+
+				.hp-card-visual-expiry-label-alt
+					display: none!important
+
+				.hp-card-visual-expiry
+					bottom: 16px!important
+					right: -3px!important
+					width: 75px!important
+
+				.hp-card-visual-expiry-value
+					font-size: 14px!important
+
+			+breakpoint($cardSize)
+				+border-radius(12px)
+				+background-size(cover!important)
+				font-size: 14px
+				height: 127px
+				width: 100%
+
+				.hp-card-visual-name
+					bottom: 34px!important
+					font-size: 14px!important
+					left: 25px!important
+
+				.hp-card-visual-number
+					font-size: 14px!important
+					top: 50px!important
+					left: 25px!important
+
+				.hp-card-visual-expiry-label-alt
+					display: none!important
+
+				.hp-card-visual-expiry
+					bottom: 16px!important
+					right: -3px!important
+					width: 75px!important
+
+				.hp-card-visual-expiry-value
+					font-size: 14px!important
+
+			> div
+				+transition(all 150ms 0 linear)
+				position: absolute
+				font-size: 29px
+				text-align: left
+				font-family: "Bitstream Vera Sans Mono", Consolas, Courier, monospace
+				font-weight: 600
+				color: #fff
+
+			.hp-card-visual-logo
+				+opacity(0)
+				+transition-timing-function(cubic-bezier(0.175, 0.885, 0.320, 1.275))
+				top: 30px
+				right: 0px
+
+			.hp-card-visual-number
+				top: 100px
+				left: 35px
+
+			.hp-card-visual-name
+				font-size: 23px
+				bottom: 50px
+				left: 35px
+				font-weight: 400
+				text-transform: uppercase
+
+			.hp-card-visual-expiry
+				bottom: 45px
+				right: 15px
+				width: 75px
+
+			.hp-card-visual-expiry-label,
+			.hp-card-visual-expiry-label-alt
+				position: absolute
+				font-size: 9px
+				text-transform: uppercase
+				font-weight: 400
+
+			.hp-card-visual-expiry-label
+				top: -40px
+
+			.hp-card-visual-expiry-label-alt
+				width: 45px
+				text-align: right
+				left: -52px
+				top: -28px
+
+			.hp-card-visual-expiry-value
+				position: absolute
+				font-size: 22px
+				text-transform: uppercase
+				top: -30px
+			
+			&.hp-card-visual-flat
+				$color: lighten($gray, 30%)
+				+box-shadow(none)
+				background: $color
+				border: 0 none
+
+				> div
+					color: $gray
+
+				&.hp-card-visual-flat-active
+					
+					@extend .hinge
+
+					border-width: 2px
+					border-color: rgb(108, 229, 108)
+
+					> div
+						+text-shadow(none)
+						color: rgb(108, 229, 108)
+		
+		.hp-content-transvault
+			position: relative
+
+			.hp-transvault-visual-image
+				text-align: center
+				margin-top: 24px
+
+				img.event
+					width: 106px
+
+			.hp-submit-refresh
+				+opacity(.8)
+				+border-radius(7px)
+				cursor: pointer
+				position: absolute
+				top: 14px
+				right: 14px
+				padding: 4px
+				border: 1px solid #50AF00
+				height: 24px
+				width: 24px
+				background: rgba(80, 175, 0, 0.1)
+				
+				&:hover
+					background: rgba(80, 175, 0, 0.2)
+
+				img.hp-submit-refresh-img
+					width: 100%
+
+			.hp-submit
+				position: absolute
+				bottom: 45px
+				top: auto
+				left: 50%
+				right: auto
+				margin: 0 0 0 -170px
+				width: 340px
+
+			p.hp-input-transvault-message
+				width: 100%
+				font-size: 2em
+				text-align: center
+				color: $blue
+				margin-top: -14px
+		
+		.hp-content-gc
+
+			hr
+				margin: 0
+				margin-bottom: 20px
+				position: relative
+
+				&:before
+					content: "OR"
+					position: absolute
+					left: 50%
+					background: white
+					color: $gray
+					top: -12px
+					font-size: 11px
+					font-weight: bold
+					display: block
+					padding: 5px
+					margin-left: -11px
+			
+			.hp-input-group
+
+				.hp-input-gc
+					margin-bottom: 20px
+				
+				.hp-submit
+					width: auto
+					margin: 6px 0 0 0
+
+				.hp-input
+					width: 250px
+
+					input
+						width: 250px
+
+		.hp-bank-visual
+
+			+box-sizing(border-box)
+			position: relative
+			height: 173px
+			width: 400px
+			margin: 0 auto
+
+			+breakpoint($mobilePortrait)
+				+simple-transform(0.49, 0, 50%, 0, 0, 0, left, bottom)
+				margin-top: -70px
+
+			+breakpoint($mobile)
+				+simple-transform(0.49, 0, 0, 0, 0, 0, left, bottom)
+
+
+			> div
+				font-family: "Bitstream Vera Sans Mono", Consolas, Courier, monospace
+				position: absolute
+				font-size: 20px
+				color: $white
+
+			.hp-bank-visual-image
+				background: url("https://cdn.rawgit.com/etsms/c8f6b08c4daeb7e44e95bc7546437589/raw/42e8585705d2f917d0aa27f64fe42b589cb4fb12/card-ach-icon.svg")
+				height: 173px
+				width: 400px
+
+			.hp-bank-visual-name
+				top: 37px
+				left: 23px
+				text-transform: uppercase
+	
+			.hp-bank-visual-account
+				bottom: 31px
+				left: 26px
+				font-size: 16px
+
+			.hp-bank-visual-routing
+				bottom: 31px
+				left: 186px
+				font-size: 16px
+
+		.hp-content-bank
+
+			.slider-container
+				padding-top: 30px
+
+		.hp-content-bank, 
+		.hp-content-cc, 
+		.hp-content-emoney,
+		.hp-content-transvault,
+		.hp-content-code
+
+			p
+				font-size: 12px
+				color: $gray
+				text-align: center
+				margin: 24px 0 0
+
+			h4
+				font-size: 16px
+				color: darken($gray, 5%)
+				text-align: center
+
+			.callout
+				background: rgba(255, 255, 255, .25)
+				padding: 17px
+				margin: 14px 0
+
+				+breakpoint($mobilePortrait)
+					display: none
+
+				p 
+					margin: 0 0 17px
+					padding: 0
+
+			.hp-code-title
+				text-align: center
+				font-size: 20px
+				position: relative
+				z-index: 1
+				margin: 20px 0
+
+				+breakpoint($mobilePortrait)
+					margin: 5px 0 15px
+
+			.hp-input-cvv-image
+				background: url("https://cdn.rawgit.com/etsms/ee77db08d015bf1c09ca99e4caeaa872/raw/2cbaae7111594584deabe5c19e53313a46e5df75/card-cvv-icon-alt.svg")
+				height: 33px
+				width: 50px
+				position: absolute
+				top: 7px
+				right: 7px
+
+			&.hp-content-card-amex
+
+				.hp-input-cvv-image
+					background: url("https://cdn.rawgit.com/etsms/c3d3179f1eaec8cfa7572e0641b767d0/raw/f98391c6432913e6f7eaeb789fb1d47b56522bfe/card-cvv-icon.svg")
+
+	.hp-avs-prompt
+		+transition(all 300ms 0 cubic-bezier(0.175, 0.885, 0.320, 1.275))
+		+box-sizing(border-box)
+		+user-select(none)
+		+border-radius(3px)
+		position: absolute
+		z-index: 10
+		width: 100%
+		height: 100%
+		background: rgba(#fff, .93)
+		border: 1px solid $gray
+		opacity: 0
+	
+		&.active
+			opacity: 1
+
+	.hp-avs-prompt-container
+		padding: 30px
+
+		> p
+			font-size: 2.7em
+			color: $blue
+			display: block
+			margin-bottom: 15px
+
+		hr
+			margin: 0 0 30px 0
+			padding: 0
+			border: 0 none
+			height: 1px
+			background: lighten($gray, 25%)
+
+		a
+			text-align: center
+			display: block
+			margin: 15px auto
+
+		+breakpoint($mobilePortrait)
+
+			> p
+				font-size: 18px
+				margin-bottom: 7px
+
+			hr
+				margin: 3px 0 12px
+
+			a
+				margin: 7px auto
+				font-size: 12px
+
+
+	.hp-label-avs
+		display: block
+		font-size: 1.8em
+		color: $gray
+
+		+breakpoint($mobilePortrait)
+			font-size: 14px
+
+	.hp-avs-prompt-right,
+	.hp-avs-prompt-left
+		display: block
+		margin-bottom: 15px
+
+		+breakpoint($mobilePortrait)
+			margin-bottom: 4px
+
+		@clearfix()
+	
+	.hp-avs-prompt-right
+		margin-bottom: 0
+
+	.hp-input-avs-street
+		width: 100%
+
+		> input
+			width: 100%
+
+	.hp-input-avs-state
+		width: 112px
+
+	.hp-input-avs-zip
+		width: 144px
+
+	.hp-input-avs-city
+		width: 234px
+
+		> input
+			width: 100%
+	
+	.hp-pull-left
+		float: left
+		margin-right: 30px
+		margin-bottom: 30px
+
+		+breakpoint($mobilePortrait)
+			margin-bottom: 4px
+
+	.hp-avs-required
+		color: $red
+
+.hp-form-emoney,
+.hp-form-code
+	position: relative
+
+.hp-form-success
+	
+	.hp-success-visual
+		background: url("https://cdn.rawgit.com/etsms/ca4ba00053a7b640c57fb9a89b364360/raw/9b754b7db0e60c8d020cead418e2376b94f6223d/success-icon.svg")
+		+squish-text()
+		height: 128px
+		width: 128px
+		margin: 85px auto 30px
+
+	+breakpoint($mobilePortrait)
+
+		.hp-success-visual
+			margin-top: 15px
+			
+		.text-muted
+			display: none
+
+.hp-form-transvault-app-link
+	height: 84px
+
+	.hp-row
+		display: none
+
+	.hp-submit-redirect
+		padding: 16px 0
+		display: block
+		color: white!important
+		width: 90%
+		margin: 14px auto 0
+
++breakpoint($mobilePortrait)
+	.hp.hp-form .hp-submit.hp-submit-danger
+		bottom: 4vh
+		left: 0
+		margin: 0 8vw
+		width: 80%
+	
+	.hp .hp-col-right .hp-content-transvault p.hp-input-transvault-message
+		font-size: 1rem
+
+	.hp-form-transvault
+		.hp-content-transvault,
+		.hp-col-left
+			min-height: 280px!important

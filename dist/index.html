@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="jquery.hosted-payments.css">
+    <script src="https://cdn.jsdelivr.net/gh/jquery/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="jquery.hosted-payments.js"></script>
+</head>
+
+<body>
+
+    <div id="test" 
+         data-ets-key="676c352d-2ba0-48a0-ba3f-a5eae303dc5b" 
+         data-amount="2.89" 
+         data-payment-type-order="0,3" 
+         data-payment-type="charge" 
+         data-correlation-id="invoice123"
+         data-terminal-id="1016">
+    </div>
+
+    <script>
+        $("#test").hp({
+            baseUrl: "https://stage-htv1b.emoney.com/v3/adapters",
+            successCallback: function(response) {
+                console.log(JSON.stringify(response));
+            },
+            errorCallback: function(response) {
+                console.log(JSON.stringify(response));
+            }
+        });
+    </script>
+
+</body>
+</html>
