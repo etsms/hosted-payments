@@ -3874,7 +3874,7 @@
         hp.Utils.hasPaymentInstrument = false;
     };
 
-    var generateGuild = function() {
+    var generateGUID = function() {
 
         var d = null;
 
@@ -4126,6 +4126,13 @@
             timeout = typeof delay === "undefined" ? 0 : delay;
 
         setTimeout(function() {
+
+            $(".hp-app-link-container")
+                .removeClass("hp-page-active")
+                .hide();
+
+            $(".hp-form")
+                .removeClass("hp-form-transvault-app-link");
 
             hp.Utils.plugins.Success.init();
 
@@ -4955,11 +4962,20 @@
             options.amount = hp.Utils.setAmount(options.amount);
         }
 
+        if (typeof options.transactionId === "undefined" || options.transactionId === "") {
+            options.transactionId = hp.Utils.generateGUID();
+        }
+
         hp.Utils.log("Merging plugin defaults with newly provided options...");
 
         hp.Utils.defaults = jQuery.extend({}, hp.Utils.defaults, options);
 
         element.data(options);
+
+        try { hp.Utils.plugins.Transvault.transvaultHub.connection.stop() }  
+        catch (e) {
+            hp.Utils.log(e);
+        }
 
         setTimeout(function() {
             hp.Utils.log("Reinitialized plugin with new options!");
@@ -5359,7 +5375,7 @@
     };
 
     var getCorrelationId = function() {
-        return hp.Utils.defaults.correlationId.length ? hp.Utils.defaults.correlationId : generateGuild();
+        return hp.Utils.defaults.correlationId.length ? hp.Utils.defaults.correlationId : generateGUID();
     };
 
     var setContainerClass = function($instance) {
@@ -5553,10 +5569,6 @@
                         tv.wasCancelled = true;
                         tv.detachEvents();
 
-                        if (typeof tv.transvaultHub !== "undefined" && typeof tv.transvaultHub.connection !== "undefined") {
-                            tv.transvaultHub.connection.stop();
-                        }
-
                     } catch (e) {
                         hp.Utils.log(e);
                     }
@@ -5629,7 +5641,7 @@
     hp.Utils.getBalance = getBalance;
     hp.Utils.formatCurrency = formatCurrency;
     hp.Utils.buildResultObjectByType = buildResultObjectByType;
-    hp.Utils.generateGuild = generateGuild;
+    hp.Utils.generateGUID = generateGUID;
     hp.Utils.createOrder = createOrder;
     hp.Utils.createNav = createNav;
     hp.Utils.getCorrelationId = getCorrelationId;
@@ -5691,6 +5703,7 @@
         this.context = context;
         this.$parent = $parent;
         this.$content = $content;
+
     };
 
     Success.prototype.createTemplate = function() {
@@ -7956,7 +7969,6 @@
         this.$parent = null;
         this.$content = null;
         this.$element = $element;
-        this.hasSuccess = false;
         this.browserId = null;
         this.transactionId = "";
         this.isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
@@ -8089,8 +8101,6 @@
         $this.$parent.find(".hp-submit").on("click", function(e) {
             e.preventDefault();
             $this.cancelTransaction();
-            $(this).attr("disabled", "disabled").text("Canceling...");
-            $this.setMessage("Canceling transaction");
         });
 
     };
@@ -8113,13 +8123,11 @@
 
         if (eventKey === "Thecredentialsprovidedwereinvalid.") {
 
-            hp.Utils.showError("Reauthenticating. Please wait...");
-
-            setTimeout(function() {
-                $this.cancelTransaction(false).then(function() {
+            $this.cancelTransaction()
+                .then(function() {
+                    hp.Utils.showError("Reauthenticating. Please wait...");
                     setTimeout(hp.Utils.reset, 5000);
                 });
-            }, 1000);
 
             return;
         }
@@ -8452,7 +8460,6 @@
         };
 
         $this.$parent.trigger("hp.transvaultSuccess", successResponse);
-        $this.hasSuccess = true;
         $this.removeAppRedirectLinkForm();
 
     };
@@ -8467,28 +8474,19 @@
     };
 
 
-    Transvault.prototype.cancelTransaction = function(shouldNotNotify) {
+    Transvault.prototype.cancelTransaction = function() {
 
         var token = hp.Utils.getSession().sessionToken,
             correlationId = hp.Utils.getCorrelationId(),
             deferred = jQuery.Deferred(),
             amount = hp.Utils.getAmount();
 
-        if (typeof shouldNotNotify !== "undefined") {
-            shouldNotNotify = true;
-        }
-
         var $this = this;
 
         if ($this.browserId === null) {
-
-            if (!shouldNotNotify) {
-                $this.onCancelled();
-            }
-
+            $this.onCancelled();
             deferred.resolve();
-
-            return;
+            return deferred;
         }
 
         $this.sendMessage({
@@ -8505,12 +8503,8 @@
             }
         });
 
-        if (!shouldNotNotify) {
-            $this.onCancelled();
-        }
-
+        $this.onCancelled();
         deferred.resolve();
-
         return deferred;
 
     };
@@ -8523,8 +8517,6 @@
         var $this = this;
 
         this.showError("Transaction cancelled.");
-
-        try { this.transvaultHub.connection.stop(); } catch (e) {}
 
     };
 
@@ -8552,8 +8544,6 @@
                 }).then(hp.Utils.log, hp.Utils.log);
 
             }
-
-            $this.transvaultHub.connection.stop();
 
         } catch (e) {}
 
@@ -8591,7 +8581,7 @@
                 $message.hide();
                 $this.$parent.find(".event-default").hide();
                 $this.$parent.find(".hp-submit").hide();
-                $this.showError("This browser does not yet support WebSockets.");
+                $this.showError("This browser does not support WebSockets.");
                 return;
             }
 
@@ -8601,7 +8591,39 @@
                 hp.Utils.log("Transvault: Connection reconnecting...");
                 $message.css("color", "#FDFDFD").text("Reconnecting in 5 seconds...");
                 hp.Utils.reset();
-            }, 15000);
+            }, 6000);
+
+        };
+
+        var startHandler = function() {
+
+            $(".hp-input-transvault-message")
+                .text("Connected (listening)...")
+                .css("color", "#F4854A");
+
+            hp.Utils.log("Your connection ID: " + $this.transvaultHub.connection.id);
+
+            $this.browserId = $this.transvaultHub.connection.id;
+
+            if ($this.isMobile && ($this.terminalId === undefined || $this.terminalId === null || $this.terminalId === "")) {
+                $this.requestAppRedirectLinkForm();
+                return;
+            }
+
+            $this.sendMessage({
+                "transvault": {
+                    "transvaultRequest": {
+                        "token": token,
+                        "amount": amount,
+                        "transactionId": $this.transactionId,
+                        "correlationId": $this.correlationId,
+                        "entryType": hp.EntryType.DEVICE_CAPTURED,
+                        "terminalId": $this.terminalId,
+                        "action": hp.Utils.defaults.paymentType,
+                        "browserId": $this.browserId
+                    }
+                }
+            });
 
         };
 
@@ -8625,70 +8647,35 @@
 
         try {
 
+            var socketOptions = {
+                withCredentials: false,
+                jsonp: false,
+                transport: ['webSockets'],
+                waitForPageLoad: true
+            };
+
             $this.transvaultHub.connection
-                .start({
-                    withCredentials: false,
-                    jsonp: false,
-                    transport: ['webSockets'],
-                    waitForPageLoad: true
-                })
-                .done(function() {
-
-                    $(".hp-input-transvault-message")
-                        .text("Connected (listening)...")
-                        .css("color", "#F4854A");
-
-                    hp.Utils.log("Your connection ID: " + $this.transvaultHub.connection.id);
-
-                    $this.browserId = $this.transvaultHub.connection.id;
-
-                    setTimeout(function() {
-
-                        if ($this.isMobile && ($this.terminalId === undefined || $this.terminalId === null || $this.terminalId === "")) {
-                            $this.requestAppRedirectLinkForm();
-                            return;
-                        }
-
-                        $this.sendMessage({
-                            "transvault": {
-                                "transvaultRequest": {
-                                    "token": token,
-                                    "amount": amount,
-                                    "transactionId": $this.transactionId,
-                                    "correlationId": $this.correlationId,
-                                    "entryType": hp.Utils.defaults.entryType,
-                                    "terminalId": $this.terminalId,
-                                    "action": hp.Utils.defaults.paymentType,
-                                    "browserId": $this.browserId
-                                }
-                            }
-                        });
-
-                    }, 50);
-
-                })
+                .start(socketOptions)
+                .done(startHandler)
                 .fail(errorHandler);
 
-            $this.transvaultHub.connection.error(reconnectHandler);
+            $this.transvaultHub.connection.error(function(err){
+                hp.Utils.log("Transvault error: ", err);
+                reconnectHandler()
+            });
 
             $this.transvaultHub.connection.disconnected(function(err) {
-                setTimeout(function() {
 
-                    if ($this.wasCancelled) {
-                        return;
-                    }
+                hp.Utils.log("Transvault disconnected: ", err);
 
-                    if ($(".hp-error-container-active").is(":visible")) {
-                        return;
-                    }
+                setTimeout(function(){
 
-                    if (!$this.hasSuccess) {
-                        $this.showError("You've been disconnected!");
-                    }
+                    $this.transvaultHub.connection
+                        .start(socketOptions)
+                        .done(startHandler)
+                        .fail(errorHandler);
 
-                    $this.transvaultHub.connection.start();
-
-                }, 1000);
+                }, 2500);
             });
 
         } catch (error) {
@@ -9829,7 +9816,7 @@
     defaults.errorCallback = $.noop;
     defaults.eventCallback = $.noop;
     defaults.terminalId = "";
-    defaults.transactionId = hp.Utils.generateGuild();
+    defaults.transactionId = "";
     defaults.instrumentId = "";
     defaults.apiKey = "";
     defaults.paymentType = hp.PaymentType.CHARGE; // "CHARGE", "REFUND", "CREATE_INSTRUMENT"
@@ -9877,6 +9864,10 @@
 
         if (typeof options.amount !== "undefined") {
             options.amount = hp.Utils.setAmount(options.amount);
+        }
+
+        if (typeof options.transactionId === "undefined" || options.transactionId === "") {
+            options.transactionId = hp.Utils.generateGUID();
         }
 
         hp.Utils.defaults = jQuery.extend({}, defaults, options);
@@ -10073,14 +10064,14 @@
         if (typeof $element.data("antiForgeryToken") !== "undefined") {
             hp.Utils.defaults.antiForgeryToken = $element.data("antiForgeryToken").toString();
         } else {
-            hp.Utils.defaults.antiForgeryToken = hp.Utils.generateGuild();
+            hp.Utils.defaults.antiForgeryToken = hp.Utils.generateGUID();
         }
 
         if (typeof $element.data("antiForgeryName") !== "undefined") {
             hp.Utils.defaults.antiForgeryName = $element.data("antiForgeryName").toString();
         }
 
-        $element.attr("data-ets-key", hp.Utils.generateGuild());
+        $element.attr("data-ets-key", hp.Utils.generateGUID());
 
         hp.Utils.setPaymentInstrument();
 
