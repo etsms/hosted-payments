@@ -3837,12 +3837,18 @@
 
         var extractLineNumberFromStack = function(stack) {
 
-            var line = stack.split('\n')[3];
+            try {
+                
+                var line = stack.split('\n')[3];
 
-            // fix for various display text
-            line = (line.indexOf(' (') >= 0 ? line.split(' (')[1].substring(0, line.length - 1) : line.split('at ')[1]);
+                // fix for various display text
+                line = (line.indexOf(' (') >= 0 ? line.split(' (')[1].substring(0, line.length - 1) : line.split('at ')[1]);
 
-            return line;
+                return line;
+
+            } catch(e) {
+                return 1;
+            }
 
         };
 
@@ -4972,8 +4978,18 @@
 
         element.data(options);
 
-        try { hp.Utils.plugins.Transvault.transvaultHub.connection.stop() }  
-        catch (e) {
+        try {
+
+            var socketOptions = {
+                withCredentials: false,
+                jsonp: false,
+                transport: ['webSockets'],
+                waitForPageLoad: true
+            };
+            
+            hp.Utils.plugins.Transvault.transvaultHub.connection.stop(socketOptions);
+
+        } catch(e) {
             hp.Utils.log(e);
         }
 
@@ -8659,14 +8675,15 @@
                 .done(startHandler)
                 .fail(errorHandler);
 
-            $this.transvaultHub.connection.error(function(err){
+            $this.transvaultHub.off("error").on("error", function(err){
                 hp.Utils.log("Transvault error: ", err);
                 reconnectHandler()
             });
 
-            $this.transvaultHub.connection.disconnected(function(err) {
+            $this.transvaultHub.off("disconnected").on("disconnected", function(err) {
 
                 hp.Utils.log("Transvault disconnected: ", err);
+                hp.Utils.log("Transvault attempting reconnection... ");
 
                 setTimeout(function(){
 

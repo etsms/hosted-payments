@@ -502,9 +502,13 @@ div.fancy-select ul.options li.hover {
   display: none;
   z-index: 10;
 }
-/* line 143, ../src/jquery.hosted-payments.sass */
-.hp .hp-loading-container.hp-page-active,
+/* line 141, ../src/jquery.hosted-payments.sass */
+.hp .hp-loading-container.hp-loading-container-active, .hp .hp-loading-container.hp-error-container-active, .hp .hp-loading-container.hp-page-active,
+.hp .hp-error-container.hp-loading-container-active,
+.hp .hp-error-container.hp-error-container-active,
 .hp .hp-error-container.hp-page-active,
+.hp .hp-app-link-container.hp-loading-container-active,
+.hp .hp-app-link-container.hp-error-container-active,
 .hp .hp-app-link-container.hp-page-active {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
