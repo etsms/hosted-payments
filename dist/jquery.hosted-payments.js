@@ -5621,9 +5621,9 @@
 
     /*
      * Build APP url
-     *  Sample: "emmerchant://{{paymentType}}/{{merchantCredentials}}?transactionId={{transactionId}}&token={{token}}&browserId={{browserId}}&correlationId={{correlationId}}&amount={{amount}}"
+     *  Sample: "emmerchant://{{paymentType}}/{{merchantCredentials}}?transactionId={{transactionId}}&token={{token}}&browserId={{browserId}}&correlationId={{correlationId}}&amount={{amount}}&entryType={{entryType}}"
      */
-    var buildEMoneyMobileAppUrl = function(paymentType, merchantCredentials, transactionId, token, browserId, correlationId, amount, hostUrl) {
+    var buildEMoneyMobileAppUrl = function(paymentType, merchantCredentials, transactionId, token, browserId, correlationId, amount, hostUrl, entryType) {
 
         var url = hp.Utils.defaults.emoneyMobileAppUrl;
 
@@ -5635,7 +5635,8 @@
             .replace("{{browserId}}", browserId)
             .replace("{{correlationId}}", encodeURIComponent(correlationId))
             .replace("{{amount}}", amount)
-            .replace("{{url}}", encodeURIComponent(hostUrl));
+            .replace("{{url}}", encodeURIComponent(hostUrl))
+            .replace("{{entryType}}", encodeURIComponent(entryType));
     };
 
     /*
@@ -8189,7 +8190,8 @@
                 this.browserId,
                 hp.Utils.getCorrelationId(),
                 hp.Utils.getAmount(),
-                hostUrl
+                hostUrl,
+                hp.Utils.defaults.entryType
             );
 
             this.buildAppRedirectLinkForm(emoneyMobileAppUrl);
@@ -9856,7 +9858,7 @@
     defaults.showGift = true;
     defaults.showEMoney = true;
     defaults.showMasterCard = true;
-    defaults.emoneyMobileAppUrl = "emmerchant://{{paymentType}}/{{merchantCredentials}}?transactionId={{transactionId}}&token={{token}}&browserId={{browserId}}&correlationId={{correlationId}}&amount={{amount}}&url={{url}}";
+    defaults.emoneyMobileAppUrl = "emmerchant://{{paymentType}}/{{merchantCredentials}}?transactionId={{transactionId}}&token={{token}}&browserId={{browserId}}&correlationId={{correlationId}}&amount={{amount}}&url={{url}}&entryType={{entryType}}";
 
     function Plugin(element, options) {
 
