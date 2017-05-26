@@ -56,11 +56,11 @@
             apiKey: "3502b8ef-359a-47bb-8151-cf3ef5322a8c",
             baseUrl: "https://htv2b.emoney.com/v3/adapters",
             successCallback: function(response) {
-                console.log(JSON.stringify(response));
+                console.dir(response);
                 alert(response.transaction_approval_code);
             },
             errorCallback: function(response) {
-                console.log(JSON.stringify(response));
+                console.error(response);
             },
             debug: true
         });
