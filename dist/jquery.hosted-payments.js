@@ -4312,6 +4312,7 @@
             "message": "Transaction processed",
             "token": getSession().sessionToken,
             "transaction_id": "",
+            "transaction_sequence_number": "",
             "transaction_approval_code": "",
             "transaction_avs_street_passed": false,
             "transaction_avs_postal_code_passed": false,
@@ -4508,6 +4509,7 @@
                 successResponse.amount = payment.amount;
                 successResponse.message = (isError ? res.description : message);
                 successResponse.transaction_id = res.transactionId;
+                successResponse.transaction_sequence_number = res.sequenceNumber;
                 successResponse.transaction_total = payment.amount;
                 successResponse.instrument_id = payment.instrumentId;
                 successResponse.instrument_type = type;
@@ -4611,6 +4613,7 @@
                 successResponse.instrument_last_four = statusResponse.properties.accountNumber;
                 successResponse.instrument_type = statusResponse.properties.cardType;
                 successResponse.transaction_id = transactionId;
+                successResponse.transaction_sequence_number = statusResponse.properties.sequenceNumber;
                 successResponse.transaction_avs_postal_code_passed = statusResponse.properties.postalCodeCheck;
                 successResponse.transaction_avs_street_passed = statusResponse.properties.addressLine1Check;
 
@@ -8451,6 +8454,7 @@
             "token": hp.Utils.getSession().sessionToken,
             "anti_forgery_token": hp.Utils.defaults.antiForgeryToken,
             "transaction_id": props.ETT,
+            "transaction_sequence_number": props.TSN,
             "transaction_approval_code": props.AC,
             "transaction_avs_street_passed": true,
             "transaction_avs_postal_code_passed": true,
