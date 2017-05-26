@@ -4972,6 +4972,10 @@
             options.transactionId = hp.Utils.generateGUID();
         }
 
+        if (typeof options.apiKey !== "undefined") {
+            hp.Utils.setSession(options.apiKey, true);
+        }
+
         hp.Utils.log("Merging plugin defaults with newly provided options...");
 
         hp.Utils.defaults = jQuery.extend({}, hp.Utils.defaults, options);
