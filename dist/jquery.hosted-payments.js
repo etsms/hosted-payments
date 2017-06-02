@@ -8300,11 +8300,7 @@
         if (!props.APAN) {
             props.APAN = "";
         }
-
-        if (!props.APN) {
-            props.APN = "";
-        }
-
+        
         if (!props.CHN) {
             props.CHN = "";
         }
@@ -8441,10 +8437,6 @@
 
         if (props.AN.length > 4) {
             props.AN = props.AN.substr(props.AN.length - 4);
-        }
-
-        if (props.APN !== "") {
-            props.CHN = props.APN;
         }
 
         var successResponse = {
