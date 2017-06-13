@@ -4509,7 +4509,6 @@
                 successResponse.amount = payment.amount;
                 successResponse.message = (isError ? res.description : message);
                 successResponse.transaction_id = res.transactionId;
-                successResponse.transaction_sequence_number = res.sequenceNumber;
                 successResponse.transaction_total = payment.amount;
                 successResponse.instrument_id = payment.instrumentId;
                 successResponse.instrument_type = type;
@@ -4548,6 +4547,7 @@
                         if (statusResponse.type === "Transaction" && typeof statusResponse.properties !== "undefined") {
                             var isACH = statusResponse.properties.accountType === "BankAccount";
                             responses[currentCount].transaction_approval_code = isACH ? "" : statusResponse.properties.approvalCode;
+                            responses[currentCount].transaction_sequence_number = statusResponse.properties.sequenceNumber;
                             responses[currentCount].transaction_avs_postal_code_passed = isACH ? true : statusResponse.properties.postalCodeCheck;
                             responses[currentCount].transaction_avs_street_passed = isACH ? true : statusResponse.properties.addressLine1Check;
                             responses[currentCount].customer_signature = (statusResponse.properties.signatureRef === null || statusResponse.properties.signatureRef === undefined || statusResponse.properties.signatureRef === "") ? "https://images.pmoney.com/00000000" : statusResponse.properties.signatureRef;
