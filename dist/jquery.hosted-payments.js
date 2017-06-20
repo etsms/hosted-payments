@@ -8516,7 +8516,8 @@
                     "correlationId": "HP:FROM-GUI",
                     "terminalId": $this.terminalId,
                     "action": "CANCEL",
-                    "browserId": $this.browserId
+                    "browserId": $this.browserId,
+                    "shouldVoid": hp.Utils.defaults.shouldVoidOnCancel
                 }
             }
         });
@@ -9859,6 +9860,7 @@
     defaults.showEMoney = true;
     defaults.showMasterCard = true;
     defaults.emoneyMobileAppUrl = "emmerchant://{{paymentType}}/{{merchantCredentials}}?transactionId={{transactionId}}&token={{token}}&browserId={{browserId}}&correlationId={{correlationId}}&amount={{amount}}&url={{url}}&entryType={{entryType}}";
+    defaults.shouldVoidOnCancel = false;
 
     function Plugin(element, options) {
 
