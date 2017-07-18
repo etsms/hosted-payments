@@ -1,6 +1,5 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
@@ -11,76 +10,32 @@
 </head>
 
 <body>
-
-    <div id="test" 
-         data-amount="2.89" 
-         data-payment-type-order="0,3" 
-         data-payment-type="charge" 
-         data-correlation-id="invoice123">
-        loading...
-    </div>
-    
-    <br />
-    <br />
-    <br />
-    <br />
-    
-    <label>Terminal ID</label>
-    <br />
-    <br />
-    <input id="terminalId" type="text" value="5357" />
-    
-    <br />
-    <br />
-    
-    <label>Amount</label>
-    <br />
-    <br />
-    <input id="amount" type="number" value="5" />
-    
-    <br />
-    <br />
-    
-    <label>Api Key</label>
-    <br />
-    <br />
-    <input id="apiKey" type="text" value="3502b8ef-359a-47bb-8151-cf3ef5322a8c" />
-    
-    <br />
-    <br />
-    <br />
-    <button>Update Plugin</button>
-
+    <div id="ets"></div>
     <script>
-        $("#test").hp({
-            apiKey: "fcd5c59e-12e6-4d06-9bc8-7134144e00f9",
-            baseUrl: "http://localhost:4930/v3/adapters",
-            successCallback: function(response) {
-                console.dir(response);
-                alert(response.transaction_approval_code);
-            },
-            errorCallback: function(response) {
-                console.error(response);
-            },
+
+        var callback = function(result) {
+            console.log(result);
+
+            if (result.transaction_approval_code) {
+                alert(result.status + " - " + result.transaction_approval_code);
+            }
+
+            if (result.message) {
+                alert(result.status + " - " + result.message);
+            }
+
+        }
+
+        $("#ets").hp({
+            terminalId: "1016",
+            apiKey: "6d63b2c1-925a-4a10-8f58-72ef333ba5c8",
+            paymentTypeOrder: [3, 0, 1, 2],
+            amount: 1.69,
+            successCallback: callback,
+            errorCallback: callback,
             debug: true
         });
-        
-        $("button").on("click", function() {
-            
-            var options = {
-                amount: +($("#amount").val()),
-                apiKey: $("#apiKey").val(),
-                debug: true
-            };
-            
-            if ($("#terminalId").val() != "") {
-                options.terminalId = $("#terminalId").val()
-            };
-            
-            hp.Utils.reset(options);
-        });
-        
     </script>
-
 </body>
+
 </html>

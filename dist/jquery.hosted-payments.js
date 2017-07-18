@@ -5579,22 +5579,12 @@
              */
             if (instance.isCode() || instance.isBankAccount() || instance.isCreditCard() || instance.isGiftCard()) {
 
-
                 /*
                  * Make sure Transvault is disconnected
                  */
-                if (typeof hp.Utils.plugins.Transvault !== "undefined" && hp.Utils.plugins.Transvault.$content !== null) {
-
-                    try {
-
-                        var tv = hp.Utils.plugins.Transvault;
-
-                        tv.wasCancelled = true;
-                        tv.detachEvents();
-
-                    } catch (e) {
-                        hp.Utils.log(e);
-                    }
+                if (typeof hp.Utils.plugins.Transvault !== "undefined" && hp.Utils.plugins.Transvault.browserId !== null) {
+                   hp.Utils.log("Cancelling transvault instance.");
+                   hp.Utils.plugins.Transvault.cancelTransactionWithoutError();
                 }
 
                 $this
@@ -7843,6 +7833,7 @@
     var messages = {
         "Success": authorizationInProgressMessage,
         "BeginSale": transactionInProgressMessage,
+        "BeginAuth": authorizationInProgressMessage,
         "Login": terminalActiveMessage,
         "LoginSuccess": terminalActiveMessage,
         "ExecuteCommand": terminalActiveMessage,
@@ -8167,6 +8158,12 @@
                 return;
             }
 
+            if (this.wasCancelled) {
+                return;
+            }
+
+            this.wasCancelled = true;
+
             $this.onCancelled();
 
             return;
@@ -8185,6 +8182,12 @@
 
             messageObject.message = "Transaction voided.";
             $this.onError(messageObject);
+            return;
+
+        } else if (eventKey === "BeginAuth") {
+
+            $this.hideSubmitButton();
+            $this.disableNavBar();
             return;
 
         } else if (eventKey === "GetMerchantCredentials") {
@@ -8491,6 +8494,39 @@
 
     };
 
+    Transvault.prototype.cancelTransactionWithoutError = function() {
+
+        var token = hp.Utils.getSession().sessionToken,
+            correlationId = hp.Utils.getCorrelationId(),
+            deferred = jQuery.Deferred(),
+            amount = hp.Utils.getAmount();
+
+        if (this.browserId === null) {
+            deferred.resolve();
+            return deferred;
+        }
+
+        this.sendMessage({
+            "transvault": {
+                "transvaultRequest": {
+                    "token": token,
+                    "amount": amount,
+                    "transactionId": this.transactionId,
+                    "correlationId": "HP:FROM-GUI",
+                    "terminalId": this.terminalId,
+                    "action": "CANCEL",
+                    "browserId": this.browserId,
+                    "shouldVoid": hp.Utils.defaults.shouldVoidOnCancel
+                }
+            }
+        });
+
+        this.wasCancelled = true;
+
+        deferred.resolve();
+        return deferred;
+
+    };
 
     Transvault.prototype.cancelTransaction = function() {
 
@@ -8528,15 +8564,44 @@
 
     };
 
+    Transvault.prototype.disableNavBar = function() {
+        if (this.$parent != null) {
+            var nav = this.$parent.find(".hp-nav");
+            nav.find(".hp-hide-list").remove();
+            nav.css("position", "relative");
+            nav.append($("<li />", {
+                class: "hp-hide-list",
+                css: {
+                    "position": "absolute",
+                    "top": "0",
+                    "left": "0",
+                    "height": "100%",
+                    "width": "100%",
+                    "z-index": "100",
+                    "background": "rgba(255, 255, 255, .7)"
+                }
+            }));
+        }
+    };
+
+    Transvault.prototype.hideSubmitButton = function() {
+        if (this.$parent != null) {
+            this.$parent.find(".hp-submit").hide();
+        }
+    };
+
+    Transvault.prototype.hideMessageText = function() {
+        if (this.$parent != null) {
+            this.$parent.find(".event-default").hide();
+        }
+    };
+
     Transvault.prototype.onCancelled = function() {
 
-        this.$parent.find(".event-default").hide();
-        this.$parent.find(".hp-submit").hide();
-
-        var $this = this;
-
+        this.hideSubmitButton();
+        this.hideMessageText();
         this.showError("Transaction cancelled.");
-
+        this.wasCancelled = true;
     };
 
     Transvault.prototype.onError = function(messageObject) {
