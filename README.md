@@ -7,13 +7,13 @@ Visit https://www.etsms.com/docs/hosted-payments
 ### Import Hosted Payments
 
 ```html
-<script async src="//cdn.jsdelivr.net/gh/etsms/hosted-payments@3.8.2/dist/jquery.hosted-payments.min.js"></script>
-<link href="//cdn.jsdelivr.net/gh/etsms/hosted-payments@3.8.2/dist/jquery.hosted-payments.min.css" rel="stylesheet"/>
+<script async src="//cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/jquery.hosted-payments.min.js"></script>
+<link href="//cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/jquery.hosted-payments.min.css" rel="stylesheet"/>
 ```
 Note: This package requires **jQuery v3** or greater. To obtain jQuery, please visit their website (https://jquery.com/download/). Or include jQuery with the script above like:
 
 ```html
-<script async src="//cdn.jsdelivr.net/combine/gh/jquery/jquery@3.2/dist/jquery.min.js,gh/etsms/hosted-payments@3.8.2/dist/jquery.hosted-payments.min.js"></script>
+<script async src="//cdn.jsdelivr.net/combine/gh/jquery/jquery@3.2/dist/jquery.min.js,gh/etsms/hosted-payments@latest/dist/jquery.hosted-payments.min.js"></script>
 ```
 
 ## Credit Cards
