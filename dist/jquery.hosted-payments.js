@@ -4479,7 +4479,15 @@
 
                     lastFour = payload.properties.cardNumber.substr(payload.properties.cardNumber.length - 4) + "";
                     name = payload.properties.nameOnCard;
-                    type = $.payment.cardType(payload.properties.cardNumber).toUpperCase();
+
+                    try {
+                        type = $.payment.cardType(payload.properties.cardNumber).toUpperCase();    
+                    } catch (e) {
+                        type = "Unknown";
+                        hp.Utils.log("Coudn't determine cardType. ", e);
+                    }
+
+                    
                     expirationDate = payload.properties.expirationDate;
 
                 }
@@ -4492,7 +4500,14 @@
 
                     lastFour = swipe.cardNumber.substr(swipe.cardNumber.length - 4);
                     name = swipe.nameOnCard;
-                    type = $.payment.cardType(swipe.cardNumber).toUpperCase();
+
+                    try {
+                        type = $.payment.cardType(payload.properties.cardNumber).toUpperCase();    
+                    } catch (e) {
+                        type = "Unknown";
+                        hp.Utils.log("Coudn't determine cardType. ", e);
+                    }
+
                     expirationDate = swipe.expMonth + "/" + swipe.expYear;
 
                 }
@@ -6102,10 +6117,10 @@
                 "charge": {
                     "chargeRequest": {
                         "token": hp.Utils.getSession().sessionToken,
-                        "transactionId": this.transactionId,
+                        "transactionId": that.transactionId,
                         "amount": hp.Utils.getAmount(),
                         "entryType": hp.Utils.defaults.entryType,
-                        "instrumentId": this.instrumentId,
+                        "instrumentId": that.instrumentId,
                         "correlationId": hp.Utils.getCorrelationId(),
                         "__request": res.request
                     }
@@ -6120,10 +6135,10 @@
                 "preAuth": {
                     "preAuthRequest": {
                         "token": hp.Utils.getSession().sessionToken,
-                        "transactionId": this.transactionId,
+                        "transactionId": that.transactionId,
                         "amount": hp.Utils.getAmount(),
                         "entryType": hp.Utils.defaults.entryType,
-                        "instrumentId": this.instrumentId,
+                        "instrumentId": that.instrumentId,
                         "correlationId": hp.Utils.getCorrelationId(),
                         "__request": res.request
                     }
@@ -6140,7 +6155,7 @@
                         "token": hp.Utils.getSession().sessionToken,
                         "amount": hp.Utils.getAmount(),
                         "entryType": hp.Utils.defaults.entryType,
-                        "instrumentId": this.instrumentId,
+                        "instrumentId": that.instrumentId,
                         "correlationId": hp.Utils.getCorrelationId(),
                         "__request": res.request
                     }
@@ -7253,9 +7268,9 @@
                     "refundRequest": {
                         "correlationId": hp.Utils.getCorrelationId(),
                         "token": hp.Utils.getSession().sessionToken,
-                        "transactionId": $this.transactionId,
                         "instrumentId": $this.instrumentId,
                         "amount": hp.Utils.getAmount(),
+                        "entryType": hp.Utils.defaults.entryType,
                         "__request": res.request
                     }
                 }
@@ -7577,10 +7592,10 @@
                     "chargeRequest": {
                         "correlationId": hp.Utils.getCorrelationId(),
                         "token": hp.Utils.getSession().sessionToken,
-                        "transactionId": res.transactionId,
+                        "transactionId": $this.transactionId,
                         "instrumentId": res.instrumentId,
                         "amount": hp.Utils.getAmount(),
-                        "entryType": hp.Utils.defaults.entryType,
+                        "entryType": hp.EntryType.DEVICE_CAPTURED,
                         "__request": res.request
                     }
                 }
@@ -7595,10 +7610,9 @@
                     "refundRequest": {
                         "correlationId": hp.Utils.getCorrelationId(),
                         "token": hp.Utils.getSession().sessionToken,
-                        "transactionId": res.transactionId,
                         "instrumentId": res.instrumentId,
                         "amount": hp.Utils.getAmount(),
-                        "entryType": hp.Utils.defaults.entryType,
+                        "entryType": hp.EntryType.DEVICE_CAPTURED,
                         "__request": res.request
                     }
                 }
