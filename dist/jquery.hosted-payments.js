@@ -7669,8 +7669,21 @@
         }
 
         if (data.card_number) {
-            $this.formData.cardNumber = $.payment.formatCardNumber(data.card_number);
-            $this.formData.cardType = $.payment.cardType(data.card_number);
+
+            try {
+                $this.formData.cardNumber = $.payment.formatCardNumber(data.card_number);
+            } catch (e) {
+                $this.formData.cardNumber = data.card_number;
+                hp.Utils.log("Coudn't format cardNumber. ", e);
+            }
+
+            try {
+                $this.formData.cardType = $.payment.cardType(payload.properties.cardNumber).toUpperCase();    
+            } catch (e) {
+                $this.formData.cardType = "Unknown";
+                hp.Utils.log("Coudn't determine cardType. ", e);
+            }
+            
         }
 
         $visualcodename.text($this.formData.nameOnCard);
