@@ -7678,7 +7678,7 @@
             }
 
             try {
-                $this.formData.cardType = $.payment.cardType(payload.properties.cardNumber).toUpperCase();    
+                $this.formData.cardType = $.payment.cardType(data.card_number).toUpperCase();    
             } catch (e) {
                 $this.formData.cardType = "Unknown";
                 hp.Utils.log("Coudn't determine cardType. ", e);
