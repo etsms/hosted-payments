@@ -4502,7 +4502,7 @@
                     name = swipe.nameOnCard;
 
                     try {
-                        type = $.payment.cardType(payload.properties.cardNumber).toUpperCase();    
+                        type = $.payment.cardType(swipe.cardNumber).toUpperCase();    
                     } catch (e) {
                         type = "Unknown";
                         hp.Utils.log("Coudn't determine cardType. ", e);
@@ -4986,6 +4986,14 @@
             options.amount = hp.Utils.setAmount(options.amount);
         }
 
+        if (typeof options.saveCustomer !== "undefined") {
+            if (options.saveCustomer.toString() === "false") {
+                options.saveCustomer = false;
+            } else if (options.saveCustomer.toString() === "true") {
+                options.saveCustomer = true;
+            }
+        }
+
         if (typeof options.transactionId === "undefined" || options.transactionId === "") {
             options.transactionId = hp.Utils.generateGUID();
         }
@@ -5002,14 +5010,18 @@
 
         try {
 
-            var socketOptions = {
-                withCredentials: false,
-                jsonp: false,
-                transport: ['webSockets'],
-                waitForPageLoad: true
-            };
-            
-            hp.Utils.plugins.Transvault.transvaultHub.connection.stop(socketOptions);
+            if (typeof hp.Utils.plugins.Transvault.transvaultHub !== "undefined") {
+
+                var socketOptions = {
+                    withCredentials: false,
+                    jsonp: false,
+                    transport: ['webSockets'],
+                    waitForPageLoad: true
+                };
+                
+                hp.Utils.plugins.Transvault.transvaultHub.connection.stop(socketOptions);
+
+            }
 
         } catch(e) {
             hp.Utils.log(e);
@@ -7595,7 +7607,6 @@
                         "transactionId": $this.transactionId,
                         "instrumentId": res.instrumentId,
                         "amount": hp.Utils.getAmount(),
-                        "entryType": hp.EntryType.DEVICE_CAPTURED,
                         "__request": res.request
                     }
                 }
@@ -7612,7 +7623,6 @@
                         "token": hp.Utils.getSession().sessionToken,
                         "instrumentId": res.instrumentId,
                         "amount": hp.Utils.getAmount(),
-                        "entryType": hp.EntryType.DEVICE_CAPTURED,
                         "__request": res.request
                     }
                 }
@@ -9953,6 +9963,7 @@
     defaults.showMasterCard = true;
     defaults.emoneyMobileAppUrl = "emmerchant://{{paymentType}}/{{merchantCredentials}}?transactionId={{transactionId}}&token={{token}}&browserId={{browserId}}&correlationId={{correlationId}}&amount={{amount}}&url={{url}}&entryType={{entryType}}";
     defaults.shouldVoidOnCancel = false;
+    defaults.saveCustomer = false;
 
     function Plugin(element, options) {
 
@@ -9977,6 +9988,14 @@
 
         if (typeof options.amount !== "undefined") {
             options.amount = hp.Utils.setAmount(options.amount);
+        }
+
+        if (typeof options.saveCustomer !== "undefined") {
+            if (options.saveCustomer.toString() === "false") {
+                options.saveCustomer = false;
+            } else if (options.saveCustomer.toString() === "true") {
+                options.saveCustomer = true;
+            }
         }
 
         if (typeof options.transactionId === "undefined" || options.transactionId === "") {
@@ -10057,6 +10076,14 @@
                 hp.Utils.defaults.showJcb = false;
             } else if ($element.data("showJcb").toString() === "true") {
                 hp.Utils.defaults.showJcb = true;
+            }
+        }
+
+        if (typeof $element.data("saveCustomer") !== "undefined") {
+            if ($element.data("saveCustomer").toString() === "false") {
+                hp.Utils.defaults.saveCustomer = false;
+            } else if ($element.data("saveCustomer").toString() === "true") {
+                hp.Utils.defaults.saveCustomer = true;
             }
         }
 
