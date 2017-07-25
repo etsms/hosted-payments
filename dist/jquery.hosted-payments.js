@@ -4533,6 +4533,35 @@
                 successResponse.instrument_entry_type_description = isTrack ? "MAGNETIC_SWIPE" : "KEY_ENTRY";
                 successResponse.customer_name = name;
 
+                if (!hp.Utils.defaults.saveCustomer) {
+
+                    successResponse.instrument_id = res.payment.instrumentId;
+                    successResponse.instrument_type = res.payment.cardType;
+                    successResponse.instrument_last_four = res.payment.accountNumber;
+
+                    if (typeof res.payment.expirationDate === "undefined") {
+                        res.payment.expirationDate = "9909";
+                    }
+
+                    if (typeof res.payment.routingNumber !== "undefined") {
+                        successResponse.instrument_routing_last_four = res.payment.routingNumber;
+                    }
+
+                    if (typeof successResponse.instrument_type === "undefined") {
+                        successResponse.instrument_type = "ACH";
+                    }
+
+                    if (successResponse.customer_name === "") {
+                        successResponse.customer_name = res.payment.nameOnAccount;
+                    }
+
+                    var date = res.payment.expirationDate,
+                        year = date.substring(0, 2),
+                        month = date.substring(2);
+
+                    successResponse.instrument_expiration_date = month + "/" + ((new Date()).getFullYear().toString().substring(0, 2)) + year;
+                }
+
                 responses.push(successResponse);
 
             }
@@ -6108,6 +6137,90 @@
         this.formData.cvv = $.trim(cvv);
     };
 
+    CreditCard.prototype.handleChargeWithoutInstrument = function(createInstrumentRequest) {
+
+        var that = this,
+            requestModel = {},
+            cardProperties = createInstrumentRequest.createPaymentInstrument.createPaymentInstrumentRequest.properties;
+
+        if (hp.Utils.defaults.paymentType == hp.PaymentType.CHARGE) {
+
+            requestModel = {
+                "charge": {
+                    "chargeRequest": {
+                        "token": hp.Utils.getSession().sessionToken,
+                        "transactionId": that.transactionId,
+                        "amount": hp.Utils.getAmount(),
+                        "entryType": hp.Utils.defaults.entryType,
+                        "properties": cardProperties,
+                        "correlationId": hp.Utils.getCorrelationId(),
+                        "__request": createInstrumentRequest
+                    }
+                }
+            };
+
+        }
+
+        if (hp.Utils.defaults.paymentType == hp.PaymentType.PREAUTH) {
+
+            requestModel = {
+                "preAuth": {
+                    "preAuthRequest": {
+                        "token": hp.Utils.getSession().sessionToken,
+                        "transactionId": that.transactionId,
+                        "amount": hp.Utils.getAmount(),
+                        "entryType": hp.Utils.defaults.entryType,
+                        "properties": cardProperties,
+                        "correlationId": hp.Utils.getCorrelationId(),
+                        "__request": createInstrumentRequest
+                    }
+                }
+            };
+
+        }
+
+        if (hp.Utils.defaults.paymentType == hp.PaymentType.REFUND) {
+
+            requestModel = {
+                "refund": {
+                    "refundRequest": {
+                        "token": hp.Utils.getSession().sessionToken,
+                        "amount": hp.Utils.getAmount(),
+                        "entryType": hp.Utils.defaults.entryType,
+                        "properties": cardProperties,
+                        "correlationId": hp.Utils.getCorrelationId(),
+                        "__request": createInstrumentRequest
+                    }
+                }
+            };
+
+        }
+
+        hp.Utils.makeRequest(requestModel)
+            .then(hp.Utils.buildResultObjectByType)
+            .then(function(promiseResponse) {
+
+                that.$parent.trigger("hp.submit", {
+                    "type": that.requestTypes.charge,
+                    "res": promiseResponse
+                });
+
+            })
+            .fail(function(promiseResponse) {
+
+                if (typeof promiseResponse.responseJSON !== "undefined") {
+                    promiseResponse = promiseResponse.responseJSON;
+                }
+
+                that.$parent.trigger("hp.submit", {
+                    "type": that.requestTypes.error,
+                    "res": promiseResponse
+                });
+
+            });
+
+    };
+
     CreditCard.prototype.handleCharge = function(res) {
 
         var that = this,
@@ -6219,7 +6332,7 @@
 
                 hp.Utils.showLoader();
 
-                return hp.Utils.makeRequest({
+                var createInstrumentRequest = {
                     "createPaymentInstrument": {
                         "createPaymentInstrumentRequest": {
                             "correlationId": hp.Utils.getCorrelationId(),
@@ -6238,10 +6351,20 @@
                             }
                         }
                     }
-                });
+                };
+
+                if (hp.Utils.defaults.saveCustomer) {
+                    return hp.Utils.makeRequest(createInstrumentRequest);
+                }
+
+                that.handleChargeWithoutInstrument(createInstrumentRequest);
 
             })
             .then(function(res) {
+
+                if (!hp.Utils.defaults.saveCustomer) {
+                    return;
+                }
 
                 if (res.isException) {
 
@@ -7250,6 +7373,70 @@
         return hp.Utils.showSuccessPage(delay);
     };
 
+    BankAccount.prototype.handleChargeWithoutInstrument = function(createPaymentInstrumentRequest) {
+
+        var $this = this,
+            requestModel = {},
+            accountProperties = createPaymentInstrumentRequest.createPaymentInstrument.createPaymentInstrumentRequest.properties;
+
+        if (hp.Utils.defaults.paymentType == hp.PaymentType.CHARGE) {
+
+            requestModel = {
+                "charge": {
+                    "chargeRequest": {
+                        "correlationId": hp.Utils.getCorrelationId(),
+                        "token": hp.Utils.getSession().sessionToken,
+                        "transactionId": $this.transactionId,
+                        "properties": accountProperties,
+                        "amount": hp.Utils.getAmount(),
+                        "__request": createPaymentInstrumentRequest
+                    }
+                }
+            };
+
+        }
+
+        if (hp.Utils.defaults.paymentType == hp.PaymentType.REFUND) {
+
+            requestModel = {
+                "refund": {
+                    "refundRequest": {
+                        "correlationId": hp.Utils.getCorrelationId(),
+                        "token": hp.Utils.getSession().sessionToken,
+                        "properties": accountProperties,
+                        "amount": hp.Utils.getAmount(),
+                        "__request": createPaymentInstrumentRequest
+                    }
+                }
+            };
+
+        }
+
+        hp.Utils.makeRequest(requestModel)
+            .then(hp.Utils.buildResultObjectByType)
+            .then(function(promiseResponse) {
+
+                $this.$parent.trigger("hp.submit", {
+                    "type": $this.requestTypes.charge,
+                    "res": promiseResponse
+                });
+
+            })
+            .fail(function(promiseResponse) {
+
+                if (typeof promiseResponse.responseJSON !== "undefined") {
+                    promiseResponse = promiseResponse.responseJSON;
+                }
+
+                $this.$parent.trigger("hp.submit", {
+                    "type": $this.requestTypes.error,
+                    "res": promiseResponse
+                });
+
+            });
+
+    };
+
     BankAccount.prototype.handleCharge = function(res) {
 
         var $this = this;
@@ -7344,7 +7531,7 @@
             .attr("disabled", "disabled")
             .text("Processing payment...");
 
-        hp.Utils.makeRequest({
+        var createPaymentInstrumentRequest = {
             "createPaymentInstrument": {
                 "createPaymentInstrumentRequest": {
                     "correlationId": hp.Utils.getCorrelationId(),
@@ -7362,40 +7549,48 @@
                     }
                 }
             }
-        }).then(function(res) {
+        };
 
-            if (res.isException) {
+        if (!hp.Utils.defaults.saveCustomer) {
+            return $this.handleChargeWithoutInstrument(createPaymentInstrumentRequest);
+        }
+
+        hp.Utils
+            .makeRequest(createPaymentInstrumentRequest)
+            .then(function(res) {
+
+                if (res.isException) {
+
+                    $this.$parent.trigger("hp.submit", {
+                        "type": 9,
+                        "res": res
+                    });
+
+                    return;
+                }
+
+                $this.instrumentId = res.instrumentId;
+                $this.transactionId = (typeof res.transactionId !== "undefined") ? res.transactionId : $this.transactionId;
 
                 $this.$parent.trigger("hp.submit", {
-                    "type": 9,
+                    "type": 0,
                     "res": res
                 });
 
-                return;
-            }
+                $this.handleCharge(res);
 
-            $this.instrumentId = res.instrumentId;
-            $this.transactionId = (typeof res.transactionId !== "undefined") ? res.transactionId : $this.transactionId;
+            }).fail(function(err) {
 
-            $this.$parent.trigger("hp.submit", {
-                "type": 0,
-                "res": res
+                if (typeof err.responseJSON !== "undefined") {
+                    err = err.responseJSON;
+                }
+
+                $this.$parent.trigger("hp.submit", {
+                    "type": 9,
+                    "res": err
+                });
+
             });
-
-            $this.handleCharge(res);
-
-        }).fail(function(err) {
-
-            if (typeof err.responseJSON !== "undefined") {
-                err = err.responseJSON;
-            }
-
-            $this.$parent.trigger("hp.submit", {
-                "type": 9,
-                "res": err
-            });
-
-        });
 
     };
 
@@ -7582,6 +7777,69 @@
 
     };
 
+    Code.prototype.handleChargeWithoutInstrument = function(createInstrumentRequest) {
+
+        var $this = this,
+            requestModel = {},
+            cardProperties = createInstrumentRequest.createPaymentInstrument.createPaymentInstrumentRequest.properties;
+
+        if (hp.Utils.defaults.paymentType == hp.PaymentType.CHARGE) {
+
+            requestModel = {
+                "charge": {
+                    "chargeRequest": {
+                        "correlationId": hp.Utils.getCorrelationId(),
+                        "token": hp.Utils.getSession().sessionToken,
+                        "transactionId": $this.transactionId,
+                        "properties": cardProperties,
+                        "amount": hp.Utils.getAmount(),
+                        "__request": createInstrumentRequest
+                    }
+                }
+            };
+
+        }
+
+        if (hp.Utils.defaults.paymentType == hp.PaymentType.REFUND) {
+
+            requestModel = {
+                "refund": {
+                    "refundRequest": {
+                        "correlationId": hp.Utils.getCorrelationId(),
+                        "token": hp.Utils.getSession().sessionToken,
+                        "properties": cardProperties,
+                        "amount": hp.Utils.getAmount(),
+                        "__request": createInstrumentRequest
+                    }
+                }
+            };
+
+        }
+
+        hp.Utils.makeRequest(requestModel)
+            .then(hp.Utils.buildResultObjectByType)
+            .then(function(promiseResponse) {
+
+                $this.$parent.trigger("hp.submit", {
+                    "type": $this.requestTypes.charge,
+                    "res": promiseResponse
+                });
+
+            })
+            .fail(function(promiseResponse) {
+
+                if (typeof promiseResponse.responseJSON !== "undefined") {
+                    promiseResponse = promiseResponse.responseJSON;
+                }
+
+                $this.$parent.trigger("hp.submit", {
+                    "type": $this.requestTypes.error,
+                    "res": promiseResponse
+                });
+
+            });
+    };
+
     Code.prototype.handleCharge = function(res) {
 
         var hasBalance = true,
@@ -7742,7 +8000,7 @@
 
         hp.Utils.promptAvs().then(function() {
 
-            return hp.Utils.makeRequest({
+            var createInstrumentRequest = {
                 "createPaymentInstrument": {
                     "createPaymentInstrumentRequest": {
                         "correlationId": hp.Utils.getCorrelationId(),
@@ -7757,9 +8015,22 @@
                         "__swipe": $this.formData
                     }
                 }
-            });
+            };
+
+            if (hp.Utils.defaults.saveCustomer) {
+                return hp.Utils.makeRequest(createInstrumentRequest);
+            }
+
+            /*
+             * Since this doesn't return a promise, the following 'then' method will not execute
+             */
+            return $this.handleChargeWithoutInstrument(createInstrumentRequest);
 
         }).then(function(res) {
+
+            if (!hp.Utils.defaults.saveCustomer) {
+                return;
+            }
 
             if (res.isException) {
 
@@ -9907,7 +10178,7 @@
 
 }).call(this);
 /*
- *  jQuery Hosted Payments - v3.8.30
+ *  jQuery Hosted Payments - v3.8.31
  *
  *  Made by Erik Zettersten
  *  Under MIT License
@@ -9917,7 +10188,7 @@
     var pluginName = "hp",
         defaults = {};
 
-    defaults.version = "v3.8.30";
+    defaults.version = "v3.8.31";
     defaults.amount = 0;
     defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
     defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
@@ -10189,8 +10460,8 @@
 
         if (typeof $element.data("paymentTypeOrder") !== "undefined") {
             hp.Utils.defaults.paymentTypeOrder = $.trim($element.data("paymentTypeOrder")
-                    .toString()
-                    .replace(" ", ""))
+                .toString()
+                .replace(" ", ""))
                 .split(",")
                 .map(function(item) {
                     return +item;
