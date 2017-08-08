@@ -4533,7 +4533,7 @@
                 successResponse.instrument_entry_type_description = isTrack ? "MAGNETIC_SWIPE" : "KEY_ENTRY";
                 successResponse.customer_name = name;
 
-                if (!hp.Utils.defaults.saveCustomer) {
+                if (!hp.Utils.defaults.saveCustomer && typeof res.payment !== "undefined") {
 
                     successResponse.instrument_id = res.payment.instrumentId;
                     successResponse.instrument_type = res.payment.cardType;
@@ -10178,7 +10178,7 @@
 
 }).call(this);
 /*
- *  jQuery Hosted Payments - v3.8.31
+ *  jQuery Hosted Payments - v3.8.32
  *
  *  Made by Erik Zettersten
  *  Under MIT License
@@ -10188,7 +10188,7 @@
     var pluginName = "hp",
         defaults = {};
 
-    defaults.version = "v3.8.31";
+    defaults.version = "v3.8.32";
     defaults.amount = 0;
     defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
     defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
