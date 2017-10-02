@@ -6952,14 +6952,14 @@
                         "createPaymentInstrumentRequest": {
                             "correlationId": hp.Utils.getCorrelationId(),
                             "transactionId": that.transactionId,
-                            "customerToken": hp.Utils.getCustomerToken(),
                             "token": hp.Utils.getSession().sessionToken,
                             "name": that.formData.name,
                             "properties": {
                                 "cardNumber": that.formData.cardNumber,
                                 "expirationDate": that.formData._expiryMonth + "/" + that.formData._expiryYear,
                                 "cvv": that.formData.cvv,
-                                "nameOnCard": that.formData.name
+                                "nameOnCard": that.formData.name,
+                                "customerToken": hp.Utils.getCustomerToken()
                             },
                             "billingAddress": {
                                 "addressLine1": hp.Utils.defaults.billingAddress.addressLine1,
@@ -7481,13 +7481,13 @@
                         "createPaymentInstrumentRequest": {
                             "correlationId": hp.Utils.getCorrelationId(),
                             "token": hp.Utils.getSession().sessionToken,
-                            "customerToken": hp.Utils.getCustomerToken(),
                             "name": that.formData.name,
                             "properties": {
                                 "cardNumber": that.formData.cardNumber,
                                 "expirationDate": that.formData._expiryMonth + "/" + that.formData._expiryYear,
                                 "cvv": that.formData.cvv,
-                                "nameOnCard": that.formData.name
+                                "nameOnCard": that.formData.name,
+                                "customerToken": hp.Utils.getCustomerToken()
                             },
                             "billingAddress": {
                                 "addressLine1": hp.Utils.defaults.billingAddress.addressLine1,
@@ -8156,13 +8156,13 @@
                 "createPaymentInstrumentRequest": {
                     "correlationId": hp.Utils.getCorrelationId(),
                     "transactionId": $this.transactionId,
-                    "customerToken": hp.Utils.getCustomerToken(),
                     "token": hp.Utils.getSession().sessionToken,
                     "name": $this.formData.name,
                     "properties": {
                         "accountNumber": $this.formData.accountNumber,
                         "routingNumber": $this.formData.routingNumber,
-                        "bankName": $this.formData.name
+                        "bankName": $this.formData.name,
+                        "customerToken": hp.Utils.getCustomerToken()
                     },
                     "billingAddress": {
                         "addressLine1": hp.Utils.defaults.billingAddress.addressLine1,
@@ -8618,6 +8618,8 @@
             };
         }
 
+        cardProperties["customerToken"] = hp.Utils.getCustomerToken();
+
         hp.Utils.promptAvs().then(function() {
 
             var createInstrumentRequest = {
@@ -8626,7 +8628,6 @@
                         "correlationId": hp.Utils.getCorrelationId(),
                         "transactionId": $this.transactionId,
                         "token": hp.Utils.getSession().sessionToken,
-                        "customerToken": hp.Utils.getCustomerToken(),
                         "name": $this.formData.nameOnCard,
                         "properties": cardProperties,
                         "billingAddress": {
@@ -10811,7 +10812,7 @@
 
 }).call(this);
 /*
- *  jQuery Hosted Payments - v3.8.33
+ *  jQuery Hosted Payments - v3.8.34
  *
  *  Made by Erik Zettersten
  *  Under MIT License
@@ -10821,7 +10822,7 @@
     var pluginName = "hp",
         defaults = {};
 
-    defaults.version = "v3.8.33";
+    defaults.version = "v3.8.34";
     defaults.amount = 0;
     defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
     defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
