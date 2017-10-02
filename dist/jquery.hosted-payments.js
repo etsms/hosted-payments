@@ -4673,6 +4673,7 @@
             "transaction_cashback": 0,
             "transaction_total": getAmount(),
             "correlation_id": getCorrelationId(),
+            "customer_token": getCustomerToken(),
             "instrument_id": "",
             "instrument_type": "",
             "instrument_method": "Other",
@@ -9407,6 +9408,7 @@
             "customer_name": props.CHN,
             "customer_signature": props.SD,
             "correlation_id": $this.correlationId,
+            "customer_token": hp.Utils.getCustomerToken(),
             "application_identifier": props.AID,
             "application_response_code": props.ARC,
             "application_issuer_data": props.IAD
