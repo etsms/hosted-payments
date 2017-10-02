@@ -12,9 +12,9 @@
 <body>
     <div id="ets"></div>
     <script>
+        var transactionId = hp.Utils.generateGUID();
 
         var callback = function(result) {
-            console.log(result);
 
             if (result.transaction_approval_code) {
                 alert(result.status + " - " + result.transaction_approval_code);
@@ -23,17 +23,19 @@
             if (result.message) {
                 alert(result.status + " - " + result.message);
             }
-
         }
 
         $("#ets").hp({
             terminalId: "1016",
             apiKey: "6d63b2c1-925a-4a10-8f58-72ef333ba5c8",
-            paymentTypeOrder: [3, 0, 1, 2],
-            amount: 1.69,
+            paymentTypeOrder: [0],
+            amount: 0,
             successCallback: callback,
             errorCallback: callback,
-            debug: true
+            debug: true,
+            transactionId: transactionId,
+            saveCustomer: true,
+            customerToken: "test"
         });
     </script>
 </body>

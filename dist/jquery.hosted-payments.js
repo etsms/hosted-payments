@@ -69,6 +69,272 @@
     }
 
 })();
+
+(function(window, document, $) {
+
+    'use strict';
+
+    // Get a regular interval for drawing to the screen
+    window.requestAnimFrame = (function(callback) {
+        return window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            window.msRequestAnimaitonFrame ||
+            function(callback) {
+                window.setTimeout(callback, 1000 / 60);
+            };
+    })();
+
+    /*
+     * Plugin Constructor
+     */
+
+    var pluginName = 'jqSignature',
+        defaults = {
+            lineColor: '#222222',
+            lineWidth: 1,
+            border: '1px dashed #AAAAAA',
+            background: 'transparent',
+            width: 300,
+            height: 100,
+            autoFit: false
+        },
+        canvasFixture = '<canvas></canvas>',
+        idCounter = 0;
+
+    function Signature(element, options) {
+        // DOM elements/objects
+        this.element = element;
+        this.$element = $(this.element);
+        this.canvas = false;
+        this.$canvas = false;
+        this.ctx = false;
+        // Drawing state
+        this.drawing = false;
+        this.currentPos = {
+            x: 0,
+            y: 0
+        };
+        this.lastPos = this.currentPos;
+        // Determine plugin settings
+        this._data = this.$element.data();
+        this.settings = $.extend({}, defaults, options, this._data);
+        // Initialize the plugin
+        this.init();
+        this.points = [-81, -251];
+    }
+
+    Signature.prototype = {
+
+        // Initialize the signature canvas
+        init: function() {
+            this.id = 'jq-signature-canvas-' + (++idCounter);
+
+            // Set up the canvas
+            this.$canvas = $(canvasFixture).appendTo(this.$element);
+            this.$canvas.attr({
+                width: this.settings.width,
+                height: this.settings.height
+            });
+            this.$canvas.css({
+                boxSizing: 'border-box',
+                width: this.settings.width + 'px',
+                height: this.settings.height + 'px',
+                border: this.settings.border,
+                background: this.settings.background,
+                cursor: 'crosshair'
+            });
+            this.$canvas.attr('id', this.id);
+
+            // Fit canvas to width of parent
+            if (this.settings.autoFit === true) {
+                this._resizeCanvas();
+                // TODO - allow for dynamic canvas resizing
+                // (need to save canvas state before changing width to avoid getting cleared)
+                // var timeout = false;
+                // $(window).on('resize', $.proxy(function(e) {
+                //   clearTimeout(timeout);
+                //   timeout = setTimeout($.proxy(this._resizeCanvas, this), 250);
+                // }, this));
+            }
+            this.canvas = this.$canvas[0];
+            this._resetCanvas();
+
+            // Listen for pointer/mouse/touch events
+            // TODO - PointerEvent isn't fully supported, but eventually do something like this:
+            // if (window.PointerEvent) {
+            //  this.$canvas.parent().css('-ms-touch-action', 'none');
+            //  this.$canvas.on("pointerdown MSPointerDown", $.proxy(this._downHandler, this));
+            //   this.$canvas.on("pointermove MSPointerMove", $.proxy(this._moveHandler, this));
+            //  this.$canvas.on("pointerup MSPointerUp", $.proxy(this._upHandler, this));
+            // }
+            // else {
+            //   this.$canvas.on('mousedown touchstart', $.proxy(this._downHandler, this));
+            //   this.$canvas.on('mousemove touchmove', $.proxy(this._moveHandler, this));
+            //   this.$canvas.on('mouseup touchend', $.proxy(this._upHandler, this));
+            // }
+            this.$canvas.on('mousedown touchstart', $.proxy(this._downHandler, this));
+            this.$canvas.on('mousemove touchmove', $.proxy(this._moveHandler, this));
+            this.$canvas.on('mouseup touchend', $.proxy(this._upHandler, this));
+
+            // Start drawing
+            var that = this;
+            (function drawLoop() {
+                window.requestAnimFrame(drawLoop);
+                that._renderCanvas();
+            })();
+        },
+
+        // Clear the canvas
+        clearCanvas: function() {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this._resetCanvas();
+        },
+
+        // Get the content of the canvas as a base64 data URL
+        getDataURL: function() {
+            return this.canvas.toDataURL();
+        },
+
+        // Get the content of the canvas as a base64 data URL
+        getDataPoints: function() {
+            return JSON
+                .stringify(this.points)
+                .replace('[', '')
+                .replace(']', '');
+        },
+
+        // Handle the start of a signature
+        _downHandler: function(e) {
+            this.drawing = true;
+            this.lastPos = this.currentPos = this._getPosition(e);
+            // Prevent scrolling, etc
+            $('body').css('overflow', 'hidden');
+            e.preventDefault();
+        },
+
+        // Handle mouse/touch moves during a signature
+        _moveHandler: function(e) {
+
+            this.currentPos = this._getPosition(e);
+            this._setPointsDown();
+
+            e.preventDefault();
+        },
+
+        // Handle the end of a signature
+        _upHandler: function(e) {
+
+            this.drawing = false;
+            this._setPointsUp();
+
+            // Trigger a change event
+            var changedEvent = $.Event('jq.signature.changed');
+            this.$element.trigger(changedEvent);
+
+            // Allow scrolling again
+            $('body').css('overflow', 'auto');
+            e.preventDefault();
+        },
+
+        // Get the position of the mouse/touch
+        _getPosition: function(event) {
+            var xPos, yPos, rect;
+            rect = this.canvas.getBoundingClientRect();
+            if (event.originalEvent)
+                event = event.originalEvent;
+
+            // Touch event
+            if (event.type.indexOf('touch') !== -1) { // event.constructor === TouchEvent
+                xPos = event.touches[0].clientX - rect.left;
+                yPos = event.touches[0].clientY - rect.top;
+            }
+            // Mouse event
+            else {
+                xPos = event.clientX - rect.left;
+                yPos = event.clientY - rect.top;
+            }
+            return {
+                x: xPos,
+                y: yPos
+            };
+        },
+
+        _setPointsDown: function() {
+            if (this.drawing) {
+                this.points.push(this.currentPos.x);
+                this.points.push(this.currentPos.y);
+            }
+        },
+
+        _setPointsUp: function() {
+            this.points.push(-81);
+            this.points.push(-251);
+        },
+
+        // Render the signature to the canvas
+        _renderCanvas: function() {
+            if (this.drawing) {
+                this.ctx.beginPath();
+                this.ctx.moveTo(this.lastPos.x, this.lastPos.y);
+                this.ctx.lineTo(this.currentPos.x, this.currentPos.y);
+                this.ctx.stroke();
+                this.lastPos = this.currentPos;
+            }
+        },
+
+        _resetPoints: function() {
+            this.points = [];
+            this._setPointsUp();
+        },
+
+        // Reset the canvas context
+        _resetCanvas: function() {
+            this.ctx = this.canvas.getContext("2d");
+            this.ctx.strokeStyle = this.settings.lineColor;
+            this.ctx.lineWidth = this.settings.lineWidth;
+            this._resetPoints();
+        },
+
+        // Resize the canvas element
+        _resizeCanvas: function() {
+            var width = this.$element.outerWidth();
+            this.$canvas.attr('width', width);
+            this.$canvas.css('width', width + 'px');
+        }
+
+    };
+
+    /*
+     * Plugin wrapper and initialization
+     */
+
+    $.fn[pluginName] = function(options) {
+        var args = arguments;
+        if (options === undefined || typeof options === 'object') {
+            return this.each(function() {
+                if (!$.data(this, 'plugin_' + pluginName)) {
+                    $.data(this, 'plugin_' + pluginName, new Signature(this, options));
+                }
+            });
+        } else if (typeof options === 'string' && options[0] !== '_' && options !== 'init') {
+            var returns;
+            this.each(function() {
+                var instance = $.data(this, 'plugin_' + pluginName);
+                if (instance instanceof Signature && typeof instance[options] === 'function') {
+                    returns = instance[options].apply(instance, Array.prototype.slice.call(args, 1));
+                }
+                if (options === 'destroy') {
+                    $.data(this, 'plugin_' + pluginName, null);
+                }
+            });
+            return returns !== undefined ? returns : this;
+        }
+    };
+
+})(window, document, jQuery);
+
 /* jquery.signalR.core.js */
 /*global window:false */
 /*!
@@ -3684,15 +3950,28 @@
     hp.EntryType.KEYED_CARD_PRESENT = "KEYED_CARD_PRESENT";
     hp.EntryType.KEYED_CARD_NOT_PRESENT = "KEYED_CARD_NOT_PRESENT";
 
+    // request type
+    hp.RequestTypes = {};
+    hp.RequestTypes.CREATE_INSTRUMENT = 0;
+    hp.RequestTypes.CHARGE = 1;
+    hp.RequestTypes.REFUND = 2;
+    hp.RequestTypes.SIGNATURE = 3;
+    hp.RequestTypes.ERROR = 9;
+
     // entry type
     hp.PaymentType = {};
     hp.PaymentType.CHARGE = "CHARGE";
     hp.PaymentType.REFUND = "REFUND";
-    hp.PaymentType.CREATE_INSTRUMENT = "CREATE_INSTRUMENT";
     hp.PaymentType.CANCEL = "CANCEL";
-    hp.PaymentType.ISSUE = "ISSUE";
     hp.PaymentType.PREAUTH = "PRE_AUTHORIZE";
-    hp.PaymentType.ADD_FUNDS = "ADD_FUNDS";
+    hp.PaymentType.ISSUE = "ISSUE";
+    hp.PaymentType.GET_CARD_INFORMATION = "GET_CARD_INFORMATION";
+    hp.PaymentType.DISPLAY_MERCHANT_DOCUMENT = "DISPLAY_MERCHANT_DOCUMENT";
+    hp.PaymentType.GIFTCARD_ISSUE = "GIFTCARD_ISSUE";
+    hp.PaymentType.GIFTCARD_ADD_VALUE = "GIFTCARD_ADD_VALUE";
+    hp.PaymentType.GIFTCARD_GET_CARD_BALANCE = "GIFTCARD_GET_CARD_BALANCE";
+    hp.PaymentType.GIFTCARD_REVERSE_ADD_VALUE = "GIFTCARD_REVERSE_ADD_VALUE";
+    hp.PaymentType.CAPTURE_SIGNATURE = "CAPTURE_SIGNATURE";
 
     // exposes payments (for split payment methods)
     hp.Utils.payments = [];
@@ -3708,7 +3987,7 @@
             $hp = $form.find(".hp");
 
         var $parent = $hp
-            .removeClass("hp-form-emoney hp-form-transvault hp-form-bank hp-form-code hp-form-cc hp-form-gc hp-form-success hp-form-error")
+            .removeClass("hp-form-emoney hp-form-transvault hp-form-bank hp-form-signature hp-form-code hp-form-cc hp-form-gc hp-form-success hp-form-error")
             .addClass("hp hp-form")
             .addClass(currentClass);
 
@@ -3798,12 +4077,30 @@
             case "refund":
                 result = hp.PaymentType.REFUND;
                 break;
-            case "createinstrument":
-                result = hp.PaymentType.CREATE_INSTRUMENT;
+            case "getcardinformation":
+                result = hp.PaymentType.GET_CARD_INFORMATION;
+                break;
+            case "displaymerchantdocument":
+                result = hp.PaymentType.DISPLAY_MERCHANT_DOCUMENT;
+                break;
+            case "giftcardissue":
+                result = hp.PaymentType.GIFTCARD_ISSUE;
+                break;
+            case "giftcardaddvalue":
+                result = hp.PaymentType.GIFTCARD_ADD_VALUE;
+                break;
+            case "giftcardgetcardbalance":
+                result = hp.PaymentType.GIFTCARD_GET_CARD_BALANCE;
+                break;
+            case "giftcardreverseaddvalue":
+                result = hp.PaymentType.GIFTCARD_REVERSE_ADD_VALUE;
+                break;
+            case "capturesignature":
+                result = hp.PaymentType.CAPTURE_SIGNATURE;
                 break;
             case "preauth":
             case "preauthorize":
-                result = hp.PaymentType.PREAUTH;
+                result = hp.PaymentType.PRE_AUTHORIZE;
                 break;
             default:
                 result = hp.PaymentType.CHARGE;
@@ -3838,7 +4135,7 @@
         var extractLineNumberFromStack = function(stack) {
 
             try {
-                
+
                 var line = stack.split('\n')[3];
 
                 // fix for various display text
@@ -3846,7 +4143,7 @@
 
                 return line;
 
-            } catch(e) {
+            } catch (e) {
                 return 1;
             }
 
@@ -4050,6 +4347,7 @@
         hp.Utils.plugins.Success = new hp.Success($element);
         hp.Utils.plugins.Transvault = new hp.Transvault($element);
         hp.Utils.plugins.GiftCard = new hp.GiftCard($element);
+        hp.Utils.plugins.Signature = new hp.Signature($element);
 
         $element.html(
             $wrapper
@@ -4119,6 +4417,10 @@
                     callback(hp.Utils.plugins.GiftCard);
                 }
 
+                if (!!$this.attr("class").match(/hp-signature/gi)) {
+                    callback(hp.Utils.plugins.Signature);
+                }
+
             });
 
 
@@ -4153,6 +4455,34 @@
         return deferred;
     };
 
+    // signature page
+    var showSignaturePage = function(delay) {
+
+        var deferred = jQuery.Deferred(),
+            timeout = typeof delay === "undefined" ? 0 : delay;
+
+        setTimeout(function() {
+
+            $(".hp-app-link-container")
+                .removeClass("hp-page-active")
+                .hide();
+
+            $(".hp-form")
+                .removeClass("hp-form-transvault-app-link");
+
+            hp.Utils.plugins.Signature.init();
+
+            $(".hp-col-left .hp-type")
+                .off("click")
+                .removeClass("hp-active");
+
+            deferred.resolve();
+
+        }, timeout);
+
+        return deferred;
+    };
+
     var setAmount = function(amount) {
         hp.Utils.defaults.amount = Math.abs(Math.round10(parseFloat(amount), -2));
         $(".hp.hp-form .hp-version-amount").text(formatCurrency(hp.Utils.defaults.amount));
@@ -4172,6 +4502,7 @@
             bankAccount = '',
             code = '',
             transvault = '',
+            signature = '',
             giftcard = '';
 
         if (defaultAreas.indexOf(0) >= 0) {
@@ -4194,6 +4525,10 @@
             giftcard = '<li class="hp-type hp-gc"><a href="javascript:void(0);"><img src="https://cdn.rawgit.com/etsms/2e9f0f3bb754a7910ffbdbd16ea9926a/raw/27ce16494e375ff8d04deb918ffd76d743397488/gift-icon.svg" alt="Gift Card" /> <span>Gift Card</span></a></li>';
         }
 
+        if (defaultAreas.indexOf(5) >= 0) {
+            signature = '<li class="hp-type hp-signature"><a href="javascript:void(0);"><img src="https://cdn.rawgit.com/etsms/d0f7a8a7fc4fd889fb932990e757eaf8/raw/b5477130ac9d74273c4078944418ce850cc733a7/signature-icon.svg" alt="Signature" /> <span>Signature</span></a></li>';
+        }
+
         for (var i = 0; i < defaultAreas.length; i++) {
 
             if (defaultAreas[i] === 0) {
@@ -4215,6 +4550,10 @@
             if (defaultAreas[i] === 4) {
                 html += giftcard;
             }
+
+            if (defaultAreas[i] === 5) {
+                html += signature;
+            }
         }
 
         return html;
@@ -4229,6 +4568,7 @@
             bankAccount = '',
             code = '',
             transvault = '',
+            signature = '',
             giftcard = '';
 
         if (defaultAreas.indexOf(0) >= 0) {
@@ -4251,6 +4591,10 @@
             giftcard = '<div class="hp-content hp-content-gc">{{giftcard}}</div>'.replace("{{giftcard}}", hp.Utils.plugins.GiftCard.createTemplate(hp.Utils.defaults.defaultCardCharacters, hp.Utils.defaults.defaultNameOnCardName, (+(new Date().getFullYear().toString().substring(2, 4)) + 3)));
         }
 
+        if (defaultAreas.indexOf(5) >= 0) {
+            signature = '<div class="hp-content hp-content-signature">{{signature}}</div>'.replace("{{signature}}", hp.Utils.plugins.Signature.createTemplate());
+        }
+
         for (var i = 0; i < defaultAreas.length; i++) {
 
             if (defaultAreas[i] === 0) {
@@ -4271,6 +4615,10 @@
 
             if (defaultAreas[i] === 4) {
                 html += giftcard;
+            }
+
+            if (defaultAreas[i] === 5) {
+                html += signature;
             }
         }
 
@@ -4343,6 +4691,22 @@
             "application_response_code": "",
             "application_issuer_data": ""
         };
+    };
+
+    var buildSignatureResultObject = function(response) {
+
+        var deferred = jQuery.Deferred();
+        var baseResponse = buildSuccessResultObject();
+
+        baseResponse.amount = 0;
+        baseResponse.transaction_type = 0;
+        baseResponse.message = "Signature captured";
+        baseResponse.transaction_type = hp.PaymentType.CAPTURE_SIGNATURE;
+        baseResponse.customer_signature = response.signatureUrl;
+
+        deferred.resolve([baseResponse]);
+        return deferred;
+
     };
 
     var buildResultObjectByType = function(response) {
@@ -4481,13 +4845,13 @@
                     name = payload.properties.nameOnCard;
 
                     try {
-                        type = $.payment.cardType(payload.properties.cardNumber).toUpperCase();    
+                        type = $.payment.cardType(payload.properties.cardNumber).toUpperCase();
                     } catch (e) {
                         type = "Unknown";
                         hp.Utils.log("Coudn't determine cardType. ", e);
                     }
 
-                    
+
                     expirationDate = payload.properties.expirationDate;
 
                 }
@@ -4502,7 +4866,7 @@
                     name = swipe.nameOnCard;
 
                     try {
-                        type = $.payment.cardType(swipe.cardNumber).toUpperCase();    
+                        type = $.payment.cardType(swipe.cardNumber).toUpperCase();
                     } catch (e) {
                         type = "Unknown";
                         hp.Utils.log("Coudn't determine cardType. ", e);
@@ -4700,6 +5064,10 @@
     requestTypes.STATUS_REQUEST = "statusRequest";
     requestTypes.STATUS_RESPONSE = "statusResponse";
 
+    requestTypes.SIGNATURE = "signature";
+    requestTypes.SIGNATURE_REQUEST = "signatureRequest";
+    requestTypes.SIGNATURE_RESPONSE = "signatureResponse";
+
     var getObjectResponseFromData = function(data) {
 
         var memberName = "";
@@ -4750,6 +5118,12 @@
             responseMemberName = requestTypes.STATUS_RESPONSE;
         }
 
+        if (requestTypes.SIGNATURE in data) {
+            memberName = requestTypes.SIGNATURE;
+            requestMemberName = requestTypes.SIGNATURE_REQUEST;
+            responseMemberName = requestTypes.SIGNATURE_RESPONSE;
+        }
+
         if (requestTypes.CHARGE_RESPONSE in data) {
             memberName = requestTypes.CHARGE_RESPONSE;
             isResponse = true;
@@ -4782,6 +5156,11 @@
 
         if (requestTypes.STATUS_RESPONSE in data) {
             memberName = requestTypes.STATUS_RESPONSE;
+            isResponse = true;
+        }
+
+        if (requestTypes.SIGNATURE_RESPONSE in data) {
+            memberName = requestTypes.SIGNATURE_RESPONSE;
             isResponse = true;
         }
 
@@ -5024,7 +5403,13 @@
         }
 
         if (typeof options.transactionId === "undefined" || options.transactionId === "") {
-            options.transactionId = hp.Utils.generateGUID();
+
+            if (typeof hp.Utils.defaults.transactionId === "undefined") {
+                hp.Utils.defaults.transactionId = hp.Utils.generateGUID();
+            }
+
+            options.transactionId = hp.Utils.defaults.transactionId;
+
         }
 
         if (typeof options.apiKey !== "undefined") {
@@ -5047,12 +5432,12 @@
                     transport: ['webSockets'],
                     waitForPageLoad: true
                 };
-                
+
                 hp.Utils.plugins.Transvault.transvaultHub.connection.stop(socketOptions);
 
             }
 
-        } catch(e) {
+        } catch (e) {
             hp.Utils.log(e);
         }
 
@@ -5457,6 +5842,15 @@
         return hp.Utils.defaults.correlationId.length ? hp.Utils.defaults.correlationId : generateGUID();
     };
 
+    var getCustomerToken = function() {
+
+        if (hp.Utils.defaults.customerToken == null || typeof hp.Utils.defaults.customerToken === "undefined") {
+            return null;
+        }
+
+        return hp.Utils.defaults.customerToken;
+    };
+
     var setContainerClass = function($instance) {
 
         var mobileClass = "hp-form-mobile",
@@ -5633,14 +6027,14 @@
              *      Should handle non-encrypted MSR reads
              *      Should handle non-encrypted Barcode reads
              */
-            if (instance.isCode() || instance.isBankAccount() || instance.isCreditCard() || instance.isGiftCard()) {
+            if (instance.isCode() || instance.isBankAccount() || instance.isCreditCard() || instance.isGiftCard() || instance.isSignature()) {
 
                 /*
                  * Make sure Transvault is disconnected
                  */
                 if (typeof hp.Utils.plugins.Transvault !== "undefined" && hp.Utils.plugins.Transvault.browserId !== null) {
-                   hp.Utils.log("Cancelling transvault instance.");
-                   hp.Utils.plugins.Transvault.cancelTransactionWithoutError();
+                    hp.Utils.log("Cancelling transvault instance.");
+                    hp.Utils.plugins.Transvault.cancelTransactionWithoutError();
                 }
 
                 $this
@@ -5648,12 +6042,17 @@
                     .on("hp.notify", hp.Utils.defaults.eventCallback)
                     .on("hp.submit", function(e, eventResponse) {
 
-                        if (eventResponse.type === instance.requestTypes.charge) {
+                        if (eventResponse.type === hp.RequestTypes.CHARGE) {
                             instance.handleSuccess(eventResponse.res);
                             hp.Utils.hideLoader();
                         }
 
-                        if (eventResponse.type === instance.requestTypes.error) {
+                        if (eventResponse.type === hp.RequestTypes.SIGNATURE) {
+                            instance.handleSuccess(eventResponse.res);
+                            hp.Utils.hideLoader();
+                        }
+
+                        if (eventResponse.type === hp.RequestTypes.ERROR) {
                             instance.handleError(eventResponse.res);
                             hp.Utils.hideLoader();
                         }
@@ -5704,6 +6103,7 @@
     hp.Utils.buildAntiForgeryInput = buildAntiForgeryInput;
     hp.Utils.createInstance = createInstance;
     hp.Utils.showSuccessPage = showSuccessPage;
+    hp.Utils.showSignaturePage = showSignaturePage;
     hp.Utils.getAmount = getAmount;
     hp.Utils.setAmount = setAmount;
     hp.Utils.getSession = getSession;
@@ -5711,6 +6111,7 @@
     hp.Utils.getBalance = getBalance;
     hp.Utils.formatCurrency = formatCurrency;
     hp.Utils.buildResultObjectByType = buildResultObjectByType;
+    hp.Utils.buildSignatureResultObject = buildSignatureResultObject;
     hp.Utils.generateGUID = generateGUID;
     hp.Utils.createOrder = createOrder;
     hp.Utils.createNav = createNav;
@@ -5739,6 +6140,7 @@
     hp.Utils.setPaymentService = setPaymentService;
     hp.Utils.retrieveTransactionStatus = retrieveTransactionStatus;
     hp.Utils.buildEMoneyMobileAppUrl = buildEMoneyMobileAppUrl;
+    hp.Utils.getCustomerToken = getCustomerToken;
 
 })(jQuery, window, document);
 
@@ -5816,10 +6218,227 @@
         return false;
     };
 
+    Success.prototype.isSignature = function() {
+        return false;
+    };
+
     /*
-     * Export "Credit Card"
+     * Export "Success"
      */
     hp.Success = Success;
+
+})(jQuery, window, document);
+(function($, window, document, undefined) {
+
+    "use strict";
+
+    /*
+     * Export "hp"
+     */
+    window.hp = hp || {};
+
+    function Signature($element) {
+        this.context = null;
+        this.$parent = null;
+        this.$content = null;
+        this.hasChanged = false;
+        this.$element = $element;
+        this.formData = { _isValid: false };
+    }
+
+    Signature.prototype.init = function() {
+
+        var context = hp.Utils.handleLegacyCssClassApplication("signature", this.$element),
+            $parent = context.parent,
+            $content = context.content;
+
+        $parent
+            .find(".icon.signature")
+            .addClass("animate")
+            .show();
+
+        this.context = context;
+        this.$parent = $parent;
+        this.$content = $content;
+
+        this.$signature = this.$parent.find('.hp-js-signature').jqSignature({
+            autoFit: true,
+            lineColor: '#007aff',
+            height: 320,
+            border: "0 none"
+        });
+
+        var that = this;
+
+        this.$signature.on("jq.signature.changed", function(e) {
+
+            if (!that.hasChanged) {
+                that.hasChanged = true;
+                that.enableButtons();
+            }
+
+        });
+
+        this.$parent
+            .find(".hp-dismiss-icon")
+            .off("click")
+            .on("click", function() {
+                hp.Utils.reset();
+            });
+
+    };
+
+    Signature.prototype.createTemplate = function() {
+
+        var $html = [
+            '<div class="hp-signature-visual">',
+            '<div class="hp-signature-container">',
+            '<a class="hp-dismiss-icon" href="javascript:;">&times</a>',
+            '<div class="hp-js-signature">',
+            '</div>',
+            '<div class="hp-submit-group">',
+            '<button disabled="disabled" class="hp-submit hp-submit-danger">Clear Signature</button>',
+            '<button disabled="disabled" class="hp-submit hp-submit-success">Submit Signature</button>',
+            '</div>',
+            '</div>',
+            '</div>'
+        ].join("");
+
+        return $html;
+
+    };
+
+    Signature.prototype.showSuccess = function(delay) {
+        return hp.Utils.showSuccessPage(delay);
+    };
+
+    Signature.prototype.attachEvents = function() {};
+
+    Signature.prototype.detachEvents = function() {};
+
+    Signature.prototype.handleSignature = function() {
+
+        var signature = this.$signature.jqSignature('getDataPoints'),
+            that = this,
+            requestModel = {
+                "signature": {
+                    "signatureRequest": {
+                        "token": hp.Utils.getSession().sessionToken,
+                        "correlationId": hp.Utils.getCorrelationId(),
+                        "transactionId": hp.Utils.defaults.transactionId,
+                        "data": signature
+                    }
+                }
+            };
+
+        hp.Utils.showLoader();
+
+        hp.Utils.makeRequest(requestModel)
+            .then(hp.Utils.buildSignatureResultObject)
+            .then(function(promiseResponse) {
+
+                that.$parent.trigger("hp.submit", {
+                    "type": hp.RequestTypes.SIGNATURE,
+                    "res": promiseResponse
+                });
+
+            })
+            .fail(function(promiseResponse) {
+
+                if (typeof promiseResponse.responseJSON !== "undefined") {
+                    promiseResponse = promiseResponse.responseJSON;
+                }
+
+                that.$parent.trigger("hp.submit", {
+                    "type": hp.RequestTypes.ERROR,
+                    "res": promiseResponse
+                });
+
+            });
+
+    };
+
+    Signature.prototype.handleError = function(res) {
+        hp.Utils.handleError(res);
+        this.clearInputs();
+    };
+
+    Signature.prototype.clearInputs = function() {
+        this.$signature.jqSignature('clearCanvas');
+    };
+
+    Signature.prototype.enableButtons = function() {
+
+        var that = this;
+
+        this.$parent
+            .find(".hp-submit-group .hp-submit")
+            .removeAttr("disabled");
+
+        this.$parent
+            .find(".hp-submit-group .hp-submit-success")
+            .off("click")
+            .on("click", function() {
+                that.handleSignature();
+            });
+
+        this.$parent
+            .find(".hp-submit-group .hp-submit-danger")
+            .off("click")
+            .on("click", function() {
+
+                that.$signature.jqSignature('clearCanvas');
+                that.hasChanged = false;
+
+                that.$parent
+                    .find(".hp-submit-group .hp-submit")
+                    .attr("disabled", "disabled");
+
+            });
+
+    };
+
+    Signature.prototype.handleSuccess = function(res) {
+        hp.Utils.handleSuccess(res);
+        this.showSuccess();
+    };
+
+    Signature.prototype.isCreditCard = function() {
+        return false;
+    };
+
+    Signature.prototype.isBankAccount = function() {
+        return false;
+    };
+
+    Signature.prototype.isEMoney = function() {
+        return false;
+    };
+
+    Signature.prototype.isSuccessPage = function() {
+        return false;
+    };
+
+    Signature.prototype.isCode = function() {
+        return false;
+    };
+
+    Signature.prototype.isGiftCard = function() {
+        return false;
+    };
+
+    Signature.prototype.isSignature = function() {
+        return true;
+    };
+
+    Signature.prototype.isTransvault = function() {
+        return false;
+    };
+
+    /*
+     * Export "Signature"
+     */
+    hp.Signature = Signature;
 
 })(jQuery, window, document);
 (function($, window, document, undefined) {
@@ -5843,11 +6462,6 @@
         this.formData = {
             _isValid: false
         };
-
-        this.requestTypes = {};
-        this.requestTypes.createPaymentInstrument = 0;
-        this.requestTypes.charge = 1;
-        this.requestTypes.error = 9;
 
         // session
         this.instrumentId = "";
@@ -6201,7 +6815,7 @@
             .then(function(promiseResponse) {
 
                 that.$parent.trigger("hp.submit", {
-                    "type": that.requestTypes.charge,
+                    "type": hp.RequestTypes.CHARGE,
                     "res": promiseResponse
                 });
 
@@ -6213,7 +6827,7 @@
                 }
 
                 that.$parent.trigger("hp.submit", {
-                    "type": that.requestTypes.error,
+                    "type": hp.RequestTypes.ERROR,
                     "res": promiseResponse
                 });
 
@@ -6294,7 +6908,7 @@
             .then(function(promiseResponse) {
 
                 that.$parent.trigger("hp.submit", {
-                    "type": that.requestTypes.charge,
+                    "type": hp.RequestTypes.CHARGE,
                     "res": promiseResponse
                 });
 
@@ -6306,7 +6920,7 @@
                 }
 
                 that.$parent.trigger("hp.submit", {
-                    "type": that.requestTypes.error,
+                    "type": hp.RequestTypes.ERROR,
                     "res": promiseResponse
                 });
 
@@ -6337,6 +6951,7 @@
                         "createPaymentInstrumentRequest": {
                             "correlationId": hp.Utils.getCorrelationId(),
                             "transactionId": that.transactionId,
+                            "customerToken": hp.Utils.getCustomerToken(),
                             "token": hp.Utils.getSession().sessionToken,
                             "name": that.formData.name,
                             "properties": {
@@ -6621,6 +7236,10 @@
         return false;
     };
 
+    CreditCard.prototype.isSignature = function() {
+        return false;
+    };
+
     /*
      * Export "Credit Card"
      */
@@ -6822,7 +7441,7 @@
             .then(function(promiseResponse) {
 
                 that.$parent.trigger("hp.submit", {
-                    "type": that.requestTypes.charge,
+                    "type": hp.RequestTypes.CHARGE,
                     "res": promiseResponse
                 });
 
@@ -6834,7 +7453,7 @@
                 }
 
                 that.$parent.trigger("hp.submit", {
-                    "type": that.requestTypes.error,
+                    "type": hp.RequestTypes.ERROR,
                     "res": promiseResponse
                 });
 
@@ -6861,6 +7480,7 @@
                         "createPaymentInstrumentRequest": {
                             "correlationId": hp.Utils.getCorrelationId(),
                             "token": hp.Utils.getSession().sessionToken,
+                            "customerToken": hp.Utils.getCustomerToken(),
                             "name": that.formData.name,
                             "properties": {
                                 "cardNumber": that.formData.cardNumber,
@@ -7056,6 +7676,10 @@
         return true;
     };
 
+    GiftCard.prototype.isSignature = function() {
+        return false;
+    };
+
     /*
      * Export "Credit Card"
      */
@@ -7081,11 +7705,6 @@
         this.$content = null;
         this.$element = $element;
         this.formData = { _isValid: false };
-
-        this.requestTypes = {};
-        this.requestTypes.createPaymentInstrument = 0;
-        this.requestTypes.charge = 1;
-        this.requestTypes.error = 9;
         this.transactionId = "";
     }
 
@@ -7417,7 +8036,7 @@
             .then(function(promiseResponse) {
 
                 $this.$parent.trigger("hp.submit", {
-                    "type": $this.requestTypes.charge,
+                    "type": hp.RequestTypes.CHARGE,
                     "res": promiseResponse
                 });
 
@@ -7429,7 +8048,7 @@
                 }
 
                 $this.$parent.trigger("hp.submit", {
-                    "type": $this.requestTypes.error,
+                    "type": hp.RequestTypes.ERROR,
                     "res": promiseResponse
                 });
 
@@ -7482,7 +8101,7 @@
             .then(function(promiseResponse) {
 
                 $this.$parent.trigger("hp.submit", {
-                    "type": $this.requestTypes.charge,
+                    "type": hp.RequestTypes.CHARGE,
                     "res": promiseResponse
                 });
 
@@ -7494,7 +8113,7 @@
                 }
 
                 $this.$parent.trigger("hp.submit", {
-                    "type": $this.requestTypes.error,
+                    "type": hp.RequestTypes.ERROR,
                     "res": promiseResponse
                 });
 
@@ -7536,6 +8155,7 @@
                 "createPaymentInstrumentRequest": {
                     "correlationId": hp.Utils.getCorrelationId(),
                     "transactionId": $this.transactionId,
+                    "customerToken": hp.Utils.getCustomerToken(),
                     "token": hp.Utils.getSession().sessionToken,
                     "name": $this.formData.name,
                     "properties": {
@@ -7622,6 +8242,10 @@
         return false;
     };
 
+    BankAccount.prototype.isSignature = function() {
+        return false;
+    };
+
     /*
      * Export "Bank Account"
      */
@@ -7646,11 +8270,6 @@
         this.$parent = null;
         this.$content = null;
         this.$element = $element;
-
-        this.requestTypes = {};
-        this.requestTypes.createPaymentInstrument = 0;
-        this.requestTypes.charge = 1;
-        this.requestTypes.error = 9;
 
         // session
         this.instrumentId = "";
@@ -7821,7 +8440,7 @@
             .then(function(promiseResponse) {
 
                 $this.$parent.trigger("hp.submit", {
-                    "type": $this.requestTypes.charge,
+                    "type": hp.RequestTypes.CHARGE,
                     "res": promiseResponse
                 });
 
@@ -7833,7 +8452,7 @@
                 }
 
                 $this.$parent.trigger("hp.submit", {
-                    "type": $this.requestTypes.error,
+                    "type": hp.RequestTypes.ERROR,
                     "res": promiseResponse
                 });
 
@@ -7893,7 +8512,7 @@
             .then(function(promiseResponse) {
 
                 $this.$parent.trigger("hp.submit", {
-                    "type": $this.requestTypes.charge,
+                    "type": hp.RequestTypes.CHARGE,
                     "res": promiseResponse
                 });
 
@@ -7905,7 +8524,7 @@
                 }
 
                 $this.$parent.trigger("hp.submit", {
-                    "type": $this.requestTypes.error,
+                    "type": hp.RequestTypes.ERROR,
                     "res": promiseResponse
                 });
 
@@ -7918,7 +8537,7 @@
 
         if (!data.is_valid) {
             $this.$parent.trigger("hp.submit", {
-                "type": $this.requestTypes.error,
+                "type": hp.RequestTypes.ERROR,
                 "res": "Bad swipe. Please try again."
             });
             return;
@@ -7946,12 +8565,12 @@
             }
 
             try {
-                $this.formData.cardType = $.payment.cardType(data.card_number).toUpperCase();    
+                $this.formData.cardType = $.payment.cardType(data.card_number).toUpperCase();
             } catch (e) {
                 $this.formData.cardType = "Unknown";
                 hp.Utils.log("Coudn't determine cardType. ", e);
             }
-            
+
         }
 
         $visualcodename.text($this.formData.nameOnCard);
@@ -8006,6 +8625,7 @@
                         "correlationId": hp.Utils.getCorrelationId(),
                         "transactionId": $this.transactionId,
                         "token": hp.Utils.getSession().sessionToken,
+                        "customerToken": hp.Utils.getCustomerToken(),
                         "name": $this.formData.nameOnCard,
                         "properties": cardProperties,
                         "billingAddress": {
@@ -8035,7 +8655,7 @@
             if (res.isException) {
 
                 $this.$parent.trigger("hp.submit", {
-                    "type": $this.requestTypes.error,
+                    "type": hp.RequestTypes.ERROR,
                     "res": res
                 });
 
@@ -8061,7 +8681,7 @@
             }
 
             $this.$parent.trigger("hp.submit", {
-                "type": $this.requestTypes.error,
+                "type": hp.RequestTypes.ERROR,
                 "res": err
             });
 
@@ -8108,6 +8728,10 @@
     };
 
     Code.prototype.isGiftCard = function() {
+        return false;
+    };
+
+    Code.prototype.isSignature = function() {
         return false;
     };
 
@@ -8611,7 +9235,7 @@
         if (!props.APAN) {
             props.APAN = "";
         }
-        
+
         if (!props.CHN) {
             props.CHN = "";
         }
@@ -8824,7 +9448,8 @@
                     "terminalId": this.terminalId,
                     "action": "CANCEL",
                     "browserId": this.browserId,
-                    "shouldVoid": hp.Utils.defaults.shouldVoidOnCancel
+                    "shouldVoid": hp.Utils.defaults.shouldVoidOnCancel,
+                    "documentIndex": hp.Utils.defaults.documentIndex
                 }
             }
         });
@@ -8861,7 +9486,8 @@
                     "terminalId": $this.terminalId,
                     "action": "CANCEL",
                     "browserId": $this.browserId,
-                    "shouldVoid": hp.Utils.defaults.shouldVoidOnCancel
+                    "shouldVoid": hp.Utils.defaults.shouldVoidOnCancel,
+                    "documentIndex": hp.Utils.defaults.documentIndex
                 }
             }
         });
@@ -9012,7 +9638,8 @@
                         "entryType": hp.EntryType.DEVICE_CAPTURED,
                         "terminalId": $this.terminalId,
                         "action": hp.Utils.defaults.paymentType,
-                        "browserId": $this.browserId
+                        "browserId": $this.browserId,
+                        "documentIndex": hp.Utils.defaults.documentIndex
                     }
                 }
             });
@@ -9051,7 +9678,7 @@
                 .done(startHandler)
                 .fail(errorHandler);
 
-            $this.transvaultHub.off("error").on("error", function(err){
+            $this.transvaultHub.off("error").on("error", function(err) {
                 hp.Utils.log("Transvault error: ", err);
                 reconnectHandler()
             });
@@ -9061,7 +9688,7 @@
                 hp.Utils.log("Transvault disconnected: ", err);
                 hp.Utils.log("Transvault attempting reconnection... ");
 
-                setTimeout(function(){
+                setTimeout(function() {
 
                     $this.transvaultHub.connection
                         .start(socketOptions)
@@ -9107,6 +9734,10 @@
     };
 
     Transvault.prototype.isGiftCard = function() {
+        return false;
+    };
+
+    Transvault.prototype.isSignature = function() {
         return false;
     };
 
@@ -10235,6 +10866,8 @@
     defaults.emoneyMobileAppUrl = "emmerchant://{{paymentType}}/{{merchantCredentials}}?transactionId={{transactionId}}&token={{token}}&browserId={{browserId}}&correlationId={{correlationId}}&amount={{amount}}&url={{url}}&entryType={{entryType}}";
     defaults.shouldVoidOnCancel = false;
     defaults.saveCustomer = false;
+    defaults.documentIndex = 1;
+    defaults.customerToken = null;
 
     function Plugin(element, options) {
 
@@ -10358,6 +10991,16 @@
             }
         }
 
+        if (typeof $element.data("documentIndex") !== "undefined") {
+            if ($element.data("documentIndex").toString() === "") {
+                hp.Utils.defaults.documentIndex = 1;
+            }
+        }
+
+        if (typeof $element.data("customerToken") !== "undefined") {
+            hp.Utils.defaults.customerToken = $element.data("customerToken").toString();
+        }
+
         if (typeof $element.data("showMasterCard") !== "undefined") {
             if ($element.data("showMasterCard").toString() === "false") {
                 hp.Utils.defaults.showMasterCard = false;
@@ -10460,8 +11103,8 @@
 
         if (typeof $element.data("paymentTypeOrder") !== "undefined") {
             hp.Utils.defaults.paymentTypeOrder = $.trim($element.data("paymentTypeOrder")
-                .toString()
-                .replace(" ", ""))
+                    .toString()
+                    .replace(" ", ""))
                 .split(",")
                 .map(function(item) {
                     return +item;
