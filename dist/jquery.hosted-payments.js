@@ -10834,7 +10834,7 @@
 
 }).call(this);
 /*
- *  jQuery Hosted Payments - v3.8.34
+ *  jQuery Hosted Payments - v3.8.35
  *
  *  Made by Erik Zettersten
  *  Under MIT License
@@ -10844,7 +10844,7 @@
     var pluginName = "hp",
         defaults = {};
 
-    defaults.version = "v3.8.34";
+    defaults.version = "v3.8.35";
     defaults.amount = 0;
     defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
     defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
