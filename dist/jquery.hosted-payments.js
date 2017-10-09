@@ -5852,6 +5852,15 @@
         return hp.Utils.defaults.customerToken;
     };
 
+    var getInstrumentId = function() {
+
+        if (hp.Utils.defaults.instrumentId == null || typeof hp.Utils.defaults.instrumentId === "undefined") {
+            return null;
+        }
+
+        return hp.Utils.defaults.instrumentId;
+    };
+
     var setContainerClass = function($instance) {
 
         var mobileClass = "hp-form-mobile",
@@ -6142,6 +6151,7 @@
     hp.Utils.retrieveTransactionStatus = retrieveTransactionStatus;
     hp.Utils.buildEMoneyMobileAppUrl = buildEMoneyMobileAppUrl;
     hp.Utils.getCustomerToken = getCustomerToken;
+    hp.Utils.getInstrumentId = getInstrumentId;
 
 })(jQuery, window, document);
 
@@ -6951,6 +6961,8 @@
                     "createPaymentInstrument": {
                         "createPaymentInstrumentRequest": {
                             "correlationId": hp.Utils.getCorrelationId(),
+                            "customerToken": hp.Utils.getCustomerToken(),
+                            "instrumentId": hp.Utils.getInstrumentId(),
                             "transactionId": that.transactionId,
                             "token": hp.Utils.getSession().sessionToken,
                             "name": that.formData.name,
@@ -6959,7 +6971,8 @@
                                 "expirationDate": that.formData._expiryMonth + "/" + that.formData._expiryYear,
                                 "cvv": that.formData.cvv,
                                 "nameOnCard": that.formData.name,
-                                "customerToken": hp.Utils.getCustomerToken()
+                                "customerToken": hp.Utils.getCustomerToken(),
+                                "instrumentId": hp.Utils.getInstrumentId()
                             },
                             "billingAddress": {
                                 "addressLine1": hp.Utils.defaults.billingAddress.addressLine1,
@@ -7480,6 +7493,8 @@
                     "createPaymentInstrument": {
                         "createPaymentInstrumentRequest": {
                             "correlationId": hp.Utils.getCorrelationId(),
+                            "customerToken": hp.Utils.getCustomerToken(),
+                            "instrumentId": hp.Utils.getInstrumentId(),
                             "token": hp.Utils.getSession().sessionToken,
                             "name": that.formData.name,
                             "properties": {
@@ -7487,7 +7502,8 @@
                                 "expirationDate": that.formData._expiryMonth + "/" + that.formData._expiryYear,
                                 "cvv": that.formData.cvv,
                                 "nameOnCard": that.formData.name,
-                                "customerToken": hp.Utils.getCustomerToken()
+                                "customerToken": hp.Utils.getCustomerToken(),
+                                "instrumentId": hp.Utils.getInstrumentId()
                             },
                             "billingAddress": {
                                 "addressLine1": hp.Utils.defaults.billingAddress.addressLine1,
@@ -8156,13 +8172,16 @@
                 "createPaymentInstrumentRequest": {
                     "correlationId": hp.Utils.getCorrelationId(),
                     "transactionId": $this.transactionId,
+                    "customerToken": hp.Utils.getCustomerToken(),
+                    "instrumentId": hp.Utils.getInstrumentId(),
                     "token": hp.Utils.getSession().sessionToken,
                     "name": $this.formData.name,
                     "properties": {
                         "accountNumber": $this.formData.accountNumber,
                         "routingNumber": $this.formData.routingNumber,
                         "bankName": $this.formData.name,
-                        "customerToken": hp.Utils.getCustomerToken()
+                        "customerToken": hp.Utils.getCustomerToken(),
+                        "instrumentId": hp.Utils.getInstrumentId()
                     },
                     "billingAddress": {
                         "addressLine1": hp.Utils.defaults.billingAddress.addressLine1,
@@ -8619,6 +8638,7 @@
         }
 
         cardProperties["customerToken"] = hp.Utils.getCustomerToken();
+        cardProperties["instrumentId"] = hp.Utils.getInstrumentId();
 
         hp.Utils.promptAvs().then(function() {
 
@@ -8626,6 +8646,8 @@
                 "createPaymentInstrument": {
                     "createPaymentInstrumentRequest": {
                         "correlationId": hp.Utils.getCorrelationId(),
+                        "customerToken": hp.Utils.getCustomerToken(),
+                        "instrumentId": hp.Utils.getInstrumentId(),
                         "transactionId": $this.transactionId,
                         "token": hp.Utils.getSession().sessionToken,
                         "name": $this.formData.nameOnCard,
@@ -10844,7 +10866,6 @@
     defaults.eventCallback = $.noop;
     defaults.terminalId = "";
     defaults.transactionId = "";
-    defaults.instrumentId = "";
     defaults.apiKey = "";
     defaults.paymentType = hp.PaymentType.CHARGE; // "CHARGE", "REFUND", "CREATE_INSTRUMENT"
     defaults.entryType = hp.EntryType.KEYED_CARD_NOT_PRESENT; // "DEVICE_CAPTURED", "KEYED_CARD_PRESENT", "KEYED_CARD_NOT_PRESENT"
@@ -10871,6 +10892,7 @@
     defaults.saveCustomer = false;
     defaults.documentIndex = 1;
     defaults.customerToken = null;
+    defaults.instrumentId = null;
 
     function Plugin(element, options) {
 
