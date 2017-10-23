@@ -5631,10 +5631,10 @@
             });
         }
 
-        if (typeof formData.accountNumber !== "undefined" && formData.accountNumber.length <= 8) {
+        if (typeof formData.accountNumber !== "undefined" && formData.accountNumber.length <= 4) {
             errors.push({
                 type: "accountNumber",
-                message: "The account number must be atleast 8 characters."
+                message: "The account number must be atleast 5 characters."
             });
         }
 
