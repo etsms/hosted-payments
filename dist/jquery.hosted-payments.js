@@ -9837,7 +9837,14 @@
         luhn: true
     }, {
         type: 'mastercard',
-        patterns: [51, 52, 53, 54, 55, 22, 23, 24, 25, 26, 27],
+        patterns: [51, 52, 53, 54, 55, 22, 23, 24, 25, 26, 27, 675920, 675923],
+        format: defaultFormat,
+        length: [16],
+        cvcLength: [3],
+        luhn: true
+    }{
+        type: 'paypal',
+        patterns: [601104],
         format: defaultFormat,
         length: [16],
         cvcLength: [3],
