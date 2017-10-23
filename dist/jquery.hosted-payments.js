@@ -7808,11 +7808,11 @@
             '<input placeholder="Enter Full Name" value="' + hp.Utils.defaults.customerName + '" autocomplete="on" type="text">',
             '</div>',
             '<div class="hp-break" >',
-            '<div class="hp-input hp-input-account">',
-            '<input placeholder="Account Number" autocomplete="on" type="text" pattern="\\d*">',
-            '</div>',
             '<div class="hp-input hp-input-routing">',
             '<input placeholder="Routing Number" autocomplete="on" type="text" pattern="\\d*">',
+            '</div>',
+            '<div class="hp-input hp-input-account">',
+            '<input placeholder="Account Number" autocomplete="on" type="text" pattern="\\d*">',
             '</div>',
             '</div>',
             '<button class="hp-submit">Submit Payment</button>',
@@ -9842,7 +9842,7 @@
         length: [16],
         cvcLength: [3],
         luhn: true
-    }{
+    }, {
         type: 'paypal',
         patterns: [601104],
         format: defaultFormat,
