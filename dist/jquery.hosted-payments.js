@@ -7758,9 +7758,9 @@
         $fullname = this.$content.find(".hp-input-fullname input");
         $accountNumber = this.$content.find(".hp-input-account input");
         $routingNumber = this.$content.find(".hp-input-routing input");
-        $visualaccount = this.$content.find(".hp-bank-visual-account");
+        $visualaccount = this.$content.find(".hp-bank-visual-right");
         $visualbank = this.$content.find(".hp-bank-visual");
-        $visualrouting = this.$content.find(".hp-bank-visual-routing");
+        $visualrouting = this.$content.find(".hp-bank-visual-left");
         $visualfullname = this.$content.find(".hp-bank-visual-name");
         $submit = this.$content.find(".hp-submit");
         $all = this.$content.find(".hp-input");
@@ -7800,25 +7800,45 @@
             '<div class="hp-bank-visual-image"></div>',
             '<div class="hp-bank-visual-logo"></div>',
             '<div class="hp-bank-visual-name">' + defaultName + '</div>',
-            '<div class="hp-bank-visual-account">' + defaultAccountNumberCharacters + '</div>',
-            '<div class="hp-bank-visual-routing">' + defaultRoutingNumberCharacters + '</div>',
+            '<div class="hp-bank-visual-right">' + defaultAccountNumberCharacters + '</div>',
+            '<div class="hp-bank-visual-left">' + defaultRoutingNumberCharacters + '</div>',
             '</div>',
             '<div class="hp-input-wrapper">',
             '<div class="hp-input hp-input-fullname">',
             '<input placeholder="Enter Full Name" value="' + hp.Utils.defaults.customerName + '" autocomplete="on" type="text">',
             '</div>',
             '<div class="hp-break" >',
-            '<div class="hp-input hp-input-routing">',
-            '<input placeholder="Routing Number" autocomplete="on" type="text" pattern="\\d*">',
-            '</div>',
-            '<div class="hp-input hp-input-account">',
-            '<input placeholder="Account Number" autocomplete="on" type="text" pattern="\\d*">',
-            '</div>',
+                '{{inputHtml}}',
             '</div>',
             '<button class="hp-submit">Submit Payment</button>',
             '<p class="info">* Please note that bank account (ACH) transactions may take up to 3 days to process. This time period varies depending on the your issuing bank. For more information please visit us at <a href="https://www.etsms.com/" target="_blank">https://etsms.com</a>.</p>',
             '</div>'
         ].join("");
+
+        var $inputHtml = [
+            '<div class="hp-input hp-input-account hp-input-left">',
+                '<input placeholder="Account Number" autocomplete="on" type="text" pattern="\\d*">',
+            '</div>',
+            '<div class="hp-input hp-input-routing hp-input-right">',
+                '<input placeholder="Routing Number" autocomplete="on" type="text" pattern="\\d*">',
+            '</div>'
+        ].join("");
+
+        if (hp.Utils.defaults.swapAchInputs) {
+
+            $inputHtml = [
+                '<div class="hp-input hp-input-routing hp-input-left">',
+                    '<input placeholder="Routing Number" autocomplete="on" type="text" pattern="\\d*">',
+                '</div>',
+                '<div class="hp-input hp-input-account hp-input-right">',
+                    '<input placeholder="Account Number" autocomplete="on" type="text" pattern="\\d*">',
+                '</div>'
+            ].join("");
+
+        }
+
+        $html = $html
+            .replace("{{inputHtml}}", $inputHtml);
 
         return $html;
 
@@ -10900,6 +10920,7 @@
     defaults.documentIndex = 1;
     defaults.customerToken = null;
     defaults.instrumentId = null;
+    defaults.swapAchInputs = false;
 
     function Plugin(element, options) {
 
@@ -11054,6 +11075,14 @@
                 hp.Utils.defaults.showGift = false;
             } else if ($element.data("showGift").toString() === "true") {
                 hp.Utils.defaults.showGift = true;
+            }
+        }
+
+        if (typeof $element.data("swapAchInputs") !== "undefined") {
+            if ($element.data("swapAchInputs").toString() === "false") {
+                hp.Utils.defaults.swapAchInputs = false;
+            } else if ($element.data("swapAchInputs").toString() === "true") {
+                hp.Utils.defaults.swapAchInputs = true;
             }
         }
 

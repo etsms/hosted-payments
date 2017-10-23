@@ -895,7 +895,7 @@ div.fancy-select ul.options li.hover {
   width: 100%;
 }
 /* line 409, ../src/jquery.hosted-payments.sass */
-.hp .hp-input.hp-input-routing {
+.hp .hp-input.hp-input-left {
   -moz-border-radius: 4px 0 0 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px 0 0 4px;
@@ -904,18 +904,18 @@ div.fancy-select ul.options li.hover {
   border-right: 0 none;
 }
 /* line 415, ../src/jquery.hosted-payments.sass */
-.hp .hp-input.hp-input-routing.hp-error {
+.hp .hp-input.hp-input-left.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
 /* line 419, ../src/jquery.hosted-payments.sass */
-.hp .hp-input.hp-input-routing > input {
+.hp .hp-input.hp-input-left > input {
   width: 100%;
 }
 /* line 422, ../src/jquery.hosted-payments.sass */
-.hp .hp-input.hp-input-account {
+.hp .hp-input.hp-input-right {
   -moz-border-radius: 0 4px 4px 0;
   -webkit-border-radius: 0;
   border-radius: 0 4px 4px 0;
@@ -923,14 +923,14 @@ div.fancy-select ul.options li.hover {
   float: left;
 }
 /* line 427, ../src/jquery.hosted-payments.sass */
-.hp .hp-input.hp-input-account.hp-error {
+.hp .hp-input.hp-input-right.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
 /* line 431, ../src/jquery.hosted-payments.sass */
-.hp .hp-input.hp-input-account > input {
+.hp .hp-input.hp-input-right > input {
   width: 100%;
 }
 /* line 434, ../src/jquery.hosted-payments.sass */
@@ -1795,13 +1795,13 @@ div.fancy-select ul.options li.hover {
   text-transform: uppercase;
 }
 /* line 1080, ../src/jquery.hosted-payments.sass */
-.hp .hp-col-right .hp-bank-visual .hp-bank-visual-account {
+.hp .hp-col-right .hp-bank-visual .hp-bank-visual-left {
   bottom: 31px;
   left: 26px;
   font-size: 16px;
 }
 /* line 1085, ../src/jquery.hosted-payments.sass */
-.hp .hp-col-right .hp-bank-visual .hp-bank-visual-routing {
+.hp .hp-col-right .hp-bank-visual .hp-bank-visual-right {
   bottom: 31px;
   left: 186px;
   font-size: 16px;
