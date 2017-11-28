@@ -4325,7 +4325,7 @@
             '</a>',
             '<div class="hp-secure-bottom">',
             '<div class="hp-secure-bottom-left">',
-            '<span class="' + ((hp.Utils.getAmount() === 0) ? "hide " : "") + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "hp-version-refund" : "hp-version-charge") + '">' + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "Refund" : "Charge") + ': <span class="hp-version-amount">' + hp.Utils.formatCurrency(hp.Utils.getAmount()) + '</span></span><br />',
+            '<span class="' + ((hp.Utils.getAmount() === 0) ? "hide " : "") + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "hp-version-refund" : "hp-version-charge") + '">' + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "Refund" : "Charge") + ': <span class="hp-version-amount">' + hp.Utils.formatCurrency(hp.Utils.getAmount() + hp.Utils.defaults.surchargeFee + hp.Utils.defaults.convenienceFee) + '</span></span><br />',
             '</div>',
             '<div class="hp-secure-bottom-right">',
             hp.Utils.getVersion(),
@@ -5393,6 +5393,14 @@
 
         if (typeof options.amount !== "undefined") {
             options.amount = hp.Utils.setAmount(options.amount);
+        }
+
+        if (typeof options.convenienceFee !== "undefined") {
+            hp.Utils.defaults.convenienceFee = options.convenienceFee;
+        }
+
+        if (typeof options.surchargeFee !== "undefined") {
+            hp.Utils.defaults.surchargeFee = options.surchargeFee;
         }
 
         if (typeof options.saveCustomer !== "undefined") {
@@ -6784,6 +6792,14 @@
                 }
             };
 
+            if (hp.Utils.defaults.surchargeFee > 0) {
+                requestModel.charge.chargeRequest.surchargeFee = hp.Utils.defaults.surchargeFee;
+            }
+
+            if (hp.Utils.defaults.convenienceFee > 0) {
+                requestModel.charge.chargeRequest.convenienceFee = hp.Utils.defaults.convenienceFee;
+            }
+
         }
 
         if (hp.Utils.defaults.paymentType == hp.PaymentType.PREAUTH) {
@@ -6801,6 +6817,14 @@
                     }
                 }
             };
+
+            if (hp.Utils.defaults.surchargeFee > 0) {
+                requestModel.preAuth.preAuthRequest.surchargeFee = hp.Utils.defaults.surchargeFee;
+            }
+
+            if (hp.Utils.defaults.convenienceFee > 0) {
+                requestModel.preAuth.preAuthRequest.convenienceFee = hp.Utils.defaults.convenienceFee;
+            }
 
         }
 
@@ -6877,6 +6901,14 @@
                 }
             };
 
+            if (hp.Utils.defaults.surchargeFee > 0) {
+                requestModel.charge.chargeRequest.surchargeFee = hp.Utils.defaults.surchargeFee;
+            }
+
+            if (hp.Utils.defaults.convenienceFee > 0) {
+                requestModel.charge.chargeRequest.convenienceFee = hp.Utils.defaults.convenienceFee;
+            }
+
         }
 
         if (hp.Utils.defaults.paymentType == hp.PaymentType.PREAUTH) {
@@ -6894,6 +6926,14 @@
                     }
                 }
             };
+
+            if (hp.Utils.defaults.surchargeFee > 0) {
+                requestModel.preAuth.preAuthRequest.surchargeFee = hp.Utils.defaults.surchargeFee;
+            }
+
+            if (hp.Utils.defaults.convenienceFee > 0) {
+                requestModel.preAuth.preAuthRequest.convenienceFee = hp.Utils.defaults.convenienceFee;
+            }
 
         }
 
@@ -7808,7 +7848,7 @@
             '<input placeholder="Enter Full Name" value="' + hp.Utils.defaults.customerName + '" autocomplete="on" type="text">',
             '</div>',
             '<div class="hp-break" >',
-                '{{inputHtml}}',
+            '{{inputHtml}}',
             '</div>',
             '<button class="hp-submit">Submit Payment</button>',
             '<p class="info">* Please note that bank account (ACH) transactions may take up to 3 days to process. This time period varies depending on the your issuing bank. For more information please visit us at <a href="https://www.etsms.com/" target="_blank">https://etsms.com</a>.</p>',
@@ -7817,10 +7857,10 @@
 
         var $inputHtml = [
             '<div class="hp-input hp-input-account hp-input-left">',
-                '<input placeholder="Account Number" autocomplete="on" type="text" pattern="\\d*">',
+            '<input placeholder="Account Number" autocomplete="on" type="text" pattern="\\d*">',
             '</div>',
             '<div class="hp-input hp-input-routing hp-input-right">',
-                '<input placeholder="Routing Number" autocomplete="on" type="text" pattern="\\d*">',
+            '<input placeholder="Routing Number" autocomplete="on" type="text" pattern="\\d*">',
             '</div>'
         ].join("");
 
@@ -7828,10 +7868,10 @@
 
             $inputHtml = [
                 '<div class="hp-input hp-input-routing hp-input-left">',
-                    '<input placeholder="Routing Number" autocomplete="on" type="text" pattern="\\d*">',
+                '<input placeholder="Routing Number" autocomplete="on" type="text" pattern="\\d*">',
                 '</div>',
                 '<div class="hp-input hp-input-account hp-input-right">',
-                    '<input placeholder="Account Number" autocomplete="on" type="text" pattern="\\d*">',
+                '<input placeholder="Account Number" autocomplete="on" type="text" pattern="\\d*">',
                 '</div>'
             ].join("");
 
@@ -10921,6 +10961,8 @@
     defaults.customerToken = null;
     defaults.instrumentId = null;
     defaults.swapAchInputs = false;
+    defaults.convenienceFee = 0;
+    defaults.surchargeFee = 0;
 
     function Plugin(element, options) {
 
@@ -11174,6 +11216,14 @@
 
         if (typeof $element.data("amount") !== "undefined") {
             hp.Utils.setAmount($element.data("amount"));
+        }
+
+        if (typeof $element.data("convenienceFee") !== "undefined") {
+            hp.Utils.defaults.convenienceFee = +($element.data("convenienceFee"));
+        }
+
+        if (typeof $element.data("surchargeFee") !== "undefined") {
+            hp.Utils.defaults.surchargeFee = +($element.data("surchargeFee"));
         }
 
         if (typeof $element.data("antiForgeryToken") !== "undefined") {
