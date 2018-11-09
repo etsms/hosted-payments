@@ -26,18 +26,15 @@
         }
 
         $("#ets").hp({
-            baseUrl: "http://dev.etsdev.net/etsemoney.com/hp/v3/adapters",
             terminalId: "1016",
-            apiKey: "d8857a83-34a6-424d-9988-04fe21ea3c30",
-            paymentTypeOrder: [1],
-            amount: 0,
+            apiKey: "0d9fa16f-678e-465c-b193-c4a430789cee",
+            paymentTypeOrder: [0],
+            amount: 1,
             successCallback: callback,
             errorCallback: callback,
             debug: true,
             transactionId: transactionId,
-            saveCustomer: true,
             customerToken: "test",
-            swapAchInputs: true
         });
     </script>
 </body>

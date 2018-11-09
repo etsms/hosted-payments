@@ -20,7 +20,7 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 // Closure
-(function() {
+(function () {
 
     /**
      * Decimal adjustment of a number.
@@ -51,37 +51,37 @@
 
     // Decimal round
     if (!Math.round10) {
-        Math.round10 = function(value, exp) {
+        Math.round10 = function (value, exp) {
             return decimalAdjust('round', value, exp);
         };
     }
     // Decimal floor
     if (!Math.floor10) {
-        Math.floor10 = function(value, exp) {
+        Math.floor10 = function (value, exp) {
             return decimalAdjust('floor', value, exp);
         };
     }
     // Decimal ceil
     if (!Math.ceil10) {
-        Math.ceil10 = function(value, exp) {
+        Math.ceil10 = function (value, exp) {
             return decimalAdjust('ceil', value, exp);
         };
     }
 
 })();
 
-(function(window, document, $) {
+(function (window, document, $) {
 
     'use strict';
 
     // Get a regular interval for drawing to the screen
-    window.requestAnimFrame = (function(callback) {
+    window.requestAnimFrame = (function (callback) {
         return window.requestAnimationFrame ||
             window.webkitRequestAnimationFrame ||
             window.mozRequestAnimationFrame ||
             window.oRequestAnimationFrame ||
             window.msRequestAnimaitonFrame ||
-            function(callback) {
+            function (callback) {
                 window.setTimeout(callback, 1000 / 60);
             };
     })();
@@ -128,7 +128,7 @@
     Signature.prototype = {
 
         // Initialize the signature canvas
-        init: function() {
+        init: function () {
             this.id = 'jq-signature-canvas-' + (++idCounter);
 
             // Set up the canvas
@@ -187,18 +187,18 @@
         },
 
         // Clear the canvas
-        clearCanvas: function() {
+        clearCanvas: function () {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this._resetCanvas();
         },
 
         // Get the content of the canvas as a base64 data URL
-        getDataURL: function() {
+        getDataURL: function () {
             return this.canvas.toDataURL();
         },
 
         // Get the content of the canvas as a base64 data URL
-        getDataPoints: function() {
+        getDataPoints: function () {
             return JSON
                 .stringify(this.points)
                 .replace('[', '')
@@ -206,7 +206,7 @@
         },
 
         // Handle the start of a signature
-        _downHandler: function(e) {
+        _downHandler: function (e) {
             this.drawing = true;
             this.lastPos = this.currentPos = this._getPosition(e);
             // Prevent scrolling, etc
@@ -215,7 +215,7 @@
         },
 
         // Handle mouse/touch moves during a signature
-        _moveHandler: function(e) {
+        _moveHandler: function (e) {
 
             this.currentPos = this._getPosition(e);
             this._setPointsDown();
@@ -224,7 +224,7 @@
         },
 
         // Handle the end of a signature
-        _upHandler: function(e) {
+        _upHandler: function (e) {
 
             this.drawing = false;
             this._setPointsUp();
@@ -239,7 +239,7 @@
         },
 
         // Get the position of the mouse/touch
-        _getPosition: function(event) {
+        _getPosition: function (event) {
             var xPos, yPos, rect;
             rect = this.canvas.getBoundingClientRect();
             if (event.originalEvent)
@@ -261,20 +261,20 @@
             };
         },
 
-        _setPointsDown: function() {
+        _setPointsDown: function () {
             if (this.drawing) {
                 this.points.push(this.currentPos.x);
                 this.points.push(this.currentPos.y);
             }
         },
 
-        _setPointsUp: function() {
+        _setPointsUp: function () {
             this.points.push(-81);
             this.points.push(-251);
         },
 
         // Render the signature to the canvas
-        _renderCanvas: function() {
+        _renderCanvas: function () {
             if (this.drawing) {
                 this.ctx.beginPath();
                 this.ctx.moveTo(this.lastPos.x, this.lastPos.y);
@@ -284,13 +284,13 @@
             }
         },
 
-        _resetPoints: function() {
+        _resetPoints: function () {
             this.points = [];
             this._setPointsUp();
         },
 
         // Reset the canvas context
-        _resetCanvas: function() {
+        _resetCanvas: function () {
             this.ctx = this.canvas.getContext("2d");
             this.ctx.strokeStyle = this.settings.lineColor;
             this.ctx.lineWidth = this.settings.lineWidth;
@@ -298,7 +298,7 @@
         },
 
         // Resize the canvas element
-        _resizeCanvas: function() {
+        _resizeCanvas: function () {
             var width = this.$element.outerWidth();
             this.$canvas.attr('width', width);
             this.$canvas.css('width', width + 'px');
@@ -310,17 +310,17 @@
      * Plugin wrapper and initialization
      */
 
-    $.fn[pluginName] = function(options) {
+    $.fn[pluginName] = function (options) {
         var args = arguments;
         if (options === undefined || typeof options === 'object') {
-            return this.each(function() {
+            return this.each(function () {
                 if (!$.data(this, 'plugin_' + pluginName)) {
                     $.data(this, 'plugin_' + pluginName, new Signature(this, options));
                 }
             });
         } else if (typeof options === 'string' && options[0] !== '_' && options !== 'init') {
             var returns;
-            this.each(function() {
+            this.each(function () {
                 var instance = $.data(this, 'plugin_' + pluginName);
                 if (instance instanceof Signature && typeof instance[options] === 'function') {
                     returns = instance[options].apply(instance, Array.prototype.slice.call(args, 1));
@@ -348,7 +348,7 @@
 
 /// <reference path="Scripts/jquery-1.6.4.js" />
 /// <reference path="jquery.signalR.version.js" />
-(function($, window, undefined) {
+(function ($, window, undefined) {
 
     var resources = {
         nojQuery: "jQuery was not found. Please ensure jQuery is referenced before the SignalR client JavaScript file.",
@@ -378,7 +378,7 @@
         reconnectWindowTimeout: "The client has been inactive since {0} and it has exceeded the inactivity timeout of {1} ms. Stopping the connection."
     };
 
-    if (typeof($) !== "function") {
+    if (typeof ($) !== "function") {
         // no jQuery!
         throw new Error(resources.nojQuery);
     }
@@ -406,12 +406,12 @@
             global: false,
             cache: false
         },
-        log = function(msg, logging) {
+        log = function (msg, logging) {
             if (logging === false) {
                 return;
             }
             var m;
-            if (typeof(window.console) === "undefined") {
+            if (typeof (window.console) === "undefined") {
                 return;
             }
             m = "[" + new Date().toTimeString() + "] SignalR: " + msg;
@@ -422,7 +422,7 @@
             }
         },
 
-        changeState = function(connection, expectedState, newState) {
+        changeState = function (connection, expectedState, newState) {
             if (expectedState === connection.state) {
                 connection.state = newState;
 
@@ -433,39 +433,39 @@
             return false;
         },
 
-        isDisconnecting = function(connection) {
+        isDisconnecting = function (connection) {
             return connection.state === signalR.connectionState.disconnected;
         },
 
-        supportsKeepAlive = function(connection) {
+        supportsKeepAlive = function (connection) {
             return connection._.keepAliveData.activated &&
                 connection.transport.supportsKeepAlive(connection);
         },
 
-        configureStopReconnectingTimeout = function(connection) {
+        configureStopReconnectingTimeout = function (connection) {
             var stopReconnectingTimeout,
                 onReconnectTimeout;
 
             // Check if this connection has already been configured to stop reconnecting after a specified timeout.
             // Without this check if a connection is stopped then started events will be bound multiple times.
             if (!connection._.configuredStopReconnectingTimeout) {
-                onReconnectTimeout = function(connection) {
+                onReconnectTimeout = function (connection) {
                     var message = signalR._.format(signalR.resources.reconnectTimeout, connection.disconnectTimeout);
                     connection.log(message);
                     $(connection).triggerHandler(events.onError, [signalR._.error(message, /* source */ "TimeoutException")]);
                     connection.stop( /* async */ false, /* notifyServer */ false);
                 };
 
-                connection.reconnecting(function() {
+                connection.reconnecting(function () {
                     var connection = this;
 
                     // Guard against state changing in a previous user defined even handler
                     if (connection.state === signalR.connectionState.reconnecting) {
-                        stopReconnectingTimeout = window.setTimeout(function() { onReconnectTimeout(connection); }, connection.disconnectTimeout);
+                        stopReconnectingTimeout = window.setTimeout(function () { onReconnectTimeout(connection); }, connection.disconnectTimeout);
                     }
                 });
 
-                connection.stateChanged(function(data) {
+                connection.stateChanged(function (data) {
                     if (data.oldState === signalR.connectionState.reconnecting) {
                         // Clear the pending reconnect timeout check
                         window.clearTimeout(stopReconnectingTimeout);
@@ -476,7 +476,7 @@
             }
         };
 
-    signalR = function(url, qs, logging) {
+    signalR = function (url, qs, logging) {
         /// <summary>Creates a new SignalR connection for the given url</summary>
         /// <param name="url" type="String">The URL of the long polling endpoint</param>
         /// <param name="qs" type="Object">
@@ -495,7 +495,7 @@
     signalR._ = {
         defaultContentType: "application/x-www-form-urlencoded; charset=UTF-8",
 
-        ieVersion: (function() {
+        ieVersion: (function () {
             var version,
                 matches;
 
@@ -512,7 +512,7 @@
             return version;
         })(),
 
-        error: function(message, source, context) {
+        error: function (message, source, context) {
             var e = new Error(message);
             e.source = source;
 
@@ -523,13 +523,13 @@
             return e;
         },
 
-        transportError: function(message, transport, source, context) {
+        transportError: function (message, transport, source, context) {
             var e = this.error(message, source, context);
             e.transport = transport ? transport.name : undefined;
             return e;
         },
 
-        format: function() {
+        format: function () {
             /// <summary>Usage: format("Hi {0}, you are {1}!", "Foo", 100) </summary>
             var s = arguments[0];
             for (var i = 0; i < arguments.length - 1; i++) {
@@ -538,23 +538,23 @@
             return s;
         },
 
-        firefoxMajorVersion: function(userAgent) {
+        firefoxMajorVersion: function (userAgent) {
             // Firefox user agents: http://useragentstring.com/pages/Firefox/
             var matches = userAgent.match(/Firefox\/(\d+)/);
             if (!matches || !matches.length || matches.length < 2) {
                 return 0;
             }
-            return parseInt(matches[1], 10 /* radix */ );
+            return parseInt(matches[1], 10 /* radix */);
         },
 
-        configurePingInterval: function(connection) {
+        configurePingInterval: function (connection) {
             var config = connection._.config,
-                onFail = function(error) {
+                onFail = function (error) {
                     $(connection).triggerHandler(events.onError, [error]);
                 };
 
             if (config && !connection._.pingIntervalId && config.pingInterval) {
-                connection._.pingIntervalId = window.setInterval(function() {
+                connection._.pingIntervalId = window.setInterval(function () {
                     signalR.transports._logic.pingServer(connection).fail(onFail);
                 }, config.pingInterval);
             }
@@ -579,7 +579,7 @@
     };
 
     signalR.hub = {
-        start: function() {
+        start: function () {
             // This will get replaced with the real hub connection start method when hubs is referenced correctly
             throw new Error("SignalR: Error loading hubs. Ensure your hubs reference is correct, e.g. <script src='/signalr/js'></script>.");
         }
@@ -588,9 +588,9 @@
     // .on() was added in version 1.7.0, .load() was removed in version 3.0.0 so we fallback to .load() if .on() does
     // not exist to not break existing applications
     if (typeof _pageWindow.on == "function") {
-        _pageWindow.on("load", function() { _pageLoaded = true; });
+        _pageWindow.on("load", function () { _pageLoaded = true; });
     } else {
-        _pageWindow.load(function() { _pageLoaded = true; });
+        _pageWindow.load(function () { _pageLoaded = true; });
     }
 
     function validateTransport(requestedTransport, connection) {
@@ -648,7 +648,7 @@
         var that = this,
             buffer = [];
 
-        that.tryBuffer = function(message) {
+        that.tryBuffer = function (message) {
             if (connection.state === $.signalR.connectionState.connecting) {
                 buffer.push(message);
 
@@ -658,7 +658,7 @@
             return false;
         };
 
-        that.drain = function() {
+        that.drain = function () {
             // Ensure that the connection is connected when we drain (do not want to drain while a connection is not active)
             if (connection.state === $.signalR.connectionState.connected) {
                 while (buffer.length > 0) {
@@ -667,13 +667,13 @@
             }
         };
 
-        that.clear = function() {
+        that.clear = function () {
             buffer = [];
         };
     }
 
     signalR.fn = signalR.prototype = {
-        init: function(url, qs, logging) {
+        init: function (url, qs, logging) {
             var $connection = $(this);
 
             this.url = url;
@@ -681,7 +681,7 @@
             this.lastError = null;
             this._ = {
                 keepAliveData: {},
-                connectingMessageBuffer: new ConnectingMessageBuffer(this, function(message) {
+                connectingMessageBuffer: new ConnectingMessageBuffer(this, function (message) {
                     $connection.triggerHandler(events.onReceived, [message]);
                 }),
                 lastMessageAt: new Date().getTime(),
@@ -690,12 +690,12 @@
                 beatHandle: null,
                 totalTransportConnectTimeout: 0 // This will be the sum of the TransportConnectTimeout sent in response to negotiate and connection.transportConnectTimeout
             };
-            if (typeof(logging) === "boolean") {
+            if (typeof (logging) === "boolean") {
                 this.logging = logging;
             }
         },
 
-        _parseResponse: function(response) {
+        _parseResponse: function (response) {
             var that = this;
 
             if (!response) {
@@ -711,7 +711,7 @@
 
         json: window.JSON,
 
-        isCrossDomain: function(url, against) {
+        isCrossDomain: function (url, against) {
             /// <summary>Checks if url is cross domain</summary>
             /// <param name="url" type="String">The base URL</param>
             /// <param name="against" type="Object">
@@ -756,7 +756,7 @@
 
         keepAliveWarnAt: 2 / 3, // Warn user of slow connection if we breach the X% mark of the keep alive timeout
 
-        start: function(options, callback) {
+        start: function (options, callback) {
             /// <summary>Starts the connection</summary>
             /// <param name="options" type="Object">Options map</param>
             /// <param name="callback" type="Function">A callback function to execute when the connection has started</param>
@@ -803,7 +803,7 @@
             // Check to see if start is being called prior to page load
             // If waitForPageLoad is true we then want to re-direct function call to the window load event
             if (!_pageLoaded && config.waitForPageLoad === true) {
-                connection._.deferredStartHandler = function() {
+                connection._.deferredStartHandler = function () {
                     connection.start(options, callback);
                 };
                 _pageWindow.bind("load", connection._.deferredStartHandler);
@@ -815,8 +815,8 @@
             if (connection.state === signalR.connectionState.connecting) {
                 return deferred.promise();
             } else if (changeState(connection,
-                    signalR.connectionState.disconnected,
-                    signalR.connectionState.connecting) === false) {
+                signalR.connectionState.disconnected,
+                signalR.connectionState.connecting) === false) {
                 // We're not connecting so try and transition into connecting.
                 // If we fail to transition then we're either in connected or reconnecting.
 
@@ -863,7 +863,7 @@
                     config.transport = ["webSockets", "serverSentEvents", "longPolling"];
                 }
 
-                if (typeof(config.withCredentials) === "undefined") {
+                if (typeof (config.withCredentials) === "undefined") {
                     config.withCredentials = true;
                 }
 
@@ -885,7 +885,7 @@
 
             connection.ajaxDataType = config.jsonp ? "jsonp" : "text";
 
-            $(connection).bind(events.onStart, function(e, data) {
+            $(connection).bind(events.onStart, function (e, data) {
                 if ($.type(callback) === "function") {
                     callback.call(connection);
                 }
@@ -894,7 +894,7 @@
 
             connection._.initHandler = signalR.transports._logic.initHandler(connection);
 
-            initialize = function(transports, index) {
+            initialize = function (transports, index) {
                 var noTransportError = signalR._.error(resources.noTransportOnInit);
 
                 index = index || 0;
@@ -922,14 +922,14 @@
 
                 var transportName = transports[index],
                     transport = signalR.transports[transportName],
-                    onFallback = function() {
+                    onFallback = function () {
                         initialize(transports, index + 1);
                     };
 
                 connection.transport = transport;
 
                 try {
-                    connection._.initHandler.start(transport, function() { // success
+                    connection._.initHandler.start(transport, function () { // success
                         // Firefox 11+ doesn't allow sync XHR withCredentials: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest#withCredentials
                         var isFirefox11OrGreater = signalR._.firefoxMajorVersion(window.navigator.userAgent) >= 11,
                             asyncAbort = !!connection.withCredentials && isFirefox11OrGreater;
@@ -947,8 +947,8 @@
                         signalR._.configurePingInterval(connection);
 
                         if (!changeState(connection,
-                                signalR.connectionState.connecting,
-                                signalR.connectionState.connected)) {
+                            signalR.connectionState.connecting,
+                            signalR.connectionState.connected)) {
                             connection.log("WARNING! The connection was not in the connecting state.");
                         }
 
@@ -958,7 +958,7 @@
                         $(connection).triggerHandler(events.onStart);
 
                         // wire the stop handler for when the user leaves the page
-                        _pageWindow.bind("unload", function() {
+                        _pageWindow.bind("unload", function () {
                             connection.log("Window unloading, stopping the connection.");
 
                             connection.stop(asyncAbort);
@@ -967,10 +967,10 @@
                         if (isFirefox11OrGreater) {
                             // Firefox does not fire cross-domain XHRs in the normal unload handler on tab close.
                             // #2400
-                            _pageWindow.bind("beforeunload", function() {
+                            _pageWindow.bind("beforeunload", function () {
                                 // If connection.stop() runs runs in beforeunload and fails, it will also fail
                                 // in unload unless connection.stop() runs after a timeout.
-                                window.setTimeout(function() {
+                                window.setTimeout(function () {
                                     connection.stop(asyncAbort);
                                 }, 0);
                             });
@@ -983,7 +983,7 @@
             };
 
             var url = connection.url + "/negotiate",
-                onFailed = function(error, connection) {
+                onFailed = function (error, connection) {
                     var err = signalR._.error(resources.errorOnNegotiate, error, connection._.negotiateRequest);
 
                     $(connection).triggerHandler(events.onError, err);
@@ -1001,16 +1001,16 @@
             // Save the ajax negotiate request object so we can abort it if stop is called while the request is in flight.
             connection._.negotiateRequest = signalR.transports._logic.ajax(connection, {
                 url: url,
-                error: function(error, statusText) {
+                error: function (error, statusText) {
                     // We don't want to cause any errors if we're aborting our own negotiate request.
                     if (statusText !== _negotiateAbortText) {
                         onFailed(error, connection);
                     } else {
                         // This rejection will noop if the deferred has already been resolved or rejected.
-                        deferred.reject(signalR._.error(resources.stoppedWhileNegotiating, null /* error */ , connection._.negotiateRequest));
+                        deferred.reject(signalR._.error(resources.stoppedWhileNegotiating, null /* error */, connection._.negotiateRequest));
                     }
                 },
-                success: function(result) {
+                success: function (result) {
                     var res,
                         keepAliveData,
                         protocolError,
@@ -1067,7 +1067,7 @@
                         return;
                     }
 
-                    $.each(signalR.transports, function(key) {
+                    $.each(signalR.transports, function (key) {
                         if ((key.indexOf("_") === 0) || (key === "webSockets" && !res.TryWebSockets)) {
                             return true;
                         }
@@ -1075,7 +1075,7 @@
                     });
 
                     if ($.isArray(config.transport)) {
-                        $.each(config.transport, function(_, transport) {
+                        $.each(config.transport, function (_, transport) {
                             if ($.inArray(transport, supportedTransports) >= 0) {
                                 transports.push(transport);
                             }
@@ -1093,18 +1093,18 @@
             return deferred.promise();
         },
 
-        starting: function(callback) {
+        starting: function (callback) {
             /// <summary>Adds a callback that will be invoked before anything is sent over the connection</summary>
             /// <param name="callback" type="Function">A callback function to execute before the connection is fully instantiated.</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onStarting, function(e, data) {
+            $(connection).bind(events.onStarting, function (e, data) {
                 callback.call(connection);
             });
             return connection;
         },
 
-        send: function(data) {
+        send: function (data) {
             /// <summary>Sends data over the connection</summary>
             /// <param name="data" type="String">The data to send over the connection</param>
             /// <returns type="signalR" />
@@ -1125,34 +1125,34 @@
             return connection;
         },
 
-        received: function(callback) {
+        received: function (callback) {
             /// <summary>Adds a callback that will be invoked after anything is received over the connection</summary>
             /// <param name="callback" type="Function">A callback function to execute when any data is received on the connection</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onReceived, function(e, data) {
+            $(connection).bind(events.onReceived, function (e, data) {
                 callback.call(connection, data);
             });
             return connection;
         },
 
-        stateChanged: function(callback) {
+        stateChanged: function (callback) {
             /// <summary>Adds a callback that will be invoked when the connection state changes</summary>
             /// <param name="callback" type="Function">A callback function to execute when the connection state changes</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onStateChanged, function(e, data) {
+            $(connection).bind(events.onStateChanged, function (e, data) {
                 callback.call(connection, data);
             });
             return connection;
         },
 
-        error: function(callback) {
+        error: function (callback) {
             /// <summary>Adds a callback that will be invoked after an error occurs with the connection</summary>
             /// <param name="callback" type="Function">A callback function to execute when an error occurs on the connection</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onError, function(e, errorData, sendData) {
+            $(connection).bind(events.onError, function (e, errorData, sendData) {
                 connection.lastError = errorData;
                 // In practice 'errorData' is the SignalR built error object.
                 // In practice 'sendData' is undefined for all error events except those triggered by
@@ -1162,52 +1162,52 @@
             return connection;
         },
 
-        disconnected: function(callback) {
+        disconnected: function (callback) {
             /// <summary>Adds a callback that will be invoked when the client disconnects</summary>
             /// <param name="callback" type="Function">A callback function to execute when the connection is broken</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onDisconnect, function(e, data) {
+            $(connection).bind(events.onDisconnect, function (e, data) {
                 callback.call(connection);
             });
             return connection;
         },
 
-        connectionSlow: function(callback) {
+        connectionSlow: function (callback) {
             /// <summary>Adds a callback that will be invoked when the client detects a slow connection</summary>
             /// <param name="callback" type="Function">A callback function to execute when the connection is slow</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onConnectionSlow, function(e, data) {
+            $(connection).bind(events.onConnectionSlow, function (e, data) {
                 callback.call(connection);
             });
 
             return connection;
         },
 
-        reconnecting: function(callback) {
+        reconnecting: function (callback) {
             /// <summary>Adds a callback that will be invoked when the underlying transport begins reconnecting</summary>
             /// <param name="callback" type="Function">A callback function to execute when the connection enters a reconnecting state</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onReconnecting, function(e, data) {
+            $(connection).bind(events.onReconnecting, function (e, data) {
                 callback.call(connection);
             });
             return connection;
         },
 
-        reconnected: function(callback) {
+        reconnected: function (callback) {
             /// <summary>Adds a callback that will be invoked when the underlying transport reconnects</summary>
             /// <param name="callback" type="Function">A callback function to execute when the connection is restored</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onReconnect, function(e, data) {
+            $(connection).bind(events.onReconnect, function (e, data) {
                 callback.call(connection);
             });
             return connection;
         },
 
-        stop: function(async, notifyServer) {
+        stop: function (async, notifyServer) {
             /// <summary>Stops listening</summary>
             /// <param name="async" type="Boolean">Whether or not to asynchronously abort the connection</param>
             /// <param name="notifyServer" type="Boolean">Whether we want to notify the server that we are aborting the connection</param>
@@ -1293,14 +1293,14 @@
             return connection;
         },
 
-        log: function(msg) {
+        log: function (msg) {
             log(msg, this.logging);
         }
     };
 
     signalR.fn.init.prototype = signalR.fn;
 
-    signalR.noConflict = function() {
+    signalR.noConflict = function () {
         /// <summary>Reinstates the original value of $.connection and returns the signalR object for manual assignment</summary>
         /// <returns type="signalR" />
         if ($.connection === signalR) {
@@ -1323,7 +1323,7 @@
 /*global window:false */
 /// <reference path="jquery.signalR.core.js" />
 
-(function($, window, undefined) {
+(function ($, window, undefined) {
 
     var signalR = $.signalR,
         events = $.signalR.events,
@@ -1340,7 +1340,7 @@
 
         // Ensure that we successfully marked active before continuing the heartbeat.
         if (transportLogic.markActive(connection)) {
-            connection._.beatHandle = window.setTimeout(function() {
+            connection._.beatHandle = window.setTimeout(function () {
                 beat(connection);
             }, connection._.beatInterval);
         }
@@ -1392,7 +1392,7 @@
     }
 
     InitHandler.prototype = {
-        start: function(transport, onSuccess, onFallback) {
+        start: function (transport, onSuccess, onFallback) {
             var that = this,
                 connection = that.connection,
                 failCalled = false;
@@ -1404,11 +1404,11 @@
 
             connection.log(transport.name + " transport starting.");
 
-            transport.start(connection, function() {
+            transport.start(connection, function () {
                 if (!failCalled) {
                     that.initReceived(transport, onSuccess);
                 }
-            }, function(error) {
+            }, function (error) {
                 // Don't allow the same transport to cause onFallback to be called twice
                 if (!failCalled) {
                     failCalled = true;
@@ -1420,7 +1420,7 @@
                 return !that.startCompleted || that.connectionStopped;
             });
 
-            that.transportTimeoutHandle = window.setTimeout(function() {
+            that.transportTimeoutHandle = window.setTimeout(function () {
                 if (!failCalled) {
                     failCalled = true;
                     connection.log(transport.name + " transport timed out when trying to connect.");
@@ -1429,13 +1429,13 @@
             }, connection._.totalTransportConnectTimeout);
         },
 
-        stop: function() {
+        stop: function () {
             this.connectionStopped = true;
             window.clearTimeout(this.transportTimeoutHandle);
             signalR.transports._logic.tryAbortStartRequest(this.connection);
         },
 
-        initReceived: function(transport, onSuccess) {
+        initReceived: function (transport, onSuccess) {
             var that = this,
                 connection = that.connection;
 
@@ -1452,13 +1452,13 @@
             window.clearTimeout(that.transportTimeoutHandle);
 
             connection.log(transport.name + " transport connected. Initiating start request.");
-            signalR.transports._logic.ajaxStart(connection, function() {
+            signalR.transports._logic.ajaxStart(connection, function () {
                 that.startCompleted = true;
                 onSuccess();
             });
         },
 
-        transportFailed: function(transport, error, onFallback) {
+        transportFailed: function (transport, error, onFallback) {
             var connection = this.connection,
                 deferred = connection._deferral,
                 wrappedError;
@@ -1494,7 +1494,7 @@
     };
 
     transportLogic = signalR.transports._logic = {
-        ajax: function(connection, options) {
+        ajax: function (connection, options) {
             return $.ajax(
                 $.extend( /*deep copy*/ true, {}, $.signalR.ajaxDefaults, {
                     type: "GET",
@@ -1505,7 +1505,7 @@
                 }, options));
         },
 
-        pingServer: function(connection) {
+        pingServer: function (connection) {
             /// <summary>Pings the server</summary>
             /// <param name="connection" type="signalr">Connection associated with the server ping</param>
             /// <returns type="signalR" />
@@ -1520,7 +1520,7 @@
 
                 xhr = transportLogic.ajax(connection, {
                     url: url,
-                    success: function(result) {
+                    success: function (result) {
                         var data;
 
                         try {
@@ -1545,13 +1545,13 @@
                                 signalR._.transportError(
                                     signalR._.format(signalR.resources.pingServerFailedInvalidResponse, result),
                                     connection.transport,
-                                    null /* error */ ,
+                                    null /* error */,
                                     xhr
                                 )
                             );
                         }
                     },
-                    error: function(error) {
+                    error: function (error) {
                         if (error.status === 401 || error.status === 403) {
                             deferral.reject(
                                 signalR._.transportError(
@@ -1586,7 +1586,7 @@
             return deferral.promise();
         },
 
-        prepareQueryString: function(connection, url) {
+        prepareQueryString: function (connection, url) {
             var preparedUrl;
 
             // Use addQs to start since it handles the ?/& prefix for us
@@ -1606,7 +1606,7 @@
             return preparedUrl;
         },
 
-        addQs: function(url, qs) {
+        addQs: function (url, qs) {
             var appender = url.indexOf("?") !== -1 ? "&" : "?",
                 firstChar;
 
@@ -1614,11 +1614,11 @@
                 return url;
             }
 
-            if (typeof(qs) === "object") {
+            if (typeof (qs) === "object") {
                 return url + appender + $.param(qs);
             }
 
-            if (typeof(qs) === "string") {
+            if (typeof (qs) === "string") {
                 firstChar = qs.charAt(0);
 
                 if (firstChar === "?" || firstChar === "&") {
@@ -1632,7 +1632,7 @@
         },
 
         // BUG #2953: The url needs to be same otherwise it will cause a memory leak
-        getUrl: function(connection, transport, reconnecting, poll, ajaxPost) {
+        getUrl: function (connection, transport, reconnecting, poll, ajaxPost) {
             /// <summary>Gets the url for making a GET based connect request</summary>
             var baseUrl = transport === "webSockets" ? "" : connection.baseUrl,
                 url = baseUrl + connection.appRelativeUrl,
@@ -1666,35 +1666,35 @@
             return url;
         },
 
-        maximizePersistentResponse: function(minPersistentResponse) {
+        maximizePersistentResponse: function (minPersistentResponse) {
             return {
                 MessageId: minPersistentResponse.C,
                 Messages: minPersistentResponse.M,
-                Initialized: typeof(minPersistentResponse.S) !== "undefined" ? true : false,
-                ShouldReconnect: typeof(minPersistentResponse.T) !== "undefined" ? true : false,
+                Initialized: typeof (minPersistentResponse.S) !== "undefined" ? true : false,
+                ShouldReconnect: typeof (minPersistentResponse.T) !== "undefined" ? true : false,
                 LongPollDelay: minPersistentResponse.L,
                 GroupsToken: minPersistentResponse.G
             };
         },
 
-        updateGroups: function(connection, groupsToken) {
+        updateGroups: function (connection, groupsToken) {
             if (groupsToken) {
                 connection.groupsToken = groupsToken;
             }
         },
 
-        stringifySend: function(connection, message) {
-            if (typeof(message) === "string" || typeof(message) === "undefined" || message === null) {
+        stringifySend: function (connection, message) {
+            if (typeof (message) === "string" || typeof (message) === "undefined" || message === null) {
                 return message;
             }
             return connection.json.stringify(message);
         },
 
-        ajaxSend: function(connection, data) {
+        ajaxSend: function (connection, data) {
             var payload = transportLogic.stringifySend(connection, data),
                 url = getAjaxUrl(connection, "/send"),
                 xhr,
-                onFail = function(error, connection) {
+                onFail = function (error, connection) {
                     $(connection).triggerHandler(events.onError, [signalR._.transportError(signalR.resources.sendFailed, connection.transport, error, xhr), data]);
                 };
 
@@ -1706,7 +1706,7 @@
                 data: {
                     data: payload
                 },
-                success: function(result) {
+                success: function (result) {
                     var res;
 
                     if (result) {
@@ -1721,7 +1721,7 @@
                         transportLogic.triggerReceived(connection, res);
                     }
                 },
-                error: function(error, textStatus) {
+                error: function (error, textStatus) {
                     if (textStatus === "abort" || textStatus === "parsererror") {
                         // The parsererror happens for sends that don't return any data, and hence
                         // don't write the jsonp callback to the response. This is harder to fix on the server
@@ -1736,13 +1736,13 @@
             return xhr;
         },
 
-        ajaxAbort: function(connection, async) {
-            if (typeof(connection.transport) === "undefined") {
+        ajaxAbort: function (connection, async) {
+            if (typeof (connection.transport) === "undefined") {
                 return;
             }
 
             // Async by default unless explicitly overidden
-            async = typeof async === "undefined" ? true: async;
+            async = typeof async === "undefined" ? true : async;
 
             var url = getAjaxUrl(connection, "/abort");
 
@@ -1756,14 +1756,14 @@
             connection.log("Fired ajax abort async = " + async + ".");
         },
 
-        ajaxStart: function(connection, onSuccess) {
-            var rejectDeferred = function(error) {
-                    var deferred = connection._deferral;
-                    if (deferred) {
-                        deferred.reject(error);
-                    }
-                },
-                triggerStartError = function(error) {
+        ajaxStart: function (connection, onSuccess) {
+            var rejectDeferred = function (error) {
+                var deferred = connection._deferral;
+                if (deferred) {
+                    deferred.reject(error);
+                }
+            },
+                triggerStartError = function (error) {
                     connection.log("The start request failed. Stopping the connection.");
                     $(connection).triggerHandler(events.onError, [error]);
                     rejectDeferred(error);
@@ -1772,7 +1772,7 @@
 
             connection._.startRequest = transportLogic.ajax(connection, {
                 url: getAjaxUrl(connection, "/start"),
-                success: function(result, statusText, xhr) {
+                success: function (result, statusText, xhr) {
                     var data;
 
                     try {
@@ -1789,10 +1789,10 @@
                     } else {
                         triggerStartError(signalR._.error(
                             signalR._.format(signalR.resources.invalidStartResponse, result),
-                            null /* error */ , xhr));
+                            null /* error */, xhr));
                     }
                 },
-                error: function(xhr, statusText, error) {
+                error: function (xhr, statusText, error) {
                     if (statusText !== startAbortText) {
                         triggerStartError(signalR._.error(
                             signalR.resources.errorDuringStartRequest,
@@ -1803,13 +1803,13 @@
                         connection.log("The start request aborted because connection.stop() was called.");
                         rejectDeferred(signalR._.error(
                             signalR.resources.stoppedDuringStartRequest,
-                            null /* error */ , xhr));
+                            null /* error */, xhr));
                     }
                 }
             });
         },
 
-        tryAbortStartRequest: function(connection) {
+        tryAbortStartRequest: function (connection) {
             if (connection._.startRequest) {
                 // If the start request has already completed this will noop.
                 connection._.startRequest.abort(startAbortText);
@@ -1817,7 +1817,7 @@
             }
         },
 
-        tryInitialize: function(connection, persistentResponse, onInitialized) {
+        tryInitialize: function (connection, persistentResponse, onInitialized) {
             if (persistentResponse.Initialized && onInitialized) {
                 onInitialized();
             } else if (persistentResponse.Initialized) {
@@ -1826,13 +1826,13 @@
 
         },
 
-        triggerReceived: function(connection, data) {
+        triggerReceived: function (connection, data) {
             if (!connection._.connectingMessageBuffer.tryBuffer(data)) {
                 $(connection).triggerHandler(events.onReceived, [data]);
             }
         },
 
-        processMessages: function(connection, minData, onInitialized) {
+        processMessages: function (connection, minData, onInitialized) {
             var data;
 
             // Update the last message time stamp
@@ -1848,7 +1848,7 @@
                 }
 
                 if (data.Messages) {
-                    $.each(data.Messages, function(index, message) {
+                    $.each(data.Messages, function (index, message) {
                         transportLogic.triggerReceived(connection, message);
                     });
 
@@ -1857,7 +1857,7 @@
             }
         },
 
-        monitorKeepAlive: function(connection) {
+        monitorKeepAlive: function (connection) {
             var keepAliveData = connection._.keepAliveData;
 
             // If we haven't initiated the keep alive timeouts then we need to
@@ -1867,7 +1867,7 @@
                 transportLogic.markLastMessage(connection);
 
                 // Save the function so we can unbind it on stop
-                connection._.keepAliveData.reconnectKeepAliveUpdate = function() {
+                connection._.keepAliveData.reconnectKeepAliveUpdate = function () {
                     // Mark a new message so that keep alive doesn't time out connections
                     transportLogic.markLastMessage(connection);
                 };
@@ -1881,7 +1881,7 @@
             }
         },
 
-        stopMonitoringKeepAlive: function(connection) {
+        stopMonitoringKeepAlive: function (connection) {
             var keepAliveData = connection._.keepAliveData;
 
             // Only attempt to stop the keep alive monitoring if its being monitored
@@ -1898,16 +1898,16 @@
             }
         },
 
-        startHeartbeat: function(connection) {
+        startHeartbeat: function (connection) {
             connection._.lastActiveAt = new Date().getTime();
             beat(connection);
         },
 
-        markLastMessage: function(connection) {
+        markLastMessage: function (connection) {
             connection._.lastMessageAt = new Date().getTime();
         },
 
-        markActive: function(connection) {
+        markActive: function (connection) {
             if (transportLogic.verifyLastActive(connection)) {
                 connection._.lastActiveAt = new Date().getTime();
                 return true;
@@ -1916,28 +1916,28 @@
             return false;
         },
 
-        isConnectedOrReconnecting: function(connection) {
+        isConnectedOrReconnecting: function (connection) {
             return connection.state === signalR.connectionState.connected ||
                 connection.state === signalR.connectionState.reconnecting;
         },
 
-        ensureReconnectingState: function(connection) {
+        ensureReconnectingState: function (connection) {
             if (changeState(connection,
-                    signalR.connectionState.connected,
-                    signalR.connectionState.reconnecting) === true) {
+                signalR.connectionState.connected,
+                signalR.connectionState.reconnecting) === true) {
                 $(connection).triggerHandler(events.onReconnecting);
             }
             return connection.state === signalR.connectionState.reconnecting;
         },
 
-        clearReconnectTimeout: function(connection) {
+        clearReconnectTimeout: function (connection) {
             if (connection && connection._.reconnectTimeout) {
                 window.clearTimeout(connection._.reconnectTimeout);
                 delete connection._.reconnectTimeout;
             }
         },
 
-        verifyLastActive: function(connection) {
+        verifyLastActive: function (connection) {
             if (new Date().getTime() - connection._.lastActiveAt >= connection.reconnectWindow) {
                 var message = signalR._.format(signalR.resources.reconnectWindowTimeout, new Date(connection._.lastActiveAt), connection.reconnectWindow);
                 connection.log(message);
@@ -1949,7 +1949,7 @@
             return true;
         },
 
-        reconnect: function(connection, transportName) {
+        reconnect: function (connection, transportName) {
             var transport = signalR.transports[transportName];
 
             // We should only set a reconnectTimeout if we are currently connected
@@ -1960,7 +1960,7 @@
                     return;
                 }
 
-                connection._.reconnectTimeout = window.setTimeout(function() {
+                connection._.reconnectTimeout = window.setTimeout(function () {
                     if (!transportLogic.verifyLastActive(connection)) {
                         return;
                     }
@@ -1975,7 +1975,7 @@
             }
         },
 
-        handleParseFailure: function(connection, result, error, onFailed, context) {
+        handleParseFailure: function (connection, result, error, onFailed, context) {
             var wrappedError = signalR._.transportError(
                 signalR._.format(signalR.resources.parseFailed, result),
                 connection.transport,
@@ -1991,7 +1991,7 @@
             }
         },
 
-        initHandler: function(connection) {
+        initHandler: function (connection) {
             return new InitHandler(connection);
         },
 
@@ -2010,7 +2010,7 @@
 /*global window:false */
 /// <reference path="jquery.signalR.transports.common.js" />
 
-(function($, window, undefined) {
+(function ($, window, undefined) {
 
     var signalR = $.signalR,
         events = $.signalR.events,
@@ -2020,28 +2020,28 @@
     signalR.transports.webSockets = {
         name: "webSockets",
 
-        supportsKeepAlive: function() {
+        supportsKeepAlive: function () {
             return true;
         },
 
-        send: function(connection, data) {
+        send: function (connection, data) {
             var payload = transportLogic.stringifySend(connection, data);
 
             try {
                 connection.socket.send(payload);
             } catch (ex) {
                 $(connection).triggerHandler(events.onError, [signalR._.transportError(
-                        signalR.resources.webSocketsInvalidState,
-                        connection.transport,
-                        ex,
-                        connection.socket
-                    ),
+                    signalR.resources.webSocketsInvalidState,
+                    connection.transport,
+                    ex,
+                    connection.socket
+                ),
                     data
                 ]);
             }
         },
 
-        start: function(connection, onSuccess, onFailed) {
+        start: function (connection, onSuccess, onFailed) {
             var url,
                 opened = false,
                 that = this,
@@ -2065,20 +2065,20 @@
                 connection.log("Connecting to websocket endpoint '" + url + "'.");
                 connection.socket = new window.WebSocket(url);
 
-                connection.socket.onopen = function() {
+                connection.socket.onopen = function () {
                     opened = true;
                     connection.log("Websocket opened.");
 
                     transportLogic.clearReconnectTimeout(connection);
 
                     if (changeState(connection,
-                            signalR.connectionState.reconnecting,
-                            signalR.connectionState.connected) === true) {
+                        signalR.connectionState.reconnecting,
+                        signalR.connectionState.connected) === true) {
                         $connection.triggerHandler(events.onReconnect);
                     }
                 };
 
-                connection.socket.onclose = function(event) {
+                connection.socket.onclose = function (event) {
                     var error;
 
                     // Only handle a socket close if the close is from the current socket.
@@ -2109,7 +2109,7 @@
                     }
                 };
 
-                connection.socket.onmessage = function(event) {
+                connection.socket.onmessage = function (event) {
                     var data;
 
                     try {
@@ -2133,15 +2133,15 @@
             }
         },
 
-        reconnect: function(connection) {
+        reconnect: function (connection) {
             transportLogic.reconnect(connection, this.name);
         },
 
-        lostConnection: function(connection) {
+        lostConnection: function (connection) {
             this.reconnect(connection);
         },
 
-        stop: function(connection) {
+        stop: function (connection) {
             // Don't trigger a reconnect after stopping
             transportLogic.clearReconnectTimeout(connection);
 
@@ -2152,7 +2152,7 @@
             }
         },
 
-        abort: function(connection, async) {
+        abort: function (connection, async) {
             transportLogic.ajaxAbort(connection, async);
         }
     };
@@ -2166,13 +2166,13 @@
 /*global window:false */
 /// <reference path="jquery.signalR.transports.common.js" />
 
-(function($, window, undefined) {
+(function ($, window, undefined) {
 
     var signalR = $.signalR,
         events = $.signalR.events,
         changeState = $.signalR.changeState,
         transportLogic = signalR.transports._logic,
-        clearReconnectAttemptTimeout = function(connection) {
+        clearReconnectAttemptTimeout = function (connection) {
             window.clearTimeout(connection._.reconnectAttemptTimeoutHandle);
             delete connection._.reconnectAttemptTimeoutHandle;
         };
@@ -2180,13 +2180,13 @@
     signalR.transports.serverSentEvents = {
         name: "serverSentEvents",
 
-        supportsKeepAlive: function() {
+        supportsKeepAlive: function () {
             return true;
         },
 
         timeOut: 3000,
 
-        start: function(connection, onSuccess, onFailed) {
+        start: function (connection, onSuccess, onFailed) {
             var that = this,
                 opened = false,
                 $connection = $(connection),
@@ -2227,20 +2227,20 @@
             }
 
             if (reconnecting) {
-                connection._.reconnectAttemptTimeoutHandle = window.setTimeout(function() {
-                        if (opened === false) {
-                            // If we're reconnecting and the event source is attempting to connect,
-                            // don't keep retrying. This causes duplicate connections to spawn.
-                            if (connection.eventSource.readyState !== window.EventSource.OPEN) {
-                                // If we were reconnecting, rather than doing initial connect, then try reconnect again
-                                that.reconnect(connection);
-                            }
+                connection._.reconnectAttemptTimeoutHandle = window.setTimeout(function () {
+                    if (opened === false) {
+                        // If we're reconnecting and the event source is attempting to connect,
+                        // don't keep retrying. This causes duplicate connections to spawn.
+                        if (connection.eventSource.readyState !== window.EventSource.OPEN) {
+                            // If we were reconnecting, rather than doing initial connect, then try reconnect again
+                            that.reconnect(connection);
                         }
-                    },
+                    }
+                },
                     that.timeOut);
             }
 
-            connection.eventSource.addEventListener("open", function(e) {
+            connection.eventSource.addEventListener("open", function (e) {
                 connection.log("EventSource connected.");
 
                 clearReconnectAttemptTimeout(connection);
@@ -2250,14 +2250,14 @@
                     opened = true;
 
                     if (changeState(connection,
-                            signalR.connectionState.reconnecting,
-                            signalR.connectionState.connected) === true) {
+                        signalR.connectionState.reconnecting,
+                        signalR.connectionState.connected) === true) {
                         $connection.triggerHandler(events.onReconnect);
                     }
                 }
             }, false);
 
-            connection.eventSource.addEventListener("message", function(e) {
+            connection.eventSource.addEventListener("message", function (e) {
                 var res;
 
                 // process messages
@@ -2275,7 +2275,7 @@
                 transportLogic.processMessages(connection, res, onSuccess);
             }, false);
 
-            connection.eventSource.addEventListener("error", function(e) {
+            connection.eventSource.addEventListener("error", function (e) {
                 var error = signalR._.transportError(
                     signalR.resources.eventSourceError,
                     connection.transport,
@@ -2309,19 +2309,19 @@
             }, false);
         },
 
-        reconnect: function(connection) {
+        reconnect: function (connection) {
             transportLogic.reconnect(connection, this.name);
         },
 
-        lostConnection: function(connection) {
+        lostConnection: function (connection) {
             this.reconnect(connection);
         },
 
-        send: function(connection, data) {
+        send: function (connection, data) {
             transportLogic.ajaxSend(connection, data);
         },
 
-        stop: function(connection) {
+        stop: function (connection) {
             // Don't trigger a reconnect after stopping
             clearReconnectAttemptTimeout(connection);
             transportLogic.clearReconnectTimeout(connection);
@@ -2334,7 +2334,7 @@
             }
         },
 
-        abort: function(connection, async) {
+        abort: function (connection, async) {
             transportLogic.ajaxAbort(connection, async);
         }
     };
@@ -2348,13 +2348,13 @@
 /*global window:false */
 /// <reference path="jquery.signalR.transports.common.js" />
 
-(function($, window, undefined) {
+(function ($, window, undefined) {
 
     var signalR = $.signalR,
         events = $.signalR.events,
         changeState = $.signalR.changeState,
         transportLogic = signalR.transports._logic,
-        createFrame = function() {
+        createFrame = function () {
             var frame = window.document.createElement("iframe");
             frame.setAttribute("style", "position:absolute;top:0;left:0;width:0;height:0;visibility:hidden;");
             return frame;
@@ -2362,19 +2362,19 @@
         // Used to prevent infinite loading icon spins in older versions of ie
         // We build this object inside a closure so we don't pollute the rest of
         // the foreverFrame transport with unnecessary functions/utilities.
-        loadPreventer = (function() {
+        loadPreventer = (function () {
             var loadingFixIntervalId = null,
                 loadingFixInterval = 1000,
                 attachedTo = 0;
 
             return {
-                prevent: function() {
+                prevent: function () {
                     // Prevent additional iframe removal procedures from newer browsers
                     if (signalR._.ieVersion <= 8) {
                         // We only ever want to set the interval one time, so on the first attachedTo
                         if (attachedTo === 0) {
                             // Create and destroy iframe every 3 seconds to prevent loading icon, super hacky
-                            loadingFixIntervalId = window.setInterval(function() {
+                            loadingFixIntervalId = window.setInterval(function () {
                                 var tempFrame = createFrame();
 
                                 window.document.body.appendChild(tempFrame);
@@ -2387,7 +2387,7 @@
                         attachedTo++;
                     }
                 },
-                cancel: function() {
+                cancel: function () {
                     // Only clear the interval if there's only one more object that the loadPreventer is attachedTo
                     if (attachedTo === 1) {
                         window.clearInterval(loadingFixIntervalId);
@@ -2403,19 +2403,19 @@
     signalR.transports.foreverFrame = {
         name: "foreverFrame",
 
-        supportsKeepAlive: function() {
+        supportsKeepAlive: function () {
             return true;
         },
 
         // Added as a value here so we can create tests to verify functionality
         iframeClearThreshold: 50,
 
-        start: function(connection, onSuccess, onFailed) {
+        start: function (connection, onSuccess, onFailed) {
             var that = this,
                 frameId = (transportLogic.foreverFrame.count += 1),
                 url,
                 frame = createFrame(),
-                frameLoadHandler = function() {
+                frameLoadHandler = function () {
                     connection.log("Forever frame iframe finished loading and is no longer receiving messages.");
                     if (!onFailed || !onFailed()) {
                         that.reconnect(connection);
@@ -2459,19 +2459,19 @@
             connection.frameId = frameId;
 
             if (onSuccess) {
-                connection.onSuccess = function() {
+                connection.onSuccess = function () {
                     connection.log("Iframe transport started.");
                     onSuccess();
                 };
             }
         },
 
-        reconnect: function(connection) {
+        reconnect: function (connection) {
             var that = this;
 
             // Need to verify connection state and verify before the setTimeout occurs because an application sleep could occur during the setTimeout duration.
             if (transportLogic.isConnectedOrReconnecting(connection) && transportLogic.verifyLastActive(connection)) {
-                window.setTimeout(function() {
+                window.setTimeout(function () {
                     // Verify that we're ok to reconnect.
                     if (!transportLogic.verifyLastActive(connection)) {
                         return;
@@ -2487,15 +2487,15 @@
             }
         },
 
-        lostConnection: function(connection) {
+        lostConnection: function (connection) {
             this.reconnect(connection);
         },
 
-        send: function(connection, data) {
+        send: function (connection, data) {
             transportLogic.ajaxSend(connection, data);
         },
 
-        receive: function(connection, data) {
+        receive: function (connection, data) {
             var cw,
                 body,
                 response;
@@ -2532,7 +2532,7 @@
             }
         },
 
-        stop: function(connection) {
+        stop: function (connection) {
             var cw = null;
 
             // Stop attempting to prevent loading icon
@@ -2568,18 +2568,18 @@
             }
         },
 
-        abort: function(connection, async) {
+        abort: function (connection, async) {
             transportLogic.ajaxAbort(connection, async);
         },
 
-        getConnection: function(id) {
+        getConnection: function (id) {
             return transportLogic.foreverFrame.connections[id];
         },
 
-        started: function(connection) {
+        started: function (connection) {
             if (changeState(connection,
-                    signalR.connectionState.reconnecting,
-                    signalR.connectionState.connected) === true) {
+                signalR.connectionState.reconnecting,
+                signalR.connectionState.connected) === true) {
 
                 $(connection).triggerHandler(events.onReconnect);
             }
@@ -2595,7 +2595,7 @@
 /*global window:false */
 /// <reference path="jquery.signalR.transports.common.js" />
 
-(function($, window, undefined) {
+(function ($, window, undefined) {
 
     var signalR = $.signalR,
         events = $.signalR.events,
@@ -2606,17 +2606,17 @@
     signalR.transports.longPolling = {
         name: "longPolling",
 
-        supportsKeepAlive: function() {
+        supportsKeepAlive: function () {
             return false;
         },
 
         reconnectDelay: 3000,
 
-        start: function(connection, onSuccess, onFailed) {
+        start: function (connection, onSuccess, onFailed) {
             /// <summary>Starts the long polling connection</summary>
             /// <param name="connection" type="signalR">The SignalR connection to start</param>
             var that = this,
-                fireConnect = function() {
+                fireConnect = function () {
                     fireConnect = $.noop;
 
                     connection.log("LongPolling connected.");
@@ -2627,7 +2627,7 @@
                         connection.log("WARNING! The client received an init message after reconnecting.");
                     }
                 },
-                tryFailConnect = function(error) {
+                tryFailConnect = function (error) {
                     if (onFailed(error)) {
                         connection.log("LongPolling failed to connect.");
                         return true;
@@ -2637,13 +2637,13 @@
                 },
                 privateData = connection._,
                 reconnectErrors = 0,
-                fireReconnected = function(instance) {
+                fireReconnected = function (instance) {
                     window.clearTimeout(privateData.reconnectTimeoutId);
                     privateData.reconnectTimeoutId = null;
 
                     if (changeState(instance,
-                            signalR.connectionState.reconnecting,
-                            signalR.connectionState.connected) === true) {
+                        signalR.connectionState.reconnecting,
+                        signalR.connectionState.connected) === true) {
                         // Successfully reconnected!
                         instance.log("Raising the reconnect event");
                         $(instance).triggerHandler(events.onReconnect);
@@ -2661,13 +2661,13 @@
 
             privateData.reconnectTimeoutId = null;
 
-            privateData.pollTimeoutId = window.setTimeout(function() {
+            privateData.pollTimeoutId = window.setTimeout(function () {
                 (function poll(instance, raiseReconnect) {
                     var messageId = instance.messageId,
                         connect = (messageId === null),
                         reconnecting = !connect,
                         polling = !raiseReconnect,
-                        url = transportLogic.getUrl(instance, that.name, reconnecting, polling, true /* use Post for longPolling */ ),
+                        url = transportLogic.getUrl(instance, that.name, reconnecting, polling, true /* use Post for longPolling */),
                         postData = {};
 
                     if (instance.messageId) {
@@ -2686,7 +2686,7 @@
                     connection.log("Opening long polling request to '" + url + "'.");
                     instance.pollXhr = transportLogic.ajax(connection, {
                         xhrFields: {
-                            onprogress: function() {
+                            onprogress: function () {
                                 transportLogic.markLastMessage(connection);
                             }
                         },
@@ -2695,7 +2695,7 @@
                         contentType: signalR._.defaultContentType,
                         data: postData,
                         timeout: connection._.pollTimeout,
-                        success: function(result) {
+                        success: function (result) {
                             var minData,
                                 delay = 0,
                                 data,
@@ -2746,7 +2746,7 @@
 
                             // We never want to pass a raiseReconnect flag after a successful poll.  This is handled via the error function
                             if (delay > 0) {
-                                privateData.pollTimeoutId = window.setTimeout(function() {
+                                privateData.pollTimeoutId = window.setTimeout(function () {
                                     poll(instance, shouldReconnect);
                                 }, delay);
                             } else {
@@ -2754,7 +2754,7 @@
                             }
                         },
 
-                        error: function(data, textStatus) {
+                        error: function (data, textStatus) {
                             var error = signalR._.transportError(signalR.resources.longPollFailed, connection.transport, data, instance.pollXhr);
 
                             // Stop trying to trigger reconnect, connection is in an error state
@@ -2783,7 +2783,7 @@
                                 // If we're not in connected or reconnecting then the next ensureReconnectingState check will fail and will return.
                                 // Therefore we don't want to change that failure code path.
                                 if ((connection.state === signalR.connectionState.connected ||
-                                        connection.state === signalR.connectionState.reconnecting) &&
+                                    connection.state === signalR.connectionState.reconnecting) &&
                                     !transportLogic.verifyLastActive(connection)) {
                                     return;
                                 }
@@ -2795,7 +2795,7 @@
                                 }
 
                                 // Call poll with the raiseReconnect flag as true after the reconnect delay
-                                privateData.pollTimeoutId = window.setTimeout(function() {
+                                privateData.pollTimeoutId = window.setTimeout(function () {
                                     poll(instance, true);
                                 }, that.reconnectDelay);
                             }
@@ -2809,23 +2809,23 @@
                         // triggering reconnected.  This depends on the "error" handler of Poll to cancel this
                         // timeout if it triggers before the Reconnected event fires.
                         // The Math.min at the end is to ensure that the reconnect timeout does not overflow.
-                        privateData.reconnectTimeoutId = window.setTimeout(function() { fireReconnected(instance); }, Math.min(1000 * (Math.pow(2, reconnectErrors) - 1), maxFireReconnectedTimeout));
+                        privateData.reconnectTimeoutId = window.setTimeout(function () { fireReconnected(instance); }, Math.min(1000 * (Math.pow(2, reconnectErrors) - 1), maxFireReconnectedTimeout));
                     }
                 }(connection));
             }, 250); // Have to delay initial poll so Chrome doesn't show loader spinner in tab
         },
 
-        lostConnection: function(connection) {
+        lostConnection: function (connection) {
             if (connection.pollXhr) {
                 connection.pollXhr.abort("lostConnection");
             }
         },
 
-        send: function(connection, data) {
+        send: function (connection, data) {
             transportLogic.ajaxSend(connection, data);
         },
 
-        stop: function(connection) {
+        stop: function (connection) {
             /// <summary>Stops the long polling connection</summary>
             /// <param name="connection" type="signalR">The SignalR connection to stop</param>
 
@@ -2842,7 +2842,7 @@
             }
         },
 
-        abort: function(connection, async) {
+        abort: function (connection, async) {
             transportLogic.ajaxAbort(connection, async);
         }
     };
@@ -2855,7 +2855,7 @@
 /*global window:false */
 /// <reference path="jquery.signalR.core.js" />
 
-(function($, window, undefined) {
+(function ($, window, undefined) {
 
     var eventNamespace = ".hubProxy",
         signalR = $.signalR;
@@ -2926,7 +2926,7 @@
     }
 
     hubProxy.fn = hubProxy.prototype = {
-        init: function(connection, hubName) {
+        init: function (connection, hubName) {
             this.state = {};
             this.connection = connection;
             this.hubName = hubName;
@@ -2937,11 +2937,11 @@
 
         constructor: hubProxy,
 
-        hasSubscriptions: function() {
+        hasSubscriptions: function () {
             return hasMembers(this._.callbackMap);
         },
 
-        on: function(eventName, callback) {
+        on: function (eventName, callback) {
             /// <summary>Wires up a callback to be invoked when a invocation request is received from the server hub.</summary>
             /// <param name="eventName" type="String">The name of the hub event to register the callback for.</param>
             /// <param name="callback" type="Function">The callback to be invoked.</param>
@@ -2957,7 +2957,7 @@
             }
 
             // Map the callback to our encompassed function
-            callbackMap[eventName][callback] = function(e, data) {
+            callbackMap[eventName][callback] = function (e, data) {
                 callback.apply(that, data);
             };
 
@@ -2966,7 +2966,7 @@
             return that;
         },
 
-        off: function(eventName, callback) {
+        off: function (eventName, callback) {
             /// <summary>Removes the callback invocation request from the server hub for the given event name.</summary>
             /// <param name="eventName" type="String">The name of the hub event to unregister the callback for.</param>
             /// <param name="callback" type="Function">The callback to be invoked.</param>
@@ -3002,7 +3002,7 @@
             return that;
         },
 
-        invoke: function(methodName) {
+        invoke: function (methodName) {
             /// <summary>Invokes a server hub method with the given arguments.</summary>
             /// <param name="methodName" type="String">The name of the server hub method.</param>
 
@@ -3012,7 +3012,7 @@
                 argValues = map(args, getArgValue),
                 data = { H: that.hubName, M: methodName, A: argValues, I: connection._.invocationCallbackId },
                 d = $.Deferred(),
-                callback = function(minResult) {
+                callback = function (minResult) {
                     var result = that._maximizeHubResponse(minResult),
                         source,
                         error;
@@ -3061,7 +3061,7 @@
             return d.promise();
         },
 
-        _maximizeHubResponse: function(minHubResponse) {
+        _maximizeHubResponse: function (minHubResponse) {
             return {
                 State: minHubResponse.S,
                 Result: minHubResponse.R,
@@ -3101,12 +3101,12 @@
 
     hubConnection.fn = hubConnection.prototype = $.connection();
 
-    hubConnection.fn.init = function(url, options) {
+    hubConnection.fn.init = function (url, options) {
         var settings = {
-                qs: null,
-                logging: false,
-                useDefaultPath: true
-            },
+            qs: null,
+            logging: false,
+            useDefaultPath: true
+        },
             connection = this;
 
         $.extend(settings, options);
@@ -3121,7 +3121,7 @@
         connection._.invocationCallbacks = {};
 
         // Wire up the received handler
-        connection.received(function(minData) {
+        connection.received(function (minData) {
             var data, proxy, dataCallbackId, callback, hubName, eventName;
             if (!minData) {
                 return;
@@ -3130,14 +3130,14 @@
             // We have to handle progress updates first in order to ensure old clients that receive
             // progress updates enter the return value branch and then no-op when they can't find
             // the callback in the map (because the minData.I value will not be a valid callback ID)
-            if (typeof(minData.P) !== "undefined") {
+            if (typeof (minData.P) !== "undefined") {
                 // Process progress notification
                 dataCallbackId = minData.P.I.toString();
                 callback = connection._.invocationCallbacks[dataCallbackId];
                 if (callback) {
                     callback.method.call(callback.scope, minData);
                 }
-            } else if (typeof(minData.I) !== "undefined") {
+            } else if (typeof (minData.I) !== "undefined") {
                 // We received the return value from a server method invocation, look up callback by id and call it
                 dataCallbackId = minData.I.toString();
                 callback = connection._.invocationCallbacks[dataCallbackId];
@@ -3168,7 +3168,7 @@
             }
         });
 
-        connection.error(function(errData, origData) {
+        connection.error(function (errData, origData) {
             var callbackId, callback;
 
             if (!origData) {
@@ -3190,18 +3190,18 @@
             }
         });
 
-        connection.reconnecting(function() {
+        connection.reconnecting(function () {
             if (connection.transport && connection.transport.name === "webSockets") {
                 clearInvocationCallbacks(connection, "Connection started reconnecting before invocation result was received.");
             }
         });
 
-        connection.disconnected(function() {
+        connection.disconnected(function () {
             clearInvocationCallbacks(connection, "Connection was disconnected before invocation result was received.");
         });
     };
 
-    hubConnection.fn._maximizeClientHubInvocation = function(minClientHubInvocation) {
+    hubConnection.fn._maximizeClientHubInvocation = function (minClientHubInvocation) {
         return {
             Hub: minClientHubInvocation.H,
             Method: minClientHubInvocation.M,
@@ -3210,7 +3210,7 @@
         };
     };
 
-    hubConnection.fn._registerSubscribedHubs = function() {
+    hubConnection.fn._registerSubscribedHubs = function () {
         /// <summary>
         ///     Sets the starting event to loop through the known hubs and register any new hubs
         ///     that have been added to the proxy.
@@ -3219,12 +3219,12 @@
 
         if (!connection._subscribedToHubs) {
             connection._subscribedToHubs = true;
-            connection.starting(function() {
+            connection.starting(function () {
                 // Set the connection's data object with all the hub proxies with active subscriptions.
                 // These proxies will receive notifications from the server.
                 var subscribedHubs = [];
 
-                $.each(connection.proxies, function(key) {
+                $.each(connection.proxies, function (key) {
                     if (this.hasSubscriptions()) {
                         subscribedHubs.push({ name: key });
                         connection.log("Client subscribed to hub '" + key + "'.");
@@ -3240,7 +3240,7 @@
         }
     };
 
-    hubConnection.fn.createHubProxy = function(hubName) {
+    hubConnection.fn.createHubProxy = function (hubName) {
         /// <summary>
         ///     Creates a new proxy object for the given hub connection that can be used to invoke
         ///     methods on server hubs and handle client method invocation requests from the server.
@@ -3275,7 +3275,7 @@
 
 /*global window:false */
 /// <reference path="jquery.signalR.core.js" />
-(function($, undefined) {
+(function ($, undefined) {
     $.signalR.version = "2.2.1";
 }(window.jQuery));
 
@@ -3290,18 +3290,18 @@
 
 /// <reference path="..\..\SignalR.Client.JS\Scripts\jquery-1.6.4.js" />
 /// <reference path="jquery.signalR.js" />
-(function($, window, undefined) {
+(function ($, window, undefined) {
     /// <param name="$" type="jQuery" />
     "use strict";
 
-    if (typeof($.signalR) !== "function") {
+    if (typeof ($.signalR) !== "function") {
         throw new Error("SignalR: SignalR is not loaded. Please ensure jquery.signalR-x.js is referenced before ~/signalr/js.");
     }
 
     var signalR = $.signalR;
 
     function makeProxyCallback(hub, callback) {
-        return function() {
+        return function () {
             // Call the client hub method
             callback.apply(hub, $.makeArray(arguments));
         };
@@ -3344,15 +3344,15 @@
         }
     }
 
-    $.hubConnection.prototype.createHubProxies = function() {
+    $.hubConnection.prototype.createHubProxies = function () {
         var proxies = {};
-        this.starting(function() {
+        this.starting(function () {
             // Register the hub proxies as subscribed
             // (instance, shouldSubscribe)
             registerHubProxies(proxies, true);
 
             this._registerSubscribedHubs();
-        }).disconnected(function() {
+        }).disconnected(function () {
             // Unsubscribe all hub proxies when we "disconnect".  This is to ensure that we do not re-add functional call backs.
             // (instance, shouldSubscribe)
             registerHubProxies(proxies, false);
@@ -3361,15 +3361,15 @@
         proxies['transvaultHub'] = this.createHubProxy('transvaultHub');
         proxies['transvaultHub'].client = {};
         proxies['transvaultHub'].server = {
-            getMerchantCredentials: function(browserId, accessToken) {
+            getMerchantCredentials: function (browserId, accessToken) {
                 return proxies['transvaultHub'].invoke.apply(proxies['transvaultHub'], $.merge(["GetMerchantCredentials"], $.makeArray(arguments)));
             },
 
-            getSignatureUrl: function(browserId, pointArray) {
+            getSignatureUrl: function (browserId, pointArray) {
                 return proxies['transvaultHub'].invoke.apply(proxies['transvaultHub'], $.merge(["GetSignatureUrl"], $.makeArray(arguments)));
             },
 
-            sendMessage: function(data) {
+            sendMessage: function (data) {
                 return proxies['transvaultHub'].invoke.apply(proxies['transvaultHub'], $.merge(["SendMessage"], $.makeArray(arguments)));
             }
         };
@@ -3381,7 +3381,7 @@
     $.extend(signalR, signalR.hub.createHubProxies());
 
 }(window.jQuery, window));
-(function() {
+(function () {
 
     "use strict";
     /*
@@ -3395,7 +3395,7 @@
     /*
      * setup urls
      */
-    var shouldMatch = function(value, regex, message) {
+    var shouldMatch = function (value, regex, message) {
 
         if (typeof value === "undefined") {
             throw new TypeError("Property cannot be undefined.");
@@ -3416,7 +3416,7 @@
      */
     var findCount = 0;
     var findDeferred = jQuery.Deferred();
-    var findElement = function(id) {
+    var findElement = function (id) {
 
         if (id.nodeType) {
             findDeferred.resolve(id);
@@ -3428,7 +3428,7 @@
             return findDeferred;
         }
 
-        setTimeout(function() {
+        setTimeout(function () {
             if (findCount < 25) {
                 findCount++;
                 findElement(id);
@@ -3444,7 +3444,7 @@
     /*
      * Query help
      */
-    var toQueryString = function(obj) {
+    var toQueryString = function (obj) {
 
         var parts = [],
             url = "";
@@ -3478,7 +3478,7 @@
      */
     hp.models = {};
 
-    hp.models.Item = function(label, price) {
+    hp.models.Item = function (label, price) {
         this.label = label;
         this.price = parseFloat(price, 2);
     };
@@ -3493,7 +3493,7 @@
      * @param: customOrderId
      * @param: customFormName
      */
-    hp.models.Options = function(merchantClientId, merchantPrimaryEmail, merchantSecondaryEmail, showMemoField, merchantGoogleAnalytics, customOrderId, customFormName, customSubjectLine) {
+    hp.models.Options = function (merchantClientId, merchantPrimaryEmail, merchantSecondaryEmail, showMemoField, merchantGoogleAnalytics, customOrderId, customFormName, customSubjectLine) {
 
         this.name = customFormName || "Checkout";
         this.CID = merchantClientId;
@@ -3531,7 +3531,7 @@
      * @param: type 
      * @param: model
      */
-    hp.Setup = function(type, options) {
+    hp.Setup = function (type, options) {
 
         if (!(type in hp.types)) {
             throw new Error("Please specify type. 'hp.Types.Event' or 'hp.Types.Product'");
@@ -3553,7 +3553,7 @@
      * addItem (prototype)
      * @param: item 
      */
-    hp.Setup.prototype.addItem = function(item) {
+    hp.Setup.prototype.addItem = function (item) {
         this.items.priceLabels += (this.items.price === "" ? "" : ",") + item.label;
         this.items.price += (this.items.price === "" ? "" : ",") + item.price;
         this.hasItems = true;
@@ -3564,7 +3564,7 @@
      * createForm (prototype)
      * @param: containerElementId 
      */
-    hp.Setup.prototype.createForm = function(containerElementId, baseUrl) {
+    hp.Setup.prototype.createForm = function (containerElementId, baseUrl) {
 
         var deferred = jQuery.Deferred();
         var iframe = document.createElement("iframe");
@@ -3614,13 +3614,13 @@
             .replace("event?&", "event?")
             .toString();
 
-        iframe.onload = function() {
+        iframe.onload = function () {
             deferred.resolve(iframe);
             iframe.className = "active";
             iframe.style.opacity = "1";
         };
 
-        findElement(containerElementId).then(function(element) {
+        findElement(containerElementId).then(function (element) {
             element.appendChild(iframe);
         });
 
@@ -3628,13 +3628,13 @@
 
     };
 
-    $(function() {
+    $(function () {
         $("[data-inventory], [data-event]").hp();
     });
 
 })();
 
-(function($, window, document, undefined) {
+(function ($, window, document, undefined) {
 
     "use strict";
 
@@ -3646,7 +3646,7 @@
      * Checks if website is running older version of jQuery.
      * Updates jQuery if bloew version 3.
      */
-    var verifyJQueryVersion = function() {
+    var verifyJQueryVersion = function () {
 
         var deferred = jQuery.Deferred();
 
@@ -3666,7 +3666,7 @@
         (function checkScript() {
 
             if ((+jQuery.fn.jquery[0]) >= 3) {
-                setTimeout(function() {
+                setTimeout(function () {
 
                     jQuery = jQuery.noConflict();
                     $ = jQuery;
@@ -3687,7 +3687,7 @@
 
     if (!Array.prototype.map) {
 
-        Array.prototype.map = function(callback, thisArg) {
+        Array.prototype.map = function (callback, thisArg) {
 
             var T, A, k;
 
@@ -3733,13 +3733,13 @@
 
     if (!Function.prototype.clone) {
 
-        Function.prototype.clone = function() {
+        Function.prototype.clone = function () {
             var cloneObj = this;
             if (this.__isClone) {
                 cloneObj = this.__clonedFrom;
             }
 
-            var temp = function() {
+            var temp = function () {
                 return cloneObj.apply(this, arguments);
             };
             for (var key in this) {
@@ -3756,7 +3756,7 @@
 
     if (!String.prototype.startsWith) {
 
-        String.prototype.startsWith = function(searchString, position) {
+        String.prototype.startsWith = function (searchString, position) {
             position = position || 0;
             return this.indexOf(searchString, position) === position;
         };
@@ -3765,7 +3765,7 @@
 
     if (!String.prototype.includes) {
 
-        String.prototype.includes = function() {
+        String.prototype.includes = function () {
             return String.prototype.indexOf.apply(this, arguments) !== -1;
         };
 
@@ -3773,7 +3773,7 @@
 
     if (!Date.prototype.toISOString) {
 
-        var pad = function(number) {
+        var pad = function (number) {
             var r = String(number);
             if (r.length === 1) {
                 r = '0' + r;
@@ -3781,7 +3781,7 @@
             return r;
         };
 
-        Date.prototype.toISOString = function() {
+        Date.prototype.toISOString = function () {
             return this.getUTCFullYear() + '-' + pad(this.getUTCMonth() + 1) + '-' + pad(this.getUTCDate()) + 'T' + pad(this.getUTCHours()) + ':' + pad(this.getUTCMinutes()) + ':' + pad(this.getUTCSeconds()) + '.' + String((this.getUTCMilliseconds() / 1000).toFixed(3)).slice(2, 5) + 'Z';
         };
 
@@ -3795,7 +3795,7 @@
             _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
 
             // public method for encoding
-            encode: function(input) {
+            encode: function (input) {
                 var output = "";
                 var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
                 var i = 0;
@@ -3829,7 +3829,7 @@
             },
 
             // public method for decoding
-            decode: function(input) {
+            decode: function (input) {
                 var output = "";
                 var chr1, chr2, chr3;
                 var enc1, enc2, enc3, enc4;
@@ -3866,7 +3866,7 @@
             },
 
             // private method for UTF-8 encoding
-            _utf8_encode: function(string) {
+            _utf8_encode: function (string) {
                 string = string.replace(/\r\n/g, "\n");
                 var utftext = "";
 
@@ -3891,7 +3891,7 @@
             },
 
             // private method for UTF-8 decoding
-            _utf8_decode: function(utftext) {
+            _utf8_decode: function (utftext) {
                 var string = "";
                 var i = 0;
                 var c = c1;
@@ -3980,7 +3980,7 @@
     hp.Utils.hasPaymentInstrument = false;
 
     // A variety of CSS based identifiers
-    var handleLegacyCssClassApplication = function(classPrefix, $form) {
+    var handleLegacyCssClassApplication = function (classPrefix, $form) {
 
         var activeClass = "hp-content-active",
             currentClass = "hp-form-" + classPrefix,
@@ -3995,7 +3995,7 @@
 
         var $content = $parent.find(".hp-content-" + classPrefix).addClass(activeClass);
 
-        setTimeout(function() {
+        setTimeout(function () {
             $form
                 .find(".hp")
                 .addClass("hp-active");
@@ -4008,7 +4008,7 @@
 
     };
 
-    var setPaymentService = function(serivceType) {
+    var setPaymentService = function (serivceType) {
 
         var result = hp.PaymentService.EFT;
 
@@ -4036,7 +4036,7 @@
 
     };
 
-    var setEntryType = function(entryType) {
+    var setEntryType = function (entryType) {
 
         var result = hp.EntryType.KEYED_CARD_NOT_PRESENT;
 
@@ -4064,7 +4064,7 @@
 
     };
 
-    var setPaymentType = function(paymentType) {
+    var setPaymentType = function (paymentType) {
 
         var result = hp.PaymentType.CHARGE;
 
@@ -4114,11 +4114,11 @@
 
     };
 
-    var log = (function(undefined) {
+    var log = (function (undefined) {
 
         var Log = Error; // does this do anything?  proper inheritance...?
 
-        Log.prototype.write = function(args) {
+        Log.prototype.write = function (args) {
 
             // via @fredrik SO trace suggestion; wrapping in special construct so it stands out
             var suffix = "@(" + (this.lineNumber ? this.fileName + ':' + this.lineNumber + ":1" : extractLineNumberFromStack(this.stack));
@@ -4132,7 +4132,7 @@
 
         };
 
-        var extractLineNumberFromStack = function(stack) {
+        var extractLineNumberFromStack = function (stack) {
 
             try {
 
@@ -4149,7 +4149,7 @@
 
         };
 
-        return function(params) {
+        return function (params) {
 
             // only if explicitly true somewhere
             if (!hp.Utils.defaults.debug) return;
@@ -4160,15 +4160,15 @@
 
     })();
 
-    var getVersion = function() {
+    var getVersion = function () {
         return hp.Utils.defaults.version;
     };
 
-    var setVersion = function(version) {
+    var setVersion = function (version) {
         hp.Utils.defaults.version = version;
     };
 
-    var setPaymentInstrument = function() {
+    var setPaymentInstrument = function () {
         if (typeof hp.Utils.defaults.instrumentId !== "undefined" && hp.Utils.defaults.instrumentId !== "") {
             hp.Utils.hasPaymentInstrument = true;
             return;
@@ -4177,7 +4177,7 @@
         hp.Utils.hasPaymentInstrument = false;
     };
 
-    var generateGUID = function() {
+    var generateGUID = function () {
 
         var d = null;
 
@@ -4189,7 +4189,7 @@
             d = new Date().getTime();
         }
 
-        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             var r = (d + Math.random() * 16) % 16 | 0;
             d = Math.floor(d / 16);
             return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
@@ -4198,7 +4198,7 @@
         return uuid;
     };
 
-    var updateAvsInfo = function(avsStreet, avsZip) {
+    var updateAvsInfo = function (avsStreet, avsZip) {
 
         if (typeof avsZip === "undefined") {
             avsZip = "";
@@ -4213,7 +4213,7 @@
 
     };
 
-    var showLoader = function() {
+    var showLoader = function () {
 
         if ($(".hp-error-container").is(":visible")) {
             hideError();
@@ -4222,11 +4222,11 @@
         $(".hp-loading-container").addClass("hp-loading-container-active");
     };
 
-    var hideLoader = function() {
+    var hideLoader = function () {
         $(".hp-loading-container").removeClass("hp-loading-container-active");
     };
 
-    var showError = function(message, showDismissalLink) {
+    var showError = function (message, showDismissalLink) {
 
         if ($(".hp-loading-container").is(":visible")) {
             hideLoader();
@@ -4265,7 +4265,7 @@
 
     };
 
-    var hideError = function(shouldReset) {
+    var hideError = function (shouldReset) {
 
         $(".hp-error-container").removeClass("hp-error-container-active");
         $(".hp-error-container .hp-error-disclaimer a").off("click");
@@ -4283,7 +4283,7 @@
     };
 
     // sets up iframe DOM
-    var createInstance = function($element, callback) {
+    var createInstance = function ($element, callback) {
 
         // Create wrapping HTML
         var $wrapper = [
@@ -4351,15 +4351,15 @@
 
         $element.html(
             $wrapper
-            .replace("{{success}}", hp.Utils.plugins.Success
-                .createTemplate()
-                .replace("{{redirectLabel}}", hp.Utils.defaults.defaultRedirectLabel)
-                .replace("{{successLabel}}", hp.Utils.defaults.defaultSuccessLabel)
-            )
-            .replace(/{{phone}}/gi, hp.Utils.defaults.defaultPhone)
-            .replace("{{error}}", hp.Utils.defaults.defaultErrorLabel)
-            .replace("{{order}}", hp.Utils.createOrder())
-            .replace("{{nav}}", hp.Utils.createNav())
+                .replace("{{success}}", hp.Utils.plugins.Success
+                    .createTemplate()
+                    .replace("{{redirectLabel}}", hp.Utils.defaults.defaultRedirectLabel)
+                    .replace("{{successLabel}}", hp.Utils.defaults.defaultSuccessLabel)
+                )
+                .replace(/{{phone}}/gi, hp.Utils.defaults.defaultPhone)
+                .replace("{{error}}", hp.Utils.defaults.defaultErrorLabel)
+                .replace("{{order}}", hp.Utils.createOrder())
+                .replace("{{nav}}", hp.Utils.createNav())
         );
 
         var $parent = $element.find(".hp"),
@@ -4374,7 +4374,7 @@
             throw new Error("hosted-payments.js : Could not locate template.");
         }
 
-        $types.off("click").on("click", function(e) {
+        $types.off("click").on("click", function (e) {
 
             e.preventDefault();
 
@@ -4387,7 +4387,7 @@
                 .addClass(activeClass);
 
             // Wait for DOM to finish loading before querying
-            $(function() {
+            $(function () {
 
                 if (!!$this.attr("class").match(/hp-cc/gi)) {
                     callback(hp.Utils.plugins.CreditCard);
@@ -4428,12 +4428,12 @@
     };
 
     // success page
-    var showSuccessPage = function(delay) {
+    var showSuccessPage = function (delay) {
 
         var deferred = jQuery.Deferred(),
             timeout = typeof delay === "undefined" ? 0 : delay;
 
-        setTimeout(function() {
+        setTimeout(function () {
 
             $(".hp-app-link-container")
                 .removeClass("hp-page-active")
@@ -4456,12 +4456,12 @@
     };
 
     // signature page
-    var showSignaturePage = function(delay) {
+    var showSignaturePage = function (delay) {
 
         var deferred = jQuery.Deferred(),
             timeout = typeof delay === "undefined" ? 0 : delay;
 
-        setTimeout(function() {
+        setTimeout(function () {
 
             $(".hp-app-link-container")
                 .removeClass("hp-page-active")
@@ -4483,18 +4483,18 @@
         return deferred;
     };
 
-    var setAmount = function(amount) {
+    var setAmount = function (amount) {
         hp.Utils.defaults.amount = Math.abs(Math.round10(parseFloat(amount), -2));
         $(".hp.hp-form .hp-version-amount").text(formatCurrency(hp.Utils.defaults.amount));
 
         return hp.Utils.defaults.amount;
     };
 
-    var getAmount = function() {
+    var getAmount = function () {
         return hp.Utils.defaults.amount;
     };
 
-    var createNav = function() {
+    var createNav = function () {
 
         var defaultAreas = hp.Utils.defaults.paymentTypeOrder,
             html = '',
@@ -4560,7 +4560,7 @@
 
     };
 
-    var createOrder = function() {
+    var createOrder = function () {
 
         var defaultAreas = hp.Utils.defaults.paymentTypeOrder,
             html = '',
@@ -4625,7 +4625,7 @@
         return html;
     };
 
-    var setSession = function(session, isApiKey) {
+    var setSession = function (session, isApiKey) {
 
         var currentSession = getSession();
 
@@ -4641,7 +4641,7 @@
 
     };
 
-    var getSession = function() {
+    var getSession = function () {
 
         var currentSession = {};
         currentSession.sessionToken = "";
@@ -4653,7 +4653,7 @@
         return currentSession;
     };
 
-    var buildSuccessResultObject = function() {
+    var buildSuccessResultObject = function () {
         return {
             "status": "Success",
             "amount": getAmount(),
@@ -4694,7 +4694,7 @@
         };
     };
 
-    var buildSignatureResultObject = function(response) {
+    var buildSignatureResultObject = function (response) {
 
         var deferred = jQuery.Deferred();
         var baseResponse = buildSuccessResultObject();
@@ -4710,11 +4710,11 @@
 
     };
 
-    var buildResultObjectByType = function(response) {
+    var buildResultObjectByType = function (response) {
 
         var deferred = jQuery.Deferred();
 
-        var isBankAccount = function(req) {
+        var isBankAccount = function (req) {
 
             var isBank = false;
 
@@ -4726,7 +4726,7 @@
 
         };
 
-        var isEMoney = function(req) {
+        var isEMoney = function (req) {
 
             if (isBankAccount(req)) {
                 return false;
@@ -4740,7 +4740,7 @@
 
         };
 
-        var isCreditCard = function(req) {
+        var isCreditCard = function (req) {
 
             if (isBankAccount(req)) {
                 return false;
@@ -4758,7 +4758,7 @@
 
         };
 
-        var isTrackAccount = function(req) {
+        var isTrackAccount = function (req) {
 
             if (isBankAccount(req)) {
                 return false;
@@ -4940,7 +4940,7 @@
                 var responseCount = responses.length || 0,
                     currentCount = 0;
 
-                $.each(responses, function(index) {
+                $.each(responses, function (index) {
 
                     var statusRequest = {
                         "status": {
@@ -4951,7 +4951,7 @@
                         }
                     };
 
-                    hp.Utils.makeRequest(statusRequest).then(function(statusResponse) {
+                    hp.Utils.makeRequest(statusRequest).then(function (statusResponse) {
 
                         if (statusResponse.type === "Transaction" && typeof statusResponse.properties !== "undefined") {
                             var isACH = statusResponse.properties.accountType === "BankAccount";
@@ -4988,7 +4988,7 @@
 
     };
 
-    var retrieveTransactionStatus = function(transactionId) {
+    var retrieveTransactionStatus = function (transactionId) {
 
         var deferred = jQuery.Deferred();
 
@@ -5003,7 +5003,7 @@
             }
         };
 
-        hp.Utils.makeRequest(statusRequest).then(function(statusResponse) {
+        hp.Utils.makeRequest(statusRequest).then(function (statusResponse) {
 
             if (statusResponse.type === "Transaction" && typeof statusResponse.properties !== "undefined") {
 
@@ -5069,7 +5069,7 @@
     requestTypes.SIGNATURE_REQUEST = "signatureRequest";
     requestTypes.SIGNATURE_RESPONSE = "signatureResponse";
 
-    var getObjectResponseFromData = function(data) {
+    var getObjectResponseFromData = function (data) {
 
         var memberName = "";
         var requestMemberName = "";
@@ -5185,7 +5185,7 @@
 
     };
 
-    var promptAvs = function($element) {
+    var promptAvs = function ($element) {
 
         var deferred = jQuery.Deferred();
 
@@ -5202,7 +5202,7 @@
             $element.find(".hp-avs-prompt").remove();
         }
 
-        setTimeout(function() {
+        setTimeout(function () {
 
             var template = [
                 '<div class="hp-avs-prompt">',
@@ -5248,7 +5248,7 @@
                 avsZipValue = "",
                 avsStreetValue = "";
 
-            var handleSubmit = function(e) {
+            var handleSubmit = function (e) {
                 e.preventDefault();
 
                 hp.Utils.updateAvsInfo(avsStreetValue, avsZipValue);
@@ -5257,12 +5257,12 @@
                 $avsPrompt.removeClass("active");
                 deferred.resolve();
 
-                setTimeout(function() {
+                setTimeout(function () {
                     $element.find(".hp-avs-prompt").remove();
                 }, 0);
             };
 
-            $avsPrompt.find(".hp-input-avs input").on("focus blur keyup", function(e) {
+            $avsPrompt.find(".hp-input-avs input").on("focus blur keyup", function (e) {
 
                 e.preventDefault();
 
@@ -5286,14 +5286,14 @@
 
             if (hp.Utils.defaults.allowAvsSkip) {
 
-                $avsPrompt.find(".hp-avs-skip").on("click", function(e) {
+                $avsPrompt.find(".hp-avs-skip").on("click", function (e) {
                     e.preventDefault();
 
                     $element.removeClass("hp-avs-active");
                     $avsPrompt.removeClass("active");
                     deferred.resolve();
 
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $element.find(".hp-avs-prompt").remove();
                     }, 0);
 
@@ -5315,7 +5315,7 @@
     };
 
     // basic http requests
-    var makeRequest = function(data, isSync) {
+    var makeRequest = function (data, isSync) {
 
         var deferred = jQuery.Deferred();
 
@@ -5332,22 +5332,22 @@
             requestObject.async = false;
         }
 
-        $.ajax(requestObject).done(function(res) {
+        $.ajax(requestObject).done(function (res) {
 
-                var requestData = getObjectResponseFromData(data);
+            var requestData = getObjectResponseFromData(data);
 
-                if (res.error) {
-                    res.error.request = requestData;
-                    deferred.resolve(res.error);
-                    return;
-                }
+            if (res.error) {
+                res.error.request = requestData;
+                deferred.resolve(res.error);
+                return;
+            }
 
-                var result = getObjectResponseFromData(res);
-                result.request = requestData;
+            var result = getObjectResponseFromData(res);
+            result.request = requestData;
 
-                deferred.resolve(result);
+            deferred.resolve(result);
 
-            })
+        })
             .fail(deferred.reject)
             .catch(deferred.reject);
 
@@ -5355,7 +5355,7 @@
 
     };
 
-    var reset = function(options) {
+    var reset = function (options) {
 
         hp.Utils.log("Checking options to reset with...", options);
 
@@ -5442,7 +5442,7 @@
             hp.Utils.log(e);
         }
 
-        setTimeout(function() {
+        setTimeout(function () {
             hp.Utils.log("Reinitialized plugin with new options!");
             hp.Utils.__instance.init();
             hp.Utils.__instance = hp.Utils.__instance;
@@ -5450,7 +5450,7 @@
 
     };
 
-    var signIn = function() {
+    var signIn = function () {
 
         var deferred = jQuery.Deferred(),
             createdOn = (new Date()).toISOString(),
@@ -5467,7 +5467,7 @@
             return deferred;
         }
 
-        verifyJQueryVersion().then(function() {
+        verifyJQueryVersion().then(function () {
 
             hp.Utils.makeRequest({
                 "signIn": {
@@ -5475,7 +5475,7 @@
                         "apiKey": apiKey
                     }
                 }
-            }).then(function(res) {
+            }).then(function (res) {
 
                 hp.Utils.setSession(res.token);
 
@@ -5483,7 +5483,7 @@
 
                 hp.Utils.log("Sign In: Retrieved from server.");
 
-            }, function(res) {
+            }, function (res) {
 
                 if (typeof res === "undefined" || res === null || res === "") {
                     hp.Utils.reset();
@@ -5501,7 +5501,7 @@
                     hp.Utils.showError(errorResponse.message);
                     hp.Utils.defaults.errorCallback(errorResponse);
                 } else {
-                    hp.Utils.buildFormFromObject(errorResponse).then(function($form) {
+                    hp.Utils.buildFormFromObject(errorResponse).then(function ($form) {
                         $form.attr("action", hp.Utils.defaults.errorCallback).submit();
                     });
                 }
@@ -5515,7 +5515,7 @@
 
     };
 
-    var formatCurrency = function(amount) {
+    var formatCurrency = function (amount) {
         var aDigits = amount.toFixed(2).split(".");
         aDigits[0] = aDigits[0].split("").reverse().join("").replace(/(\d{3})(?=\d)/g, "$1,").split("").reverse().join("");
         return "$" + aDigits.join(".");
@@ -5523,7 +5523,7 @@
 
     var hasChecked = false;
 
-    var checkHttpsConnection = function() {
+    var checkHttpsConnection = function () {
 
         if (!hasChecked && (location.hostname === "localhost" || location.hostname === "")) {
             hasChecked = true;
@@ -5542,7 +5542,7 @@
 
     };
 
-    var getBalance = function(sessionId, cardNumber) {
+    var getBalance = function (sessionId, cardNumber) {
 
         var balance = 0,
             settings = {
@@ -5562,13 +5562,13 @@
                 async: false
             };
 
-        $.ajax(settings).done(function(res) {
+        $.ajax(settings).done(function (res) {
 
             if (res.balanceResponse) {
                 balance = res.balanceResponse.balance;
             }
 
-        }).fail(function() {
+        }).fail(function () {
             balance = 0;
         });
 
@@ -5576,11 +5576,11 @@
 
     };
 
-    var isEmail = function(email) {
+    var isEmail = function (email) {
         return /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i.test(email);
     };
 
-    var validateEMoneyData = function(formData, callback) {
+    var validateEMoneyData = function (formData, callback) {
 
         var errors = [];
 
@@ -5620,7 +5620,7 @@
 
     };
 
-    var validateBankAccountData = function(formData, callback) {
+    var validateBankAccountData = function (formData, callback) {
 
         var errors = [];
 
@@ -5674,7 +5674,7 @@
         return callback(null, formData);
     };
 
-    var shouldErrorPostBack = function() {
+    var shouldErrorPostBack = function () {
 
         var options = hp.Utils.defaults;
 
@@ -5685,7 +5685,7 @@
         return false;
     };
 
-    var shouldSuccessPostBack = function() {
+    var shouldSuccessPostBack = function () {
 
         var options = hp.Utils.defaults;
 
@@ -5698,7 +5698,7 @@
     };
 
     // Validate Credit Card Data
-    var validateCreditCardData = function(formData, callback) {
+    var validateCreditCardData = function (formData, callback) {
 
         var errors = [];
 
@@ -5745,7 +5745,7 @@
 
     };
 
-    var buildAntiForgeryInput = function() {
+    var buildAntiForgeryInput = function () {
 
         var result = "";
 
@@ -5770,12 +5770,12 @@
         });
     };
 
-    var buildFormFromObject = function(obj) {
+    var buildFormFromObject = function (obj) {
 
         var deferred = jQuery.Deferred(),
             $antiForgeryInput = buildAntiForgeryInput();
 
-        setTimeout(function() {
+        setTimeout(function () {
 
             var formId = "FRM" + (new Date()).getTime().toString(),
                 $form = $("<form />", {
@@ -5835,15 +5835,15 @@
 
     };
 
-    var getTerminalId = function() {
+    var getTerminalId = function () {
         return hp.Utils.defaults.terminalId || "";
     };
 
-    var getCorrelationId = function() {
+    var getCorrelationId = function () {
         return hp.Utils.defaults.correlationId.length ? hp.Utils.defaults.correlationId : generateGUID();
     };
 
-    var getCustomerToken = function() {
+    var getCustomerToken = function () {
 
         if (hp.Utils.defaults.customerToken == null || typeof hp.Utils.defaults.customerToken === "undefined") {
             return null;
@@ -5852,7 +5852,7 @@
         return hp.Utils.defaults.customerToken;
     };
 
-    var getInstrumentId = function() {
+    var getInstrumentId = function () {
 
         if (hp.Utils.defaults.instrumentId == null || typeof hp.Utils.defaults.instrumentId === "undefined") {
             return null;
@@ -5861,7 +5861,7 @@
         return hp.Utils.defaults.instrumentId;
     };
 
-    var setContainerClass = function($instance) {
+    var setContainerClass = function ($instance) {
 
         var mobileClass = "hp-form-mobile",
             tabletClass = "hp-form-tablet",
@@ -5875,7 +5875,7 @@
             .removeClass(tabletClass)
             .removeClass(desktopClass);
 
-        setTimeout(function() {
+        setTimeout(function () {
 
             if (currentWidth >= 615) {
                 containerElement.addClass(desktopClass);
@@ -5896,7 +5896,7 @@
 
     };
 
-    var handleError = function(res) {
+    var handleError = function (res) {
 
         var errorResponse = {
             "status": "Error",
@@ -5911,7 +5911,7 @@
                 hp.Utils.showError(errorResponse.message);
                 hp.Utils.defaults.errorCallback(errorResponse);
             } else {
-                hp.Utils.buildFormFromObject(errorResponse).then(function($form) {
+                hp.Utils.buildFormFromObject(errorResponse).then(function ($form) {
                     $form.attr("action", hp.Utils.defaults.errorCallback).submit();
                 });
             }
@@ -5934,7 +5934,7 @@
         errorResponse.message = message;
 
         if (hp.Utils.shouldErrorPostBack()) {
-            hp.Utils.buildFormFromObject(errorResponse).then(function($form) {
+            hp.Utils.buildFormFromObject(errorResponse).then(function ($form) {
                 $form.attr("action", hp.Utils.defaults.errorCallback).submit();
             });
         } else {
@@ -5945,7 +5945,7 @@
     };
 
 
-    var handleSuccess = function(res) {
+    var handleSuccess = function (res) {
 
         var errorResponse = {
             "status": "Error",
@@ -5960,7 +5960,7 @@
                 hp.Utils.showError(errorResponse.message);
                 hp.Utils.defaults.errorCallback(errorResponse);
             } else {
-                hp.Utils.buildFormFromObject(errorResponse).then(function($form) {
+                hp.Utils.buildFormFromObject(errorResponse).then(function ($form) {
                     $form.attr("action", hp.Utils.defaults.errorCallback).submit();
                 });
             }
@@ -5972,7 +5972,7 @@
         var response = res.length > 1 ? res : res[0];
 
         if (hp.Utils.shouldSuccessPostBack()) {
-            hp.Utils.buildFormFromObject(response).then(function($form) {
+            hp.Utils.buildFormFromObject(response).then(function ($form) {
                 $form.attr("action", hp.Utils.defaults.successCallback).submit();
             });
         } else {
@@ -5980,12 +5980,12 @@
         }
     };
 
-    var setupPluginInstances = function($element) {
+    var setupPluginInstances = function ($element) {
 
         var deferred = jQuery.Deferred();
 
         // Handle instance
-        hp.Utils.createInstance($element, function(instance) {
+        hp.Utils.createInstance($element, function (instance) {
 
             // The same elements across many instances
             var $this = $element,
@@ -6009,7 +6009,7 @@
                 $this
                     .off()
                     .on("hp.notify", hp.Utils.defaults.eventCallback)
-                    .on("hp.transvaultSuccess", function(e, data) {
+                    .on("hp.transvaultSuccess", function (e, data) {
 
                         var _response = data;
 
@@ -6019,7 +6019,7 @@
                         if (!hp.Utils.shouldSuccessPostBack()) {
                             hp.Utils.defaults.successCallback(_response);
                         } else {
-                            hp.Utils.buildFormFromObject(_response).then(function($form) {
+                            hp.Utils.buildFormFromObject(_response).then(function ($form) {
                                 $form.attr("action", hp.Utils.defaults.successCallback).submit();
                             });
                         }
@@ -6050,7 +6050,7 @@
                 $this
                     .off()
                     .on("hp.notify", hp.Utils.defaults.eventCallback)
-                    .on("hp.submit", function(e, eventResponse) {
+                    .on("hp.submit", function (e, eventResponse) {
 
                         if (eventResponse.type === hp.RequestTypes.CHARGE) {
                             instance.handleSuccess(eventResponse.res);
@@ -6085,7 +6085,7 @@
      * Build APP url
      *  Sample: "emmerchant://{{paymentType}}/{{merchantCredentials}}?transactionId={{transactionId}}&token={{token}}&browserId={{browserId}}&correlationId={{correlationId}}&amount={{amount}}&entryType={{entryType}}"
      */
-    var buildEMoneyMobileAppUrl = function(paymentType, merchantCredentials, transactionId, token, browserId, correlationId, amount, hostUrl, entryType) {
+    var buildEMoneyMobileAppUrl = function (paymentType, merchantCredentials, transactionId, token, browserId, correlationId, amount, hostUrl, entryType) {
 
         var url = hp.Utils.defaults.emoneyMobileAppUrl;
 
@@ -6155,7 +6155,7 @@
 
 })(jQuery, window, document);
 
-(function($, window, document, undefined) {
+(function ($, window, document, undefined) {
 
     "use strict";
 
@@ -6172,7 +6172,7 @@
         this.formData = { _isValid: false };
     }
 
-    Success.prototype.init = function() {
+    Success.prototype.init = function () {
 
         var context = hp.Utils.handleLegacyCssClassApplication("success", this.$element),
             $parent = context.parent,
@@ -6189,7 +6189,7 @@
 
     };
 
-    Success.prototype.createTemplate = function() {
+    Success.prototype.createTemplate = function () {
 
         var $html = [
             '<div class="hp-success-visual"></div>',
@@ -6201,35 +6201,35 @@
 
     };
 
-    Success.prototype.showSuccess = function(delay) {
+    Success.prototype.showSuccess = function (delay) {
         return hp.Utils.showSuccessPage(delay);
     };
 
-    Success.prototype.isCreditCard = function() {
+    Success.prototype.isCreditCard = function () {
         return false;
     };
 
-    Success.prototype.isBankAccount = function() {
+    Success.prototype.isBankAccount = function () {
         return false;
     };
 
-    Success.prototype.isEMoney = function() {
+    Success.prototype.isEMoney = function () {
         return false;
     };
 
-    Success.prototype.isSuccessPage = function() {
+    Success.prototype.isSuccessPage = function () {
         return true;
     };
 
-    Success.prototype.isCode = function() {
+    Success.prototype.isCode = function () {
         return false;
     };
 
-    Success.prototype.isGiftCard = function() {
+    Success.prototype.isGiftCard = function () {
         return false;
     };
 
-    Success.prototype.isSignature = function() {
+    Success.prototype.isSignature = function () {
         return false;
     };
 
@@ -6239,7 +6239,7 @@
     hp.Success = Success;
 
 })(jQuery, window, document);
-(function($, window, document, undefined) {
+(function ($, window, document, undefined) {
 
     "use strict";
 
@@ -6257,7 +6257,7 @@
         this.formData = { _isValid: false };
     }
 
-    Signature.prototype.init = function() {
+    Signature.prototype.init = function () {
 
         var context = hp.Utils.handleLegacyCssClassApplication("signature", this.$element),
             $parent = context.parent,
@@ -6281,7 +6281,7 @@
 
         var that = this;
 
-        this.$signature.on("jq.signature.changed", function(e) {
+        this.$signature.on("jq.signature.changed", function (e) {
 
             if (!that.hasChanged) {
                 that.hasChanged = true;
@@ -6293,13 +6293,13 @@
         this.$parent
             .find(".hp-dismiss-icon")
             .off("click")
-            .on("click", function() {
+            .on("click", function () {
                 hp.Utils.reset();
             });
 
     };
 
-    Signature.prototype.createTemplate = function() {
+    Signature.prototype.createTemplate = function () {
 
         var $html = [
             '<div class="hp-signature-visual">',
@@ -6319,15 +6319,15 @@
 
     };
 
-    Signature.prototype.showSuccess = function(delay) {
+    Signature.prototype.showSuccess = function (delay) {
         return hp.Utils.showSuccessPage(delay);
     };
 
-    Signature.prototype.attachEvents = function() {};
+    Signature.prototype.attachEvents = function () { };
 
-    Signature.prototype.detachEvents = function() {};
+    Signature.prototype.detachEvents = function () { };
 
-    Signature.prototype.handleSignature = function() {
+    Signature.prototype.handleSignature = function () {
 
         var signature = this.$signature.jqSignature('getDataPoints'),
             that = this,
@@ -6346,7 +6346,7 @@
 
         hp.Utils.makeRequest(requestModel)
             .then(hp.Utils.buildSignatureResultObject)
-            .then(function(promiseResponse) {
+            .then(function (promiseResponse) {
 
                 that.$parent.trigger("hp.submit", {
                     "type": hp.RequestTypes.SIGNATURE,
@@ -6354,7 +6354,7 @@
                 });
 
             })
-            .fail(function(promiseResponse) {
+            .fail(function (promiseResponse) {
 
                 if (typeof promiseResponse.responseJSON !== "undefined") {
                     promiseResponse = promiseResponse.responseJSON;
@@ -6369,16 +6369,16 @@
 
     };
 
-    Signature.prototype.handleError = function(res) {
+    Signature.prototype.handleError = function (res) {
         hp.Utils.handleError(res);
         this.clearInputs();
     };
 
-    Signature.prototype.clearInputs = function() {
+    Signature.prototype.clearInputs = function () {
         this.$signature.jqSignature('clearCanvas');
     };
 
-    Signature.prototype.enableButtons = function() {
+    Signature.prototype.enableButtons = function () {
 
         var that = this;
 
@@ -6389,14 +6389,14 @@
         this.$parent
             .find(".hp-submit-group .hp-submit-success")
             .off("click")
-            .on("click", function() {
+            .on("click", function () {
                 that.handleSignature();
             });
 
         this.$parent
             .find(".hp-submit-group .hp-submit-danger")
             .off("click")
-            .on("click", function() {
+            .on("click", function () {
 
                 that.$signature.jqSignature('clearCanvas');
                 that.hasChanged = false;
@@ -6409,40 +6409,40 @@
 
     };
 
-    Signature.prototype.handleSuccess = function(res) {
+    Signature.prototype.handleSuccess = function (res) {
         hp.Utils.handleSuccess(res);
         this.showSuccess();
     };
 
-    Signature.prototype.isCreditCard = function() {
+    Signature.prototype.isCreditCard = function () {
         return false;
     };
 
-    Signature.prototype.isBankAccount = function() {
+    Signature.prototype.isBankAccount = function () {
         return false;
     };
 
-    Signature.prototype.isEMoney = function() {
+    Signature.prototype.isEMoney = function () {
         return false;
     };
 
-    Signature.prototype.isSuccessPage = function() {
+    Signature.prototype.isSuccessPage = function () {
         return false;
     };
 
-    Signature.prototype.isCode = function() {
+    Signature.prototype.isCode = function () {
         return false;
     };
 
-    Signature.prototype.isGiftCard = function() {
+    Signature.prototype.isGiftCard = function () {
         return false;
     };
 
-    Signature.prototype.isSignature = function() {
+    Signature.prototype.isSignature = function () {
         return true;
     };
 
-    Signature.prototype.isTransvault = function() {
+    Signature.prototype.isTransvault = function () {
         return false;
     };
 
@@ -6452,7 +6452,7 @@
     hp.Signature = Signature;
 
 })(jQuery, window, document);
-(function($, window, document, undefined) {
+(function ($, window, document, undefined) {
 
     "use strict";
 
@@ -6496,7 +6496,7 @@
     var sessionId = "",
         createdOn = (new Date()).toISOString();
 
-    CreditCard.prototype.init = function() {
+    CreditCard.prototype.init = function () {
 
         sessionId = hp.Utils.getSession().sessionToken;
 
@@ -6538,7 +6538,7 @@
         this.transactionId = hp.Utils.defaults.transactionId;
     };
 
-    CreditCard.prototype.clearInputs = function() {
+    CreditCard.prototype.clearInputs = function () {
 
         this.formData = {
             _isValid: false
@@ -6559,7 +6559,7 @@
 
     };
 
-    CreditCard.prototype.createTemplate = function(defaultCardCharacters, defaultNameOnCardName, defaultDateCharacters) {
+    CreditCard.prototype.createTemplate = function (defaultCardCharacters, defaultNameOnCardName, defaultDateCharacters) {
 
         if (hp.Utils.defaults.paymentTypeOrder.indexOf(0) < 0) {
             return "";
@@ -6569,7 +6569,7 @@
             throw new Error("hosted-payments.credit-card.js : Cannot create template. Arguments are null or undefined.");
         }
 
-        var generateYearList = function(input) {
+        var generateYearList = function (input) {
 
             var min = new Date().getFullYear(),
                 max = (new Date().getFullYear()) + 10,
@@ -6590,7 +6590,7 @@
             return select;
         };
 
-        var generateMonthList = function(input) {
+        var generateMonthList = function (input) {
 
             var min = 1,
                 select = "";
@@ -6615,7 +6615,7 @@
             return select;
         };
 
-        var parseDatesTemplates = function(input) {
+        var parseDatesTemplates = function (input) {
             return input
                 .replace("{{monthList}}", generateMonthList())
                 .replace("{{yearList}}", generateYearList());
@@ -6633,26 +6633,26 @@
             '</div>',
             '<div class="hp-input-wrapper">',
             '<div class="hp-input hp-input-cc">',
-            '<input placeholder="Enter Card Number" autocomplete="on" type="text" pattern="\\d*">',
+            '<input placeholder="Enter Card Number" name="cardnumber" autocomplete="cc-number" type="text" pattern="\\d*">',
             '</div>',
             '<div class="hp-input hp-input-name">',
-            '<input placeholder="Enter Full Name" value="' + hp.Utils.defaults.customerName + '" autocomplete="on" type="text">',
+            '<input placeholder="Enter Full Name" name="ccname" value="' + hp.Utils.defaults.customerName + '" autocomplete="cc-name" type="text">',
             '</div>',
             '<br class="hp-break" />',
             '<div class="hp-input-container hp-input-container-date">',
             '<div class="hp-input hp-input-month">',
-            '<select autocomplete="on">',
+            '<select autocomplete="cc-exp-month" name="cc-exp">',
             '{{monthList}}',
             '</select>',
             '</div>',
             '<div class="hp-input hp-input-year">',
-            '<select autocomplete="on">',
+            '<select autocomplete="cc-exp-year" name="cc-exp">',
             '{{yearList}}',
             '</select>',
             '</div>',
             '</div>',
             '<div class="hp-input hp-input-third hp-input-cvv">',
-            '<input placeholder="Enter CVV" autocomplete="off" type="text" pattern="\\d*">',
+            '<input placeholder="Enter CVV" name="cvc" autocomplete="cc-csc" type="text" pattern="\\d*">',
             '<span class="hp-input-cvv-image"></span>',
             '</div>',
             '<br class="hp-break" />',
@@ -6664,11 +6664,11 @@
 
     };
 
-    CreditCard.prototype.showSuccess = function(delay) {
+    CreditCard.prototype.showSuccess = function (delay) {
         return hp.Utils.showSuccessPage(delay);
     };
 
-    CreditCard.prototype.detachEvents = function() {
+    CreditCard.prototype.detachEvents = function () {
         $cc.off().val("");
         $cvv.off().val("");
         $name.off().val(hp.Utils.defaults.customerName);
@@ -6680,7 +6680,7 @@
         this.handleNotify();
     };
 
-    CreditCard.prototype.handleCreditCardInput = function(cardNumber) {
+    CreditCard.prototype.handleCreditCardInput = function (cardNumber) {
 
         if (cardNumber === "") {
             $visualcc.html(hp.Utils.defaults.defaultCardCharacters);
@@ -6713,7 +6713,7 @@
 
     };
 
-    CreditCard.prototype.handleMonthInput = function(expiryMonth) {
+    CreditCard.prototype.handleMonthInput = function (expiryMonth) {
 
         if (expiryMonth === "") {
             $visualmonth.html(hp.Utils.defaults.defaultDateCharacters);
@@ -6723,14 +6723,14 @@
         this.formData._expiryMonth = $.trim(expiryMonth);
         $visualmonth.text(expiryMonth);
 
-        setTimeout(function() {
+        setTimeout(function () {
             $month.next().text(expiryMonth);
         }, 0);
 
     };
 
 
-    CreditCard.prototype.handleYearInput = function(expiryYear) {
+    CreditCard.prototype.handleYearInput = function (expiryYear) {
 
         if (expiryYear === "") {
             $visualyear.html(hp.Utils.defaults.defaultDateCharacters);
@@ -6740,29 +6740,33 @@
         this.formData._expiryYear = $.trim(expiryYear);
         $visualyear.text(expiryYear.substring(2));
 
-        setTimeout(function() {
+        setTimeout(function () {
             $year.next().text(expiryYear);
         }, 0);
 
     };
 
-    CreditCard.prototype.handleNameInput = function(name) {
+    CreditCard.prototype.handleNameInput = function (name) {
 
         if (name === "") {
             $visualname.text(hp.Utils.defaults.defaultNameOnCardName);
             return;
         }
 
-        this.formData.name = $.trim(name);
-        $visualname.text(name);
+        name = name.replace(/[0-9]/g, '');
+
+        this.formData.name = name;
+
+
+        $visualname.text(this.formData.name);
 
     };
 
-    CreditCard.prototype.handleCVVInput = function(cvv) {
+    CreditCard.prototype.handleCVVInput = function (cvv) {
         this.formData.cvv = $.trim(cvv);
     };
 
-    CreditCard.prototype.handleChargeWithoutInstrument = function(createInstrumentRequest) {
+    CreditCard.prototype.handleChargeWithoutInstrument = function (createInstrumentRequest) {
 
         var that = this,
             requestModel = {},
@@ -6823,7 +6827,7 @@
 
         hp.Utils.makeRequest(requestModel)
             .then(hp.Utils.buildResultObjectByType)
-            .then(function(promiseResponse) {
+            .then(function (promiseResponse) {
 
                 that.$parent.trigger("hp.submit", {
                     "type": hp.RequestTypes.CHARGE,
@@ -6831,7 +6835,7 @@
                 });
 
             })
-            .fail(function(promiseResponse) {
+            .fail(function (promiseResponse) {
 
                 if (typeof promiseResponse.responseJSON !== "undefined") {
                     promiseResponse = promiseResponse.responseJSON;
@@ -6846,7 +6850,7 @@
 
     };
 
-    CreditCard.prototype.handleCharge = function(res) {
+    CreditCard.prototype.handleCharge = function (res) {
 
         var that = this,
             hasBalance = true,
@@ -6916,7 +6920,7 @@
 
         hp.Utils.makeRequest(requestModel)
             .then(hp.Utils.buildResultObjectByType)
-            .then(function(promiseResponse) {
+            .then(function (promiseResponse) {
 
                 that.$parent.trigger("hp.submit", {
                     "type": hp.RequestTypes.CHARGE,
@@ -6924,7 +6928,7 @@
                 });
 
             })
-            .fail(function(promiseResponse) {
+            .fail(function (promiseResponse) {
 
                 if (typeof promiseResponse.responseJSON !== "undefined") {
                     promiseResponse = promiseResponse.responseJSON;
@@ -6939,13 +6943,13 @@
 
     };
 
-    CreditCard.prototype.handleSubmit = function() {
+    CreditCard.prototype.handleSubmit = function () {
 
         var that = this;
 
         if (!that.formData._isValid) {
             $visualcard.addClass("hp-card-invalid");
-            setTimeout(function() {
+            setTimeout(function () {
                 $visualcard.removeClass("hp-card-invalid");
             }, 2000);
             return;
@@ -6953,43 +6957,43 @@
 
         $submit.attr("disabled", "disabled").text("Submitting...");
 
-        hp.Utils.promptAvs().then(function() {
+        hp.Utils.promptAvs().then(function () {
 
-                hp.Utils.showLoader();
+            hp.Utils.showLoader();
 
-                var createInstrumentRequest = {
-                    "createPaymentInstrument": {
-                        "createPaymentInstrumentRequest": {
-                            "correlationId": hp.Utils.getCorrelationId(),
+            var createInstrumentRequest = {
+                "createPaymentInstrument": {
+                    "createPaymentInstrumentRequest": {
+                        "correlationId": hp.Utils.getCorrelationId(),
+                        "customerToken": hp.Utils.getCustomerToken(),
+                        "instrumentId": hp.Utils.getInstrumentId(),
+                        "transactionId": that.transactionId,
+                        "token": hp.Utils.getSession().sessionToken,
+                        "name": that.formData.name,
+                        "properties": {
+                            "cardNumber": that.formData.cardNumber,
+                            "expirationDate": that.formData._expiryMonth + "/" + that.formData._expiryYear,
+                            "cvv": that.formData.cvv,
+                            "nameOnCard": that.formData.name,
                             "customerToken": hp.Utils.getCustomerToken(),
-                            "instrumentId": hp.Utils.getInstrumentId(),
-                            "transactionId": that.transactionId,
-                            "token": hp.Utils.getSession().sessionToken,
-                            "name": that.formData.name,
-                            "properties": {
-                                "cardNumber": that.formData.cardNumber,
-                                "expirationDate": that.formData._expiryMonth + "/" + that.formData._expiryYear,
-                                "cvv": that.formData.cvv,
-                                "nameOnCard": that.formData.name,
-                                "customerToken": hp.Utils.getCustomerToken(),
-                                "instrumentId": hp.Utils.getInstrumentId()
-                            },
-                            "billingAddress": {
-                                "addressLine1": hp.Utils.defaults.billingAddress.addressLine1,
-                                "postalCode": hp.Utils.defaults.billingAddress.postalCode
-                            }
+                            "instrumentId": hp.Utils.getInstrumentId()
+                        },
+                        "billingAddress": {
+                            "addressLine1": hp.Utils.defaults.billingAddress.addressLine1,
+                            "postalCode": hp.Utils.defaults.billingAddress.postalCode
                         }
                     }
-                };
-
-                if (hp.Utils.defaults.saveCustomer) {
-                    return hp.Utils.makeRequest(createInstrumentRequest);
                 }
+            };
 
-                that.handleChargeWithoutInstrument(createInstrumentRequest);
+            if (hp.Utils.defaults.saveCustomer) {
+                return hp.Utils.makeRequest(createInstrumentRequest);
+            }
 
-            })
-            .then(function(res) {
+            that.handleChargeWithoutInstrument(createInstrumentRequest);
+
+        })
+            .then(function (res) {
 
                 if (!hp.Utils.defaults.saveCustomer) {
                     return;
@@ -7015,7 +7019,7 @@
 
                 that.handleCharge(res);
 
-            }).fail(function(err) {
+            }).fail(function (err) {
 
                 if (typeof err.responseJSON !== "undefined") {
                     err = err.responseJSON;
@@ -7030,17 +7034,17 @@
 
     };
 
-    CreditCard.prototype.handleSuccess = function(res) {
+    CreditCard.prototype.handleSuccess = function (res) {
         hp.Utils.handleSuccess(res);
         this.showSuccess();
     };
 
-    CreditCard.prototype.handleError = function(res) {
+    CreditCard.prototype.handleError = function (res) {
         hp.Utils.handleError(res);
         this.clearInputs();
     };
 
-    CreditCard.prototype.attachEvents = function() {
+    CreditCard.prototype.attachEvents = function () {
 
         this.detachEvents();
 
@@ -7052,7 +7056,7 @@
 
         $cc
             .payment('formatCardNumber')
-            .on("keyup", function() {
+            .on("keyup", function () {
 
                 var cardNumber = $(this).val();
                 var cardType = $.payment.cardType(cardNumber);
@@ -7074,13 +7078,13 @@
             });
 
         $cvv
-            .payment('formatCardCVC').on("focus", function() {
+            .payment('formatCardCVC').on("focus", function () {
 
                 $this.$parent.addClass("hp-back");
                 $this.$parent.trigger("hp.notify");
                 $this.handleNotify();
 
-            }).on("keyup", function(e) {
+            }).on("keyup", function (e) {
 
                 var cvv = $(this).val();
                 $this.handleCVVInput(cvv);
@@ -7091,19 +7095,27 @@
             });
 
         $name
-            .on("focus", function() {
+            .on("focus", function () {
 
                 $this.$parent.trigger("hp.notify");
                 $this.handleNotify();
                 $this.$parent.removeClass("hp-back");
 
-            }).on("keyup", function(e) {
+            }).on("keyup", function (e) {
 
                 var name = $(this).val();
                 $this.handleNameInput(name);
                 $this.$parent.trigger("hp.name", name);
                 $this.$parent.trigger("hp.notify");
                 $this.handleNotify();
+
+                var $el = $(this);
+
+                setTimeout(() => {
+                    if ($this.formData.name.length != 1) {
+                        $el.val($this.formData.name);
+                    }
+                });
 
             });
 
@@ -7112,11 +7124,11 @@
         }
 
         $month
-            .on("focus", function(e) {
+            .on("focus", function (e) {
                 $(".hp-input-active").removeClass("hp-input-active");
                 $(this).parents(".hp-input").addClass("hp-input-active");
             })
-            .on("change.fs", function(e) {
+            .on("change.fs", function (e) {
 
                 var month = $(this).val();
                 $this.handleMonthInput(month);
@@ -7126,17 +7138,17 @@
                 $this.handleNotify();
 
             })
-            .on("blur", function(e) {
+            .on("blur", function (e) {
                 $(".hp-input-active").removeClass("hp-input-active");
             })
             .trigger("change.fs");
 
         $year
-            .on("focus", function(e) {
+            .on("focus", function (e) {
                 $(".hp-input-active").removeClass("hp-input-active");
                 $(this).parents(".hp-input").addClass("hp-input-active");
             })
-            .on("change.fs", function(e) {
+            .on("change.fs", function (e) {
 
                 var year = $(this).val();
                 $this.handleYearInput(year);
@@ -7146,13 +7158,13 @@
                 $this.handleNotify();
 
             })
-            .on("blur", function(e) {
+            .on("blur", function (e) {
                 $(".hp-input-active").removeClass("hp-input-active");
             })
             .trigger("change.fs");
 
         $submit
-            .on("click", function(e) {
+            .on("click", function (e) {
                 e.preventDefault();
                 $this.handleSubmit();
                 $this.$parent.trigger("hp.notify");
@@ -7164,7 +7176,7 @@
 
     };
 
-    CreditCard.prototype.handleNotify = function() {
+    CreditCard.prototype.handleNotify = function () {
 
         if (typeof this.formData._expiryYear !== "undefined" && typeof this.formData._expiryMonth !== "undefined") {
             this.formData.expirationDate = $.trim(this.formData._expiryMonth + this.formData._expiryYear.substring(2));
@@ -7172,7 +7184,7 @@
 
         var $this = this;
 
-        hp.Utils.validateCreditCardData(this.formData, function(error, data) {
+        hp.Utils.validateCreditCardData(this.formData, function (error, data) {
 
             $all.removeClass("hp-error");
 
@@ -7222,35 +7234,35 @@
 
     };
 
-    CreditCard.prototype.isCreditCard = function() {
+    CreditCard.prototype.isCreditCard = function () {
         return true;
     };
 
-    CreditCard.prototype.isBankAccount = function() {
+    CreditCard.prototype.isBankAccount = function () {
         return false;
     };
 
-    CreditCard.prototype.isEMoney = function() {
+    CreditCard.prototype.isEMoney = function () {
         return false;
     };
 
-    CreditCard.prototype.isCode = function() {
+    CreditCard.prototype.isCode = function () {
         return false;
     };
 
-    CreditCard.prototype.isSuccessPage = function() {
+    CreditCard.prototype.isSuccessPage = function () {
         return false;
     };
 
-    CreditCard.prototype.isTransvault = function() {
+    CreditCard.prototype.isTransvault = function () {
         return false;
     };
 
-    CreditCard.prototype.isGiftCard = function() {
+    CreditCard.prototype.isGiftCard = function () {
         return false;
     };
 
-    CreditCard.prototype.isSignature = function() {
+    CreditCard.prototype.isSignature = function () {
         return false;
     };
 
@@ -7261,7 +7273,7 @@
 
 })(jQuery, window, document);
 
-(function($, window, document, undefined) {
+(function ($, window, document, undefined) {
 
     "use strict";
 
@@ -7289,7 +7301,7 @@
     var sessionId = "",
         createdOn = (new Date()).toISOString();
 
-    GiftCard.prototype.init = function() {
+    GiftCard.prototype.init = function () {
 
         sessionId = hp.Utils.getSession().sessionToken;
 
@@ -7311,7 +7323,7 @@
         this.transactionId = hp.Utils.defaults.transactionId;
     };
 
-    GiftCard.prototype.clearInputs = function() {
+    GiftCard.prototype.clearInputs = function () {
 
         this.formData = {
             _isValid: false
@@ -7319,7 +7331,7 @@
 
     };
 
-    GiftCard.prototype.createTemplate = function(defaultCardCharacters, defaultNameOnCardName, defaultDateCharacters) {
+    GiftCard.prototype.createTemplate = function (defaultCardCharacters, defaultNameOnCardName, defaultDateCharacters) {
 
         if (hp.Utils.defaults.paymentTypeOrder.indexOf(4) < 0) {
             return "";
@@ -7370,11 +7382,11 @@
 
     };
 
-    GiftCard.prototype.getCurrentPageElement = function() {
+    GiftCard.prototype.getCurrentPageElement = function () {
         return this.$content.find(".hp-page-active").eq(0);
     };
 
-    GiftCard.prototype.goTo = function(pageNumber) {
+    GiftCard.prototype.goTo = function (pageNumber) {
 
         if (pageNumber === "first") {
             pageNumber = 0;
@@ -7406,26 +7418,26 @@
     };
 
 
-    GiftCard.prototype.next = function() {
+    GiftCard.prototype.next = function () {
         var page = this.currrentPage + 1;
         this.goTo(page === this.totalPages ? "first" : page);
     };
 
 
-    GiftCard.prototype.prev = function() {
+    GiftCard.prototype.prev = function () {
         this.goTo(this.currrentPage === 0 ? "last" : this.currrentPage - 1);
     };
 
-    GiftCard.prototype.showSuccess = function(delay) {
+    GiftCard.prototype.showSuccess = function (delay) {
         return hp.Utils.showSuccessPage(delay);
     };
 
-    GiftCard.prototype.detachEvents = function() {
+    GiftCard.prototype.detachEvents = function () {
         this.$parent.trigger("hp.notify");
         this.handleNotify();
     };
 
-    GiftCard.prototype.handleCharge = function(res) {
+    GiftCard.prototype.handleCharge = function (res) {
 
         var that = this,
             hasBalance = true,
@@ -7439,20 +7451,20 @@
         };
 
         hp.Utils.makeRequest({
-                "charge": {
-                    "chargeRequest": {
-                        "correlationId": hp.Utils.getCorrelationId(),
-                        "token": hp.Utils.getSession().sessionToken,
-                        "transactionId": this.transactionId,
-                        "instrumentId": this.instrumentId,
-                        "entryType": hp.Utils.defaults.entryType,
-                        "amount": hp.Utils.getAmount(),
-                        "__request": res.request
-                    }
+            "charge": {
+                "chargeRequest": {
+                    "correlationId": hp.Utils.getCorrelationId(),
+                    "token": hp.Utils.getSession().sessionToken,
+                    "transactionId": this.transactionId,
+                    "instrumentId": this.instrumentId,
+                    "entryType": hp.Utils.defaults.entryType,
+                    "amount": hp.Utils.getAmount(),
+                    "__request": res.request
                 }
-            })
+            }
+        })
             .then(hp.Utils.buildResultObjectByType)
-            .then(function(promiseResponse) {
+            .then(function (promiseResponse) {
 
                 that.$parent.trigger("hp.submit", {
                     "type": hp.RequestTypes.CHARGE,
@@ -7460,7 +7472,7 @@
                 });
 
             })
-            .fail(function(promiseResponse) {
+            .fail(function (promiseResponse) {
 
                 if (typeof promiseResponse.responseJSON !== "undefined") {
                     promiseResponse = promiseResponse.responseJSON;
@@ -7475,7 +7487,7 @@
 
     };
 
-    GiftCard.prototype.handleSubmit = function() {
+    GiftCard.prototype.handleSubmit = function () {
 
         var that = this;
 
@@ -7485,36 +7497,36 @@
 
         $submit.attr("disabled", "disabled").text("Submitting...");
 
-        hp.Utils.promptAvs().then(function() {
+        hp.Utils.promptAvs().then(function () {
 
-                hp.Utils.showLoader();
+            hp.Utils.showLoader();
 
-                return hp.Utils.makeRequest({
-                    "createPaymentInstrument": {
-                        "createPaymentInstrumentRequest": {
-                            "correlationId": hp.Utils.getCorrelationId(),
+            return hp.Utils.makeRequest({
+                "createPaymentInstrument": {
+                    "createPaymentInstrumentRequest": {
+                        "correlationId": hp.Utils.getCorrelationId(),
+                        "customerToken": hp.Utils.getCustomerToken(),
+                        "instrumentId": hp.Utils.getInstrumentId(),
+                        "token": hp.Utils.getSession().sessionToken,
+                        "name": that.formData.name,
+                        "properties": {
+                            "cardNumber": that.formData.cardNumber,
+                            "expirationDate": that.formData._expiryMonth + "/" + that.formData._expiryYear,
+                            "cvv": that.formData.cvv,
+                            "nameOnCard": that.formData.name,
                             "customerToken": hp.Utils.getCustomerToken(),
-                            "instrumentId": hp.Utils.getInstrumentId(),
-                            "token": hp.Utils.getSession().sessionToken,
-                            "name": that.formData.name,
-                            "properties": {
-                                "cardNumber": that.formData.cardNumber,
-                                "expirationDate": that.formData._expiryMonth + "/" + that.formData._expiryYear,
-                                "cvv": that.formData.cvv,
-                                "nameOnCard": that.formData.name,
-                                "customerToken": hp.Utils.getCustomerToken(),
-                                "instrumentId": hp.Utils.getInstrumentId()
-                            },
-                            "billingAddress": {
-                                "addressLine1": hp.Utils.defaults.billingAddress.addressLine1,
-                                "postalCode": hp.Utils.defaults.billingAddress.postalCode
-                            }
+                            "instrumentId": hp.Utils.getInstrumentId()
+                        },
+                        "billingAddress": {
+                            "addressLine1": hp.Utils.defaults.billingAddress.addressLine1,
+                            "postalCode": hp.Utils.defaults.billingAddress.postalCode
                         }
                     }
-                });
+                }
+            });
 
-            })
-            .then(function(res) {
+        })
+            .then(function (res) {
 
                 if (res.isException) {
 
@@ -7536,7 +7548,7 @@
 
                 that.handleCharge(res);
 
-            }).fail(function(err) {
+            }).fail(function (err) {
 
                 if (typeof err.responseJSON !== "undefined") {
                     err = err.responseJSON;
@@ -7551,34 +7563,34 @@
 
     };
 
-    GiftCard.prototype.handleSuccess = function(res) {
+    GiftCard.prototype.handleSuccess = function (res) {
         hp.Utils.handleSuccess(res);
         this.showSuccess();
     };
 
-    GiftCard.prototype.handleError = function(res) {
+    GiftCard.prototype.handleError = function (res) {
         hp.Utils.handleError(res);
         this.clearInputs();
     };
 
-    GiftCard.prototype.addScanSwipeListener = function(first_argument) {
+    GiftCard.prototype.addScanSwipeListener = function (first_argument) {
 
         var $this = this;
 
         $(document).pos({
             onEventName: "hp.global_giftcard_start",
             offEventName: "hp.global_giftcard_end",
-            onSwipeScan: function(result) {
+            onSwipeScan: function (result) {
                 $this.handleSubmit(data);
             }
         });
     };
 
-    GiftCard.prototype.attachEvents = function() {
+    GiftCard.prototype.attachEvents = function () {
 
         var $this = this;
 
-        $this.$parent.on("hp.notify", function(e, args) {
+        $this.$parent.on("hp.notify", function (e, args) {
 
             if (typeof args === "undefined") {
                 return;
@@ -7607,7 +7619,7 @@
         $this.handleNotify();
     };
 
-    GiftCard.prototype.handlePage0Events = function(container) {
+    GiftCard.prototype.handlePage0Events = function (container) {
 
         this.addScanSwipeListener();
 
@@ -7618,7 +7630,7 @@
         container
             .find(".hp-input-gc .hp-submit")
             .off()
-            .on("click", function(e) {
+            .on("click", function (e) {
 
             });
 
@@ -7626,31 +7638,31 @@
 
     };
 
-    GiftCard.prototype.handlePage1Events = function(container) {
+    GiftCard.prototype.handlePage1Events = function (container) {
         console.log("handlePage1Events", container);
     };
 
-    GiftCard.prototype.handlePage2Events = function(container) {
+    GiftCard.prototype.handlePage2Events = function (container) {
         console.log("handlePage2Events", container);
     };
 
-    GiftCard.prototype.handlePage3Events = function(container) {
+    GiftCard.prototype.handlePage3Events = function (container) {
         console.log("handlePage3Events", container);
     };
 
-    GiftCard.prototype.handlePage4Events = function(container) {
+    GiftCard.prototype.handlePage4Events = function (container) {
         console.log("handlePage4Events", container);
     };
 
-    GiftCard.prototype.handlePage5Events = function(container) {
+    GiftCard.prototype.handlePage5Events = function (container) {
         console.log("handlePage5Events", container);
     };
 
-    GiftCard.prototype.handleNotify = function() {
+    GiftCard.prototype.handleNotify = function () {
 
         var $this = this;
 
-        hp.Utils.validateCreditCardData(this.formData, function(error, data) {
+        hp.Utils.validateCreditCardData(this.formData, function (error, data) {
 
             if (!error) {
                 $this.formData._isValid = true;
@@ -7665,35 +7677,35 @@
 
     };
 
-    GiftCard.prototype.isCreditCard = function() {
+    GiftCard.prototype.isCreditCard = function () {
         return true;
     };
 
-    GiftCard.prototype.isBankAccount = function() {
+    GiftCard.prototype.isBankAccount = function () {
         return false;
     };
 
-    GiftCard.prototype.isEMoney = function() {
+    GiftCard.prototype.isEMoney = function () {
         return false;
     };
 
-    GiftCard.prototype.isCode = function() {
+    GiftCard.prototype.isCode = function () {
         return false;
     };
 
-    GiftCard.prototype.isSuccessPage = function() {
+    GiftCard.prototype.isSuccessPage = function () {
         return false;
     };
 
-    GiftCard.prototype.isTransvault = function() {
+    GiftCard.prototype.isTransvault = function () {
         return false;
     };
 
-    GiftCard.prototype.isGiftCard = function() {
+    GiftCard.prototype.isGiftCard = function () {
         return true;
     };
 
-    GiftCard.prototype.isSignature = function() {
+    GiftCard.prototype.isSignature = function () {
         return false;
     };
 
@@ -7704,7 +7716,7 @@
 
 })(jQuery, window, document);
 
-(function($, window, document, undefined) {
+(function ($, window, document, undefined) {
 
     "use strict";
 
@@ -7738,7 +7750,7 @@
     var sessionId = "",
         createdOn = (new Date()).toISOString();
 
-    BankAccount.prototype.init = function() {
+    BankAccount.prototype.init = function () {
 
         sessionId = hp.Utils.getSession().sessionToken;
 
@@ -7768,13 +7780,13 @@
         this.transactionId = hp.Utils.defaults.transactionId;
     };
 
-    BankAccount.prototype.clearInputs = function() {
+    BankAccount.prototype.clearInputs = function () {
 
         this.formData = {
             _isValid: false
         };
 
-        $all.each(function() {
+        $all.each(function () {
             $(this).find("input").val("");
         });
 
@@ -7785,7 +7797,7 @@
 
     };
 
-    BankAccount.prototype.createTemplate = function(defaultName, defaultAccountNumberCharacters, defaultRoutingNumberCharacters) {
+    BankAccount.prototype.createTemplate = function (defaultName, defaultAccountNumberCharacters, defaultRoutingNumberCharacters) {
 
         if (hp.Utils.defaults.paymentTypeOrder.indexOf(1) < 0) {
             return "";
@@ -7808,7 +7820,7 @@
             '<input placeholder="Enter Full Name" value="' + hp.Utils.defaults.customerName + '" autocomplete="on" type="text">',
             '</div>',
             '<div class="hp-break" >',
-                '{{inputHtml}}',
+            '{{inputHtml}}',
             '</div>',
             '<button class="hp-submit">Submit Payment</button>',
             '<p class="info">* Please note that bank account (ACH) transactions may take up to 3 days to process. This time period varies depending on the your issuing bank. For more information please visit us at <a href="https://www.etsms.com/" target="_blank">https://etsms.com</a>.</p>',
@@ -7817,10 +7829,10 @@
 
         var $inputHtml = [
             '<div class="hp-input hp-input-account hp-input-left">',
-                '<input placeholder="Account Number" autocomplete="on" type="text" pattern="\\d*">',
+            '<input placeholder="Account Number" autocomplete="on" type="text" pattern="\\d*">',
             '</div>',
             '<div class="hp-input hp-input-routing hp-input-right">',
-                '<input placeholder="Routing Number" autocomplete="on" type="text" pattern="\\d*">',
+            '<input placeholder="Routing Number" autocomplete="on" type="text" pattern="\\d*">',
             '</div>'
         ].join("");
 
@@ -7828,10 +7840,10 @@
 
             $inputHtml = [
                 '<div class="hp-input hp-input-routing hp-input-left">',
-                    '<input placeholder="Routing Number" autocomplete="on" type="text" pattern="\\d*">',
+                '<input placeholder="Routing Number" autocomplete="on" type="text" pattern="\\d*">',
                 '</div>',
                 '<div class="hp-input hp-input-account hp-input-right">',
-                    '<input placeholder="Account Number" autocomplete="on" type="text" pattern="\\d*">',
+                '<input placeholder="Account Number" autocomplete="on" type="text" pattern="\\d*">',
                 '</div>'
             ].join("");
 
@@ -7845,7 +7857,7 @@
     };
 
 
-    BankAccount.prototype.detachEvents = function() {
+    BankAccount.prototype.detachEvents = function () {
 
         this.$content.find(".hp-input-account input").off().val("");
         this.$content.find(".hp-input-fullname input").off().val(hp.Utils.defaults.customerName);
@@ -7856,40 +7868,42 @@
 
     };
 
-    BankAccount.prototype.handleRoutingInput = function(routingNumber) {
+    BankAccount.prototype.handleRoutingInput = function (routingNumber) {
 
         if (routingNumber === "") {
             return $visualrouting.html(hp.Utils.defaults.defaultRoutingNumberCharacters);
         }
 
         this.formData.routingNumber = $.trim(routingNumber);
-        $visualrouting.text(routingNumber);
+        $visualrouting.text(this.formData.routingNumber);
 
     };
 
-    BankAccount.prototype.handleAccountInput = function(accountNumber) {
+    BankAccount.prototype.handleAccountInput = function (accountNumber) {
 
         if (accountNumber === "") {
             return $visualaccount.html(hp.Utils.defaults.defaultAccountNumberCharacters);
         }
 
         this.formData.accountNumber = $.trim(accountNumber);
-        $visualaccount.text(accountNumber);
+        $visualaccount.text(this.formData.accountNumber);
 
     };
 
-    BankAccount.prototype.handleNameInput = function(name) {
+    BankAccount.prototype.handleNameInput = function (name) {
 
         if (name === "") {
             return $visualfullname.html(hp.Utils.defaults.defaultName);
         }
 
-        this.formData.name = $.trim(name);
-        $visualfullname.text(name);
+        name = name.replace(/[0-9]/g, '');
 
+        this.formData.name = name;
+
+        $visualfullname.text(this.formData.name);
     };
 
-    BankAccount.prototype.attachEvents = function() {
+    BankAccount.prototype.attachEvents = function () {
 
         this.detachEvents();
 
@@ -7897,7 +7911,7 @@
 
         $this.$content.find(".hp-input-account input")
             .payment('restrictNumeric')
-            .on("keyup, keydown, keypress, change, input", function() {
+            .on("keyup, keydown, keypress, change, input", function () {
 
                 var that = $(this),
                     count = that.val().length;
@@ -7924,7 +7938,7 @@
             });
 
         $this.$content.find(".hp-input-fullname input")
-            .on("keyup, keydown, keypress, change, input", function() {
+            .on("keyup, keydown, keypress, change, input", function () {
 
                 var name = $(this).val();
 
@@ -7938,7 +7952,7 @@
             });
 
         if (hp.Utils.defaults.customerName !== "") {
-            setTimeout(function() {
+            setTimeout(function () {
                 $this.$content.find(".hp-input-fullname input").val(hp.Utils.defaults.customerName);
                 $this.$content.find(".hp-input-fullname input").trigger("keyup");
                 $this.$parent.trigger("hp.name", hp.Utils.defaults.customerName);
@@ -7949,7 +7963,7 @@
 
         $this.$content.find(".hp-input-routing input")
             .payment('restrictNumeric')
-            .on("keyup, keydown, keypress, change, input", function(e) {
+            .on("keyup, keydown, keypress, change, input", function (e) {
 
                 var that = $(this),
                     count = that.val().length;
@@ -7969,7 +7983,7 @@
             });
 
         $this.$content.find(".hp-submit")
-            .on("click", function(e) {
+            .on("click", function (e) {
                 e.preventDefault();
                 $this.handleSubmit();
                 $this.$parent.trigger("hp.notify");
@@ -7980,11 +7994,11 @@
         this.handleNotify();
     };
 
-    BankAccount.prototype.handleNotify = function() {
+    BankAccount.prototype.handleNotify = function () {
 
         var $this = this;
 
-        hp.Utils.validateBankAccountData(this.formData, function(error, data) {
+        hp.Utils.validateBankAccountData(this.formData, function (error, data) {
 
             $all.removeClass("hp-error");
 
@@ -8025,11 +8039,11 @@
 
     };
 
-    BankAccount.prototype.showSuccess = function(delay) {
+    BankAccount.prototype.showSuccess = function (delay) {
         return hp.Utils.showSuccessPage(delay);
     };
 
-    BankAccount.prototype.handleChargeWithoutInstrument = function(createPaymentInstrumentRequest) {
+    BankAccount.prototype.handleChargeWithoutInstrument = function (createPaymentInstrumentRequest) {
 
         var $this = this,
             requestModel = {},
@@ -8070,7 +8084,7 @@
 
         hp.Utils.makeRequest(requestModel)
             .then(hp.Utils.buildResultObjectByType)
-            .then(function(promiseResponse) {
+            .then(function (promiseResponse) {
 
                 $this.$parent.trigger("hp.submit", {
                     "type": hp.RequestTypes.CHARGE,
@@ -8078,7 +8092,7 @@
                 });
 
             })
-            .fail(function(promiseResponse) {
+            .fail(function (promiseResponse) {
 
                 if (typeof promiseResponse.responseJSON !== "undefined") {
                     promiseResponse = promiseResponse.responseJSON;
@@ -8093,7 +8107,7 @@
 
     };
 
-    BankAccount.prototype.handleCharge = function(res) {
+    BankAccount.prototype.handleCharge = function (res) {
 
         var $this = this;
 
@@ -8135,7 +8149,7 @@
 
         hp.Utils.makeRequest(requestModel)
             .then(hp.Utils.buildResultObjectByType)
-            .then(function(promiseResponse) {
+            .then(function (promiseResponse) {
 
                 $this.$parent.trigger("hp.submit", {
                     "type": hp.RequestTypes.CHARGE,
@@ -8143,7 +8157,7 @@
                 });
 
             })
-            .fail(function(promiseResponse) {
+            .fail(function (promiseResponse) {
 
                 if (typeof promiseResponse.responseJSON !== "undefined") {
                     promiseResponse = promiseResponse.responseJSON;
@@ -8158,23 +8172,23 @@
 
     };
 
-    BankAccount.prototype.handleSuccess = function(res) {
+    BankAccount.prototype.handleSuccess = function (res) {
         hp.Utils.handleSuccess(res);
         this.showSuccess();
     };
 
-    BankAccount.prototype.handleError = function(res) {
+    BankAccount.prototype.handleError = function (res) {
         hp.Utils.handleError(res);
         this.clearInputs();
     };
 
-    BankAccount.prototype.handleSubmit = function() {
+    BankAccount.prototype.handleSubmit = function () {
 
         var $this = this;
 
         if (!$this.formData._isValid) {
             $visualbank.addClass("hp-bank-invalid");
-            setTimeout(function() {
+            setTimeout(function () {
                 $visualbank.removeClass("hp-bank-invalid");
             }, 2000);
             return;
@@ -8217,7 +8231,7 @@
 
         hp.Utils
             .makeRequest(createPaymentInstrumentRequest)
-            .then(function(res) {
+            .then(function (res) {
 
                 if (res.isException) {
 
@@ -8239,7 +8253,7 @@
 
                 $this.handleCharge(res);
 
-            }).fail(function(err) {
+            }).fail(function (err) {
 
                 if (typeof err.responseJSON !== "undefined") {
                     err = err.responseJSON;
@@ -8254,35 +8268,35 @@
 
     };
 
-    BankAccount.prototype.isCreditCard = function() {
+    BankAccount.prototype.isCreditCard = function () {
         return false;
     };
 
-    BankAccount.prototype.isBankAccount = function() {
+    BankAccount.prototype.isBankAccount = function () {
         return true;
     };
 
-    BankAccount.prototype.isEMoney = function() {
+    BankAccount.prototype.isEMoney = function () {
         return false;
     };
 
-    BankAccount.prototype.isSuccessPage = function() {
+    BankAccount.prototype.isSuccessPage = function () {
         return false;
     };
 
-    BankAccount.prototype.isCode = function() {
+    BankAccount.prototype.isCode = function () {
         return false;
     };
 
-    BankAccount.prototype.isTransvault = function() {
+    BankAccount.prototype.isTransvault = function () {
         return false;
     };
 
-    BankAccount.prototype.isGiftCard = function() {
+    BankAccount.prototype.isGiftCard = function () {
         return false;
     };
 
-    BankAccount.prototype.isSignature = function() {
+    BankAccount.prototype.isSignature = function () {
         return false;
     };
 
@@ -8293,7 +8307,7 @@
 
 })(jQuery, window, document);
 
-(function($, window, document, undefined) {
+(function ($, window, document, undefined) {
 
     "use strict";
 
@@ -8330,7 +8344,7 @@
     var sessionId = "",
         createdOn = (new Date()).toISOString();
 
-    Code.prototype.init = function() {
+    Code.prototype.init = function () {
 
         sessionId = hp.Utils.getSession().sessionToken;
 
@@ -8357,7 +8371,7 @@
         this.transactionId = hp.Utils.defaults.transactionId;
     };
 
-    Code.prototype.clearInputs = function() {
+    Code.prototype.clearInputs = function () {
 
         this.formData = {
             _isValid: false
@@ -8371,7 +8385,7 @@
 
     };
 
-    Code.prototype.createTemplate = function(defaultCardCharacters, defaultNameOnCardName, defaultDateCharacters) {
+    Code.prototype.createTemplate = function (defaultCardCharacters, defaultNameOnCardName, defaultDateCharacters) {
 
         if (hp.Utils.defaults.paymentTypeOrder.indexOf(2) < 0) {
             return "";
@@ -8399,7 +8413,7 @@
 
     };
 
-    Code.prototype.detachEvents = function() {
+    Code.prototype.detachEvents = function () {
         this.$content.find(".hp-submit").off();
         this.$parent.off("hp.swipped");
         this.$parent.trigger("hp.notify");
@@ -8409,7 +8423,7 @@
         $(window).off("keydown");
     };
 
-    Code.prototype.attachEvents = function() {
+    Code.prototype.attachEvents = function () {
 
         this.detachEvents();
 
@@ -8417,18 +8431,18 @@
 
         $(document).pos();
 
-        $(document).on("hp.global_swipped_start", function(event, data) {
+        $(document).on("hp.global_swipped_start", function (event, data) {
             hp.Utils.showLoader();
             hp.Utils.defaults.eventCallback(data);
         });
 
-        $(document).on("hp.global_swipped_end", function(event, data) {
+        $(document).on("hp.global_swipped_end", function (event, data) {
             hp.Utils.defaults.eventCallback(data);
             $this.handleSubmit(data);
         });
 
         // Kills spacebar page-down event
-        $(window).on("keydown", function(e) {
+        $(window).on("keydown", function (e) {
             if (e.target == document.body) {
                 return e.keyCode != 32;
             }
@@ -8436,7 +8450,7 @@
 
     };
 
-    Code.prototype.handleChargeWithoutInstrument = function(createInstrumentRequest) {
+    Code.prototype.handleChargeWithoutInstrument = function (createInstrumentRequest) {
 
         var $this = this,
             requestModel = {},
@@ -8477,7 +8491,7 @@
 
         hp.Utils.makeRequest(requestModel)
             .then(hp.Utils.buildResultObjectByType)
-            .then(function(promiseResponse) {
+            .then(function (promiseResponse) {
 
                 $this.$parent.trigger("hp.submit", {
                     "type": hp.RequestTypes.CHARGE,
@@ -8485,7 +8499,7 @@
                 });
 
             })
-            .fail(function(promiseResponse) {
+            .fail(function (promiseResponse) {
 
                 if (typeof promiseResponse.responseJSON !== "undefined") {
                     promiseResponse = promiseResponse.responseJSON;
@@ -8499,7 +8513,7 @@
             });
     };
 
-    Code.prototype.handleCharge = function(res) {
+    Code.prototype.handleCharge = function (res) {
 
         var hasBalance = true,
             $this = this,
@@ -8549,7 +8563,7 @@
 
         hp.Utils.makeRequest(requestModel)
             .then(hp.Utils.buildResultObjectByType)
-            .then(function(promiseResponse) {
+            .then(function (promiseResponse) {
 
                 $this.$parent.trigger("hp.submit", {
                     "type": hp.RequestTypes.CHARGE,
@@ -8557,7 +8571,7 @@
                 });
 
             })
-            .fail(function(promiseResponse) {
+            .fail(function (promiseResponse) {
 
                 if (typeof promiseResponse.responseJSON !== "undefined") {
                     promiseResponse = promiseResponse.responseJSON;
@@ -8571,7 +8585,7 @@
             });
     };
 
-    Code.prototype.handleSubmit = function(data) {
+    Code.prototype.handleSubmit = function (data) {
 
         var $this = this;
 
@@ -8660,7 +8674,7 @@
         cardProperties["customerToken"] = hp.Utils.getCustomerToken();
         cardProperties["instrumentId"] = hp.Utils.getInstrumentId();
 
-        hp.Utils.promptAvs().then(function() {
+        hp.Utils.promptAvs().then(function () {
 
             var createInstrumentRequest = {
                 "createPaymentInstrument": {
@@ -8690,7 +8704,7 @@
              */
             return $this.handleChargeWithoutInstrument(createInstrumentRequest);
 
-        }).then(function(res) {
+        }).then(function (res) {
 
             if (!hp.Utils.defaults.saveCustomer) {
                 return;
@@ -8718,7 +8732,7 @@
 
             $this.handleCharge(res);
 
-        }).fail(function(err) {
+        }).fail(function (err) {
 
             if (typeof err.responseJSON !== "undefined") {
                 err = err.responseJSON;
@@ -8733,49 +8747,49 @@
 
     };
 
-    Code.prototype.handleSuccess = function(res) {
+    Code.prototype.handleSuccess = function (res) {
         hp.Utils.handleSuccess(res);
         this.showSuccess();
     };
 
-    Code.prototype.handleError = function(res) {
+    Code.prototype.handleError = function (res) {
         hp.Utils.handleError(res);
         this.clearInputs();
     };
 
-    Code.prototype.showSuccess = function(delay) {
+    Code.prototype.showSuccess = function (delay) {
         return hp.Utils.showSuccessPage(delay);
     };
 
-    Code.prototype.isCreditCard = function() {
+    Code.prototype.isCreditCard = function () {
         return false;
     };
 
-    Code.prototype.isCode = function() {
+    Code.prototype.isCode = function () {
         return true;
     };
 
-    Code.prototype.isBankAccount = function() {
+    Code.prototype.isBankAccount = function () {
         return false;
     };
 
-    Code.prototype.isEMoney = function() {
+    Code.prototype.isEMoney = function () {
         return false;
     };
 
-    Code.prototype.isSuccessPage = function() {
+    Code.prototype.isSuccessPage = function () {
         return false;
     };
 
-    Code.prototype.isTransvault = function() {
+    Code.prototype.isTransvault = function () {
         return false;
     };
 
-    Code.prototype.isGiftCard = function() {
+    Code.prototype.isGiftCard = function () {
         return false;
     };
 
-    Code.prototype.isSignature = function() {
+    Code.prototype.isSignature = function () {
         return false;
     };
 
@@ -8786,7 +8800,7 @@
 
 })(jQuery, window, document);
 
-(function($, window, document, undefined) {
+(function ($, window, document, undefined) {
 
     "use strict";
 
@@ -8838,7 +8852,7 @@
         "GetMerchantCredentials": buildingLinkMessage
     };
 
-    var getMessage = function(event) {
+    var getMessage = function (event) {
 
         var eventKey = "Idle";
         var eventValue = "";
@@ -8921,7 +8935,7 @@
 
     };
 
-    var getMessageKeyColor = function(message) {
+    var getMessageKeyColor = function (message) {
 
         var result = "";
 
@@ -8968,7 +8982,7 @@
         };
     }
 
-    Transvault.prototype.init = function() {
+    Transvault.prototype.init = function () {
 
         // utils call
         var context = hp.Utils.handleLegacyCssClassApplication("transvault", this.$element),
@@ -8988,9 +9002,9 @@
         this.wasCancelled = false;
     };
 
-    Transvault.prototype.showError = function(message, title, code) {
+    Transvault.prototype.showError = function (message, title, code) {
 
-        setTimeout(function() {
+        setTimeout(function () {
 
             var createdOn = (new Date()).toISOString();
             var sessionId = hp.Utils.getSession().sessionId;
@@ -9030,7 +9044,7 @@
             if (!hp.Utils.shouldErrorPostBack()) {
                 hp.Utils.defaults.errorCallback(errorResponse);
             } else {
-                hp.Utils.buildFormFromObject(errorResponse).then(function($form) {
+                hp.Utils.buildFormFromObject(errorResponse).then(function ($form) {
                     $form.attr("action", hp.Utils.defaults.errorCallback).submit();
                 });
             }
@@ -9039,7 +9053,7 @@
 
     };
 
-    Transvault.prototype.createTemplate = function() {
+    Transvault.prototype.createTemplate = function () {
 
         if (hp.Utils.defaults.paymentTypeOrder.indexOf(3) < 0) {
             return "";
@@ -9066,7 +9080,7 @@
 
     };
 
-    Transvault.prototype.detachEvents = function() {
+    Transvault.prototype.detachEvents = function () {
 
         this.$parent.off("hp.transvaultSuccess");
         this.$parent.off("hp.transvaultError");
@@ -9079,7 +9093,7 @@
 
     };
 
-    Transvault.prototype.attachEvents = function() {
+    Transvault.prototype.attachEvents = function () {
 
         this.detachEvents();
 
@@ -9089,14 +9103,14 @@
         $this.setupWebockets();
         $this.$parent.find(".hp-submit-refresh").on("click", hp.Utils.reset);
 
-        $this.$parent.find(".hp-submit").on("click", function(e) {
+        $this.$parent.find(".hp-submit").on("click", function (e) {
             e.preventDefault();
             $this.cancelTransaction();
         });
 
     };
 
-    Transvault.prototype.onMessage = function(response) {
+    Transvault.prototype.onMessage = function (response) {
 
         var hostUrl = hp.Utils.defaults.baseUrl;
 
@@ -9115,7 +9129,7 @@
         if (eventKey === "Thecredentialsprovidedwereinvalid.") {
 
             $this.cancelTransaction()
-                .then(function() {
+                .then(function () {
                     hp.Utils.showError("Reauthenticating. Please wait...");
                     setTimeout(hp.Utils.reset, 5000);
                 });
@@ -9185,7 +9199,7 @@
         }
     };
 
-    Transvault.prototype.removeAppRedirectLinkForm = function(emoneyMobileAppUrl) {
+    Transvault.prototype.removeAppRedirectLinkForm = function (emoneyMobileAppUrl) {
 
         var $formElement = this.$parent.eq(0);
 
@@ -9201,7 +9215,7 @@
 
     };
 
-    Transvault.prototype.buildAppRedirectLinkForm = function(emoneyMobileAppUrl) {
+    Transvault.prototype.buildAppRedirectLinkForm = function (emoneyMobileAppUrl) {
 
         var $formElement = this.$parent.eq(0);
 
@@ -9229,7 +9243,7 @@
         $formElement.prepend(html);
     };
 
-    Transvault.prototype.onSuccess = function(response) {
+    Transvault.prototype.onSuccess = function (response) {
 
         var $this = this,
             props = response;
@@ -9462,7 +9476,7 @@
 
     };
 
-    Transvault.prototype.setMessage = function(message) {
+    Transvault.prototype.setMessage = function (message) {
 
         var el = this.$parent.find(".hp-input-transvault-message");
         el.text(message);
@@ -9471,7 +9485,7 @@
 
     };
 
-    Transvault.prototype.cancelTransactionWithoutError = function() {
+    Transvault.prototype.cancelTransactionWithoutError = function () {
 
         var token = hp.Utils.getSession().sessionToken,
             correlationId = hp.Utils.getCorrelationId(),
@@ -9506,7 +9520,7 @@
 
     };
 
-    Transvault.prototype.cancelTransaction = function() {
+    Transvault.prototype.cancelTransaction = function () {
 
         var token = hp.Utils.getSession().sessionToken,
             correlationId = hp.Utils.getCorrelationId(),
@@ -9543,7 +9557,7 @@
 
     };
 
-    Transvault.prototype.disableNavBar = function() {
+    Transvault.prototype.disableNavBar = function () {
         if (this.$parent != null) {
             var nav = this.$parent.find(".hp-nav");
             nav.find(".hp-hide-list").remove();
@@ -9563,19 +9577,19 @@
         }
     };
 
-    Transvault.prototype.hideSubmitButton = function() {
+    Transvault.prototype.hideSubmitButton = function () {
         if (this.$parent != null) {
             this.$parent.find(".hp-submit").hide();
         }
     };
 
-    Transvault.prototype.hideMessageText = function() {
+    Transvault.prototype.hideMessageText = function () {
         if (this.$parent != null) {
             this.$parent.find(".event-default").hide();
         }
     };
 
-    Transvault.prototype.onCancelled = function() {
+    Transvault.prototype.onCancelled = function () {
 
         this.hideSubmitButton();
         this.hideMessageText();
@@ -9583,7 +9597,7 @@
         this.wasCancelled = true;
     };
 
-    Transvault.prototype.onError = function(messageObject) {
+    Transvault.prototype.onError = function (messageObject) {
 
         this.$parent.find(".event-default").hide();
         this.$parent.find(".hp-submit").hide();
@@ -9608,16 +9622,16 @@
 
             }
 
-        } catch (e) {}
+        } catch (e) { }
 
     };
 
-    Transvault.prototype.sendMessage = function(request) {
+    Transvault.prototype.sendMessage = function (request) {
         var requestStringified = JSON.stringify(request);
         this.transvaultHub.server.sendMessage(requestStringified);
     };
 
-    Transvault.prototype.requestAppRedirectLinkForm = function() {
+    Transvault.prototype.requestAppRedirectLinkForm = function () {
 
         this.transvaultHub
             .server
@@ -9625,7 +9639,7 @@
 
     };
 
-    Transvault.prototype.setupWebockets = function(amount) {
+    Transvault.prototype.setupWebockets = function (amount) {
 
         var $this = this,
             $message = $this.$parent.find(".hp-input-transvault-message"),
@@ -9634,11 +9648,11 @@
         amount = amount || hp.Utils.getAmount();
         $this.correlationId = hp.Utils.getCorrelationId();
 
-        var messageHandler = function(response) {
+        var messageHandler = function (response) {
             $this.onMessage(response);
         };
 
-        var reconnectHandler = function(response) {
+        var reconnectHandler = function (response) {
 
             if (response && response.message && response.message.startsWith("No transport")) {
                 $message.hide();
@@ -9650,7 +9664,7 @@
 
             hp.Utils.log("Transvault: Connection error!");
 
-            setTimeout(function() {
+            setTimeout(function () {
                 hp.Utils.log("Transvault: Connection reconnecting...");
                 $message.css("color", "#FDFDFD").text("Reconnecting in 5 seconds...");
                 hp.Utils.reset();
@@ -9658,7 +9672,7 @@
 
         };
 
-        var startHandler = function() {
+        var startHandler = function () {
 
             $(".hp-input-transvault-message")
                 .text("Connected (listening)...")
@@ -9691,7 +9705,7 @@
 
         };
 
-        var errorHandler = function(response) {
+        var errorHandler = function (response) {
 
             if (response) {
                 $message.css("color", "#FC5F45").text(response);
@@ -9723,17 +9737,17 @@
                 .done(startHandler)
                 .fail(errorHandler);
 
-            $this.transvaultHub.off("error").on("error", function(err) {
+            $this.transvaultHub.off("error").on("error", function (err) {
                 hp.Utils.log("Transvault error: ", err);
                 reconnectHandler()
             });
 
-            $this.transvaultHub.off("disconnected").on("disconnected", function(err) {
+            $this.transvaultHub.off("disconnected").on("disconnected", function (err) {
 
                 hp.Utils.log("Transvault disconnected: ", err);
                 hp.Utils.log("Transvault attempting reconnection... ");
 
-                setTimeout(function() {
+                setTimeout(function () {
 
                     $this.transvaultHub.connection
                         .start(socketOptions)
@@ -9750,39 +9764,39 @@
         $this.$parent.trigger("hp.notify");
     };
 
-    Transvault.prototype.showSuccess = function(delay) {
+    Transvault.prototype.showSuccess = function (delay) {
         hp.Utils.showSuccessPage(delay);
     };
 
-    Transvault.prototype.isCreditCard = function() {
+    Transvault.prototype.isCreditCard = function () {
         return false;
     };
 
-    Transvault.prototype.isBankAccount = function() {
+    Transvault.prototype.isBankAccount = function () {
         return false;
     };
 
-    Transvault.prototype.isEMoney = function() {
+    Transvault.prototype.isEMoney = function () {
         return false;
     };
 
-    Transvault.prototype.isSuccessPage = function() {
+    Transvault.prototype.isSuccessPage = function () {
         return false;
     };
 
-    Transvault.prototype.isCode = function() {
+    Transvault.prototype.isCode = function () {
         return false;
     };
 
-    Transvault.prototype.isTransvault = function() {
+    Transvault.prototype.isTransvault = function () {
         return true;
     };
 
-    Transvault.prototype.isGiftCard = function() {
+    Transvault.prototype.isGiftCard = function () {
         return false;
     };
 
-    Transvault.prototype.isSignature = function() {
+    Transvault.prototype.isSignature = function () {
         return false;
     };
 
@@ -9794,10 +9808,10 @@
 })(jQuery, window, document);
 
 // Generated by CoffeeScript 1.7.1
-(function() {
+(function () {
     var $, cardFromNumber, cardFromType, cards, defaultFormat, formatBackCardNumber, formatBackExpiry, formatCardNumber, formatExpiry, formatForwardExpiry, formatForwardSlashAndSpace, hasTextSelected, luhnCheck, reFormatCVC, reFormatCardNumber, reFormatExpiry, reFormatNumeric, replaceFullWidthChars, restrictCVC, restrictCardNumber, restrictExpiry, restrictNumeric, safeVal, setCardType,
         __slice = [].slice,
-        __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+        __indexOf = [].indexOf || function (item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
     $ = window.jQuery || window.Zepto || window.$;
 
@@ -9805,7 +9819,7 @@
 
     $.payment.fn = {};
 
-    $.fn.payment = function() {
+    $.fn.payment = function () {
         var args, method;
         method = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
         return $.payment.fn[method].apply(this, args);
@@ -9906,7 +9920,7 @@
         luhn: true
     }];
 
-    cardFromNumber = function(num) {
+    cardFromNumber = function (num) {
         var card, p, pattern, _i, _j, _len, _len1, _ref;
         num = (num + '').replace(/\D/g, '');
         for (_i = 0, _len = cards.length; _i < _len; _i++) {
@@ -9922,7 +9936,7 @@
         }
     };
 
-    cardFromType = function(type) {
+    cardFromType = function (type) {
         var card, _i, _len;
         for (_i = 0, _len = cards.length; _i < _len; _i++) {
             card = cards[_i];
@@ -9932,7 +9946,7 @@
         }
     };
 
-    luhnCheck = function(num) {
+    luhnCheck = function (num) {
         var digit, digits, odd, sum, _i, _len;
         odd = true;
         sum = 0;
@@ -9951,7 +9965,7 @@
         return sum % 10 === 0;
     };
 
-    hasTextSelected = function($target) {
+    hasTextSelected = function ($target) {
         var _ref;
         if (($target.prop('selectionStart') != null) && $target.prop('selectionStart') !== $target.prop('selectionEnd')) {
             return true;
@@ -9964,7 +9978,7 @@
         return false;
     };
 
-    safeVal = function(value, $target) {
+    safeVal = function (value, $target) {
         var currPair, cursor, digit, error, last, prevPair;
         try {
             cursor = $target.prop('selectionStart');
@@ -9991,7 +10005,7 @@
         }
     };
 
-    replaceFullWidthChars = function(str) {
+    replaceFullWidthChars = function (str) {
         var chars, chr, fullWidth, halfWidth, idx, value, _i, _len;
         if (str == null) {
             str = '';
@@ -10011,10 +10025,10 @@
         return value;
     };
 
-    reFormatNumeric = function(e) {
+    reFormatNumeric = function (e) {
         var $target;
         $target = $(e.currentTarget);
-        return setTimeout(function() {
+        return setTimeout(function () {
             var value;
             value = $target.val();
             value = replaceFullWidthChars(value);
@@ -10023,10 +10037,10 @@
         });
     };
 
-    reFormatCardNumber = function(e) {
+    reFormatCardNumber = function (e) {
         var $target;
         $target = $(e.currentTarget);
-        return setTimeout(function() {
+        return setTimeout(function () {
             var value;
             value = $target.val();
             value = replaceFullWidthChars(value);
@@ -10035,7 +10049,7 @@
         });
     };
 
-    formatCardNumber = function(e) {
+    formatCardNumber = function (e) {
         var $target, card, digit, length, re, upperLength, value;
         digit = String.fromCharCode(e.which);
         if (!/^\d+$/.test(digit)) {
@@ -10062,18 +10076,18 @@
         }
         if (re.test(value)) {
             e.preventDefault();
-            return setTimeout(function() {
+            return setTimeout(function () {
                 return $target.val(value + ' ' + digit);
             });
         } else if (re.test(value + digit)) {
             e.preventDefault();
-            return setTimeout(function() {
+            return setTimeout(function () {
                 return $target.val(value + digit + ' ');
             });
         }
     };
 
-    formatBackCardNumber = function(e) {
+    formatBackCardNumber = function (e) {
         var $target, value;
         $target = $(e.currentTarget);
         value = $target.val();
@@ -10085,21 +10099,21 @@
         }
         if (/\d\s$/.test(value)) {
             e.preventDefault();
-            return setTimeout(function() {
+            return setTimeout(function () {
                 return $target.val(value.replace(/\d\s$/, ''));
             });
         } else if (/\s\d?$/.test(value)) {
             e.preventDefault();
-            return setTimeout(function() {
+            return setTimeout(function () {
                 return $target.val(value.replace(/\d$/, ''));
             });
         }
     };
 
-    reFormatExpiry = function(e) {
+    reFormatExpiry = function (e) {
         var $target;
         $target = $(e.currentTarget);
-        return setTimeout(function() {
+        return setTimeout(function () {
             var value;
             value = $target.val();
             value = replaceFullWidthChars(value);
@@ -10108,7 +10122,7 @@
         });
     };
 
-    formatExpiry = function(e) {
+    formatExpiry = function (e) {
         var $target, digit, val;
         digit = String.fromCharCode(e.which);
         if (!/^\d+$/.test(digit)) {
@@ -10118,12 +10132,12 @@
         val = $target.val() + digit;
         if (/^\d$/.test(val) && (val !== '0' && val !== '1')) {
             e.preventDefault();
-            return setTimeout(function() {
+            return setTimeout(function () {
                 return $target.val("0" + val + " / ");
             });
         } else if (/^\d\d$/.test(val)) {
             e.preventDefault();
-            return setTimeout(function() {
+            return setTimeout(function () {
                 var m1, m2;
                 m1 = parseInt(val[0], 10);
                 m2 = parseInt(val[1], 10);
@@ -10136,7 +10150,7 @@
         }
     };
 
-    formatForwardExpiry = function(e) {
+    formatForwardExpiry = function (e) {
         var $target, digit, val;
         digit = String.fromCharCode(e.which);
         if (!/^\d+$/.test(digit)) {
@@ -10149,7 +10163,7 @@
         }
     };
 
-    formatForwardSlashAndSpace = function(e) {
+    formatForwardSlashAndSpace = function (e) {
         var $target, val, which;
         which = String.fromCharCode(e.which);
         if (!(which === '/' || which === ' ')) {
@@ -10162,7 +10176,7 @@
         }
     };
 
-    formatBackExpiry = function(e) {
+    formatBackExpiry = function (e) {
         var $target, value;
         $target = $(e.currentTarget);
         value = $target.val();
@@ -10174,16 +10188,16 @@
         }
         if (/\d\s\/\s$/.test(value)) {
             e.preventDefault();
-            return setTimeout(function() {
+            return setTimeout(function () {
                 return $target.val(value.replace(/\d\s\/\s$/, ''));
             });
         }
     };
 
-    reFormatCVC = function(e) {
+    reFormatCVC = function (e) {
         var $target;
         $target = $(e.currentTarget);
-        return setTimeout(function() {
+        return setTimeout(function () {
             var value;
             value = $target.val();
             value = replaceFullWidthChars(value);
@@ -10192,7 +10206,7 @@
         });
     };
 
-    restrictNumeric = function(e) {
+    restrictNumeric = function (e) {
         var input;
         if (e.metaKey || e.ctrlKey) {
             return true;
@@ -10210,7 +10224,7 @@
         return !!/[\d\s]/.test(input);
     };
 
-    restrictCardNumber = function(e) {
+    restrictCardNumber = function (e) {
         var $target, card, digit, value;
         $target = $(e.currentTarget);
         digit = String.fromCharCode(e.which);
@@ -10229,7 +10243,7 @@
         }
     };
 
-    restrictExpiry = function(e) {
+    restrictExpiry = function (e) {
         var $target, digit, value;
         $target = $(e.currentTarget);
         digit = String.fromCharCode(e.which);
@@ -10246,7 +10260,7 @@
         }
     };
 
-    restrictCVC = function(e) {
+    restrictCVC = function (e) {
         var $target, digit, val;
         $target = $(e.currentTarget);
         digit = String.fromCharCode(e.which);
@@ -10260,13 +10274,13 @@
         return val.length <= 4;
     };
 
-    setCardType = function(e) {
+    setCardType = function (e) {
         var $target, allTypes, card, cardType, val;
         $target = $(e.currentTarget);
         val = $target.val();
         cardType = $.payment.cardType(val) || 'unknown';
         if (!$target.hasClass(cardType)) {
-            allTypes = (function() {
+            allTypes = (function () {
                 var _i, _len, _results;
                 _results = [];
                 for (_i = 0, _len = cards.length; _i < _len; _i++) {
@@ -10283,7 +10297,7 @@
         }
     };
 
-    $.payment.fn.formatCardCVC = function() {
+    $.payment.fn.formatCardCVC = function () {
         this.on('keypress', restrictNumeric);
         this.on('keypress', restrictCVC);
         this.on('paste', reFormatCVC);
@@ -10292,7 +10306,7 @@
         return this;
     };
 
-    $.payment.fn.formatCardExpiry = function() {
+    $.payment.fn.formatCardExpiry = function () {
         this.on('keypress', restrictNumeric);
         this.on('keypress', restrictExpiry);
         this.on('keypress', formatExpiry);
@@ -10304,7 +10318,7 @@
         return this;
     };
 
-    $.payment.fn.formatCardNumber = function() {
+    $.payment.fn.formatCardNumber = function () {
         this.on('keypress', restrictNumeric);
         this.on('keypress', restrictCardNumber);
         this.on('keypress', formatCardNumber);
@@ -10317,7 +10331,7 @@
         return this;
     };
 
-    $.payment.fn.restrictNumeric = function() {
+    $.payment.fn.restrictNumeric = function () {
         this.on('keypress', restrictNumeric);
         this.on('paste', reFormatNumeric);
         this.on('change', reFormatNumeric);
@@ -10325,11 +10339,11 @@
         return this;
     };
 
-    $.payment.fn.cardExpiryVal = function() {
+    $.payment.fn.cardExpiryVal = function () {
         return $.payment.cardExpiryVal($(this).val());
     };
 
-    $.payment.cardExpiryVal = function(value) {
+    $.payment.cardExpiryVal = function (value) {
         var month, prefix, year, _ref;
         _ref = value.split(/[\s\/]+/, 2), month = _ref[0], year = _ref[1];
         if ((year != null ? year.length : void 0) === 2 && /^\d+$/.test(year)) {
@@ -10345,7 +10359,7 @@
         };
     };
 
-    $.payment.validateCardNumber = function(num) {
+    $.payment.validateCardNumber = function (num) {
         var card, _ref;
         num = (num + '').replace(/\s+|-/g, '');
         if (!/^\d+$/.test(num)) {
@@ -10358,7 +10372,7 @@
         return (_ref = num.length, __indexOf.call(card.length, _ref) >= 0) && (card.luhn === false || luhnCheck(num));
     };
 
-    $.payment.validateCardExpiry = function(month, year) {
+    $.payment.validateCardExpiry = function (month, year) {
         var currentTime, expiry, _ref;
         if (typeof month === 'object' && 'month' in month) {
             _ref = month, month = _ref.month, year = _ref.year;
@@ -10394,7 +10408,7 @@
         return expiry > currentTime;
     };
 
-    $.payment.validateCardCVC = function(cvc, type) {
+    $.payment.validateCardCVC = function (cvc, type) {
         var card, _ref;
         cvc = $.trim(cvc);
         if (!/^\d+$/.test(cvc)) {
@@ -10408,7 +10422,7 @@
         }
     };
 
-    $.payment.cardType = function(num) {
+    $.payment.cardType = function (num) {
         var _ref;
         if (!num) {
             return null;
@@ -10416,7 +10430,7 @@
         return ((_ref = cardFromNumber(num)) != null ? _ref.type : void 0) || null;
     };
 
-    $.payment.formatCardNumber = function(num) {
+    $.payment.formatCardNumber = function (num) {
         var card, groups, upperLength, _ref;
         num = num.replace(/\D/g, '');
         card = cardFromNumber(num);
@@ -10433,14 +10447,14 @@
                 return;
             }
             groups.shift();
-            groups = $.grep(groups, function(n) {
+            groups = $.grep(groups, function (n) {
                 return n;
             });
             return groups.join(' ');
         }
     };
 
-    $.payment.formatExpiry = function(expiry) {
+    $.payment.formatExpiry = function (expiry) {
         var mon, parts, sep, year;
         parts = expiry.match(/^\D*(\d{1,2})(\D+)?(\d{1,4})?/);
         if (!parts) {
@@ -10464,11 +10478,11 @@
     };
 
 }).call(this);
-(function($) {
+(function ($) {
 
     var defaults = {}
 
-    $.fn.pos = function(options) {
+    $.fn.pos = function (options) {
 
         //define instance for use in child functions
 
@@ -10493,12 +10507,12 @@
         };
 
         // helper
-        var hasValue = function(match, index) {
+        var hasValue = function (match, index) {
             var result = false;
 
             try {
                 result = typeof match[index] !== "undefined";
-            } catch (err) {}
+            } catch (err) { }
 
             return result;
         }
@@ -10506,7 +10520,7 @@
         //extend options
         $this.options = $.extend(true, {}, defaults, options);
 
-        $this.off("keypress").on("keypress", function(event) {
+        $this.off("keypress").on("keypress", function (event) {
 
             if ($this.options.swipe) {
 
@@ -10584,7 +10598,7 @@
                 // Clean matches
                 if (parsedTrackResult != null && parsedTrackResult.length) {
 
-                    parsedTrackResult = parsedTrackResult.map(function(match) {
+                    parsedTrackResult = parsedTrackResult.map(function (match) {
                         return match.replace("|", "");
                     });
 
@@ -10655,12 +10669,12 @@
 })(jQuery);
 
 // Generated by CoffeeScript 1.4.0
-(function() {
+(function () {
     var $;
 
     $ = window.jQuery || window.Zepto || window.$;
 
-    $.fn.fancySelect = function(opts) {
+    $.fn.fancySelect = function (opts) {
         var isiOS, settings;
         if (opts == null) {
             opts = {};
@@ -10668,15 +10682,15 @@
         settings = $.extend({
             forceiOS: false,
             includeBlank: false,
-            optionTemplate: function(optionEl) {
+            optionTemplate: function (optionEl) {
                 return optionEl.text();
             },
-            triggerTemplate: function(optionEl) {
+            triggerTemplate: function (optionEl) {
                 return optionEl.text();
             }
         }, opts);
         isiOS = !!navigator.userAgent.match(/iP(hone|od|ad)/i);
-        return this.each(function() {
+        return this.each(function () {
             var copyOptionsToList, disabled, options, sel, trigger, updateTriggerText, wrapper;
             sel = $(this);
             if (sel.hasClass('fancified') || sel[0].tagName !== 'SELECT') {
@@ -10707,23 +10721,23 @@
             if (disabled) {
                 wrapper.addClass('disabled');
             }
-            updateTriggerText = function() {
+            updateTriggerText = function () {
                 var triggerHtml;
                 triggerHtml = settings.triggerTemplate(sel.find(':selected'));
                 return trigger.html(triggerHtml);
             };
-            sel.on('blur.fs', function() {
+            sel.on('blur.fs', function () {
                 if (trigger.hasClass('open')) {
-                    return setTimeout(function() {
+                    return setTimeout(function () {
                         return trigger.trigger('close.fs');
                     }, 120);
                 }
             });
-            trigger.on('close.fs', function() {
+            trigger.on('close.fs', function () {
                 trigger.removeClass('open');
                 return options.removeClass('open');
             });
-            trigger.on('click.fs', function() {
+            trigger.on('click.fs', function () {
                 var offParent, parent;
                 if (!disabled) {
                     trigger.toggleClass('open');
@@ -10748,25 +10762,25 @@
                     }
                 }
             });
-            sel.on('enable', function() {
+            sel.on('enable', function () {
                 sel.prop('disabled', false);
                 wrapper.removeClass('disabled');
                 disabled = false;
                 return copyOptionsToList();
             });
-            sel.on('disable', function() {
+            sel.on('disable', function () {
                 sel.prop('disabled', true);
                 wrapper.addClass('disabled');
                 return disabled = true;
             });
-            sel.on('change.fs', function(e) {
+            sel.on('change.fs', function (e) {
                 if (e.originalEvent && e.originalEvent.isTrusted) {
                     return e.stopPropagation();
                 } else {
                     return updateTriggerText();
                 }
             });
-            sel.on('keydown', function(e) {
+            sel.on('keydown', function (e) {
                 var hovered, newHovered, w;
                 w = e.which;
                 hovered = options.find('.hover');
@@ -10809,7 +10823,7 @@
                     }
                 }
             });
-            options.on('mousedown.fs', 'li', function(e) {
+            options.on('mousedown.fs', 'li', function (e) {
                 var clicked;
                 clicked = $(this);
                 sel.val(clicked.data('raw-value'));
@@ -10821,24 +10835,24 @@
                 trigger.addClass('selected');
                 return sel.val(clicked.data('raw-value')).trigger('change.fs').trigger('blur.fs').trigger('focus.fs');
             });
-            options.on('mouseenter.fs', 'li', function() {
+            options.on('mouseenter.fs', 'li', function () {
                 var hovered, nowHovered;
                 nowHovered = $(this);
                 hovered = options.find('.hover');
                 hovered.removeClass('hover');
                 return nowHovered.addClass('hover');
             });
-            options.on('mouseleave.fs', 'li', function() {
+            options.on('mouseleave.fs', 'li', function () {
                 return options.find('.hover').removeClass('hover');
             });
-            copyOptionsToList = function() {
+            copyOptionsToList = function () {
                 var selOpts;
                 updateTriggerText();
                 if (isiOS && !settings.forceiOS) {
                     return;
                 }
                 selOpts = sel.find('option');
-                return sel.find('option').each(function(i, opt) {
+                return sel.find('option').each(function (i, opt) {
                     var optHtml;
                     opt = $(opt);
                     if (!opt.prop('disabled') && (opt.val() || settings.includeBlank)) {
@@ -10851,7 +10865,7 @@
                     }
                 });
             };
-            sel.on('update.fs', function() {
+            sel.on('update.fs', function () {
                 wrapper.find('.options').empty();
                 return copyOptionsToList();
             });
@@ -10866,7 +10880,7 @@
  *  Made by Erik Zettersten
  *  Under MIT License
  */
-(function($, window, document, undefined) {
+(function ($, window, document, undefined) {
 
     var pluginName = "hp",
         defaults = {};
@@ -10968,7 +10982,7 @@
     /*
      * Main
      */
-    var intialize = function() {
+    var intialize = function () {
 
         var that = this,
             $element = $(that.element),
@@ -11164,10 +11178,10 @@
 
         if (typeof $element.data("paymentTypeOrder") !== "undefined") {
             hp.Utils.defaults.paymentTypeOrder = $.trim($element.data("paymentTypeOrder")
-                    .toString()
-                    .replace(" ", ""))
+                .toString()
+                .replace(" ", ""))
                 .split(",")
-                .map(function(item) {
+                .map(function (item) {
                     return +item;
                 });
         }
@@ -11190,7 +11204,7 @@
 
         hp.Utils.setPaymentInstrument();
 
-        hp.Utils.signIn().then(function() {
+        hp.Utils.signIn().then(function () {
             hp.Utils.setupPluginInstances($element);
         });
 
@@ -11198,7 +11212,7 @@
 
     $.extend(Plugin.prototype, {
 
-        init: function() {
+        init: function () {
 
             var $element = $(this.element),
                 name = "",
@@ -11242,14 +11256,14 @@
 
             var setup = new hp.Setup(type, new hp.models.Options(clientId, email, bcc, showMemoField, ga, orderId, name, subject));
 
-            $element.find("[data-item]").each(function() {
+            $element.find("[data-item]").each(function () {
                 var item = new hp.models.Item($(this).data("item"), $(this).data("price"));
                 setup.addItem(item);
             });
 
             $element.empty();
 
-            setup.createForm(this.element, hp.Utils.defaults.baseUrl).then(function(iframe) {
+            setup.createForm(this.element, hp.Utils.defaults.baseUrl).then(function (iframe) {
                 $element
                     .width(iframe.width)
                     .height(iframe.height)
@@ -11259,8 +11273,8 @@
         }
     });
 
-    $.fn[pluginName] = function(options) {
-        this.each(function() {
+    $.fn[pluginName] = function (options) {
+        this.each(function () {
             if (!$.data(this, "plugin_" + pluginName)) {
                 $.data(this, "plugin_" + pluginName, new Plugin(this, options));
             }
