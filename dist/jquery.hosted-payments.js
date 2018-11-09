@@ -10885,7 +10885,7 @@
     var pluginName = "hp",
         defaults = {};
 
-    defaults.version = "v3.8.39";
+    defaults.version = "v3.8.40";
     defaults.amount = 0;
     defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
     defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
