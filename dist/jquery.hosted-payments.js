@@ -6633,26 +6633,26 @@
             '</div>',
             '<div class="hp-input-wrapper">',
             '<div class="hp-input hp-input-cc">',
-            '<input placeholder="Enter Card Number" name="cardnumber" autocomplete="cc-number" type="text" pattern="\\d*">',
+            '<input placeholder="Enter Card Number" name="cardnumber" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-number") + '" type="text" pattern="\\d*">',
             '</div>',
             '<div class="hp-input hp-input-name">',
-            '<input placeholder="Enter Full Name" name="ccname" value="' + hp.Utils.defaults.customerName + '" autocomplete="cc-name" type="text">',
+            '<input placeholder="Enter Full Name" name="ccname" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-name") + '" type="text">',
             '</div>',
             '<br class="hp-break" />',
             '<div class="hp-input-container hp-input-container-date">',
             '<div class="hp-input hp-input-month">',
-            '<select autocomplete="cc-exp-month" name="cc-exp">',
+            '<select autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-exp-month") + '" name="cc-exp">',
             '{{monthList}}',
             '</select>',
             '</div>',
             '<div class="hp-input hp-input-year">',
-            '<select autocomplete="cc-exp-year" name="cc-exp">',
+            '<select autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-exp-year") + '" name="cc-exp">',
             '{{yearList}}',
             '</select>',
             '</div>',
             '</div>',
             '<div class="hp-input hp-input-third hp-input-cvv">',
-            '<input placeholder="Enter CVV" name="cvc" autocomplete="cc-csc" type="text" pattern="\\d*">',
+            '<input placeholder="Enter CVV" name="cvc" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-csc") + '" type="text" pattern="\\d*">',
             '<span class="hp-input-cvv-image"></span>',
             '</div>',
             '<br class="hp-break" />',
@@ -7829,10 +7829,10 @@
 
         var $inputHtml = [
             '<div class="hp-input hp-input-account hp-input-left">',
-            '<input placeholder="Account Number" autocomplete="on" type="text" pattern="\\d*">',
+            '<input placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">',
             '</div>',
             '<div class="hp-input hp-input-routing hp-input-right">',
-            '<input placeholder="Routing Number" autocomplete="on" type="text" pattern="\\d*">',
+            '<input placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">',
             '</div>'
         ].join("");
 
@@ -10935,6 +10935,7 @@
     defaults.customerToken = null;
     defaults.instrumentId = null;
     defaults.swapAchInputs = false;
+    defaults.disableAutocomplete = false;
 
     function Plugin(element, options) {
 
@@ -10966,6 +10967,14 @@
                 options.saveCustomer = false;
             } else if (options.saveCustomer.toString() === "true") {
                 options.saveCustomer = true;
+            }
+        }
+
+        if (typeof options.disableAutocomplete !== "undefined") {
+            if (options.disableAutocomplete.toString() === "false") {
+                options.disableAutocomplete = false;
+            } else if (options.disableAutocomplete.toString() === "true") {
+                options.disableAutocomplete = true;
             }
         }
 
@@ -11055,6 +11064,14 @@
                 hp.Utils.defaults.saveCustomer = false;
             } else if ($element.data("saveCustomer").toString() === "true") {
                 hp.Utils.defaults.saveCustomer = true;
+            }
+        }
+
+        if (typeof $element.data("disableAutocomplete") !== "undefined") {
+            if ($element.data("disableAutocomplete").toString() === "false") {
+                hp.Utils.defaults.disableAutocomplete = false;
+            } else if ($element.data("disableAutocomplete").toString() === "true") {
+                hp.Utils.defaults.disableAutocomplete = true;
             }
         }
 
