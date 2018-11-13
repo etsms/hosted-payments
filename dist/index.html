@@ -29,17 +29,16 @@
         $("#ets").hp({
             terminalId: "1016",
             apiKey: "0d9fa16f-678e-465c-b193-c4a430789cee",
-            paymentTypeOrder: [0],
             amount: 1,
             successCallback: callback,
             errorCallback: callback,
             debug: true,
             transactionId: transactionId,
-            surchargeFee: 1,
+            surchargeFee: 2,
             convenienceFee: 1,
-            disableAutocomplete: true
+            disableAutocomplete: false
         });
-        
+
     </script>
 </body>
 

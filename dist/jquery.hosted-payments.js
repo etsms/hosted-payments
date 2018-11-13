@@ -19,56 +19,7 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
-// Closure
-(function () {
 
-    /**
-     * Decimal adjustment of a number.
-     *
-     * @param	{String}	type	The type of adjustment.
-     * @param	{Number}	value	The number.
-     * @param	{Integer}	exp		The exponent (the 10 logarithm of the adjustment base).
-     * @returns	{Number}			The adjusted value.
-     */
-    function decimalAdjust(type, value, exp) {
-        // If the exp is undefined or zero...
-        if (typeof exp === 'undefined' || +exp === 0) {
-            return Math[type](value);
-        }
-        value = +value;
-        exp = +exp;
-        // If the value is not a number or the exp is not an integer...
-        if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
-            return NaN;
-        }
-        // Shift
-        value = value.toString().split('e');
-        value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
-        // Shift back
-        value = value.toString().split('e');
-        return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
-    }
-
-    // Decimal round
-    if (!Math.round10) {
-        Math.round10 = function (value, exp) {
-            return decimalAdjust('round', value, exp);
-        };
-    }
-    // Decimal floor
-    if (!Math.floor10) {
-        Math.floor10 = function (value, exp) {
-            return decimalAdjust('floor', value, exp);
-        };
-    }
-    // Decimal ceil
-    if (!Math.ceil10) {
-        Math.ceil10 = function (value, exp) {
-            return decimalAdjust('ceil', value, exp);
-        };
-    }
-
-})();
 
 (function (window, document, $) {
 
@@ -89,7 +40,6 @@
     /*
      * Plugin Constructor
      */
-
     var pluginName = 'jqSignature',
         defaults = {
             lineColor: '#222222',
@@ -335,19 +285,6 @@
 
 })(window, document, jQuery);
 
-/* jquery.signalR.core.js */
-/*global window:false */
-/*!
- * ASP.NET SignalR JavaScript Library v2.2.1
- * http://signalr.net/
- *
- * Copyright (c) .NET Foundation. All rights reserved.
- * Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
- *
- */
-
-/// <reference path="Scripts/jquery-1.6.4.js" />
-/// <reference path="jquery.signalR.version.js" />
 (function ($, window, undefined) {
 
     var resources = {
@@ -1316,12 +1253,6 @@
     $.connection = $.signalR = signalR;
 
 }(window.jQuery, window));
-/* jquery.signalR.transports.common.js */
-// Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
-
-/*global window:false */
-/// <reference path="jquery.signalR.core.js" />
 
 (function ($, window, undefined) {
 
@@ -2002,13 +1933,6 @@
     };
 
 }(window.jQuery, window));
-/* jquery.signalR.transports.webSockets.js */
-// Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
-
-
-/*global window:false */
-/// <reference path="jquery.signalR.transports.common.js" />
 
 (function ($, window, undefined) {
 
@@ -2158,13 +2082,6 @@
     };
 
 }(window.jQuery, window));
-/* jquery.signalR.transports.serverSentEvents.js */
-// Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
-
-
-/*global window:false */
-/// <reference path="jquery.signalR.transports.common.js" />
 
 (function ($, window, undefined) {
 
@@ -2340,13 +2257,6 @@
     };
 
 }(window.jQuery, window));
-/* jquery.signalR.transports.foreverFrame.js */
-// Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
-
-
-/*global window:false */
-/// <reference path="jquery.signalR.transports.common.js" />
 
 (function ($, window, undefined) {
 
@@ -2587,13 +2497,6 @@
     };
 
 }(window.jQuery, window));
-/* jquery.signalR.transports.longPolling.js */
-// Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
-
-
-/*global window:false */
-/// <reference path="jquery.signalR.transports.common.js" />
 
 (function ($, window, undefined) {
 
@@ -2848,12 +2751,6 @@
     };
 
 }(window.jQuery, window));
-/* jquery.signalR.hubs.js */
-// Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
-
-/*global window:false */
-/// <reference path="jquery.signalR.core.js" />
 
 (function ($, window, undefined) {
 
@@ -3268,28 +3165,11 @@
     $.hubConnection = hubConnection;
 
 }(window.jQuery, window));
-/* jquery.signalR.version.js */
-// Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-
-/*global window:false */
-/// <reference path="jquery.signalR.core.js" />
 (function ($, undefined) {
     $.signalR.version = "2.2.1";
 }(window.jQuery));
 
-/*!
- * ASP.NET SignalR JavaScript Library v2.2.1
- * http://signalr.net/
- *
- * Copyright (c) .NET Foundation. All rights reserved.
- * Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
- *
- */
-
-/// <reference path="..\..\SignalR.Client.JS\Scripts\jquery-1.6.4.js" />
-/// <reference path="jquery.signalR.js" />
 (function ($, window, undefined) {
     /// <param name="$" type="jQuery" />
     "use strict";
@@ -3378,379 +3258,41 @@
     };
 
     signalR.hub = $.hubConnection("/hp/v3/adapters/transvault", { useDefaultPath: false });
+
     $.extend(signalR, signalR.hub.createHubProxies());
 
 }(window.jQuery, window));
-(function () {
-
-    "use strict";
-    /*
-     * setup patterns
-     */
-    var patterns = {};
-    patterns.isNumber = "[0-9]+";
-    patterns.isNotEmpty = "\S+";
-    patterns.isEmail = ".+\@.+\..+";
-
-    /*
-     * setup urls
-     */
-    var shouldMatch = function (value, regex, message) {
-
-        if (typeof value === "undefined") {
-            throw new TypeError("Property cannot be undefined.");
-        }
-
-        value = value + "";
-
-        var pattern = new RegExp(regex);
-
-        if (!pattern.test(value)) {
-            throw new Error(message);
-        }
-
-    };
-
-    /*
-     * findElement
-     */
-    var findCount = 0;
-    var findDeferred = jQuery.Deferred();
-    var findElement = function (id) {
-
-        if (id.nodeType) {
-            findDeferred.resolve(id);
-            return findDeferred;
-        }
-
-        if (!!document.getElementById(id)) {
-            findDeferred.resolve(document.getElementById(id));
-            return findDeferred;
-        }
-
-        setTimeout(function () {
-            if (findCount < 25) {
-                findCount++;
-                findElement(id);
-            } else {
-                findDeferred.reject();
-            }
-        }, 25);
-
-        return findDeferred;
-
-    };
-
-    /*
-     * Query help
-     */
-    var toQueryString = function (obj) {
-
-        var parts = [],
-            url = "";
-
-        for (var i in obj) {
-            if (obj.hasOwnProperty(i)) {
-                parts.push(encodeURIComponent(i) + "=" + encodeURIComponent(obj[i]));
-            }
-        }
-
-        url = "&" + parts.join("&");
-
-        return url;
-    };
-
-    /*
-     * Export "hp"
-     */
-    window.hp = {};
-
-    /*
-     * hp Types
-     */
-    hp.types = {};
-    hp.types.Event = "Event";
-    hp.types.Product = "Product";
-    hp.types.Adapter = "Adapter";
-
-    /*
-     * hp Models
-     */
-    hp.models = {};
-
-    hp.models.Item = function (label, price) {
-        this.label = label;
-        this.price = parseFloat(price, 2);
-    };
-
-    /*
-     * Options
-     * @param: merchantClientId 
-     * @param: merchantPrimaryEmail
-     * @param: merchantSecondaryEmail
-     * @param: showMemoField
-     * @param: merchantGoogleAnalytics
-     * @param: customOrderId
-     * @param: customFormName
-     */
-    hp.models.Options = function (merchantClientId, merchantPrimaryEmail, merchantSecondaryEmail, showMemoField, merchantGoogleAnalytics, customOrderId, customFormName, customSubjectLine) {
-
-        this.name = customFormName || "Checkout";
-        this.CID = merchantClientId;
-        this.email = merchantPrimaryEmail;
-
-        shouldMatch(this.CID, patterns.isNumber, "Client ID should be digits only.");
-        shouldMatch(this.email, patterns.isEmail, "Primary email should be a valid email address.");
-
-        if (typeof merchantGoogleAnalytics !== "undefined") {
-            this.ga = merchantGoogleAnalytics;
-        }
-
-        if (typeof customSubjectLine !== "undefined") {
-            this.subject = customSubjectLine;
-        }
-
-        if (typeof merchantSecondaryEmail !== "undefined") {
-            this.repoEmail = merchantSecondaryEmail;
-            shouldMatch(this.repoEmail, patterns.isEmail, "Secondary email should be a valid email address.");
-        }
-
-        if (typeof showMemoField !== "undefined") {
-            this.showMemoField = showMemoField.toString().toLowerCase() === "true" ? "True" : "False";
-        }
-
-        if (typeof customOrderId !== "undefined") {
-            this.orderId = customOrderId;
-            shouldMatch(this.orderId, patterns.isNumber, "Customer order Id must be a valid number.");
-        }
-
-    };
-
-    /*
-     * Setup
-     * @param: type 
-     * @param: model
-     */
-    hp.Setup = function (type, options) {
-
-        if (!(type in hp.types)) {
-            throw new Error("Please specify type. 'hp.Types.Event' or 'hp.Types.Product'");
-        }
-
-        this.type = type;
-        this.options = options;
-
-        this.hasItems = false;
-
-        this.items = {
-            priceLabels: "",
-            price: ""
-        };
-
-    };
-
-    /*
-     * addItem (prototype)
-     * @param: item 
-     */
-    hp.Setup.prototype.addItem = function (item) {
-        this.items.priceLabels += (this.items.price === "" ? "" : ",") + item.label;
-        this.items.price += (this.items.price === "" ? "" : ",") + item.price;
-        this.hasItems = true;
-        return this;
-    };
-
-    /*
-     * createForm (prototype)
-     * @param: containerElementId 
-     */
-    hp.Setup.prototype.createForm = function (containerElementId, baseUrl) {
-
-        var deferred = jQuery.Deferred();
-        var iframe = document.createElement("iframe");
-        var href = document.createElement("a");
-        href.href = baseUrl;
-
-        iframe.setAttribute("seamless", "seamless");
-        iframe.setAttribute("marginheight", "0");
-        iframe.setAttribute("marginwidth", "0");
-        iframe.setAttribute("frameborder", "0");
-        iframe.setAttribute("horizontalscrolling", "no");
-        iframe.setAttribute("verticalscrolling", "no");
-        iframe.style.overflowY = "hidden";
-        iframe.style.border = "none";
-        iframe.width = "640";
-        iframe.className = "inactive";
-
-        iframe.style.opacity = "0";
-        iframe.style.transition = "all 450ms 25ms cubic-bezier(0.175, 0.885, 0.320, 1)";
-        iframe.style.webkitTransition = "all 450ms 25ms cubic-bezier(0.175, 0.885, 0.320, 1)";
-        iframe.style.mozTransition = "all 450ms 25ms cubic-bezier(0.175, 0.885, 0.320, 1)";
-        iframe.style.msTransition = "all 450ms 25ms cubic-bezier(0.175, 0.885, 0.320, 1)";
-        iframe.style.oTransition = "all 450ms 25ms cubic-bezier(0.175, 0.885, 0.320, 1)";
-
-        var url = href.protocol + "//" + href.host;
-
-        if (this.type == hp.types.Event) {
-            url = url + "/hp/v1/event";
-            iframe.height = "1311";
-        }
-
-        if (this.type == hp.types.Product) {
-            url = url + "/hp/v1/item";
-            iframe.height = "1220";
-        }
-
-        url = url + "?" + toQueryString(this.options);
-
-        if (!this.hasItems) {
-            url = url + "&price=0";
-        } else {
-            url = url + toQueryString(this.items);
-        }
-
-        iframe.src = url
-            .replace("item?&", "item?")
-            .replace("event?&", "event?")
-            .toString();
-
-        iframe.onload = function () {
-            deferred.resolve(iframe);
-            iframe.className = "active";
-            iframe.style.opacity = "1";
-        };
-
-        findElement(containerElementId).then(function (element) {
-            element.appendChild(iframe);
-        });
-
-        return deferred;
-
-    };
-
-    $(function () {
-        $("[data-inventory], [data-event]").hp();
-    });
-
-})();
 
 (function ($, window, document, undefined) {
 
     "use strict";
 
-    if (typeof jQuery === "undefined") {
-        throw new Error("jQuery not found. 'jquery.hosted-payments.js' requires jQuery version 3 or greater. For more details, please visit http://jquery.com/.");
-    }
+    if (!Math.round10) {
 
-    /*
-     * Checks if website is running older version of jQuery.
-     * Updates jQuery if bloew version 3.
-     */
-    var verifyJQueryVersion = function () {
+        Math.round10 = function (value, exp) {
 
-        var deferred = jQuery.Deferred();
+            // If the exp is undefined or zero...
+            if (typeof exp === 'undefined' || +exp === 0) {
+                return Math.round(value);
+            }
 
-        if ((+($.fn.jquery[0])) >= 3) {
-            deferred.resolve();
-            return deferred;
+            value = +value;
+            exp = +exp;
+
+            // If the value is not a number or the exp is not an integer...
+            if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+                return NaN;
+            }
+
+            // Shift
+            value = value.toString().split('e');
+            value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+
+            // Shift back
+            value = value.toString().split('e');
+
+            return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
         }
-
-        var $jqueryMigrateScript = $("<script />", {
-            src: "https://code.jquery.com/jquery-3.1.1.min.js"
-        });
-
-        hp.Utils.log("An invalid version of 'jQuery' was found. Attempting to load new version.");
-
-        $(document.head).append($jqueryMigrateScript);
-
-        (function checkScript() {
-
-            if ((+jQuery.fn.jquery[0]) >= 3) {
-                setTimeout(function () {
-
-                    jQuery = jQuery.noConflict();
-                    $ = jQuery;
-
-                    deferred.resolve();
-
-                }, 100);
-                return;
-            }
-
-            setTimeout(checkScript, 250);
-
-        })();
-
-        return deferred;
-
-    };
-
-    if (!Array.prototype.map) {
-
-        Array.prototype.map = function (callback, thisArg) {
-
-            var T, A, k;
-
-            if (this === null) {
-                throw new TypeError(' this is null or not defined');
-            }
-
-            var O = Object(this);
-
-            var len = O.length >>> 0;
-
-            if (typeof callback !== 'function') {
-                throw new TypeError(callback + ' is not a function');
-            }
-
-            if (arguments.length > 1) {
-                T = thisArg;
-            }
-
-            A = new Array(len);
-
-            k = 0;
-
-            while (k < len) {
-
-                var kValue, mappedValue;
-
-                if (k in O) {
-
-                    kValue = O[k];
-
-                    mappedValue = callback.call(T, kValue, k, O);
-
-                    A[k] = mappedValue;
-                }
-
-                k++;
-            }
-
-            return A;
-        };
-    }
-
-    if (!Function.prototype.clone) {
-
-        Function.prototype.clone = function () {
-            var cloneObj = this;
-            if (this.__isClone) {
-                cloneObj = this.__clonedFrom;
-            }
-
-            var temp = function () {
-                return cloneObj.apply(this, arguments);
-            };
-            for (var key in this) {
-                temp[key] = this[key];
-            }
-
-            temp.__isClone = true;
-            temp.__clonedFrom = cloneObj;
-
-            return temp;
-        };
 
     }
 
@@ -3787,149 +3329,10 @@
 
     }
 
-    if (!window.Base64) {
-
-        var Base64 = {
-
-            // private property
-            _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
-
-            // public method for encoding
-            encode: function (input) {
-                var output = "";
-                var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
-                var i = 0;
-
-                input = Base64._utf8_encode(input);
-
-                while (i < input.length) {
-
-                    chr1 = input.charCodeAt(i++);
-                    chr2 = input.charCodeAt(i++);
-                    chr3 = input.charCodeAt(i++);
-
-                    enc1 = chr1 >> 2;
-                    enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
-                    enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
-                    enc4 = chr3 & 63;
-
-                    if (isNaN(chr2)) {
-                        enc3 = enc4 = 64;
-                    } else if (isNaN(chr3)) {
-                        enc4 = 64;
-                    }
-
-                    output = output +
-                        this._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +
-                        this._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);
-
-                }
-
-                return output;
-            },
-
-            // public method for decoding
-            decode: function (input) {
-                var output = "";
-                var chr1, chr2, chr3;
-                var enc1, enc2, enc3, enc4;
-                var i = 0;
-
-                input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
-
-                while (i < input.length) {
-
-                    enc1 = this._keyStr.indexOf(input.charAt(i++));
-                    enc2 = this._keyStr.indexOf(input.charAt(i++));
-                    enc3 = this._keyStr.indexOf(input.charAt(i++));
-                    enc4 = this._keyStr.indexOf(input.charAt(i++));
-
-                    chr1 = (enc1 << 2) | (enc2 >> 4);
-                    chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
-                    chr3 = ((enc3 & 3) << 6) | enc4;
-
-                    output = output + String.fromCharCode(chr1);
-
-                    if (enc3 != 64) {
-                        output = output + String.fromCharCode(chr2);
-                    }
-                    if (enc4 != 64) {
-                        output = output + String.fromCharCode(chr3);
-                    }
-
-                }
-
-                output = Base64._utf8_decode(output);
-
-                return output;
-
-            },
-
-            // private method for UTF-8 encoding
-            _utf8_encode: function (string) {
-                string = string.replace(/\r\n/g, "\n");
-                var utftext = "";
-
-                for (var n = 0; n < string.length; n++) {
-
-                    var c = string.charCodeAt(n);
-
-                    if (c < 128) {
-                        utftext += String.fromCharCode(c);
-                    } else if ((c > 127) && (c < 2048)) {
-                        utftext += String.fromCharCode((c >> 6) | 192);
-                        utftext += String.fromCharCode((c & 63) | 128);
-                    } else {
-                        utftext += String.fromCharCode((c >> 12) | 224);
-                        utftext += String.fromCharCode(((c >> 6) & 63) | 128);
-                        utftext += String.fromCharCode((c & 63) | 128);
-                    }
-
-                }
-
-                return utftext;
-            },
-
-            // private method for UTF-8 decoding
-            _utf8_decode: function (utftext) {
-                var string = "";
-                var i = 0;
-                var c = c1;
-                var c1 = c2;
-                var c2 = 0;
-
-                while (i < utftext.length) {
-
-                    c = utftext.charCodeAt(i);
-
-                    if (c < 128) {
-                        string += String.fromCharCode(c);
-                        i++;
-                    } else if ((c > 191) && (c < 224)) {
-                        c2 = utftext.charCodeAt(i + 1);
-                        string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
-                        i += 2;
-                    } else {
-                        c2 = utftext.charCodeAt(i + 1);
-                        c3 = utftext.charCodeAt(i + 2);
-                        string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
-                        i += 3;
-                    }
-
-                }
-
-                return string;
-            }
-
-        };
-
-    }
-
-
     /*
      * Export "hp"
      */
-    window.hp = hp || {};
+    window.hp = {};
     window.hp.Utils = hp.Utils || {};
 
     // exposes defaults
@@ -4162,10 +3565,6 @@
 
     var getVersion = function () {
         return hp.Utils.defaults.version;
-    };
-
-    var setVersion = function (version) {
-        hp.Utils.defaults.version = version;
     };
 
     var setPaymentInstrument = function () {
@@ -4668,7 +4067,7 @@
             "transaction_status_indicator": "",
             "transaction_type": hp.Utils.defaults.paymentType,
             "transaction_tax": 0,
-            "transaction_surcharge": 0,
+            "transaction_surcharge": hp.Utils.defaults.surchargeFee,
             "transaction_gratuity": 0,
             "transaction_cashback": 0,
             "transaction_total": getAmount(),
@@ -5475,48 +4874,45 @@
             return deferred;
         }
 
-        verifyJQueryVersion().then(function () {
-
-            hp.Utils.makeRequest({
-                "signIn": {
-                    "signInRequest": {
-                        "apiKey": apiKey
-                    }
+        hp.Utils.makeRequest({
+            "signIn": {
+                "signInRequest": {
+                    "apiKey": apiKey
                 }
-            }).then(function (res) {
+            }
+        }).then(function (res) {
 
-                hp.Utils.setSession(res.token);
+            hp.Utils.setSession(res.token);
 
-                deferred.resolve(res);
+            deferred.resolve(res);
 
-                hp.Utils.log("Sign In: Retrieved from server.");
+            hp.Utils.log("Sign In: Retrieved from server.");
 
-            }, function (res) {
+        }, function (res) {
 
-                if (typeof res === "undefined" || res === null || res === "") {
-                    hp.Utils.reset();
-                    return;
-                }
+            if (typeof res === "undefined" || res === null || res === "") {
+                hp.Utils.reset();
+                return;
+            }
 
-                var errorResponse = {
-                    "status": "Error",
-                    "message": "We're sorry. Payments cannot accepted at this time. Please try again later.",
-                    "created_on": createdOn,
-                    "token": sessionId
-                };
+            var errorResponse = {
+                "status": "Error",
+                "message": "We're sorry. Payments cannot accepted at this time. Please try again later.",
+                "created_on": createdOn,
+                "token": sessionId
+            };
 
-                if (!hp.Utils.shouldErrorPostBack()) {
-                    hp.Utils.showError(errorResponse.message);
-                    hp.Utils.defaults.errorCallback(errorResponse);
-                } else {
-                    hp.Utils.buildFormFromObject(errorResponse).then(function ($form) {
-                        $form.attr("action", hp.Utils.defaults.errorCallback).submit();
-                    });
-                }
+            if (!hp.Utils.shouldErrorPostBack()) {
+                hp.Utils.showError(errorResponse.message);
+                hp.Utils.defaults.errorCallback(errorResponse);
+            } else {
+                hp.Utils.buildFormFromObject(errorResponse).then(function ($form) {
+                    $form.attr("action", hp.Utils.defaults.errorCallback).submit();
+                });
+            }
 
-                deferred.reject();
+            deferred.reject();
 
-            });
         });
 
         return deferred;
@@ -6247,6 +5643,7 @@
     hp.Success = Success;
 
 })(jQuery, window, document);
+
 (function ($, window, document, undefined) {
 
     "use strict";
@@ -6460,6 +5857,7 @@
     hp.Signature = Signature;
 
 })(jQuery, window, document);
+
 (function ($, window, document, undefined) {
 
     "use strict";
@@ -6538,10 +5936,6 @@
         $visualcard = this.$content.find(".hp-card-visual");
         $all = this.$content.find(".hp-input");
         $fancy = $([$month, $year]);
-
-        $fancy.fancySelect({
-            includeBlank: true
-        });
 
         this.transactionId = hp.Utils.defaults.transactionId;
     };
@@ -6646,7 +6040,6 @@
             '<div class="hp-input hp-input-name">',
             '<input placeholder="Enter Full Name" name="ccname" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-name") + '" type="text">',
             '</div>',
-            '<br class="hp-break" />',
             '<div class="hp-input-container hp-input-container-date">',
             '<div class="hp-input hp-input-month">',
             '<select autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-exp-month") + '" name="cc-exp">',
@@ -6663,7 +6056,6 @@
             '<input placeholder="Enter CVV" name="cvc" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-csc") + '" type="text" pattern="\\d*">',
             '<span class="hp-input-cvv-image"></span>',
             '</div>',
-            '<br class="hp-break" />',
             '<button class="hp-submit">' + (hp.Utils.defaults.promptForAvs ? "Verify Billing Address &#10144;" : "Submit Payment") + '</button>',
             '</div>'
         ].join("");
@@ -6683,7 +6075,6 @@
         $submit.off();
         $month.off("focus");
         $year.off("focus");
-        $fancy.trigger("disable.fs");
         this.$parent.trigger("hp.notify");
         this.handleNotify();
     };
@@ -6702,7 +6093,6 @@
             $name.val("").trigger("keyup").removeAttr("readonly");
             $month.removeAttr("readonly").val(date.getMonth() <= 9 ? "0" + date.getMonth() : date.getMonth()).trigger("change");
             $year.removeAttr("readonly").val(date.getFullYear()).trigger("change");
-            $fancy.trigger("enable.fs");
             $cvv.val("").trigger("keyup").removeAttr("readonly");
         }
 
@@ -6711,7 +6101,6 @@
             $month.val("12").trigger("change").attr("readonly", "readonly");
             $year.val("2025").trigger("change").attr("readonly", "readonly");
             $cvv.val("999").trigger("keyup").attr("readonly", "readonly");
-            $fancy.trigger("disable.fs");
             this.wasOnceEMoney = true;
         }
 
@@ -7089,8 +6478,6 @@
         this.detachEvents();
 
         var $this = this;
-
-        $fancy.trigger("enable.fs");
 
         hp.Utils.setContainerClass($this.$element);
 
@@ -7490,7 +6877,7 @@
             "token": sessionId
         };
 
-        hp.Utils.makeRequest({
+        var requestModel = {
             "charge": {
                 "chargeRequest": {
                     "correlationId": hp.Utils.getCorrelationId(),
@@ -7502,7 +6889,17 @@
                     "__request": res.request
                 }
             }
-        })
+        };
+
+        if (hp.Utils.defaults.surchargeFee > 0) {
+            requestModel.charge.chargeRequest.surchargeFee = hp.Utils.defaults.surchargeFee;
+        }
+
+        if (hp.Utils.defaults.convenienceFee > 0) {
+            requestModel.charge.chargeRequest.convenienceFee = hp.Utils.defaults.convenienceFee;
+        }
+
+        hp.Utils.makeRequest(requestModel)
             .then(hp.Utils.buildResultObjectByType)
             .then(function (promiseResponse) {
 
@@ -7849,40 +7246,40 @@
 
         var $html = [
             '<div class="hp-bank-visual">',
-                '<div class="hp-bank-visual-image"></div>',
-                '<div class="hp-bank-visual-logo"></div>',
-                '<div class="hp-bank-visual-name">' + defaultName + '</div>',
-                '<div class="hp-bank-visual-right">' + defaultAccountNumberCharacters + '</div>',
-                '<div class="hp-bank-visual-left">' + defaultRoutingNumberCharacters + '</div>',
+            '<div class="hp-bank-visual-image"></div>',
+            '<div class="hp-bank-visual-logo"></div>',
+            '<div class="hp-bank-visual-name">' + defaultName + '</div>',
+            '<div class="hp-bank-visual-right">' + defaultAccountNumberCharacters + '</div>',
+            '<div class="hp-bank-visual-left">' + defaultRoutingNumberCharacters + '</div>',
             '</div>',
             '<div class="hp-input-wrapper">',
-                '<div class="hp-input hp-input-fullname">',
-                    '<input placeholder="Enter Full Name" value="' + hp.Utils.defaults.customerName + '" autocomplete="on" type="text">',
-                '</div>',
-                '<div class="hp-break" >',
-                    '{{inputHtml}}',
-                '</div>',
-                '<button class="hp-submit">Submit Payment</button>',
-                '<p class="info">* Please note that bank account (ACH) transactions may take up to 3 days to process. This time period varies depending on the your issuing bank. For more information please visit us at <a href="https://www.etsms.com/" target="_blank">https://etsms.com</a>.</p>',
+            '<div class="hp-input hp-input-fullname">',
+            '<input placeholder="Enter Full Name" value="' + hp.Utils.defaults.customerName + '" autocomplete="on" type="text">',
+            '</div>',
+            '<div class="hp-break" >',
+            '{{inputHtml}}',
+            '</div>',
+            '<button class="hp-submit">Submit Payment</button>',
+            '<p class="info">* Please note that bank account (ACH) transactions may take up to 3 days to process. This time period varies depending on the your issuing bank. For more information please visit us at <a href="https://www.etsms.com/" target="_blank">https://etsms.com</a>.</p>',
             '</div>'
         ].join("");
 
         var $inputHtml = [
             '<div class="hp-input hp-input-account hp-input-left">',
-                '<input placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">',
+            '<input placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">',
             '</div>',
             '<div class="hp-input hp-input-routing hp-input-right">',
-                '<input placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">',
+            '<input placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">',
             '</div>'
         ].join("");
 
         if (hp.Utils.defaults.swapAchInputs) {
             $inputHtml = [
                 '<div class="hp-input hp-input-routing hp-input-left">',
-                    '<input placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">',
+                '<input placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">',
                 '</div>',
                 '<div class="hp-input hp-input-account hp-input-right">',
-                    '<input placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">',
+                '<input placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">',
                 '</div>'
             ].join("");
         }
@@ -9865,98 +9262,79 @@
 
     defaultFormat = /(\d{1,4})/g;
 
-    $.payment.cards = cards = [{
-        type: 'elo',
-        patterns: [401178, 401179, 431274, 438935, 451416, 457393, 457631, 457632, 504175, 506699, 5067, 509, 627780, 636297, 636368, 650, 6516, 6550],
-        format: defaultFormat,
-        length: [16],
-        cvcLength: [3],
-        luhn: true
-    }, {
-        type: 'maestro',
-        patterns: [5018, 502, 503, 506, 56, 58, 639, 6220, 67],
-        format: defaultFormat,
-        length: [12, 13, 14, 15, 16, 17, 18, 19],
-        cvcLength: [3],
-        luhn: true
-    }, {
-        type: 'forbrugsforeningen',
-        patterns: [600],
-        format: defaultFormat,
-        length: [16],
-        cvcLength: [3],
-        luhn: true
-    }, {
-        type: 'dankort',
-        patterns: [5019],
-        format: defaultFormat,
-        length: [16],
-        cvcLength: [3],
-        luhn: true
-    }, {
-        type: 'visa',
-        patterns: [4],
-        format: defaultFormat,
-        length: [13, 16],
-        cvcLength: [3],
-        luhn: true
-    }, {
-        type: 'emoney',
-        patterns: [627571],
-        format: defaultFormat,
-        length: [16],
-        cvcLength: [3],
-        luhn: true
-    }, {
-        type: 'mastercard',
-        patterns: [51, 52, 53, 54, 55, 22, 23, 24, 25, 26, 27, 675920, 675923],
-        format: defaultFormat,
-        length: [16],
-        cvcLength: [3],
-        luhn: true
-    }, {
-        type: 'paypal',
-        patterns: [601104],
-        format: defaultFormat,
-        length: [16],
-        cvcLength: [3],
-        luhn: true
-    }, {
-        type: 'amex',
-        patterns: [34, 37],
-        format: /(\d{1,4})(\d{1,6})?(\d{1,5})?/,
-        length: [15],
-        cvcLength: [3, 4],
-        luhn: true
-    }, {
-        type: 'dinersclub',
-        patterns: [30, 36, 38, 39],
-        format: /(\d{1,4})(\d{1,6})?(\d{1,4})?/,
-        length: [14],
-        cvcLength: [3],
-        luhn: true
-    }, {
-        type: 'discover',
-        patterns: [60, 64, 65, 622],
-        format: defaultFormat,
-        length: [16],
-        cvcLength: [3],
-        luhn: true
-    }, {
-        type: 'unionpay',
-        patterns: [62, 88],
-        format: defaultFormat,
-        length: [16, 17, 18, 19],
-        cvcLength: [3],
-        luhn: false
-    }, {
-        type: 'jcb',
-        patterns: [35],
-        format: defaultFormat,
-        length: [16],
-        cvcLength: [3],
-        luhn: true
-    }];
+    $.payment.cards = cards = [
+        {
+            type: 'maestro',
+            patterns: [5018, 502, 503, 506, 56, 58, 639, 6220, 67],
+            format: defaultFormat,
+            length: [12, 13, 14, 15, 16, 17, 18, 19],
+            cvcLength: [3],
+            luhn: true
+        }, {
+            type: 'forbrugsforeningen',
+            patterns: [600],
+            format: defaultFormat,
+            length: [16],
+            cvcLength: [3],
+            luhn: true
+        }, {
+            type: 'dankort',
+            patterns: [5019],
+            format: defaultFormat,
+            length: [16],
+            cvcLength: [3],
+            luhn: true
+        }, {
+            type: 'visa',
+            patterns: [4],
+            format: defaultFormat,
+            length: [13, 16],
+            cvcLength: [3],
+            luhn: true
+        }, {
+            type: 'mastercard',
+            patterns: [51, 52, 53, 54, 55, 22, 23, 24, 25, 26, 27],
+            format: defaultFormat,
+            length: [16],
+            cvcLength: [3],
+            luhn: true
+        }, {
+            type: 'amex',
+            patterns: [34, 37],
+            format: /(\d{1,4})(\d{1,6})?(\d{1,5})?/,
+            length: [15],
+            cvcLength: [3, 4],
+            luhn: true
+        }, {
+            type: 'dinersclub',
+            patterns: [30, 36, 38, 39],
+            format: /(\d{1,4})(\d{1,6})?(\d{1,4})?/,
+            length: [14],
+            cvcLength: [3],
+            luhn: true
+        }, {
+            type: 'discover',
+            patterns: [60, 64, 65, 622],
+            format: defaultFormat,
+            length: [16],
+            cvcLength: [3],
+            luhn: true
+        }, {
+            type: 'unionpay',
+            patterns: [62, 88],
+            format: defaultFormat,
+            length: [16, 17, 18, 19],
+            cvcLength: [3],
+            luhn: false
+        }, {
+            type: 'jcb',
+            patterns: [35],
+            format: defaultFormat,
+            length: [16],
+            cvcLength: [3],
+            luhn: true
+        }
+    ];
 
     cardFromNumber = function (num) {
         var card, p, pattern, _i, _j, _len, _len1, _ref;
@@ -10516,6 +9894,7 @@
     };
 
 }).call(this);
+
 (function ($) {
 
     var defaults = {}
@@ -10706,214 +10085,8 @@
 
 })(jQuery);
 
-// Generated by CoffeeScript 1.4.0
-(function () {
-    var $;
-
-    $ = window.jQuery || window.Zepto || window.$;
-
-    $.fn.fancySelect = function (opts) {
-        var isiOS, settings;
-        if (opts == null) {
-            opts = {};
-        }
-        settings = $.extend({
-            forceiOS: false,
-            includeBlank: false,
-            optionTemplate: function (optionEl) {
-                return optionEl.text();
-            },
-            triggerTemplate: function (optionEl) {
-                return optionEl.text();
-            }
-        }, opts);
-        isiOS = !!navigator.userAgent.match(/iP(hone|od|ad)/i);
-        return this.each(function () {
-            var copyOptionsToList, disabled, options, sel, trigger, updateTriggerText, wrapper;
-            sel = $(this);
-            if (sel.hasClass('fancified') || sel[0].tagName !== 'SELECT') {
-                return;
-            }
-            sel.addClass('fancified');
-            sel.css({
-                width: 1,
-                height: 1,
-                display: 'block',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                opacity: 0
-            });
-            sel.wrap('<div class="fancy-select">');
-            wrapper = sel.parent();
-            if (sel.data('class')) {
-                wrapper.addClass(sel.data('class'));
-            }
-            wrapper.append('<div class="trigger">');
-            if (!(isiOS && !settings.forceiOS)) {
-                wrapper.append('<ul class="options">');
-            }
-            trigger = wrapper.find('.trigger');
-            options = wrapper.find('.options');
-            disabled = sel.prop('disabled');
-            if (disabled) {
-                wrapper.addClass('disabled');
-            }
-            updateTriggerText = function () {
-                var triggerHtml;
-                triggerHtml = settings.triggerTemplate(sel.find(':selected'));
-                return trigger.html(triggerHtml);
-            };
-            sel.on('blur.fs', function () {
-                if (trigger.hasClass('open')) {
-                    return setTimeout(function () {
-                        return trigger.trigger('close.fs');
-                    }, 120);
-                }
-            });
-            trigger.on('close.fs', function () {
-                trigger.removeClass('open');
-                return options.removeClass('open');
-            });
-            trigger.on('click.fs', function () {
-                var offParent, parent;
-                if (!disabled) {
-                    trigger.toggleClass('open');
-                    if (isiOS && !settings.forceiOS) {
-                        if (trigger.hasClass('open')) {
-                            return sel.focus();
-                        }
-                    } else {
-                        if (trigger.hasClass('open')) {
-                            parent = trigger.parent();
-                            offParent = parent.offsetParent();
-                            if ((parent.offset().top + parent.outerHeight() + options.outerHeight() + 20) > $(window).height() + $(window).scrollTop()) {
-                                options.addClass('overflowing');
-                            } else {
-                                options.removeClass('overflowing');
-                            }
-                        }
-                        options.toggleClass('open');
-                        if (!isiOS) {
-                            return sel.focus();
-                        }
-                    }
-                }
-            });
-            sel.on('enable', function () {
-                sel.prop('disabled', false);
-                wrapper.removeClass('disabled');
-                disabled = false;
-                return copyOptionsToList();
-            });
-            sel.on('disable', function () {
-                sel.prop('disabled', true);
-                wrapper.addClass('disabled');
-                return disabled = true;
-            });
-            sel.on('change.fs', function (e) {
-                if (e.originalEvent && e.originalEvent.isTrusted) {
-                    return e.stopPropagation();
-                } else {
-                    return updateTriggerText();
-                }
-            });
-            sel.on('keydown', function (e) {
-                var hovered, newHovered, w;
-                w = e.which;
-                hovered = options.find('.hover');
-                hovered.removeClass('hover');
-                if (!options.hasClass('open')) {
-                    if (w === 13 || w === 32 || w === 38 || w === 40) {
-                        e.preventDefault();
-                        return trigger.trigger('click.fs');
-                    }
-                } else {
-                    if (w === 38) {
-                        e.preventDefault();
-                        if (hovered.length && hovered.index() > 0) {
-                            hovered.prev().addClass('hover');
-                        } else {
-                            options.find('li:last-child').addClass('hover');
-                        }
-                    } else if (w === 40) {
-                        e.preventDefault();
-                        if (hovered.length && hovered.index() < options.find('li').length - 1) {
-                            hovered.next().addClass('hover');
-                        } else {
-                            options.find('li:first-child').addClass('hover');
-                        }
-                    } else if (w === 27) {
-                        e.preventDefault();
-                        trigger.trigger('click.fs');
-                    } else if (w === 13 || w === 32) {
-                        e.preventDefault();
-                        hovered.trigger('mousedown.fs');
-                    } else if (w === 9) {
-                        if (trigger.hasClass('open')) {
-                            trigger.trigger('close.fs');
-                        }
-                    }
-                    newHovered = options.find('.hover');
-                    if (newHovered.length) {
-                        options.scrollTop(0);
-                        return options.scrollTop(newHovered.position().top - 12);
-                    }
-                }
-            });
-            options.on('mousedown.fs', 'li', function (e) {
-                var clicked;
-                clicked = $(this);
-                sel.val(clicked.data('raw-value'));
-                if (!isiOS) {
-                    sel.trigger('blur.fs').trigger('focus.fs');
-                }
-                options.find('.selected').removeClass('selected');
-                clicked.addClass('selected');
-                trigger.addClass('selected');
-                return sel.val(clicked.data('raw-value')).trigger('change.fs').trigger('blur.fs').trigger('focus.fs');
-            });
-            options.on('mouseenter.fs', 'li', function () {
-                var hovered, nowHovered;
-                nowHovered = $(this);
-                hovered = options.find('.hover');
-                hovered.removeClass('hover');
-                return nowHovered.addClass('hover');
-            });
-            options.on('mouseleave.fs', 'li', function () {
-                return options.find('.hover').removeClass('hover');
-            });
-            copyOptionsToList = function () {
-                var selOpts;
-                updateTriggerText();
-                if (isiOS && !settings.forceiOS) {
-                    return;
-                }
-                selOpts = sel.find('option');
-                return sel.find('option').each(function (i, opt) {
-                    var optHtml;
-                    opt = $(opt);
-                    if (!opt.prop('disabled') && (opt.val() || settings.includeBlank)) {
-                        optHtml = settings.optionTemplate(opt);
-                        if (opt.prop('selected')) {
-                            return options.append("<li data-raw-value=\"" + (opt.val()) + "\" class=\"selected\">" + optHtml + "</li>");
-                        } else {
-                            return options.append("<li data-raw-value=\"" + (opt.val()) + "\">" + optHtml + "</li>");
-                        }
-                    }
-                });
-            };
-            sel.on('update.fs', function () {
-                wrapper.find('.options').empty();
-                return copyOptionsToList();
-            });
-            return copyOptionsToList();
-        });
-    };
-
-}).call(this);
 /*
- *  jQuery Hosted Payments - v3.9.1
+ *  jQuery Hosted Payments - v3.9.3
  *
  *  Made by Erik Zettersten
  *  Under MIT License
@@ -10923,7 +10096,7 @@
     var pluginName = "hp",
         defaults = {};
 
-    defaults.version = "v3.9.1";
+    defaults.version = "v3.9.3";
     defaults.amount = 0;
     defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
     defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
@@ -11279,61 +10452,11 @@
 
         init: function () {
 
-            var $element = $(this.element),
-                name = "",
-                type = hp.types.Adapter;
-
-            if ($element.data("event") !== null && typeof $element.data("event") !== "undefined") {
-                type = hp.types.Event;
-                name = $element.data("event");
-            }
-
-            if ($element.data("inventory") !== null && typeof $element.data("inventory") !== "undefined") {
-                type = hp.types.Product;
-                name = $element.data("inventory");
-            }
+            var $element = $(this.element);
 
             // Get outer wrapper width and set css class for mobile purposes
             hp.Utils.setContainerClass($element);
-
-            if (type === hp.types.Event) {
-
-                name = $element.data("event");
-
-            } else if (type === hp.types.Product) {
-
-                name = $element.data("inventory");
-
-            } else if (type === hp.types.Adapter) {
-
-                intialize.call(this);
-
-                return;
-            }
-
-            var email = $element.data("email"),
-                bcc = $element.data("bcc"),
-                clientId = $element.data("client"),
-                showMemoField = typeof $element.data("memo") === "undefined" ? false : true,
-                ga = $element.data("ga"),
-                orderId = $element.data("order"),
-                subject = $element.data("subject");
-
-            var setup = new hp.Setup(type, new hp.models.Options(clientId, email, bcc, showMemoField, ga, orderId, name, subject));
-
-            $element.find("[data-item]").each(function () {
-                var item = new hp.models.Item($(this).data("item"), $(this).data("price"));
-                setup.addItem(item);
-            });
-
-            $element.empty();
-
-            setup.createForm(this.element, hp.Utils.defaults.baseUrl).then(function (iframe) {
-                $element
-                    .width(iframe.width)
-                    .height(iframe.height)
-                    .css("margin", "0 auto");
-            });
+            intialize.call(this);
 
         }
     });
