@@ -12,6 +12,7 @@
 <body>
     <div id="ets"></div>
     <script>
+
         var transactionId = hp.Utils.generateGUID();
 
         var callback = function(result) {
@@ -26,9 +27,8 @@
         }
 
         $("#ets").hp({
-            baseUrl: "http://dev.etsdev.net/etsemoney.com/hp/v3/adapters",
             terminalId: "1016",
-            apiKey: "d8857a83-34a6-424d-9988-04fe21ea3c30",
+            apiKey: "0d9fa16f-678e-465c-b193-c4a430789cee",
             paymentTypeOrder: [0],
             amount: 1,
             successCallback: callback,
@@ -36,8 +36,10 @@
             debug: true,
             transactionId: transactionId,
             surchargeFee: 1,
-            convenienceFee: 1
+            convenienceFee: 1,
+            disableAutocomplete: true
         });
+        
     </script>
 </body>
 
