@@ -56,6 +56,21 @@ $lightGray: darken($white, 15%)
 	&.hp-error .hp-button-tagline
 		color: $red!important
 
+	&.hp-loading 
+
+		.hp-button-loader
+			display: block
+			
+		.hp-button-tagline
+			opacity: 0.5
+
+		.hp-button-logo,
+		.hp-button-text
+			opacity: 0
+
+		.hp-button-element
+			background: white!important
+
 	.hp-button-logo-wrap
 		display: inline-block
 		vertical-align: middle
@@ -84,3 +99,12 @@ $lightGray: darken($white, 15%)
 		top: -3px
 		left: 5px
 		color: $gray
+
+	.hp-button-loader
+		height: 20px
+		position: absolute
+		left: 50%
+		top: 50%
+		margin-top: -20px
+		margin-left: -11px
+		display: none

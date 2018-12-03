@@ -98,25 +98,42 @@
 .hp-button-wrap.hp-error .hp-button-tagline {
   color: #EA2D3F !important;
 }
-/* line 59, ../src/jquery.hosted-checkout.sass */
+/* line 61, ../src/jquery.hosted-checkout.sass */
+.hp-button-wrap.hp-loading .hp-button-loader {
+  display: block;
+}
+/* line 64, ../src/jquery.hosted-checkout.sass */
+.hp-button-wrap.hp-loading .hp-button-tagline {
+  opacity: 0.5;
+}
+/* line 67, ../src/jquery.hosted-checkout.sass */
+.hp-button-wrap.hp-loading .hp-button-logo,
+.hp-button-wrap.hp-loading .hp-button-text {
+  opacity: 0;
+}
+/* line 71, ../src/jquery.hosted-checkout.sass */
+.hp-button-wrap.hp-loading .hp-button-element {
+  background: white !important;
+}
+/* line 74, ../src/jquery.hosted-checkout.sass */
 .hp-button-wrap .hp-button-logo-wrap {
   display: inline-block;
   vertical-align: middle;
   padding-top: 1px;
 }
-/* line 64, ../src/jquery.hosted-checkout.sass */
+/* line 79, ../src/jquery.hosted-checkout.sass */
 .hp-button-wrap .hp-button-logo {
   display: inline-block;
   vertical-align: middle;
 }
-/* line 68, ../src/jquery.hosted-checkout.sass */
+/* line 83, ../src/jquery.hosted-checkout.sass */
 .hp-button-wrap .hp-button-text {
   display: inline-block;
   vertical-align: middle;
   padding-top: 1px;
   text-shadow: 0 1px 0 #fff;
 }
-/* line 74, ../src/jquery.hosted-checkout.sass */
+/* line 89, ../src/jquery.hosted-checkout.sass */
 .hp-button-wrap .hp-button-tagline {
   height: 15px;
   text-align: center;
@@ -124,11 +141,21 @@
   display: block;
   padding-top: 1px;
 }
-/* line 81, ../src/jquery.hosted-checkout.sass */
+/* line 96, ../src/jquery.hosted-checkout.sass */
 .hp-button-wrap .hp-button-version {
   font-size: 9px;
   position: relative;
   top: -3px;
   left: 5px;
   color: #9CA3B3;
+}
+/* line 103, ../src/jquery.hosted-checkout.sass */
+.hp-button-wrap .hp-button-loader {
+  height: 20px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-top: -20px;
+  margin-left: -11px;
+  display: none;
 }

@@ -1,70 +1,75 @@
-;(function ($, window, document, undefined) {
+; (function ($, window, document, undefined) {
 
 	"use strict";
 
-	/*
-     * Export "hp"
-     */
-    window.checkout = {};
-    window.checkout.Utils = checkout.Utils || {};
+	const pluginName = "checkout";
+	const version = "v1.0.0";
 
-    // exposes defaults
-    checkout.Utils.defaults = {};
-
-    // exposes plugins
-    checkout.Utils.initSession = {};
-
-	var newGuid = function() {
-		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-			var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-			return v.toString(16);
-		});
+	let defaults = {
+		id: newGuid(),
+		publicKey: null,
+		baseUrl: "https://checkout.emoney.com/",
+		issuerId: null,
+		apiKey: null,
+		total: null,
+		customerFirstName: null,
+		customerLastName: null,
+		successCallbackUrl: null,
+		successRedirectUrl: null,
+		cancelCallbackUrl: null,
+		cancelRedirectUrl: null,
+		declineCallbackUrl: null,
+		declineRedirectUrl: null,
+		errorCallbackUrl: null,
+		errorRedirectUrl: null,
+		privacyPolicyUrl: null,
+		termsAndConditionsUrl: null,
 	};
 
-	var pluginName = "checkout",
-		version = "v1.0.0",
-		defaults = {
-			apiUrl: "https://checkout.emoney.com/",
-			businessId: "",
-			bearerToken: "",
-			apikey: ""
-		};
-
-	var $outerWrap = $("<div />", {
+	const $outerWrap = $("<div />", {
 		class: "hp-button-wrap"
 	});
 
-	var $button = $("<button />", {
+	const $button = $("<button />", {
 		class: "hp-button-element"
 	});
 
-	var $emoneyLogoWrap = $("<span />", {
+	const $emoneyLogoWrap = $("<span />", {
 		class: "hp-button-logo-wrap"
 	});
 
-	var $emoneyLogo = $("<img />", {
+	const $emoneyLogo = $("<img />", {
 		src: "https://app.emoney.com/Public/Styles/Images/logo-blue.svg",
 		class: "hp-button-logo",
 		height: 20
 	});
 
-	var $textContent = $("<span />", {
+	const $loader = $("<img />", {
+		src: "https://app.emoney.com/public/styles/images/loading.gif",
+		class: "hp-button-loader",
+		height: 20
+	});
+
+	const $textContent = $("<span />", {
 		class: "hp-button-text",
 		text: " Checkout"
 	});
 
-	var $tagLineContent = $("<span />", {
+	const $tagLineContent = $("<span />", {
 		class: "hp-button-tagline",
 		text: "Make Commerce Happen!"
 	});
 
-	var $versionTag = $("<small />", {
+	const $versionTag = $("<small />", {
 		class: "hp-button-version",
 		text: version
 	});
 
 	$emoneyLogoWrap
 		.append($emoneyLogo);
+
+	$emoneyLogoWrap
+		.append($loader);
 
 	$button
 		.append($emoneyLogoWrap);
@@ -79,41 +84,28 @@
 		.append($versionTag);
 
 	$outerWrap
-		.append($tagLineContent)
+		.append($tagLineContent);
 
-	
-	
-	var sessionToken = "";
-	var redirectUrl = "";
-
-	var initSession = { }
-		initSession.id = newGuid();
-		initSession.total = "";
-		initSession.customerFirstName = "";
-		initSession.customerLastName = "";
-		initSession.successCallbackUrl = "";
-		initSession.successRedirectUrl = "";
-		initSession.cancelCallbackUrl = "";
-		initSession.cancelRedirectUrl = "";
-		initSession.declineCallbackUrl = "";
-		initSession.declineRedirectUrl = "";
-		initSession.errorCallbackUrl = "";
-		initSession.errorRedirectUrl = "";
-		initSession.privacyPolicyUrl = "";
-		initSession.termsAndConditionsUrl = "";
-	
 	// The actual plugin constructor
 	function Plugin(element, options) {
+
 		this._name = pluginName;
 		this.element = $(element);
+		this.options = $.extend({}, defaults, options);
 
-		checkout.Utils.defaults = jQuery.extend({}, defaults, options);
-		checkout.Utils.initSession = jQuery.extend({}, initSession, options);
-		
+		$.ajaxSetup({
+			contentType: 'application/json',
+			headers: {
+				"Authorization": `Bearer ${defaults.publicKey}`
+			},
+			beforeSend: (xhr, ajaxOptions) => {
+				ajaxOptions.url = this.options.baseUrl + ajaxOptions.url;
+			}
+		});
+
 		this.init();
-		checkout.Utils.__instance = this;
 	}
-	
+
 	// Avoid Plugin.prototype conflicts
 	$.extend(Plugin.prototype, {
 
@@ -127,46 +119,51 @@
 		},
 
 		addEventHandler: function () {
-
-
 			$button
 				.off("click")
 				.on("click", ($ev) => {
-			this.showErrorState();
 
 					this.addLoadingIndicator();
 
 					this.authenticateSession()
-						.then(this.createSession())
+						.then((sessionResponse) => this.createSession(sessionResponse.resource.sessionToken, sessionResponse.href))
 						.then(
-							(successResponse) => {
-								this.removeLoadingIndicator();
-							}, 
-							(errorResponse) => this.showErrorState()
+							(checkoutRedirectUrl) => {
+								this.redirectToCheckoutUrl(checkoutRedirectUrl);
+							},
+							() => this.showErrorState()
 						);
-			});
+				});
 		},
 
-		addLoadingIndicator: function() {},
+		addLoadingIndicator: function () {
+			$outerWrap.addClass("hp-loading");
+		},
 
-		removeLoadingIndicator: function() {},
+		removeLoadingIndicator: function () {
+			$outerWrap.removeClass("hp-loading");
+		},
 
-		showErrorState: function() {
+		redirectToCheckoutUrl: function (urlToRedirect) {
+			setTimeout(() => window.location.href = urlToRedirect, 1000);
+		},
+
+		showErrorState: function () {
 
 			this.removeLoadingIndicator();
 
 			$outerWrap.addClass("hp-error");
 
-			var previousState = $tagLineContent.html();
+			const previousState = $tagLineContent.html();
 
 			$tagLineContent
-				.fadeOut(function(){
+				.fadeOut(function () {
 					$(this).html("An error occured.");
-					$(this).fadeIn(function(){
+					$(this).fadeIn(function () {
 						$(this)
 							.delay(5000)
 							.fadeOut()
-							.fadeIn(function(){
+							.fadeIn(function () {
 								$(this).html(previousState);
 								$outerWrap.removeClass("hp-error");
 							});
@@ -174,53 +171,38 @@
 				});
 		},
 
-		authenticateSession: function() {
-			var deferred = $.Deferred();
-			// do ajax
-			// inside success do
-			// ... deferred.resolve()
-			var sessionUrl = defaults.apiUrl + "issuer/" + defaults.businessId + "/session/authenticate/api-key";
-			var authSessionCredentials = {
-					"credentials" : btoa(defaults.apikey).toString()
-				}
+		authenticateSession: function () {
+
+			const deferred = $.Deferred();
+			const sessionUrl = `issuer/${this.options.issuerId}/session/authenticate/api-key`;
+
 			$.ajax({
 				type: "POST",
-				contentType: 'application/json',
-				headers: {
-					"Authorization": `Bearer ${defaults.bearerToken}`
-				}, 
 				url: sessionUrl,
-				data: authSessionCredentials,
-				success: function(response){
-					sessionToken = response.resource.sessionToken;
-					redirectUrl = response.href;
-					this.createSession()
-				}
+				data: JSON.stringify({
+					"credentials": btoa(this.options.apiKey)
+				}),
+				success: deferred.resolve,
+				error: deferred.reject
 			});
 
-    		return deferred.promise();
+			return deferred.promise();
 		},
 
-		createSession: function() {
-			var deferred = $.Deferred();
-			// do ajax
-			// inside success do
-			// ... deferred.resolve()
-			var createSessionUrl = defaults.apiUrl + "/issuer/" + defaults.businessId + "/checkout/" + sessionToken + "/session";
+		createSession: function (sessionToken, checkoutRedirectUrl) {
+
+			const deferred = $.Deferred();
+			const createSessionUrl = `issuer/${this.options.issuerId}/checkout/${sessionToken}/session`;
+
 			$.ajax({
 				type: "POST",
 				url: createSessionUrl,
-				contentType: 'application/json',
-				headers: {
-					"Authorization": `Bearer ${defaults.bearerToken}`
-				},
-				data: JSON.stringify(initSession),
-				success: function (response) {
-					window.location.href = redirectUrl;
-				}
+				data: JSON.stringify(this.options),
+				success: () => deferred.resolve(checkoutRedirectUrl),
+				error: deferred.reject
 			});
 
-    		return deferred.promise();
+			return deferred.promise();
 		}
 
 	});
@@ -231,6 +213,16 @@
 				$.data(this, "plugin_" +
 					pluginName, new Plugin(this, options));
 			}
+		});
+	};
+
+	/**
+	 * Helpers
+	 */
+	function newGuid() {
+		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+			const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+			return v.toString(16);
 		});
 	};
 
