@@ -1,0 +1,134 @@
+/* line 17, ../src/jquery.hosted-checkout.sass */
+.hp-button-wrap {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+  height: 58px;
+  width: 260px;
+}
+/* line 40, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+.hp-button-wrap div, .hp-button-wrap span, .hp-button-wrap applet, .hp-button-wrap object, .hp-button-wrap iframe,
+.hp-button-wrap h1, .hp-button-wrap h2, .hp-button-wrap h3, .hp-button-wrap h4, .hp-button-wrap h5, .hp-button-wrap h6, .hp-button-wrap p, .hp-button-wrap blockquote, .hp-button-wrap pre,
+.hp-button-wrap a, .hp-button-wrap abbr, .hp-button-wrap acronym, .hp-button-wrap address, .hp-button-wrap big, .hp-button-wrap cite, .hp-button-wrap code,
+.hp-button-wrap del, .hp-button-wrap dfn, .hp-button-wrap em, .hp-button-wrap img, .hp-button-wrap ins, .hp-button-wrap kbd, .hp-button-wrap q, .hp-button-wrap s, .hp-button-wrap samp,
+.hp-button-wrap small, .hp-button-wrap strike, .hp-button-wrap strong, .hp-button-wrap sub, .hp-button-wrap sup, .hp-button-wrap tt, .hp-button-wrap var,
+.hp-button-wrap b, .hp-button-wrap u, .hp-button-wrap i, .hp-button-wrap center,
+.hp-button-wrap dl, .hp-button-wrap dt, .hp-button-wrap dd, .hp-button-wrap ol, .hp-button-wrap ul, .hp-button-wrap li,
+.hp-button-wrap fieldset, .hp-button-wrap form, .hp-button-wrap label, .hp-button-wrap legend,
+.hp-button-wrap table, .hp-button-wrap caption, .hp-button-wrap tbody, .hp-button-wrap tfoot, .hp-button-wrap thead, .hp-button-wrap tr, .hp-button-wrap th, .hp-button-wrap td,
+.hp-button-wrap article, .hp-button-wrap aside, .hp-button-wrap canvas, .hp-button-wrap details, .hp-button-wrap embed,
+.hp-button-wrap figure, .hp-button-wrap figcaption, .hp-button-wrap footer, .hp-button-wrap header, .hp-button-wrap hgroup,
+.hp-button-wrap menu, .hp-button-wrap nav, .hp-button-wrap output, .hp-button-wrap ruby, .hp-button-wrap section, .hp-button-wrap summary,
+.hp-button-wrap time, .hp-button-wrap mark, .hp-button-wrap audio, .hp-button-wrap video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+/* line 55, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+.hp-button-wrap table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+/* line 57, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+.hp-button-wrap caption, .hp-button-wrap th, .hp-button-wrap td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+/* line 59, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+.hp-button-wrap q, .hp-button-wrap blockquote {
+  quotes: none;
+}
+/* line 103, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+.hp-button-wrap q:before, .hp-button-wrap q:after, .hp-button-wrap blockquote:before, .hp-button-wrap blockquote:after {
+  content: "";
+  content: none;
+}
+/* line 61, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+.hp-button-wrap a img {
+  border: none;
+}
+/* line 28, ../src/jquery.hosted-checkout.sass */
+.hp-button-wrap span,
+.hp-button-wrap button {
+  font-family: "Segoe UI Light", "Segoe UI", "Selawik Light", "Arial", sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  outline: none;
+}
+/* line 35, ../src/jquery.hosted-checkout.sass */
+.hp-button-wrap .hp-button-element {
+  background: #f3f3f3 linear-gradient(to bottom, #f3f3f3, #cdcdcd);
+  border: 1px solid #cdcdcd;
+  cursor: pointer;
+  height: 40px;
+  width: 100%;
+  text-align: center;
+  border-radius: 3px;
+}
+/* line 44, ../src/jquery.hosted-checkout.sass */
+.hp-button-wrap .hp-button-element:hover {
+  background: #f3f3f3;
+}
+/* line 47, ../src/jquery.hosted-checkout.sass */
+.hp-button-wrap .hp-button-element:active {
+  background: #9CA3B3;
+  -moz-box-shadow: inset 0 0 0 1px #007aff;
+  -webkit-box-shadow: inset 0 0 0 1px #007aff;
+  box-shadow: inset 0 0 0 1px #007aff;
+}
+/* line 52, ../src/jquery.hosted-checkout.sass */
+.hp-button-wrap.hp-error .hp-button-element {
+  border: 1px solid #EA2D3F !important;
+  color: #EA2D3F !important;
+}
+/* line 56, ../src/jquery.hosted-checkout.sass */
+.hp-button-wrap.hp-error .hp-button-tagline {
+  color: #EA2D3F !important;
+}
+/* line 59, ../src/jquery.hosted-checkout.sass */
+.hp-button-wrap .hp-button-logo-wrap {
+  display: inline-block;
+  vertical-align: middle;
+  padding-top: 1px;
+}
+/* line 64, ../src/jquery.hosted-checkout.sass */
+.hp-button-wrap .hp-button-logo {
+  display: inline-block;
+  vertical-align: middle;
+}
+/* line 68, ../src/jquery.hosted-checkout.sass */
+.hp-button-wrap .hp-button-text {
+  display: inline-block;
+  vertical-align: middle;
+  padding-top: 1px;
+  text-shadow: 0 1px 0 #fff;
+}
+/* line 74, ../src/jquery.hosted-checkout.sass */
+.hp-button-wrap .hp-button-tagline {
+  height: 15px;
+  text-align: center;
+  width: 100%;
+  display: block;
+  padding-top: 1px;
+}
+/* line 81, ../src/jquery.hosted-checkout.sass */
+.hp-button-wrap .hp-button-version {
+  font-size: 9px;
+  position: relative;
+  top: -3px;
+  left: 5px;
+  color: #9CA3B3;
+}

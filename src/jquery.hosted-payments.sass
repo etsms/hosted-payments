@@ -24,8 +24,6 @@ $tablet: "screen" 768px
 $desktop: "screen" 992px
 $tv: "screen" 1200px
 
-@import "styles/_fancySelect"
-
 +keyframes(hinge)
 	0%
 		+transform-origin(top left)
@@ -218,32 +216,6 @@ $tv: "screen" 1200px
 				&:nth-of-type(4)
 					background: #0f9d58
 					+animation-delay(.6s)
-
-
-	.slider-container
-		clear: both
-		width: 100%
-		display: block
-		margin: 0
-		padding: 25px 0 7px
-		overflow: hidden
-
-		.slider
-			float: left
-			width: 70%
-
-		.slider-value
-			+border-radius(4px)
-			+box-sizing(border-box)
-			float: right
-			width: 20%
-			text-align: center
-			color: #3FB8AF
-			text-shadow: 0 1px 0 #fff
-			margin-top: -10px
-			background: #fff
-			padding: 10px 0
-			border: 1px solid $gray
 	
 
 	.hp-submit
@@ -350,7 +322,6 @@ $tv: "screen" 1200px
 		+box-sizing(border-box)
 		+box-shadow(0 1px 1px #fff)
 		margin-top: 6px
-		overflow: hidden
 		border: 1px solid $gray
 		display: inline-block
 		background: #fff
@@ -1210,8 +1181,6 @@ $tv: "screen" 1200px
 
 		+breakpoint($mobilePortrait)
 			margin-bottom: 4px
-
-		@clearfix()
 	
 	.hp-avs-prompt-right
 		margin-bottom: 0

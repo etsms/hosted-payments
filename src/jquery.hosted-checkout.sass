@@ -1,0 +1,86 @@
+@import "compass/utilities"
+@import "compass/reset/utilities"
+@import "compass/css3"
+@import "compass/css3/animation"
+@import "breakpoint"
+
+$black: #2E3037
+$white: #f3f3f3
+$orange: #FC5F45
+$blue: #007aff
+$red: #EA2D3F
+$green: #50AF00
+$darkBlue: darken($blue, 10%)
+$gray: #9CA3B3
+$lightGray: darken($white, 15%)
+
+.hp-button-wrap
+	+nested-reset()
+	+box-sizing(border-box)
+	+user-select(none)
+	+border-radius(3px)
+	position: relative
+
+	overflow: hidden
+	height: 58px
+	width: 260px
+
+	span,
+	button
+		font-family: "Segoe UI Light", "Segoe UI", "Selawik Light", "Arial", sans-serif
+		font-weight: 600
+		font-size: 12px
+		outline: none
+
+	.hp-button-element
+		background: $white linear-gradient(to bottom, $white, $lightGray)
+		border: 1px solid $lightGray
+		cursor: pointer
+		height: 40px
+		width: 100%
+		text-align: center
+		border-radius: 3px
+		
+		&:hover
+			background: $white
+
+		&:active
+			background: $gray
+			+box-shadow(inset 0 0 0 1px $blue)
+
+
+	&.hp-error .hp-button-element
+		border: 1px solid $red!important
+		color: $red!important
+
+	&.hp-error .hp-button-tagline
+		color: $red!important
+
+	.hp-button-logo-wrap
+		display: inline-block
+		vertical-align: middle
+		padding-top: 1px
+
+	.hp-button-logo
+		display: inline-block
+		vertical-align: middle
+
+	.hp-button-text
+		display: inline-block
+		vertical-align: middle
+		padding-top: 1px
+		text-shadow: 0 1px 0 #fff
+
+	.hp-button-tagline
+		height: 15px
+		text-align: center
+		width: 100%
+		display: block
+		padding-top: 1px
+
+	.hp-button-version 
+		font-size: 9px
+		position: relative
+		top: -3px
+		left: 5px
+		color: $gray
