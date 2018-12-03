@@ -3,7 +3,7 @@
 	"use strict";
 
 	const pluginName = "checkout";
-	const version = "v1.0.0";
+	const version = "v3.9.7";
 
 	let defaults = {
 		id: newGuid(),
