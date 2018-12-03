@@ -1,11 +1,11 @@
+"use strict";
+
 ; (function ($, window, document, undefined) {
 
-	"use strict";
+	var pluginName = "checkout";
+	var version = "v3.9.8";
 
-	const pluginName = "checkout";
-	const version = "v3.9.7";
-
-	let defaults = {
+	var defaults = {
 		id: newGuid(),
 		publicKey: null,
 		baseUrl: "https://checkout.emoney.com/",
@@ -23,71 +23,65 @@
 		errorCallbackUrl: null,
 		errorRedirectUrl: null,
 		privacyPolicyUrl: null,
-		termsAndConditionsUrl: null,
+		termsAndConditionsUrl: null
 	};
 
-	const $outerWrap = $("<div />", {
+	var $outerWrap = $("<div />", {
 		class: "hp-button-wrap"
 	});
 
-	const $button = $("<button />", {
+	var $button = $("<button />", {
 		class: "hp-button-element"
 	});
 
-	const $emoneyLogoWrap = $("<span />", {
+	var $emoneyLogoWrap = $("<span />", {
 		class: "hp-button-logo-wrap"
 	});
 
-	const $emoneyLogo = $("<img />", {
+	var $emoneyLogo = $("<img />", {
 		src: "https://app.emoney.com/Public/Styles/Images/logo-blue.svg",
 		class: "hp-button-logo",
 		height: 20
 	});
 
-	const $loader = $("<img />", {
+	var $loader = $("<img />", {
 		src: "https://app.emoney.com/public/styles/images/loading.gif",
 		class: "hp-button-loader",
 		height: 20
 	});
 
-	const $textContent = $("<span />", {
+	var $textContent = $("<span />", {
 		class: "hp-button-text",
 		text: " Checkout"
 	});
 
-	const $tagLineContent = $("<span />", {
+	var $tagLineContent = $("<span />", {
 		class: "hp-button-tagline",
 		text: "Make Commerce Happen!"
 	});
 
-	const $versionTag = $("<small />", {
+	var $versionTag = $("<small />", {
 		class: "hp-button-version",
 		text: version
 	});
 
-	$emoneyLogoWrap
-		.append($emoneyLogo);
+	$emoneyLogoWrap.append($emoneyLogo);
 
-	$emoneyLogoWrap
-		.append($loader);
+	$emoneyLogoWrap.append($loader);
 
-	$button
-		.append($emoneyLogoWrap);
+	$button.append($emoneyLogoWrap);
 
-	$button
-		.append($textContent);
+	$button.append($textContent);
 
-	$outerWrap
-		.append($button);
+	$outerWrap.append($button);
 
-	$tagLineContent
-		.append($versionTag);
+	$tagLineContent.append($versionTag);
 
-	$outerWrap
-		.append($tagLineContent);
+	$outerWrap.append($tagLineContent);
 
 	// The actual plugin constructor
 	function Plugin(element, options) {
+		var _this = this;
 
 		this._name = pluginName;
 		this.element = $(element);
@@ -96,10 +90,10 @@
 		$.ajaxSetup({
 			contentType: 'application/json',
 			headers: {
-				"Authorization": `Bearer ${defaults.publicKey}`
+				"Authorization": "Bearer " + defaults.publicKey
 			},
-			beforeSend: (xhr, ajaxOptions) => {
-				ajaxOptions.url = this.options.baseUrl + ajaxOptions.url;
+			beforeSend: function beforeSend(xhr, ajaxOptions) {
+				ajaxOptions.url = _this.options.baseUrl + ajaxOptions.url;
 			}
 		});
 
@@ -109,72 +103,69 @@
 	// Avoid Plugin.prototype conflicts
 	$.extend(Plugin.prototype, {
 
-		init: function () {
+		init: function init() {
 			this.addElementToPluginElement();
 			this.addEventHandler();
 		},
 
-		addElementToPluginElement: function () {
+		addElementToPluginElement: function addElementToPluginElement() {
 			this.element.append($outerWrap);
 		},
 
-		addEventHandler: function () {
-			$button
-				.off("click")
-				.on("click", ($ev) => {
+		addEventHandler: function addEventHandler() {
+			var _this2 = this;
 
-					this.addLoadingIndicator();
+			$button.off("click").on("click", function ($ev) {
 
-					this.authenticateSession()
-						.then((sessionResponse) => this.createSession(sessionResponse.resource.sessionToken, sessionResponse.href))
-						.then(
-							(checkoutRedirectUrl) => {
-								this.redirectToCheckoutUrl(checkoutRedirectUrl);
-							},
-							() => this.showErrorState()
-						);
+				_this2.addLoadingIndicator();
+
+				_this2.authenticateSession().then(function (sessionResponse) {
+					return _this2.createSession(sessionResponse.resource.sessionToken, sessionResponse.href);
+				}).then(function (checkoutRedirectUrl) {
+					_this2.redirectToCheckoutUrl(checkoutRedirectUrl);
+				}, function () {
+					return _this2.showErrorState();
 				});
+			});
 		},
 
-		addLoadingIndicator: function () {
+		addLoadingIndicator: function addLoadingIndicator() {
 			$outerWrap.addClass("hp-loading");
 		},
 
-		removeLoadingIndicator: function () {
+		removeLoadingIndicator: function removeLoadingIndicator() {
 			$outerWrap.removeClass("hp-loading");
 		},
 
-		redirectToCheckoutUrl: function (urlToRedirect) {
-			setTimeout(() => window.location.href = urlToRedirect, 1000);
+		redirectToCheckoutUrl: function redirectToCheckoutUrl(urlToRedirect) {
+			setTimeout(function () {
+				return window.location.href = urlToRedirect;
+			}, 1000);
 		},
 
-		showErrorState: function () {
+		showErrorState: function showErrorState() {
 
 			this.removeLoadingIndicator();
 
 			$outerWrap.addClass("hp-error");
 
-			const previousState = $tagLineContent.html();
+			var previousState = $tagLineContent.html();
 
-			$tagLineContent
-				.fadeOut(function () {
-					$(this).html("An error occured.");
-					$(this).fadeIn(function () {
-						$(this)
-							.delay(5000)
-							.fadeOut()
-							.fadeIn(function () {
-								$(this).html(previousState);
-								$outerWrap.removeClass("hp-error");
-							});
+			$tagLineContent.fadeOut(function () {
+				$(this).html("An error occured.");
+				$(this).fadeIn(function () {
+					$(this).delay(5000).fadeOut().fadeIn(function () {
+						$(this).html(previousState);
+						$outerWrap.removeClass("hp-error");
 					});
 				});
+			});
 		},
 
-		authenticateSession: function () {
+		authenticateSession: function authenticateSession() {
 
-			const deferred = $.Deferred();
-			const sessionUrl = `issuer/${this.options.issuerId}/session/authenticate/api-key`;
+			var deferred = $.Deferred();
+			var sessionUrl = "issuer/" + this.options.issuerId + "/session/authenticate/api-key";
 
 			$.ajax({
 				type: "POST",
@@ -189,16 +180,18 @@
 			return deferred.promise();
 		},
 
-		createSession: function (sessionToken, checkoutRedirectUrl) {
+		createSession: function createSession(sessionToken, checkoutRedirectUrl) {
 
-			const deferred = $.Deferred();
-			const createSessionUrl = `issuer/${this.options.issuerId}/checkout/${sessionToken}/session`;
+			var deferred = $.Deferred();
+			var createSessionUrl = "issuer/" + this.options.issuerId + "/checkout/" + sessionToken + "/session";
 
 			$.ajax({
 				type: "POST",
 				url: createSessionUrl,
 				data: JSON.stringify(this.options),
-				success: () => deferred.resolve(checkoutRedirectUrl),
+				success: function success() {
+					return deferred.resolve(checkoutRedirectUrl);
+				},
 				error: deferred.reject
 			});
 
@@ -210,8 +203,7 @@
 	$.fn[pluginName] = function (options) {
 		return this.each(function () {
 			if (!$.data(this, "plugin_" + pluginName)) {
-				$.data(this, "plugin_" +
-					pluginName, new Plugin(this, options));
+				$.data(this, "plugin_" + pluginName, new Plugin(this, options));
 			}
 		});
 	};
@@ -221,9 +213,9 @@
 	 */
 	function newGuid() {
 		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-			const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+			var r = Math.random() * 16 | 0,
+				v = c == 'x' ? r : r & 0x3 | 0x8;
 			return v.toString(16);
 		});
 	};
-
 })(jQuery, window, document);
