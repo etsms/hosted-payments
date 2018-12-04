@@ -5,19 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <script src="https://cdn.jsdelivr.net/gh/jquery/jquery@3.2/dist/jquery.min.js"></script>
-    <link rel="stylesheet" href="jquery.hosted-checkout.css">
-    <script src="jquery.hosted-checkout.js"></script>
+    <link rel="stylesheet" href="jquery.hosted-giftcard.css">
+    <script src="jquery.hosted-giftcard.js"></script>
 </head>
 
 <body>
     <div id="ets"></div>
     <script>
-        $("#ets").checkout({
-			issuerId: "3e0e8c60",
+        $("#ets").giftcard({
+			issuerId: "7b1b06aa",
 			publicKey: "3C74E6AD7DCEB270EB714BBF3761A5CF52C93EA8AA4C51D2",
-			apiKey: "14FCD780-2B9B-496B-86DC-7CA98DD57944",
+			apiKey: "3632bf5a-2c24-4750-b52e-8483f1c0a6f2",
+			baseUrl: "https://stage-app.emoney.com",
+			profileId :"13d58d48",
 			tagline: "erik",
-			text: "Test",
+			text: "gc",
 			logo: null,
 			size: "small"
 		});

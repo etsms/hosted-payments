@@ -2,30 +2,17 @@
 
 ; (function ($, window, document, undefined) {
 
-	var pluginName = "checkout";
+	var pluginName = "giftcard";
 	var version = "v3.9.9";
 
 	var defaults = {
-		id: newGuid(),
-		publicKey: null,
-		baseUrl: "https://checkout.emoney.com/",
+		baseUrl: "https://app.emoney.com/",
 		issuerId: null,
 		apiKey: null,
-		total: null,
-		customerFirstName: null,
-		customerLastName: null,
-		successCallbackUrl: null,
-		successRedirectUrl: null,
-		cancelCallbackUrl: null,
-		cancelRedirectUrl: null,
-		declineCallbackUrl: null,
-		declineRedirectUrl: null,
-		errorCallbackUrl: null,
-		errorRedirectUrl: null,
-		privacyPolicyUrl: null,
-		termsAndConditionsUrl: null,
+		profileId: null,
+		publicKey: null,
 		tagline: "Make Commerce Happen!",
-		text: "Checkout",
+		text: "Purchase Gift Card",
 		logo: "https://app.emoney.com/Public/Styles/Images/logo-blue.svg",
 		size: "normal" // small, responsive
 	};
@@ -56,7 +43,7 @@
 
 	var $textContent = $("<span />", {
 		class: "hp-button-text",
-		text: " Checkout"
+		text: " Giftcard"
 	});
 
 	var $tagLineContent = $("<span />", {
@@ -77,16 +64,6 @@
 		this.element = $(element);
 		this.options = $.extend({}, defaults, options);
 
-		$.ajaxSetup({
-			contentType: 'application/json',
-			headers: {
-				"Authorization": "Bearer " + defaults.publicKey
-			},
-			beforeSend: function beforeSend(xhr, ajaxOptions) {
-				ajaxOptions.url = _this.options.baseUrl + ajaxOptions.url;
-			}
-		});
-
 		this.init();
 	}
 
@@ -101,6 +78,10 @@
 		addElementToPluginElement: function addElementToPluginElement() {
 			
 			$emoneyLogo.attr("src", this.options.logo);
+
+			if (this.options.logo != null) {
+				$emoneyLogoWrap.append($emoneyLogo);
+			}
 
 			$emoneyLogoWrap.append($loader);
 
@@ -118,10 +99,6 @@
 
 			$outerWrap.append($tagLineContent);
 
-			if (this.options.logo != null) {
-				$emoneyLogoWrap.append($emoneyLogo);
-			}
-
 			switch(this.options.size) {
 				case "responsive":
 					$outerWrap.addClass("hp-button-wrap-responsive");
@@ -133,7 +110,7 @@
 					$outerWrap.addClass("hp-button-wrap-normal");
 					break;
 			}
-
+			
 			this.element.append($outerWrap);
 		},
 
@@ -144,13 +121,7 @@
 
 				_this2.addLoadingIndicator();
 
-				_this2.authenticateSession().then(function (sessionResponse) {
-					return _this2.createSession(sessionResponse.resource.sessionToken, sessionResponse.href);
-				}).then(function (checkoutRedirectUrl) {
-					_this2.redirectToCheckoutUrl(checkoutRedirectUrl);
-				}, function () {
-					return _this2.showErrorState();
-				});
+				_this2.giftCardEmbedUrl()
 			});
 		},
 
@@ -160,12 +131,6 @@
 
 		removeLoadingIndicator: function removeLoadingIndicator() {
 			$outerWrap.removeClass("hp-loading");
-		},
-
-		redirectToCheckoutUrl: function redirectToCheckoutUrl(urlToRedirect) {
-			setTimeout(function () {
-				return window.location.href = urlToRedirect;
-			}, 1000);
 		},
 
 		showErrorState: function showErrorState() {
@@ -187,41 +152,16 @@
 			});
 		},
 
-		authenticateSession: function authenticateSession() {
+		giftCardEmbedUrl: function giftCardEmbedUrl() {
 
-			var deferred = $.Deferred();
-			var sessionUrl = "issuer/" + this.options.issuerId + "/session/authenticate/api-key";
+			var embedId = btoa(this.options.apiKey + "|" + this.options.profileId +"|" + this.options.issuerId + "|" + this.options.publicKey)
 
-			$.ajax({
-				type: "POST",
-				url: sessionUrl,
-				data: JSON.stringify({
-					"credentials": btoa(this.options.apiKey)
-				}),
-				success: deferred.resolve,
-				error: deferred.reject
-			});
+			var redirectLink = this.options.baseUrl + '/giftcards?embedId=' + embedId
+			
+			window.location.href = redirectLink
 
-			return deferred.promise();
 		},
 
-		createSession: function createSession(sessionToken, checkoutRedirectUrl) {
-
-			var deferred = $.Deferred();
-			var createSessionUrl = "issuer/" + this.options.issuerId + "/checkout/" + sessionToken + "/session";
-
-			$.ajax({
-				type: "POST",
-				url: createSessionUrl,
-				data: JSON.stringify(this.options),
-				success: function success() {
-					return deferred.resolve(checkoutRedirectUrl);
-				},
-				error: deferred.reject
-			});
-
-			return deferred.promise();
-		}
 
 	});
 
@@ -233,14 +173,4 @@
 		});
 	};
 
-	/**
-	 * Helpers
-	 */
-	function newGuid() {
-		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-			var r = Math.random() * 16 | 0,
-				v = c == 'x' ? r : r & 0x3 | 0x8;
-			return v.toString(16);
-		});
-	};
 })(jQuery, window, document);

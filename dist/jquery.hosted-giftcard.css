@@ -1,4 +1,4 @@
-/* line 18, ../src/jquery.hosted-checkout.sass */
+/* line 18, ../src/jquery.hosted-giftcard.sass */
 .hp-button-wrap {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -60,20 +60,20 @@
 .hp-button-wrap a img {
   border: none;
 }
-/* line 29, ../src/jquery.hosted-checkout.sass */
+/* line 29, ../src/jquery.hosted-giftcard.sass */
 .hp-button-wrap.hp-button-wrap-responsive {
   width: 100%;
 }
-/* line 32, ../src/jquery.hosted-checkout.sass */
+/* line 32, ../src/jquery.hosted-giftcard.sass */
 .hp-button-wrap.hp-button-wrap-small {
   width: 76px;
   height: 48px;
 }
-/* line 36, ../src/jquery.hosted-checkout.sass */
+/* line 36, ../src/jquery.hosted-giftcard.sass */
 .hp-button-wrap.hp-button-wrap-small .hp-button-element {
   height: 30px;
 }
-/* line 39, ../src/jquery.hosted-checkout.sass */
+/* line 39, ../src/jquery.hosted-giftcard.sass */
 .hp-button-wrap span,
 .hp-button-wrap button {
   font-family: "Segoe UI Light", "Segoe UI", "Selawik Light", "Arial", sans-serif;
@@ -81,7 +81,7 @@
   font-size: 12px;
   outline: none;
 }
-/* line 46, ../src/jquery.hosted-checkout.sass */
+/* line 46, ../src/jquery.hosted-giftcard.sass */
 .hp-button-wrap .hp-button-element {
   background: #f3f3f3 linear-gradient(to bottom, #f3f3f3, #cdcdcd);
   border: 1px solid #cdcdcd;
@@ -91,62 +91,62 @@
   text-align: center;
   border-radius: 3px;
 }
-/* line 55, ../src/jquery.hosted-checkout.sass */
+/* line 55, ../src/jquery.hosted-giftcard.sass */
 .hp-button-wrap .hp-button-element:hover {
   background: #f3f3f3;
 }
-/* line 58, ../src/jquery.hosted-checkout.sass */
+/* line 58, ../src/jquery.hosted-giftcard.sass */
 .hp-button-wrap .hp-button-element:active {
   background: #9CA3B3;
   -moz-box-shadow: inset 0 0 0 1px #007aff;
   -webkit-box-shadow: inset 0 0 0 1px #007aff;
   box-shadow: inset 0 0 0 1px #007aff;
 }
-/* line 63, ../src/jquery.hosted-checkout.sass */
+/* line 63, ../src/jquery.hosted-giftcard.sass */
 .hp-button-wrap.hp-error .hp-button-element {
   border: 1px solid #EA2D3F !important;
   color: #EA2D3F !important;
 }
-/* line 67, ../src/jquery.hosted-checkout.sass */
+/* line 67, ../src/jquery.hosted-giftcard.sass */
 .hp-button-wrap.hp-error .hp-button-tagline {
   color: #EA2D3F !important;
 }
-/* line 72, ../src/jquery.hosted-checkout.sass */
+/* line 72, ../src/jquery.hosted-giftcard.sass */
 .hp-button-wrap.hp-loading .hp-button-loader {
   display: block;
 }
-/* line 75, ../src/jquery.hosted-checkout.sass */
+/* line 75, ../src/jquery.hosted-giftcard.sass */
 .hp-button-wrap.hp-loading .hp-button-tagline {
   opacity: 0.5;
 }
-/* line 78, ../src/jquery.hosted-checkout.sass */
+/* line 78, ../src/jquery.hosted-giftcard.sass */
 .hp-button-wrap.hp-loading .hp-button-logo,
 .hp-button-wrap.hp-loading .hp-button-text {
   opacity: 0;
 }
-/* line 82, ../src/jquery.hosted-checkout.sass */
+/* line 82, ../src/jquery.hosted-giftcard.sass */
 .hp-button-wrap.hp-loading .hp-button-element {
   background: white !important;
 }
-/* line 85, ../src/jquery.hosted-checkout.sass */
+/* line 85, ../src/jquery.hosted-giftcard.sass */
 .hp-button-wrap .hp-button-logo-wrap {
   display: inline-block;
   vertical-align: middle;
   padding-top: 1px;
 }
-/* line 90, ../src/jquery.hosted-checkout.sass */
+/* line 90, ../src/jquery.hosted-giftcard.sass */
 .hp-button-wrap .hp-button-logo {
   display: inline-block;
   vertical-align: middle;
 }
-/* line 94, ../src/jquery.hosted-checkout.sass */
+/* line 94, ../src/jquery.hosted-giftcard.sass */
 .hp-button-wrap .hp-button-text {
   display: inline-block;
   vertical-align: middle;
   padding-top: 1px;
   text-shadow: 0 1px 0 #fff;
 }
-/* line 100, ../src/jquery.hosted-checkout.sass */
+/* line 100, ../src/jquery.hosted-giftcard.sass */
 .hp-button-wrap .hp-button-tagline {
   height: 15px;
   text-align: center;
@@ -154,7 +154,7 @@
   display: block;
   padding-top: 1px;
 }
-/* line 107, ../src/jquery.hosted-checkout.sass */
+/* line 107, ../src/jquery.hosted-giftcard.sass */
 .hp-button-wrap .hp-button-version {
   font-size: 9px;
   position: relative;
@@ -162,7 +162,7 @@
   left: 5px;
   color: #9CA3B3;
 }
-/* line 114, ../src/jquery.hosted-checkout.sass */
+/* line 114, ../src/jquery.hosted-giftcard.sass */
 .hp-button-wrap .hp-button-loader {
   height: 20px;
   position: absolute;
