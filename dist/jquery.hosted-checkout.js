@@ -3,10 +3,10 @@
 ; (function ($, window, document, undefined) {
 
 	var pluginName = "checkout";
-	var version = "v3.9.9";
+	var version = "v4.0.0";
 
 	var defaults = {
-		id: newGuid(),
+		id: null,
 		publicKey: null,
 		baseUrl: "https://checkout.emoney.com/",
 		issuerId: null,
@@ -209,6 +209,10 @@
 
 			var deferred = $.Deferred();
 			var createSessionUrl = "issuer/" + this.options.issuerId + "/checkout/" + sessionToken + "/session";
+			
+			if(this.options.id == null) {
+				this.options.id = newGuid()
+			}
 
 			$.ajax({
 				type: "POST",

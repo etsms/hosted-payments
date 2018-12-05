@@ -9364,7 +9364,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 })(jQuery, window, document);
 
 /*
- *  jQuery Hosted Payments - v3.9.9
+ *  jQuery Hosted Payments - v4.0.0
  *
  *  Made by Erik Zettersten
  *  Under MIT License
@@ -9374,7 +9374,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	var pluginName = "hp",
 		defaults = {};
 
-	defaults.version = "v3.9.9";
+	defaults.version = "v4.0.0";
 	defaults.amount = 0;
 	defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
 	defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
