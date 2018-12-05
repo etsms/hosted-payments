@@ -3,7 +3,7 @@
 ; (function ($, window, document, undefined) {
 
 	var pluginName = "giftcard";
-	var version = "v4.0.1";
+	var version = "v4.0.2";
 
 	var defaults = {
 		baseUrl: "https://app.emoney.com/",

@@ -1,0 +1,24 @@
+@import "compass/utilities"
+@import "compass/reset/utilities"
+@import "compass/css3"
+@import "compass/css3/animation"
+@import "breakpoint"
+
+#hp-eshop-wrapper
+	+nested-reset()
+	+box-sizing(border-box)
+	position: relative
+	padding-top: 35px
+	padding-bottom: 100%
+	height: 0
+	overflow: hidden
+
+	> iframe
+		+box-sizing(border-box)
+		width: 100%
+		height: 100%
+		position: absolute
+		border: 0 none
+		margin: 0
+		padding: 0
+

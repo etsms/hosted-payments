@@ -1,0 +1,68 @@
+/* line 7, ../src/jquery.hosted-eshop.sass */
+#hp-eshop-wrapper {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  position: relative;
+  padding-top: 35px;
+  padding-bottom: 100%;
+  height: 0;
+  overflow: hidden;
+}
+/* line 40, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+#hp-eshop-wrapper div, #hp-eshop-wrapper span, #hp-eshop-wrapper applet, #hp-eshop-wrapper object, #hp-eshop-wrapper iframe,
+#hp-eshop-wrapper h1, #hp-eshop-wrapper h2, #hp-eshop-wrapper h3, #hp-eshop-wrapper h4, #hp-eshop-wrapper h5, #hp-eshop-wrapper h6, #hp-eshop-wrapper p, #hp-eshop-wrapper blockquote, #hp-eshop-wrapper pre,
+#hp-eshop-wrapper a, #hp-eshop-wrapper abbr, #hp-eshop-wrapper acronym, #hp-eshop-wrapper address, #hp-eshop-wrapper big, #hp-eshop-wrapper cite, #hp-eshop-wrapper code,
+#hp-eshop-wrapper del, #hp-eshop-wrapper dfn, #hp-eshop-wrapper em, #hp-eshop-wrapper img, #hp-eshop-wrapper ins, #hp-eshop-wrapper kbd, #hp-eshop-wrapper q, #hp-eshop-wrapper s, #hp-eshop-wrapper samp,
+#hp-eshop-wrapper small, #hp-eshop-wrapper strike, #hp-eshop-wrapper strong, #hp-eshop-wrapper sub, #hp-eshop-wrapper sup, #hp-eshop-wrapper tt, #hp-eshop-wrapper var,
+#hp-eshop-wrapper b, #hp-eshop-wrapper u, #hp-eshop-wrapper i, #hp-eshop-wrapper center,
+#hp-eshop-wrapper dl, #hp-eshop-wrapper dt, #hp-eshop-wrapper dd, #hp-eshop-wrapper ol, #hp-eshop-wrapper ul, #hp-eshop-wrapper li,
+#hp-eshop-wrapper fieldset, #hp-eshop-wrapper form, #hp-eshop-wrapper label, #hp-eshop-wrapper legend,
+#hp-eshop-wrapper table, #hp-eshop-wrapper caption, #hp-eshop-wrapper tbody, #hp-eshop-wrapper tfoot, #hp-eshop-wrapper thead, #hp-eshop-wrapper tr, #hp-eshop-wrapper th, #hp-eshop-wrapper td,
+#hp-eshop-wrapper article, #hp-eshop-wrapper aside, #hp-eshop-wrapper canvas, #hp-eshop-wrapper details, #hp-eshop-wrapper embed,
+#hp-eshop-wrapper figure, #hp-eshop-wrapper figcaption, #hp-eshop-wrapper footer, #hp-eshop-wrapper header, #hp-eshop-wrapper hgroup,
+#hp-eshop-wrapper menu, #hp-eshop-wrapper nav, #hp-eshop-wrapper output, #hp-eshop-wrapper ruby, #hp-eshop-wrapper section, #hp-eshop-wrapper summary,
+#hp-eshop-wrapper time, #hp-eshop-wrapper mark, #hp-eshop-wrapper audio, #hp-eshop-wrapper video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+/* line 55, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+#hp-eshop-wrapper table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+/* line 57, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+#hp-eshop-wrapper caption, #hp-eshop-wrapper th, #hp-eshop-wrapper td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+/* line 59, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+#hp-eshop-wrapper q, #hp-eshop-wrapper blockquote {
+  quotes: none;
+}
+/* line 103, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+#hp-eshop-wrapper q:before, #hp-eshop-wrapper q:after, #hp-eshop-wrapper blockquote:before, #hp-eshop-wrapper blockquote:after {
+  content: "";
+  content: none;
+}
+/* line 61, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+#hp-eshop-wrapper a img {
+  border: none;
+}
+/* line 16, ../src/jquery.hosted-eshop.sass */
+#hp-eshop-wrapper > iframe {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  border: 0 none;
+  margin: 0;
+  padding: 0;
+}
