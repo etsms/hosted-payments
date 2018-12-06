@@ -3,7 +3,7 @@
 ; (function ($, window, document, undefined) {
 
 	var pluginName = "checkout";
-	var version = "v4.0.2";
+	var version = "v4.0.3";
 
 	var defaults = {
 		id: null,
@@ -24,6 +24,7 @@
 		errorRedirectUrl: null,
 		privacyPolicyUrl: null,
 		termsAndConditionsUrl: null,
+		paymentOptions: null,
 		tagline: "Make Commerce Happen!",
 		text: "Checkout",
 		logo: "https://app.emoney.com/Public/Styles/Images/logo-blue.svg",
