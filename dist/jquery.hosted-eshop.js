@@ -3,7 +3,7 @@
 ; (function ($, window, document, undefined) {
 
 	var pluginName = "eshop";
-	var version = "v4.0.3";
+	var version = "v4.0.4";
 
 	var defaults = {
 		issuerId: null,

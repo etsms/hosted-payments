@@ -1,0 +1,121 @@
+@import "compass/utilities"
+@import "compass/reset/utilities"
+@import "compass/css3"
+@import "compass/css3/animation"
+@import "breakpoint"
+
+$black: #2E3037
+$white: #f3f3f3
+$orange: #FC5F45
+$blue: #007aff
+$red: #EA2D3F
+$green: #50AF00
+$darkBlue: darken($blue, 10%)
+$gray: #9CA3B3
+$lightGray: darken($white, 15%)
+$height: 58px
+
+.hp-button-wrap
+	+nested-reset()
+	+box-sizing(border-box)
+	+user-select(none)
+	+border-radius(3px)
+	position: relative
+
+	overflow: hidden
+	height: $height
+	width: 260px
+
+	&.hp-button-wrap-responsive
+		width: 100%
+
+	&.hp-button-wrap-small
+		width: 76px
+		height: $height - 10px
+
+		.hp-button-element
+			height: $height - 18px - 10px
+
+	span,
+	button
+		font-family: "Segoe UI Light", "Segoe UI", "Selawik Light", "Arial", sans-serif
+		font-weight: 600
+		font-size: 12px
+		outline: none
+
+	.hp-button-element
+		background: $white linear-gradient(to bottom, $white, $lightGray)
+		border: 1px solid $lightGray
+		cursor: pointer
+		height: $height - 18px
+		width: 100%
+		text-align: center
+		border-radius: 3px
+		
+		&:hover
+			background: $white
+
+		&:active
+			background: $gray
+			+box-shadow(inset 0 0 0 1px $blue)
+
+
+	&.hp-error .hp-button-element
+		border: 1px solid $red!important
+		color: $red!important
+
+	&.hp-error .hp-button-tagline
+		color: $red!important
+
+	&.hp-loading 
+
+		.hp-button-loader
+			display: block
+			
+		.hp-button-tagline
+			opacity: 0.5
+
+		.hp-button-logo,
+		.hp-button-text
+			opacity: 0
+
+		.hp-button-element
+			background: white!important
+
+	.hp-button-logo-wrap
+		display: inline-block
+		vertical-align: middle
+		padding-top: 1px
+
+	.hp-button-logo
+		display: inline-block
+		vertical-align: middle
+
+	.hp-button-text
+		display: inline-block
+		vertical-align: middle
+		padding-top: 1px
+		text-shadow: 0 1px 0 #fff
+
+	.hp-button-tagline
+		height: 15px
+		text-align: center
+		width: 100%
+		display: block
+		padding-top: 1px
+
+	.hp-button-version 
+		font-size: 9px
+		position: relative
+		top: -3px
+		left: 5px
+		color: $gray
+
+	.hp-button-loader
+		height: 20px
+		position: absolute
+		left: 50%
+		top: 50%
+		margin-top: -20px
+		margin-left: -11px
+		display: none
