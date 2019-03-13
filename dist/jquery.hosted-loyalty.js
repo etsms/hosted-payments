@@ -3,15 +3,15 @@
 ; (function ($, window, document, undefined) {
 
 	var pluginName = "loyalty";
-	var version = "v4.0.4";
+	var version = "v4.0.5";
 
 	var defaults = {
-		baseUrl: "https://app.emoney.com/loyalty/",
+		baseUrl: "https://stage-app.emoney.com/loyalty/",
 		issuerId: null,
 		apiKey: null,
 		publicKey: null,
 		tagline: "Make Commerce Happen!",
-		text: "Collect Loyalty Points",
+		text: "Want a loyalty account?",
 		logo: "https://app.emoney.com/Public/Styles/Images/logo-blue.svg",
 		size: "normal" // small, responsive
 	};
@@ -120,7 +120,7 @@
 
 				_this2.addLoadingIndicator();
 
-				_this2.giftCardEmbedUrl()
+				_this2.loyaltyRedirectUrl()
 			});
 		},
 
@@ -154,7 +154,7 @@
 		loyaltyRedirectUrl: function loyaltyRedirectUrl() {
 
 			var redirectLink = this.options.baseUrl + this.options.issuerId
-			
+
 			window.location.href = redirectLink
 		},
 
