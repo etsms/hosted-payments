@@ -3,10 +3,10 @@
 ; (function ($, window, document, undefined) {
 
 	var pluginName = "loyalty";
-	var version = "v4.0.5";
+	var version = "v4.0.6";
 
 	var defaults = {
-		baseUrl: "https://stage-app.emoney.com/loyalty/",
+		baseUrl: "https://app.emoney.com/loyalty/",
 		issuerId: null,
 		apiKey: null,
 		publicKey: null,
