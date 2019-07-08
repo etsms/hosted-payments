@@ -1,5 +1,6 @@
 # Hosted Payments
 Hosted Payments is a comprehensive, browser-based financial transaction toolset,
+[![](https://data.jsdelivr.com/v1/package/gh/etsms/hosted-payments/badge)](https://www.jsdelivr.com/package/gh/etsms/hosted-payments)
 
 ## Get Started
 Visit https://www.etsms.com/docs/hosted-payments
