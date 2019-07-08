@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <div id="ets"></div>
+    <div id="ets" data-default-button-label="test"></div>
     <script>
 
         var transactionId = hp.Utils.generateGUID();
@@ -36,7 +36,8 @@
             transactionId: transactionId,
             surchargeFee: 2,
             convenienceFee: 1,
-            disableAutocomplete: false
+            disableAutocomplete: false,
+            checkHttpsConnection: false
         });
 
     </script>

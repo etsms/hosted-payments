@@ -25,14 +25,20 @@
     "engines": {
         "node": ">=0.6.0"
     },
-    "dependencies": {},
+    "dependencies": {
+        "typestyle": "^2.0.3"
+    },
     "devDependencies": {
+        "@babel/core": "^7.5.0",
+        "@babel/preset-env": "^7.5.0",
+        "@babel/preset-typescript": "^7.3.3",
         "gulp": "*",
+        "gulp-babel": "^8.0.0",
         "gulp-compass": "^2.0.1",
         "gulp-concat": "^2.4.1",
+        "gulp-serve": "*",
         "gulp-util": "^3.0.1",
-        "gulp-watch": "^1.1.0",
-        "gulp-serve" : "*"
+        "gulp-watch": "^1.1.0"
     },
     "repository": {
         "type": "git",
