@@ -1,7 +1,5 @@
 "use strict";
 
-;
-
 (function ($, window, document, undefined) {
   var pluginName = "eshop";
   var version = "v4.0.6";

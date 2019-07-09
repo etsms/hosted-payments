@@ -1,7 +1,5 @@
 "use strict";
 
-;
-
 (function ($, window, document, undefined) {
   var pluginName = "giftcard";
   var version = "v4.0.6";
@@ -127,7 +125,7 @@
     },
     giftCardEmbedUrl: function giftCardEmbedUrl() {
       var embedId = btoa(this.options.apiKey + "|" + this.options.profileId + "|" + this.options.issuerId + "|" + this.options.publicKey);
-      var redirectLink = this.options.baseUrl + '/giftcards?embedId=' + embedId;
+      var redirectLink = this.options.baseUrl + "/giftcards?embedId=" + embedId;
       window.location.href = redirectLink;
     }
   });

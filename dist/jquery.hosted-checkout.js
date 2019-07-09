@@ -1,7 +1,5 @@
 "use strict";
 
-;
-
 (function ($, window, document, undefined) {
   var pluginName = "checkout";
   var version = "v4.0.6";
@@ -70,9 +68,9 @@
     this.element = $(element);
     this.options = $.extend({}, defaults, options);
     $.ajaxSetup({
-      contentType: 'application/json',
+      contentType: "application/json",
       headers: {
-        "Authorization": "Bearer " + defaults.publicKey
+        Authorization: "Bearer " + defaults.publicKey
       },
       beforeSend: function beforeSend(xhr, ajaxOptions) {
         ajaxOptions.url = _this.options.baseUrl + ajaxOptions.url;
@@ -165,7 +163,7 @@
         type: "POST",
         url: sessionUrl,
         data: JSON.stringify({
-          "credentials": btoa(this.options.apiKey)
+          credentials: btoa(this.options.apiKey)
         }),
         success: deferred.resolve,
         error: deferred.reject
@@ -206,12 +204,10 @@
 
 
   function newGuid() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
       var r = Math.random() * 16 | 0,
-          v = c == 'x' ? r : r & 0x3 | 0x8;
+          v = c == "x" ? r : r & 0x3 | 0x8;
       return v.toString(16);
     });
   }
-
-  ;
 })(jQuery, window, document);

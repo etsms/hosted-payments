@@ -1,26 +1,4 @@
-'use strict';
-
-function _typeof3(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof3 = function _typeof3(obj) { return typeof obj; }; } else { _typeof3 = function _typeof3(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof3(obj); }
-
-function _typeof2(obj) {
-  if (typeof Symbol === "function" && _typeof3(Symbol.iterator) === "symbol") {
-    _typeof2 = function _typeof2(obj) {
-      return _typeof3(obj);
-    };
-  } else {
-    _typeof2 = function _typeof2(obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof3(obj);
-    };
-  }
-
-  return _typeof2(obj);
-}
-
-var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
-  return _typeof2(obj);
-} : function (obj) {
-  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof2(obj);
-};
+"use strict";
 /*!
  * Copyright (c) 2020 Elavon Inc
  *
@@ -43,9 +21,10 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 (function ($, window, document, undefined) {
-  'use strict'; // Get a regular interval for drawing to the screen
+  "use strict"; // Get a regular interval for drawing to the screen
 
   window.requestAnimFrame = function (callback) {
     return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimaitonFrame || function (callback) {
@@ -57,17 +36,17 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
    */
 
 
-  var pluginName = 'jqSignature',
+  var pluginName = "jqSignature",
       defaults = {
-    lineColor: '#222222',
+    lineColor: "#222222",
     lineWidth: 1,
-    border: '1px dashed #AAAAAA',
-    background: 'transparent',
+    border: "1px dashed #AAAAAA",
+    background: "transparent",
     width: 300,
     height: 100,
     autoFit: false
   },
-      canvasFixture = '<canvas></canvas>',
+      canvasFixture = "<canvas></canvas>",
       idCounter = 0;
 
   function Signature(element, options) {
@@ -95,7 +74,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
   Signature.prototype = {
     // Initialize the signature canvas
     init: function init() {
-      this.id = 'jq-signature-canvas-' + ++idCounter; // Set up the canvas
+      this.id = "jq-signature-canvas-" + ++idCounter; // Set up the canvas
 
       this.$canvas = $(canvasFixture).appendTo(this.$element);
       this.$canvas.attr({
@@ -103,14 +82,14 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
         height: this.settings.height
       });
       this.$canvas.css({
-        boxSizing: 'border-box',
-        width: this.settings.width + 'px',
-        height: this.settings.height + 'px',
+        boxSizing: "border-box",
+        width: this.settings.width + "px",
+        height: this.settings.height + "px",
         border: this.settings.border,
         background: this.settings.background,
-        cursor: 'crosshair'
+        cursor: "crosshair"
       });
-      this.$canvas.attr('id', this.id); // Fit canvas to width of parent
+      this.$canvas.attr("id", this.id); // Fit canvas to width of parent
 
       if (this.settings.autoFit === true) {
         this._resizeCanvas(); // TODO - allow for dynamic canvas resizing
@@ -140,9 +119,9 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       // }
 
 
-      this.$canvas.on('mousedown touchstart', $.proxy(this._downHandler, this));
-      this.$canvas.on('mousemove touchmove', $.proxy(this._moveHandler, this));
-      this.$canvas.on('mouseup touchend', $.proxy(this._upHandler, this)); // Start drawing
+      this.$canvas.on("mousedown touchstart", $.proxy(this._downHandler, this));
+      this.$canvas.on("mousemove touchmove", $.proxy(this._moveHandler, this));
+      this.$canvas.on("mouseup touchend", $.proxy(this._upHandler, this)); // Start drawing
 
       var that = this;
 
@@ -164,14 +143,14 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     },
     // Get the content of the canvas as a base64 data URL
     getDataPoints: function getDataPoints() {
-      return JSON.stringify(this.points).replace('[', '').replace(']', '');
+      return JSON.stringify(this.points).replace("[", "").replace("]", "");
     },
     // Handle the start of a signature
     _downHandler: function _downHandler(e) {
       this.drawing = true;
       this.lastPos = this.currentPos = this._getPosition(e); // Prevent scrolling, etc
 
-      $('body').css('overflow', 'hidden');
+      $("body").css("overflow", "hidden");
       e.preventDefault();
     },
     // Handle mouse/touch moves during a signature
@@ -189,10 +168,10 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       this._setPointsUp(); // Trigger a change event
 
 
-      var changedEvent = $.Event('jq.signature.changed');
+      var changedEvent = $.Event("jq.signature.changed");
       this.$element.trigger(changedEvent); // Allow scrolling again
 
-      $('body').css('overflow', 'auto');
+      $("body").css("overflow", "auto");
       e.preventDefault();
     },
     // Get the position of the mouse/touch
@@ -201,7 +180,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       rect = this.canvas.getBoundingClientRect();
       if (event.originalEvent) event = event.originalEvent; // Touch event
 
-      if (event.type.indexOf('touch') !== -1) {
+      if (event.type.indexOf("touch") !== -1) {
         // event.constructor === TouchEvent
         xPos = event.touches[0].clientX - rect.left;
         yPos = event.touches[0].clientY - rect.top;
@@ -252,8 +231,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     // Resize the canvas element
     _resizeCanvas: function _resizeCanvas() {
       var width = this.$element.outerWidth();
-      this.$canvas.attr('width', width);
-      this.$canvas.css('width', width + 'px');
+      this.$canvas.attr("width", width);
+      this.$canvas.css("width", width + "px");
     }
   };
   /*
@@ -263,23 +242,23 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
   $.fn[pluginName] = function (options) {
     var args = arguments;
 
-    if (options === undefined || (typeof options === 'undefined' ? 'undefined' : _typeof(options)) === 'object') {
+    if (options === undefined || (typeof options === "undefined" ? "undefined" : _typeof(options)) === "object") {
       return this.each(function () {
-        if (!$.data(this, 'plugin_' + pluginName)) {
-          $.data(this, 'plugin_' + pluginName, new Signature(this, options));
+        if (!$.data(this, "plugin_" + pluginName)) {
+          $.data(this, "plugin_" + pluginName, new Signature(this, options));
         }
       });
-    } else if (typeof options === 'string' && options[0] !== '_' && options !== 'init') {
+    } else if (typeof options === "string" && options[0] !== "_" && options !== "init") {
       var returns;
       this.each(function () {
-        var instance = $.data(this, 'plugin_' + pluginName);
+        var instance = $.data(this, "plugin_" + pluginName);
 
-        if (instance instanceof Signature && typeof instance[options] === 'function') {
+        if (instance instanceof Signature && typeof instance[options] === "function") {
           returns = instance[options].apply(instance, Array.prototype.slice.call(args, 1));
         }
 
-        if (options === 'destroy') {
-          $.data(this, 'plugin_' + pluginName, null);
+        if (options === "destroy") {
+          $.data(this, "plugin_" + pluginName, null);
         }
       });
       return returns !== undefined ? returns : this;
@@ -439,7 +418,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     ieVersion: function () {
       var version, matches;
 
-      if (window.navigator.appName === 'Microsoft Internet Explorer') {
+      if (window.navigator.appName === "Microsoft Internet Explorer") {
         // Check if the user agent has the pattern "MSIE (one or more numbers).(one or more numbers)";
         matches = /MSIE ([0-9]+\.[0-9]+)/.exec(window.navigator.userAgent);
 
@@ -916,9 +895,9 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
             onFailed(_error2, connection);
           } else {
             // This rejection will noop if the deferred has already been resolved or rejected.
-            deferred.reject(_signalR._.error(resources.stoppedWhileNegotiating, null
+            deferred.reject(_signalR._.error(resources.stoppedWhileNegotiating, null,
             /* error */
-            , connection._.negotiateRequest));
+            connection._.negotiateRequest));
           }
         },
         success: function success(result) {
@@ -1402,9 +1381,9 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
             if (data.Response === "pong") {
               deferral.resolve();
             } else {
-              deferral.reject(signalR._.transportError(signalR._.format(signalR.resources.pingServerFailedInvalidResponse, result), connection.transport, null
+              deferral.reject(signalR._.transportError(signalR._.format(signalR.resources.pingServerFailedInvalidResponse, result), connection.transport, null,
               /* error */
-              , xhr));
+              xhr));
             }
           },
           error: function error(_error3) {
@@ -1447,7 +1426,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
         return url;
       }
 
-      if ((typeof qs === 'undefined' ? 'undefined' : _typeof(qs)) === "object") {
+      if ((typeof qs === "undefined" ? "undefined" : _typeof(qs)) === "object") {
         return url + appender + $.param(qs);
       }
 
@@ -1609,9 +1588,9 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
           if (data.Response === "started") {
             onSuccess();
           } else {
-            triggerStartError(signalR._.error(signalR._.format(signalR.resources.invalidStartResponse, result), null
+            triggerStartError(signalR._.error(signalR._.format(signalR.resources.invalidStartResponse, result), null,
             /* error */
-            , xhr));
+            xhr));
           }
         },
         error: function error(xhr, statusText, _error5) {
@@ -1621,9 +1600,9 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
             // Stop has been called, no need to trigger the error handler
             // or stop the connection again with onStartError
             connection.log("The start request aborted because connection.stop() was called.");
-            rejectDeferred(signalR._.error(signalR.resources.stoppedDuringStartRequest, null
+            rejectDeferred(signalR._.error(signalR.resources.stoppedDuringStartRequest, null,
             /* error */
-            , xhr));
+            xhr));
           }
         }
       });
@@ -2990,17 +2969,17 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       // (instance, shouldSubscribe)
       registerHubProxies(proxies, false);
     });
-    proxies['transvaultHub'] = this.createHubProxy('transvaultHub');
-    proxies['transvaultHub'].client = {};
-    proxies['transvaultHub'].server = {
+    proxies["transvaultHub"] = this.createHubProxy("transvaultHub");
+    proxies["transvaultHub"].client = {};
+    proxies["transvaultHub"].server = {
       getMerchantCredentials: function getMerchantCredentials(browserId, accessToken) {
-        return proxies['transvaultHub'].invoke.apply(proxies['transvaultHub'], $.merge(["GetMerchantCredentials"], $.makeArray(arguments)));
+        return proxies["transvaultHub"].invoke.apply(proxies["transvaultHub"], $.merge(["GetMerchantCredentials"], $.makeArray(arguments)));
       },
       getSignatureUrl: function getSignatureUrl(browserId, pointArray) {
-        return proxies['transvaultHub'].invoke.apply(proxies['transvaultHub'], $.merge(["GetSignatureUrl"], $.makeArray(arguments)));
+        return proxies["transvaultHub"].invoke.apply(proxies["transvaultHub"], $.merge(["GetSignatureUrl"], $.makeArray(arguments)));
       },
       sendMessage: function sendMessage(data) {
-        return proxies['transvaultHub'].invoke.apply(proxies['transvaultHub'], $.merge(["SendMessage"], $.makeArray(arguments)));
+        return proxies["transvaultHub"].invoke.apply(proxies["transvaultHub"], $.merge(["SendMessage"], $.makeArray(arguments)));
       }
     };
     return proxies;
@@ -3018,23 +2997,23 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
   if (!Math.round10) {
     Math.round10 = function (value, exp) {
       // If the exp is undefined or zero...
-      if (typeof exp === 'undefined' || +exp === 0) {
+      if (typeof exp === "undefined" || +exp === 0) {
         return Math.round(value);
       }
 
       value = +value;
       exp = +exp; // If the value is not a number or the exp is not an integer...
 
-      if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+      if (isNaN(value) || !(typeof exp === "number" && exp % 1 === 0)) {
         return NaN;
       } // Shift
 
 
-      value = value.toString().split('e');
-      value = Math.round(+(value[0] + 'e' + (value[1] ? +value[1] - exp : -exp))); // Shift back
+      value = value.toString().split("e");
+      value = Math.round(+(value[0] + "e" + (value[1] ? +value[1] - exp : -exp))); // Shift back
 
-      value = value.toString().split('e');
-      return +(value[0] + 'e' + (value[1] ? +value[1] + exp : exp));
+      value = value.toString().split("e");
+      return +(value[0] + "e" + (value[1] ? +value[1] + exp : exp));
     };
   }
 
@@ -3056,14 +3035,14 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       var r = String(number);
 
       if (r.length === 1) {
-        r = '0' + r;
+        r = "0" + r;
       }
 
       return r;
     };
 
     Date.prototype.toISOString = function () {
-      return this.getUTCFullYear() + '-' + pad(this.getUTCMonth() + 1) + '-' + pad(this.getUTCDate()) + 'T' + pad(this.getUTCHours()) + ':' + pad(this.getUTCMinutes()) + ':' + pad(this.getUTCSeconds()) + '.' + String((this.getUTCMilliseconds() / 1000).toFixed(3)).slice(2, 5) + 'Z';
+      return this.getUTCFullYear() + "-" + pad(this.getUTCMonth() + 1) + "-" + pad(this.getUTCDate()) + "T" + pad(this.getUTCHours()) + ":" + pad(this.getUTCMinutes()) + ":" + pad(this.getUTCSeconds()) + "." + String((this.getUTCMilliseconds() / 1000).toFixed(3)).slice(2, 5) + "Z";
     };
   }
   /*
@@ -3127,6 +3106,56 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       parent: $parent,
       content: $content
     };
+  };
+
+  var replacePaymentPlan = function replacePaymentPlan(customerToken, instrumentId, planId, callback) {
+    var accessToken = getSession().sessionToken;
+
+    if (accessToken === undefined) {
+      throw new Error("AccessToken was invalid or unspecified.");
+    }
+
+    if (callback === undefined || typeof callback !== "function") {
+      throw new Error("A callback was not provided.");
+    }
+
+    var requestPayload = {
+      replacePlan: {
+        replacePlanRequest: {
+          token: accessToken,
+          customerToken: customerToken,
+          instrumentId: instrumentId,
+          planId: planId
+        }
+      }
+    };
+    log("Replace plan request: ", requestPayload);
+
+    try {
+      makeRequest(requestPayload).then(function (replacePlanResponse) {
+        log("Replace plan response: ", replacePlanResponse);
+
+        if (replacePlanResponse.error !== undefined) {
+          callback(replacePlanResponse.error, null);
+          return;
+        }
+
+        callback(null, replacePlanResponse.replacePlanResponse);
+      }, function (replacePlanResponseError) {
+        var err = replacePlanResponseError.responseJSON;
+        log("Replace plan error: ", err);
+
+        if (err.error !== undefined) {
+          callback(err.error, null);
+          return;
+        }
+
+        callback(err, null);
+      });
+    } catch (err) {
+      log("Replace plan exception: ", err);
+      callback(err, null);
+    }
   };
 
   var setPaymentService = function setPaymentService(serivceType) {
@@ -3241,7 +3270,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     Log.prototype.write = function (args) {
       // via @fredrik SO trace suggestion; wrapping in special construct so it stands out
-      var suffix = "@(" + (this.lineNumber ? this.fileName + ':' + this.lineNumber + ":1" : extractLineNumberFromStack(this.stack));
+      var suffix = "@(" + (this.lineNumber ? this.fileName + ":" + this.lineNumber + ":1" : extractLineNumberFromStack(this.stack));
       args = args.concat([suffix]); // via @paulirish console wrapper
 
       if (console && console.log) {
@@ -3256,9 +3285,9 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     var extractLineNumberFromStack = function extractLineNumberFromStack(stack) {
       try {
-        var line = stack.split('\n')[3]; // fix for various display text
+        var line = stack.split("\n")[3]; // fix for various display text
 
-        line = line.indexOf(' (') >= 0 ? line.split(' (')[1].substring(0, line.length - 1) : line.split('at ')[1];
+        line = line.indexOf(" (") >= 0 ? line.split(" (")[1].substring(0, line.length - 1) : line.split("at ")[1];
         return line;
       } catch (e) {
         return 1;
@@ -3297,10 +3326,10 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       d = new Date().getTime();
     }
 
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
       var r = (d + Math.random() * 16) % 16 | 0;
       d = Math.floor(d / 16);
-      return (c == 'x' ? r : r & 0x3 | 0x8).toString(16);
+      return (c == "x" ? r : r & 0x3 | 0x8).toString(16);
     });
     return uuid;
   };
@@ -3338,7 +3367,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     $(".hp-error-container").addClass("hp-error-container-active");
     var $message = $(".hp-error-container .hp-error-message"),
         isArray = typeof message !== "undefined" && typeof message.push !== "undefined",
-        list = "<p>Please review the following errors: </p><ul class=\"hp-error-message-list\">{{errors}}</ul>";
+        list = '<p>Please review the following errors: </p><ul class="hp-error-message-list">{{errors}}</ul>';
 
     if (isArray) {
       var errors = "";
@@ -3377,7 +3406,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
   var createInstance = function createInstance($element, callback) {
     // Create wrapping HTML
-    var $wrapper = ['<div class="hp hp-form">', '<div class="hp-loading-container">', '<span class="hp-loading-text">Loading</span>', '<div class="hp-loading"><span></span><span></span><span></span><span></span></div>', '</div>', '<div class="hp-error-container">', '<span class="hp-error-text">{{error}} </span>', '<div class="hp-error-message"></div>', '<hr />', '<div class="hp-error-disclaimer">If you feel that the above error was made by a mistake please contact our support at {{phone}}. <br /><br /><a href="javascript:;">&times; Dismiss error</a></div>', '</div>', '<div class="hp-row">', '<div class="hp-col hp-col-left">', '<ul class="hp-nav">', '{{nav}}', '</ul>', '<div class="hp-secure">', '<div class="hp-support">', '<strong>Help &amp; support</strong>', '<p>Having issues with your payments? Call us at <a href="tel:{{phone}}">{{phone}}</a>.</p>', '<br />', '</div>', '<div class="hp-cards">', '<img class="hp-cards-icons' + (hp.Utils.defaults.showAmex ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/amex.svg" alt="AMEX" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showDiners ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/diners.svg" alt="Diners" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showDiscover ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/discover.svg" alt="Discover" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showJcb ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/jcb.svg" alt="JCB" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showMasterCard ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/mastercard.svg" alt="Master Card" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showVisa ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/visa.svg" alt="VISA" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showEMoney ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/c2568c3f7343be79032ac7a717fa80de/raw/7923fdf2aacffbc6baf62454cc4213b46b943596/emoney-card-icon.svg" alt="EMoney" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showGift ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/cd2abb29142a84bb16fbeb3d07a7aefa/raw/a17760bdd23cf1d90c22c8a2235f8d6e6753663e/gift-card-icon.svg" alt="Gift Cards" />', '</div>', '<a class="hp-secure-icon" href="https://www.elavonpayments.com/" target="_blank" title="ETS - Electronic Transaction Systems">', '<img src="https://cdn.rawgit.com/etsms/a5b6be8ebd898748ec829538bd4b603e/raw/9691ef92d11b5a1608a73f5f46c427c4c494d0b9/secure-icon.svg" alt="Secured by ETS" />', '<span>Secured by <br />Elavon Inc.</span>', '</a>', '<div class="hp-secure-bottom">', '<div class="hp-secure-bottom-left">', '<span class="' + (hp.Utils.getAmount() === 0 ? "hide " : "") + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "hp-version-refund" : "hp-version-charge") + '">' + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "Refund" : "Charge") + ': <span class="hp-version-amount">' + hp.Utils.formatCurrency(hp.Utils.getAmount() + hp.Utils.defaults.surchargeFee + hp.Utils.defaults.convenienceFee) + '</span></span><br />', '</div>', '<div class="hp-secure-bottom-right">', hp.Utils.getVersion(), '</div>', '</div>', '</div>', '</div>', '<div class="hp-col hp-col-right">', '{{order}}', '<div class="hp-content hp-content-success">{{success}}</div>', '</div>', '</div>', '</div>'].join("");
+    var $wrapper = ['<div class="hp hp-form">', '<div class="hp-loading-container">', '<span class="hp-loading-text">Loading</span>', '<div class="hp-loading"><span></span><span></span><span></span><span></span></div>', "</div>", '<div class="hp-error-container">', '<span class="hp-error-text">{{error}} </span>', '<div class="hp-error-message"></div>', "<hr />", '<div class="hp-error-disclaimer">If you feel that the above error was made by a mistake please contact our support at {{phone}}. <br /><br /><a href="javascript:;">&times; Dismiss error</a></div>', "</div>", '<div class="hp-row">', '<div class="hp-col hp-col-left">', '<ul class="hp-nav">', "{{nav}}", "</ul>", '<div class="hp-secure">', '<div class="hp-support">', "<strong>Help &amp; support</strong>", '<p>Having issues with your payments? Call us at <a href="tel:{{phone}}">{{phone}}</a>.</p>', "<br />", "</div>", '<div class="hp-cards">', '<img class="hp-cards-icons' + (hp.Utils.defaults.showAmex ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/amex.svg" alt="AMEX" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showDiners ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/diners.svg" alt="Diners" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showDiscover ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/discover.svg" alt="Discover" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showJcb ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/jcb.svg" alt="JCB" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showMasterCard ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/mastercard.svg" alt="Master Card" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showVisa ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/visa.svg" alt="VISA" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showEMoney ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/c2568c3f7343be79032ac7a717fa80de/raw/7923fdf2aacffbc6baf62454cc4213b46b943596/emoney-card-icon.svg" alt="EMoney" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showGift ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/cd2abb29142a84bb16fbeb3d07a7aefa/raw/a17760bdd23cf1d90c22c8a2235f8d6e6753663e/gift-card-icon.svg" alt="Gift Cards" />', "</div>", '<a class="hp-secure-icon" href="https://www.elavonpayments.com/" target="_blank" title="ETS - Electronic Transaction Systems">', '<img src="https://cdn.rawgit.com/etsms/a5b6be8ebd898748ec829538bd4b603e/raw/9691ef92d11b5a1608a73f5f46c427c4c494d0b9/secure-icon.svg" alt="Secured by ETS" />', "<span>Secured by <br />Elavon Inc.</span>", "</a>", '<div class="hp-secure-bottom">', '<div class="hp-secure-bottom-left">', '<span class="' + (hp.Utils.getAmount() === 0 ? "hide " : "") + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "hp-version-refund" : "hp-version-charge") + '">' + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "Refund" : "Charge") + ': <span class="hp-version-amount">' + hp.Utils.formatCurrency(hp.Utils.getAmount() + hp.Utils.defaults.surchargeFee + hp.Utils.defaults.convenienceFee) + "</span></span><br />", "</div>", '<div class="hp-secure-bottom-right">', hp.Utils.getVersion(), "</div>", "</div>", "</div>", "</div>", '<div class="hp-col hp-col-right">', "{{order}}", '<div class="hp-content hp-content-success">{{success}}</div>', "</div>", "</div>", "</div>"].join("");
     hp.Utils.plugins.CreditCard = new hp.CreditCard($element);
     hp.Utils.plugins.BankAccount = new hp.BankAccount($element);
     hp.Utils.plugins.Code = new hp.Code($element);
@@ -3478,13 +3507,13 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
   var createNav = function createNav() {
     var defaultAreas = hp.Utils.defaults.paymentTypeOrder,
-        html = '',
-        creditCard = '',
-        bankAccount = '',
-        code = '',
-        transvault = '',
-        signature = '',
-        giftcard = '';
+        html = "",
+        creditCard = "",
+        bankAccount = "",
+        code = "",
+        transvault = "",
+        signature = "",
+        giftcard = "";
 
     if (defaultAreas.indexOf(0) >= 0) {
       creditCard = '<li class="hp-type hp-cc"><a href="javascript:void(0);"><img src="https://cdn.rawgit.com/etsms/9e2e4c55564ca8eba12f9fa3e7064299/raw/93965040e6e421e1851bfe7a15af92bdc722fa43/credt-card-icon.svg" alt="Credit Card" /> <span>Credit Card</span></a></li>';
@@ -3541,13 +3570,13 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
   var createOrder = function createOrder() {
     var defaultAreas = hp.Utils.defaults.paymentTypeOrder,
-        html = '',
-        creditCard = '',
-        bankAccount = '',
-        code = '',
-        transvault = '',
-        signature = '',
-        giftcard = '';
+        html = "",
+        creditCard = "",
+        bankAccount = "",
+        code = "",
+        transvault = "",
+        signature = "",
+        giftcard = "";
 
     if (defaultAreas.indexOf(0) >= 0) {
       creditCard = '<div class="hp-content hp-content-cc">{{creditCard}}</div>'.replace("{{creditCard}}", hp.Utils.plugins.CreditCard.createTemplate(hp.Utils.defaults.defaultCardCharacters, hp.Utils.defaults.defaultNameOnCardName, hp.Utils.defaults.defaultDateCharacters));
@@ -3627,42 +3656,42 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
   var buildSuccessResultObject = function buildSuccessResultObject() {
     return {
-      "status": "Success",
-      "amount": getAmount(),
-      "message": "Transaction processed",
-      "token": getSession().sessionToken,
-      "transaction_id": "",
-      "transaction_sequence_number": "",
-      "transaction_approval_code": "",
-      "transaction_avs_street_passed": false,
-      "transaction_avs_postal_code_passed": false,
-      "transaction_currency": "USD$",
-      "transaction_status_indicator": "",
-      "transaction_type": hp.Utils.defaults.paymentType,
-      "transaction_tax": 0,
-      "transaction_surcharge": hp.Utils.defaults.surchargeFee,
-      "transaction_gratuity": 0,
-      "transaction_cashback": 0,
-      "transaction_total": getAmount(),
-      "correlation_id": getCorrelationId(),
-      "customer_token": getCustomerToken(),
-      "instrument_id": "",
-      "instrument_type": "",
-      "instrument_method": "Other",
-      "instrument_last_four": "",
-      "instrument_routing_last_four": "",
-      "instrument_expiration_date": "",
-      "instrument_verification_method": "",
-      "instrument_entry_type": hp.Utils.defaults.entryType,
-      "instrument_entry_type_description": "KEY_ENTRY",
-      "instrument_verification_results": "",
-      "created_on": new Date().toISOString(),
-      "customer_name": "",
-      "customer_signature": "https://images.pmoney.com/00000000",
-      "anti_forgery_token": hp.Utils.defaults.antiForgeryToken,
-      "application_identifier": "Hosted Payments",
-      "application_response_code": "",
-      "application_issuer_data": ""
+      status: "Success",
+      amount: getAmount(),
+      message: "Transaction processed",
+      token: getSession().sessionToken,
+      transaction_id: "",
+      transaction_sequence_number: "",
+      transaction_approval_code: "",
+      transaction_avs_street_passed: false,
+      transaction_avs_postal_code_passed: false,
+      transaction_currency: "USD$",
+      transaction_status_indicator: "",
+      transaction_type: hp.Utils.defaults.paymentType,
+      transaction_tax: 0,
+      transaction_surcharge: hp.Utils.defaults.surchargeFee,
+      transaction_gratuity: 0,
+      transaction_cashback: 0,
+      transaction_total: getAmount(),
+      correlation_id: getCorrelationId(),
+      customer_token: getCustomerToken(),
+      instrument_id: "",
+      instrument_type: "",
+      instrument_method: "Other",
+      instrument_last_four: "",
+      instrument_routing_last_four: "",
+      instrument_expiration_date: "",
+      instrument_verification_method: "",
+      instrument_entry_type: hp.Utils.defaults.entryType,
+      instrument_entry_type_description: "KEY_ENTRY",
+      instrument_verification_results: "",
+      created_on: new Date().toISOString(),
+      customer_name: "",
+      customer_signature: "https://images.pmoney.com/00000000",
+      anti_forgery_token: hp.Utils.defaults.antiForgeryToken,
+      application_identifier: "Hosted Payments",
+      application_response_code: "",
+      application_issuer_data: ""
     };
   };
 
@@ -3881,10 +3910,10 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
             currentCount = 0;
         $.each(responses, function (index) {
           var statusRequest = {
-            "status": {
-              "statusRequest": {
-                "token": hp.Utils.getSession().sessionToken,
-                "transactionId": responses[index].transaction_id
+            status: {
+              statusRequest: {
+                token: hp.Utils.getSession().sessionToken,
+                transactionId: responses[index].transaction_id
               }
             }
           };
@@ -3923,10 +3952,10 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     var deferred = jQuery.Deferred();
     var successResponse = buildSuccessResultObject();
     var statusRequest = {
-      "status": {
-        "statusRequest": {
-          "token": getSession().sessionToken,
-          "transactionId": transactionId
+      status: {
+        statusRequest: {
+          token: getSession().sessionToken,
+          transactionId: transactionId
         }
       }
     };
@@ -4113,7 +4142,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     }
 
     setTimeout(function () {
-      var template = ['<div class="hp-avs-prompt">', '<div class="hp-avs-prompt-container">', '<p>Billing Address</p>', '<div class="hp-avs-prompt-left">', '<label class="hp-label-avs" for="avsStreet">Address <span class="hp-avs-required">*</span></label>', '<div class="hp-input hp-input-avs hp-input-avs-street">', '<input placeholder="Street Address" value="' + hp.Utils.defaults.billingAddress.addressLine1 + '" name="avsStreet" id="avsStreet" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "address-line1") + '" type="text" pattern="\\d*">', '</div>', '</div>', '<div class="hp-avs-prompt-right">', '<div class="hp-pull-left">', '<label class="hp-label-avs" for="avsZip">City</label>', '<div class="hp-input hp-input-avs hp-input-avs-city">', '<input placeholder="City" name="city" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text">', '</div>', '</div>', '<div class="hp-pull-left">', '<label class="hp-label-avs" for="avsZip">State</label>', '<div class="hp-input hp-input-avs hp-input-avs-state">', '<input placeholder="State" name="state" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text">', '</div>', '</div>', '<div class="hp-pull-left">', '<label class="hp-label-avs" for="avsZip">Zip <span class="hp-avs-required">*</span></label>', '<div class="hp-input hp-input-avs hp-input-avs-zip">', '<input placeholder="Zipcode" value="' + hp.Utils.defaults.billingAddress.postalCode + '" name="avsZip" id="avsZip" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "postal-code") + '" type="text" pattern="\\d*">', '</div>', '</div>', '</div>', '<br class="hp-break" />', '<hr>', '<button class="hp-submit hp-avs-submit">' + hp.Utils.defaults.defaultButtonLabel + '</button>', hp.Utils.defaults.allowAvsSkip ? '<a class="hp-avs-skip" href="javascript:;">Skip \'Address Verification\'</a>' : '', '</div>', '</div>'].join("");
+      var template = ['<div class="hp-avs-prompt">', '<div class="hp-avs-prompt-container">', "<p>Billing Address</p>", '<div class="hp-avs-prompt-left">', '<label class="hp-label-avs" for="avsStreet">Address <span class="hp-avs-required">*</span></label>', '<div class="hp-input hp-input-avs hp-input-avs-street">', '<input placeholder="Street Address" value="' + hp.Utils.defaults.billingAddress.addressLine1 + '" name="avsStreet" id="avsStreet" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "address-line1") + '" type="text" pattern="\\d*">', "</div>", "</div>", '<div class="hp-avs-prompt-right">', '<div class="hp-pull-left">', '<label class="hp-label-avs" for="avsZip">City</label>', '<div class="hp-input hp-input-avs hp-input-avs-city">', '<input placeholder="City" name="city" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text">', "</div>", "</div>", '<div class="hp-pull-left">', '<label class="hp-label-avs" for="avsZip">State</label>', '<div class="hp-input hp-input-avs hp-input-avs-state">', '<input placeholder="State" name="state" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text">', "</div>", "</div>", '<div class="hp-pull-left">', '<label class="hp-label-avs" for="avsZip">Zip <span class="hp-avs-required">*</span></label>', '<div class="hp-input hp-input-avs hp-input-avs-zip">', '<input placeholder="Zipcode" value="' + hp.Utils.defaults.billingAddress.postalCode + '" name="avsZip" id="avsZip" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "postal-code") + '" type="text" pattern="\\d*">', "</div>", "</div>", "</div>", '<br class="hp-break" />', "<hr>", '<button class="hp-submit hp-avs-submit">' + hp.Utils.defaults.defaultButtonLabel + "</button>", hp.Utils.defaults.allowAvsSkip ? '<a class="hp-avs-skip" href="javascript:;">Skip \'Address Verification\'</a>' : "", "</div>", "</div>"].join("");
       $element.prepend(template);
       var $avsPrompt = $element.find(".hp-avs-prompt"),
           avsZipValue = "",
@@ -4272,7 +4301,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
         var socketOptions = {
           withCredentials: false,
           jsonp: false,
-          transport: ['webSockets'],
+          transport: ["webSockets"],
           waitForPageLoad: true
         };
         hp.Utils.plugins.Transvault.transvaultHub.connection.stop(socketOptions);
@@ -4307,9 +4336,9 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     }
 
     hp.Utils.makeRequest({
-      "signIn": {
-        "signInRequest": {
-          "apiKey": apiKey
+      signIn: {
+        signInRequest: {
+          apiKey: apiKey
         }
       }
     }).then(function (res) {
@@ -4323,10 +4352,10 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       }
 
       var errorResponse = {
-        "status": "Error",
-        "message": "We're sorry. Payments cannot accepted at this time. Please try again later.",
-        "created_on": createdOn,
-        "token": sessionId
+        status: "Error",
+        message: "We're sorry. Payments cannot accepted at this time. Please try again later.",
+        created_on: createdOn,
+        token: sessionId
       };
 
       if (!hp.Utils.shouldErrorPostBack()) {
@@ -4376,10 +4405,10 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       contentType: "application/json",
       crossDomain: true,
       data: JSON.stringify({
-        "balance": {
-          "balanceRequest": {
-            "token": sessionId,
-            "cardNumber": cardNumber
+        balance: {
+          balanceRequest: {
+            token: sessionId,
+            cardNumber: cardNumber
           }
         }
       }),
@@ -4573,9 +4602,9 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     }
 
     return $("<input />", {
-      "type": "hidden",
-      "name": hp.Utils.defaults.antiForgeryName,
-      "value": result
+      type: "hidden",
+      name: hp.Utils.defaults.antiForgeryName,
+      value: result
     });
   };
 
@@ -4585,8 +4614,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     setTimeout(function () {
       var formId = "FRM" + new Date().getTime().toString(),
           $form = $("<form />", {
-        "method": "POST",
-        "id": formId
+        method: "POST",
+        id: formId
       });
 
       if (!$.isEmptyObject(obj)) {
@@ -4596,18 +4625,18 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
             for (var objKey in objInArray) {
               $form.append($("<input />", {
-                "type": "hidden",
-                "name": objKey + "[" + i + "]",
-                "value": objInArray[objKey]
+                type: "hidden",
+                name: objKey + "[" + i + "]",
+                value: objInArray[objKey]
               }));
             }
           }
         } else {
           for (var key in obj) {
             $form.append($("<input />", {
-              "type": "hidden",
-              "name": key,
-              "value": obj[key]
+              type: "hidden",
+              name: key,
+              value: obj[key]
             }));
           }
         }
@@ -4676,10 +4705,10 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
   var handleError = function handleError(res) {
     var errorResponse = {
-      "status": "Error",
-      "message": "Your session is no longer valid. Please refresh your page and try again.",
-      "created_on": new Date().toISOString(),
-      "token": getSession().sessionToken
+      status: "Error",
+      message: "Your session is no longer valid. Please refresh your page and try again.",
+      created_on: new Date().toISOString(),
+      token: getSession().sessionToken
     };
 
     if (typeof res === "undefined") {
@@ -4721,10 +4750,10 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
   var handleSuccess = function handleSuccess(res) {
     var errorResponse = {
-      "status": "Error",
-      "message": "Your session is no longer valid. Please refresh your page and try again.",
-      "created_on": new Date().toISOString(),
-      "token": getSession().sessionToken
+      status: "Error",
+      message: "Your session is no longer valid. Please refresh your page and try again.",
+      created_on: new Date().toISOString(),
+      token: getSession().sessionToken
     };
 
     if (typeof res === "undefined") {
@@ -4764,7 +4793,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       instance.init();
       instance.attachEvents();
       /*
-       * Transvault 
+       * Transvault
        *      Methods for handling swipes through a terminal
        * @description:
        *      Invoke terminal and communicate to this instance unqiuely
@@ -4786,7 +4815,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
         });
       }
       /*
-       * Code 
+       * Code
        *      Methods for handling barcodes & swipes
        * @description:
        *      Should handle encrypted MSR reads
@@ -4887,6 +4916,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
   hp.Utils.setupPluginInstances = setupPluginInstances;
   hp.Utils.reset = reset;
   hp.Utils.setPaymentService = setPaymentService;
+  hp.Utils.replacePaymentPlan = replacePaymentPlan;
   hp.Utils.retrieveTransactionStatus = retrieveTransactionStatus;
   hp.Utils.buildEMoneyMobileAppUrl = buildEMoneyMobileAppUrl;
   hp.Utils.getCustomerToken = getCustomerToken;
@@ -4992,9 +5022,9 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     this.context = context;
     this.$parent = $parent;
     this.$content = $content;
-    this.$signature = this.$parent.find('.hp-js-signature').jqSignature({
+    this.$signature = this.$parent.find(".hp-js-signature").jqSignature({
       autoFit: true,
-      lineColor: '#007aff',
+      lineColor: "#007aff",
       height: 320,
       border: "0 none"
     });
@@ -5011,7 +5041,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
   };
 
   Signature.prototype.createTemplate = function () {
-    var $html = ['<div class="hp-signature-visual">', '<div class="hp-signature-container">', '<a class="hp-dismiss-icon" href="javascript:;">&times</a>', '<div class="hp-js-signature">', '</div>', '<div class="hp-submit-group">', '<button disabled="disabled" class="hp-submit hp-submit-danger">Clear Signature</button>', '<button disabled="disabled" class="hp-submit hp-submit-success">Submit Signature</button>', '</div>', '</div>', '</div>'].join("");
+    var $html = ['<div class="hp-signature-visual">', '<div class="hp-signature-container">', '<a class="hp-dismiss-icon" href="javascript:;">&times</a>', '<div class="hp-js-signature">', "</div>", '<div class="hp-submit-group">', '<button disabled="disabled" class="hp-submit hp-submit-danger">Clear Signature</button>', '<button disabled="disabled" class="hp-submit hp-submit-success">Submit Signature</button>', "</div>", "</div>", "</div>"].join("");
     return $html;
   };
 
@@ -5024,23 +5054,23 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
   Signature.prototype.detachEvents = function () {};
 
   Signature.prototype.handleSignature = function () {
-    var signature = this.$signature.jqSignature('getDataPoints'),
+    var signature = this.$signature.jqSignature("getDataPoints"),
         that = this,
         requestModel = {
-      "signature": {
-        "signatureRequest": {
-          "token": hp.Utils.getSession().sessionToken,
-          "correlationId": hp.Utils.getCorrelationId(),
-          "transactionId": hp.Utils.defaults.transactionId,
-          "data": signature
+      signature: {
+        signatureRequest: {
+          token: hp.Utils.getSession().sessionToken,
+          correlationId: hp.Utils.getCorrelationId(),
+          transactionId: hp.Utils.defaults.transactionId,
+          data: signature
         }
       }
     };
     hp.Utils.showLoader();
     hp.Utils.makeRequest(requestModel).then(hp.Utils.buildSignatureResultObject).then(function (promiseResponse) {
       that.$parent.trigger("hp.submit", {
-        "type": hp.RequestTypes.SIGNATURE,
-        "res": promiseResponse
+        type: hp.RequestTypes.SIGNATURE,
+        res: promiseResponse
       });
     }).fail(function (promiseResponse) {
       if (typeof promiseResponse.responseJSON !== "undefined") {
@@ -5048,8 +5078,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       }
 
       that.$parent.trigger("hp.submit", {
-        "type": hp.RequestTypes.ERROR,
-        "res": promiseResponse
+        type: hp.RequestTypes.ERROR,
+        res: promiseResponse
       });
     });
   };
@@ -5060,7 +5090,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
   };
 
   Signature.prototype.clearInputs = function () {
-    this.$signature.jqSignature('clearCanvas');
+    this.$signature.jqSignature("clearCanvas");
   };
 
   Signature.prototype.enableButtons = function () {
@@ -5070,7 +5100,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       that.handleSignature();
     });
     this.$parent.find(".hp-submit-group .hp-submit-danger").off("click").on("click", function () {
-      that.$signature.jqSignature('clearCanvas');
+      that.$signature.jqSignature("clearCanvas");
       that.hasChanged = false;
       that.$parent.find(".hp-submit-group .hp-submit").attr("disabled", "disabled");
     });
@@ -5264,7 +5294,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       return input.replace("{{monthList}}", generateMonthList()).replace("{{yearList}}", generateYearList());
     };
 
-    var $html = ['<div class="hp-card-visual">', '<div class="hp-card-visual-number">' + defaultCardCharacters + '</div>', '<div class="hp-card-visual-name">' + defaultNameOnCardName + '</div>', '<div class="hp-card-visual-expiry">', '<span class="hp-card-visual-expiry-label">Month/Year</span>', '<span class="hp-card-visual-expiry-label-alt">Valid Thru</span>', '<span class="hp-card-visual-expiry-value"><span class="hp-card-visual-expiry-month">' + defaultDateCharacters + '</span><span>/</span><span class="hp-card-visual-expiry-year">' + defaultDateCharacters + '</span></span>', '</div>', '</div>', '<div class="hp-input-wrapper">', '<div class="hp-input hp-input-cc">', '<input placeholder="Enter Card Number" name="cardnumber" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-number") + '" type="text" pattern="\\d*">', '</div>', '<div class="hp-input hp-input-name">', '<input placeholder="Enter Full Name" name="ccname" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-name") + '" type="text">', '</div>', '<div class="hp-input-container hp-input-container-date">', '<div class="hp-input hp-input-month">', '<select autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-exp-month") + '" name="cc-exp">', '{{monthList}}', '</select>', '</div>', '<div class="hp-input hp-input-year">', '<select autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-exp-year") + '" name="cc-exp">', '{{yearList}}', '</select>', '</div>', '</div>', '<div class="hp-input hp-input-third hp-input-cvv">', '<input placeholder="Enter CVV" name="cvc" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-csc") + '" type="text" pattern="\\d*">', '<span class="hp-input-cvv-image"></span>', '</div>', '<button class="hp-submit">' + (hp.Utils.defaults.promptForAvs ? "Verify Billing Address &#10144;" : hp.Utils.defaults.defaultButtonLabel) + '</button>', '</div>'].join("");
+    var $html = ['<div class="hp-card-visual">', '<div class="hp-card-visual-number">' + defaultCardCharacters + "</div>", '<div class="hp-card-visual-name">' + defaultNameOnCardName + "</div>", '<div class="hp-card-visual-expiry">', '<span class="hp-card-visual-expiry-label">Month/Year</span>', '<span class="hp-card-visual-expiry-label-alt">Valid Thru</span>', '<span class="hp-card-visual-expiry-value"><span class="hp-card-visual-expiry-month">' + defaultDateCharacters + '</span><span>/</span><span class="hp-card-visual-expiry-year">' + defaultDateCharacters + "</span></span>", "</div>", "</div>", '<div class="hp-input-wrapper">', '<div class="hp-input hp-input-cc">', '<input placeholder="Enter Card Number" name="cardnumber" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-number") + '" type="text" pattern="\\d*">', "</div>", '<div class="hp-input hp-input-name">', '<input placeholder="Enter Full Name" name="ccname" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-name") + '" type="text">', "</div>", '<div class="hp-input-container hp-input-container-date">', '<div class="hp-input hp-input-month">', '<select autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-exp-month") + '" name="cc-exp">', "{{monthList}}", "</select>", "</div>", '<div class="hp-input hp-input-year">', '<select autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-exp-year") + '" name="cc-exp">', "{{yearList}}", "</select>", "</div>", "</div>", '<div class="hp-input hp-input-third hp-input-cvv">', '<input placeholder="Enter CVV" name="cvc" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-csc") + '" type="text" pattern="\\d*">', '<span class="hp-input-cvv-image"></span>', "</div>", '<button class="hp-submit">' + (hp.Utils.defaults.promptForAvs ? "Verify Billing Address &#10144;" : hp.Utils.defaults.defaultButtonLabel) + "</button>", "</div>"].join("");
     return parseDatesTemplates($html);
   };
 
@@ -5344,7 +5374,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       return;
     }
 
-    name = name.replace(/[0-9]/g, '');
+    name = name.replace(/[0-9]/g, "");
     this.formData.name = name;
     $visualname.text(this.formData.name);
   };
@@ -5360,15 +5390,15 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     if (hp.Utils.defaults.paymentType == hp.PaymentType.CHARGE) {
       requestModel = {
-        "charge": {
-          "chargeRequest": {
-            "token": hp.Utils.getSession().sessionToken,
-            "transactionId": that.transactionId,
-            "amount": hp.Utils.getAmount(),
-            "entryType": hp.Utils.defaults.entryType,
-            "properties": cardProperties,
-            "correlationId": hp.Utils.getCorrelationId(),
-            "__request": createInstrumentRequest
+        charge: {
+          chargeRequest: {
+            token: hp.Utils.getSession().sessionToken,
+            transactionId: that.transactionId,
+            amount: hp.Utils.getAmount(),
+            entryType: hp.Utils.defaults.entryType,
+            properties: cardProperties,
+            correlationId: hp.Utils.getCorrelationId(),
+            __request: createInstrumentRequest
           }
         }
       };
@@ -5384,15 +5414,15 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     if (hp.Utils.defaults.paymentType == hp.PaymentType.PREAUTH) {
       requestModel = {
-        "preAuth": {
-          "preAuthRequest": {
-            "token": hp.Utils.getSession().sessionToken,
-            "transactionId": that.transactionId,
-            "amount": hp.Utils.getAmount(),
-            "entryType": hp.Utils.defaults.entryType,
-            "properties": cardProperties,
-            "correlationId": hp.Utils.getCorrelationId(),
-            "__request": createInstrumentRequest
+        preAuth: {
+          preAuthRequest: {
+            token: hp.Utils.getSession().sessionToken,
+            transactionId: that.transactionId,
+            amount: hp.Utils.getAmount(),
+            entryType: hp.Utils.defaults.entryType,
+            properties: cardProperties,
+            correlationId: hp.Utils.getCorrelationId(),
+            __request: createInstrumentRequest
           }
         }
       };
@@ -5408,14 +5438,14 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     if (hp.Utils.defaults.paymentType == hp.PaymentType.REFUND) {
       requestModel = {
-        "refund": {
-          "refundRequest": {
-            "token": hp.Utils.getSession().sessionToken,
-            "amount": hp.Utils.getAmount(),
-            "entryType": hp.Utils.defaults.entryType,
-            "properties": cardProperties,
-            "correlationId": hp.Utils.getCorrelationId(),
-            "__request": createInstrumentRequest
+        refund: {
+          refundRequest: {
+            token: hp.Utils.getSession().sessionToken,
+            amount: hp.Utils.getAmount(),
+            entryType: hp.Utils.defaults.entryType,
+            properties: cardProperties,
+            correlationId: hp.Utils.getCorrelationId(),
+            __request: createInstrumentRequest
           }
         }
       };
@@ -5423,8 +5453,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     hp.Utils.makeRequest(requestModel).then(hp.Utils.buildResultObjectByType).then(function (promiseResponse) {
       that.$parent.trigger("hp.submit", {
-        "type": hp.RequestTypes.CHARGE,
-        "res": promiseResponse
+        type: hp.RequestTypes.CHARGE,
+        res: promiseResponse
       });
     }).fail(function (promiseResponse) {
       if (typeof promiseResponse.responseJSON !== "undefined") {
@@ -5432,8 +5462,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       }
 
       that.$parent.trigger("hp.submit", {
-        "type": hp.RequestTypes.ERROR,
-        "res": promiseResponse
+        type: hp.RequestTypes.ERROR,
+        res: promiseResponse
       });
     });
   };
@@ -5443,24 +5473,24 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
         hasBalance = true,
         cardBalance = 0;
     var errorResponse = {
-      "status": "Error",
-      "message": "The payment instrument provided had no remaining funds and will not be applied to the split payment.",
-      "created_on": createdOn,
-      "token": sessionId
+      status: "Error",
+      message: "The payment instrument provided had no remaining funds and will not be applied to the split payment.",
+      created_on: createdOn,
+      token: sessionId
     };
     var requestModel = {};
 
     if (hp.Utils.defaults.paymentType == hp.PaymentType.CHARGE) {
       requestModel = {
-        "charge": {
-          "chargeRequest": {
-            "token": hp.Utils.getSession().sessionToken,
-            "transactionId": that.transactionId,
-            "amount": hp.Utils.getAmount(),
-            "entryType": hp.Utils.defaults.entryType,
-            "instrumentId": that.instrumentId,
-            "correlationId": hp.Utils.getCorrelationId(),
-            "__request": res.request
+        charge: {
+          chargeRequest: {
+            token: hp.Utils.getSession().sessionToken,
+            transactionId: that.transactionId,
+            amount: hp.Utils.getAmount(),
+            entryType: hp.Utils.defaults.entryType,
+            instrumentId: that.instrumentId,
+            correlationId: hp.Utils.getCorrelationId(),
+            __request: res.request
           }
         }
       };
@@ -5476,15 +5506,15 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     if (hp.Utils.defaults.paymentType == hp.PaymentType.PREAUTH) {
       requestModel = {
-        "preAuth": {
-          "preAuthRequest": {
-            "token": hp.Utils.getSession().sessionToken,
-            "transactionId": that.transactionId,
-            "amount": hp.Utils.getAmount(),
-            "entryType": hp.Utils.defaults.entryType,
-            "instrumentId": that.instrumentId,
-            "correlationId": hp.Utils.getCorrelationId(),
-            "__request": res.request
+        preAuth: {
+          preAuthRequest: {
+            token: hp.Utils.getSession().sessionToken,
+            transactionId: that.transactionId,
+            amount: hp.Utils.getAmount(),
+            entryType: hp.Utils.defaults.entryType,
+            instrumentId: that.instrumentId,
+            correlationId: hp.Utils.getCorrelationId(),
+            __request: res.request
           }
         }
       };
@@ -5500,14 +5530,14 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     if (hp.Utils.defaults.paymentType == hp.PaymentType.REFUND) {
       requestModel = {
-        "refund": {
-          "refundRequest": {
-            "token": hp.Utils.getSession().sessionToken,
-            "amount": hp.Utils.getAmount(),
-            "entryType": hp.Utils.defaults.entryType,
-            "instrumentId": that.instrumentId,
-            "correlationId": hp.Utils.getCorrelationId(),
-            "__request": res.request
+        refund: {
+          refundRequest: {
+            token: hp.Utils.getSession().sessionToken,
+            amount: hp.Utils.getAmount(),
+            entryType: hp.Utils.defaults.entryType,
+            instrumentId: that.instrumentId,
+            correlationId: hp.Utils.getCorrelationId(),
+            __request: res.request
           }
         }
       };
@@ -5515,8 +5545,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     hp.Utils.makeRequest(requestModel).then(hp.Utils.buildResultObjectByType).then(function (promiseResponse) {
       that.$parent.trigger("hp.submit", {
-        "type": hp.RequestTypes.CHARGE,
-        "res": promiseResponse
+        type: hp.RequestTypes.CHARGE,
+        res: promiseResponse
       });
     }).fail(function (promiseResponse) {
       if (typeof promiseResponse.responseJSON !== "undefined") {
@@ -5524,8 +5554,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       }
 
       that.$parent.trigger("hp.submit", {
-        "type": hp.RequestTypes.ERROR,
-        "res": promiseResponse
+        type: hp.RequestTypes.ERROR,
+        res: promiseResponse
       });
     });
   };
@@ -5545,25 +5575,25 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     hp.Utils.promptAvs().then(function () {
       hp.Utils.showLoader();
       var createInstrumentRequest = {
-        "createPaymentInstrument": {
-          "createPaymentInstrumentRequest": {
-            "correlationId": hp.Utils.getCorrelationId(),
-            "customerToken": hp.Utils.getCustomerToken(),
-            "instrumentId": hp.Utils.getInstrumentId(),
-            "transactionId": that.transactionId,
-            "token": hp.Utils.getSession().sessionToken,
-            "name": that.formData.name,
-            "properties": {
-              "cardNumber": that.formData.cardNumber,
-              "expirationDate": that.formData._expiryMonth + "/" + that.formData._expiryYear,
-              "cvv": that.formData.cvv,
-              "nameOnCard": that.formData.name,
-              "customerToken": hp.Utils.getCustomerToken(),
-              "instrumentId": hp.Utils.getInstrumentId()
+        createPaymentInstrument: {
+          createPaymentInstrumentRequest: {
+            correlationId: hp.Utils.getCorrelationId(),
+            customerToken: hp.Utils.getCustomerToken(),
+            instrumentId: hp.Utils.getInstrumentId(),
+            transactionId: that.transactionId,
+            token: hp.Utils.getSession().sessionToken,
+            name: that.formData.name,
+            properties: {
+              cardNumber: that.formData.cardNumber,
+              expirationDate: that.formData._expiryMonth + "/" + that.formData._expiryYear,
+              cvv: that.formData.cvv,
+              nameOnCard: that.formData.name,
+              customerToken: hp.Utils.getCustomerToken(),
+              instrumentId: hp.Utils.getInstrumentId()
             },
-            "billingAddress": {
-              "addressLine1": hp.Utils.defaults.billingAddress.addressLine1,
-              "postalCode": hp.Utils.defaults.billingAddress.postalCode
+            billingAddress: {
+              addressLine1: hp.Utils.defaults.billingAddress.addressLine1,
+              postalCode: hp.Utils.defaults.billingAddress.postalCode
             }
           }
         }
@@ -5581,8 +5611,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
       if (res.isException) {
         that.$parent.trigger("hp.submit", {
-          "type": 9,
-          "res": res
+          type: 9,
+          res: res
         });
         return;
       }
@@ -5590,8 +5620,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       that.instrumentId = res.instrumentId;
       that.transactionId = typeof res.transactionId !== "undefined" ? res.transactionId : that.transactionId;
       that.$parent.trigger("hp.submit", {
-        "type": 0,
-        "res": res
+        type: 0,
+        res: res
       });
       that.handleCharge(res);
     }).fail(function (err) {
@@ -5600,8 +5630,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       }
 
       that.$parent.trigger("hp.submit", {
-        "type": 9,
-        "res": err
+        type: 9,
+        res: err
       });
     });
   };
@@ -5620,7 +5650,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     this.detachEvents();
     var $this = this;
     hp.Utils.setContainerClass($this.$element);
-    $cc.payment('formatCardNumber').on("keyup", function () {
+    $cc.payment("formatCardNumber").on("keyup", function () {
       var cardNumber = $(this).val();
       var cardType = $.payment.cardType(cardNumber);
       $this.$parent.removeClass("hp-back");
@@ -5634,7 +5664,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       $this.$parent.trigger("hp.notify");
       $this.handleNotify();
     });
-    $cvv.payment('formatCardCVC').on("focus", function () {
+    $cvv.payment("formatCardCVC").on("focus", function () {
       $this.$parent.addClass("hp-back");
       $this.$parent.trigger("hp.notify");
       $this.handleNotify();
@@ -5839,7 +5869,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       return "";
     }
 
-    var $html = ['<div class="hp-page hp-page-0 hp-page-active">', '<h2>Swipe, scan, or manually<br /> enter a gift card.</h2><br />', '<div class="hp-card-visual">', '<div class="hp-card-visual-number">' + defaultCardCharacters + '</div>', '<div class="hp-card-visual-name">' + defaultNameOnCardName + '</div>', '<div class="hp-card-visual-expiry">', '<span class="hp-card-visual-expiry-label">Month/Year</span>', '<span class="hp-card-visual-expiry-label-alt">Valid Thru</span>', '<span class="hp-card-visual-expiry-value"><span class="hp-card-visual-expiry-month">12</span><span>/</span><span class="hp-card-visual-expiry-year">' + defaultDateCharacters + '</span></span>', '</div>', '</div>', '<div class="hp-input-wrapper">', '<div class="hp-input-group hp-clearfix">', '<div class="hp-input hp-input-gc hp-pull-left">', '<input placeholder="Enter Card Number" name="cardNumber" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-number") + '" type="text" pattern="\\d*">', '</div>', '<button class="hp-submit hp-pull-left">Submit</button>', '</div>', '<hr />', '<button class="hp-submit hp-submit-success">Issue a new Gift Card</button>', '</div>', '</div>', '<div class="hp-page hp-page-1">', '<h2>Page 1.</h2><br />', '</div>', '<div class="hp-page hp-page-2">', '<h2>Page 2.</h2><br />', '</div>', '<div class="hp-page hp-page-3">', '<h2>Page 3.</h2><br />', '</div>', '<div class="hp-page hp-page-4">', '<h2>Page 4.</h2><br />', '</div>', '<div class="hp-page hp-page-5">', '<h2>Page 5.</h2><br />', '</div>', '<br />'].join("");
+    var $html = ['<div class="hp-page hp-page-0 hp-page-active">', "<h2>Swipe, scan, or manually<br /> enter a gift card.</h2><br />", '<div class="hp-card-visual">', '<div class="hp-card-visual-number">' + defaultCardCharacters + "</div>", '<div class="hp-card-visual-name">' + defaultNameOnCardName + "</div>", '<div class="hp-card-visual-expiry">', '<span class="hp-card-visual-expiry-label">Month/Year</span>', '<span class="hp-card-visual-expiry-label-alt">Valid Thru</span>', '<span class="hp-card-visual-expiry-value"><span class="hp-card-visual-expiry-month">12</span><span>/</span><span class="hp-card-visual-expiry-year">' + defaultDateCharacters + "</span></span>", "</div>", "</div>", '<div class="hp-input-wrapper">', '<div class="hp-input-group hp-clearfix">', '<div class="hp-input hp-input-gc hp-pull-left">', '<input placeholder="Enter Card Number" name="cardNumber" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-number") + '" type="text" pattern="\\d*">', "</div>", '<button class="hp-submit hp-pull-left">Submit</button>', "</div>", "<hr />", '<button class="hp-submit hp-submit-success">Issue a new Gift Card</button>', "</div>", "</div>", '<div class="hp-page hp-page-1">', "<h2>Page 1.</h2><br />", "</div>", '<div class="hp-page hp-page-2">', "<h2>Page 2.</h2><br />", "</div>", '<div class="hp-page hp-page-3">', "<h2>Page 3.</h2><br />", "</div>", '<div class="hp-page hp-page-4">', "<h2>Page 4.</h2><br />", "</div>", '<div class="hp-page hp-page-5">', "<h2>Page 5.</h2><br />", "</div>", "<br />"].join("");
     return $html;
   };
 
@@ -5869,8 +5899,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     this.$content.find(".hp-page").removeClass("hp-page-active").filter(".hp-page-" + num).addClass("hp-page-active");
     this.currrentPage = num;
     this.$parent.trigger("hp.notify", {
-      "type": "page",
-      "value": num
+      type: "page",
+      value: num
     });
   };
 
@@ -5897,21 +5927,21 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
         hasBalance = true,
         cardBalance = 0;
     var errorResponse = {
-      "status": "Error",
-      "message": "The payment instrument provided had no remaining funds and will not be applied to the split payment.",
-      "created_on": createdOn,
-      "token": sessionId
+      status: "Error",
+      message: "The payment instrument provided had no remaining funds and will not be applied to the split payment.",
+      created_on: createdOn,
+      token: sessionId
     };
     var requestModel = {
-      "charge": {
-        "chargeRequest": {
-          "correlationId": hp.Utils.getCorrelationId(),
-          "token": hp.Utils.getSession().sessionToken,
-          "transactionId": this.transactionId,
-          "instrumentId": this.instrumentId,
-          "entryType": hp.Utils.defaults.entryType,
-          "amount": hp.Utils.getAmount(),
-          "__request": res.request
+      charge: {
+        chargeRequest: {
+          correlationId: hp.Utils.getCorrelationId(),
+          token: hp.Utils.getSession().sessionToken,
+          transactionId: this.transactionId,
+          instrumentId: this.instrumentId,
+          entryType: hp.Utils.defaults.entryType,
+          amount: hp.Utils.getAmount(),
+          __request: res.request
         }
       }
     };
@@ -5926,8 +5956,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     hp.Utils.makeRequest(requestModel).then(hp.Utils.buildResultObjectByType).then(function (promiseResponse) {
       that.$parent.trigger("hp.submit", {
-        "type": hp.RequestTypes.CHARGE,
-        "res": promiseResponse
+        type: hp.RequestTypes.CHARGE,
+        res: promiseResponse
       });
     }).fail(function (promiseResponse) {
       if (typeof promiseResponse.responseJSON !== "undefined") {
@@ -5935,8 +5965,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       }
 
       that.$parent.trigger("hp.submit", {
-        "type": hp.RequestTypes.ERROR,
-        "res": promiseResponse
+        type: hp.RequestTypes.ERROR,
+        res: promiseResponse
       });
     });
   };
@@ -5952,24 +5982,24 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     hp.Utils.promptAvs().then(function () {
       hp.Utils.showLoader();
       return hp.Utils.makeRequest({
-        "createPaymentInstrument": {
-          "createPaymentInstrumentRequest": {
-            "correlationId": hp.Utils.getCorrelationId(),
-            "customerToken": hp.Utils.getCustomerToken(),
-            "instrumentId": hp.Utils.getInstrumentId(),
-            "token": hp.Utils.getSession().sessionToken,
-            "name": that.formData.name,
-            "properties": {
-              "cardNumber": that.formData.cardNumber,
-              "expirationDate": that.formData._expiryMonth + "/" + that.formData._expiryYear,
-              "cvv": that.formData.cvv,
-              "nameOnCard": that.formData.name,
-              "customerToken": hp.Utils.getCustomerToken(),
-              "instrumentId": hp.Utils.getInstrumentId()
+        createPaymentInstrument: {
+          createPaymentInstrumentRequest: {
+            correlationId: hp.Utils.getCorrelationId(),
+            customerToken: hp.Utils.getCustomerToken(),
+            instrumentId: hp.Utils.getInstrumentId(),
+            token: hp.Utils.getSession().sessionToken,
+            name: that.formData.name,
+            properties: {
+              cardNumber: that.formData.cardNumber,
+              expirationDate: that.formData._expiryMonth + "/" + that.formData._expiryYear,
+              cvv: that.formData.cvv,
+              nameOnCard: that.formData.name,
+              customerToken: hp.Utils.getCustomerToken(),
+              instrumentId: hp.Utils.getInstrumentId()
             },
-            "billingAddress": {
-              "addressLine1": hp.Utils.defaults.billingAddress.addressLine1,
-              "postalCode": hp.Utils.defaults.billingAddress.postalCode
+            billingAddress: {
+              addressLine1: hp.Utils.defaults.billingAddress.addressLine1,
+              postalCode: hp.Utils.defaults.billingAddress.postalCode
             }
           }
         }
@@ -5977,8 +6007,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     }).then(function (res) {
       if (res.isException) {
         that.$parent.trigger("hp.submit", {
-          "type": 9,
-          "res": res
+          type: 9,
+          res: res
         });
         return;
       }
@@ -5986,8 +6016,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       that.instrumentId = res.instrumentId;
       that.transactionId = typeof res.transactionId !== "undefined" ? res.transactionId : that.transactionId;
       that.$parent.trigger("hp.submit", {
-        "type": 0,
-        "res": res
+        type: 0,
+        res: res
       });
       that.handleCharge(res);
     }).fail(function (err) {
@@ -5996,8 +6026,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       }
 
       that.$parent.trigger("hp.submit", {
-        "type": 9,
-        "res": err
+        type: 9,
+        res: err
       });
     });
   };
@@ -6053,7 +6083,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
   GiftCard.prototype.handlePage0Events = function (container) {
     this.addScanSwipeListener();
-    container.find(".hp-input-gc input").payment('formatCardNumber');
+    container.find(".hp-input-gc input").payment("formatCardNumber");
     container.find(".hp-input-gc .hp-submit").off().on("click", function (e) {});
     console.log("handlePage0Events", container);
   };
@@ -6208,11 +6238,11 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       throw new Error("hosted-payments.bank-account.js : Cannot create template. Arguments are null or undefined.");
     }
 
-    var $html = ['<div class="hp-bank-visual">', '<div class="hp-bank-visual-image"></div>', '<div class="hp-bank-visual-logo"></div>', '<div class="hp-bank-visual-name">' + defaultName + '</div>', '<div class="hp-bank-visual-right">' + defaultAccountNumberCharacters + '</div>', '<div class="hp-bank-visual-left">' + defaultRoutingNumberCharacters + '</div>', '</div>', '<div class="hp-input-wrapper">', '<div class="hp-input hp-input-fullname">', '<input placeholder="Enter Full Name" name="name" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "name") + '" type="text">', '</div>', '<div class="hp-break" >', '{{inputHtml}}', '</div>', '<button class="hp-submit">' + hp.Utils.defaults.defaultButtonLabel + '</button>', '<p class="info">* Please note that bank account (ACH) transactions may take up to 3 days to process. This time period varies depending on the your issuing bank. For more information please visit us at <a href="https://www.elavonpayments.com/" target="_blank">https://elavonpayments.com</a>.</p>', '</div>'].join("");
-    var $inputHtml = ['<div class="hp-input hp-input-account hp-input-left">', '<input placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', '</div>', '<div class="hp-input hp-input-routing hp-input-right">', '<input placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', '</div>'].join("");
+    var $html = ['<div class="hp-bank-visual">', '<div class="hp-bank-visual-image"></div>', '<div class="hp-bank-visual-logo"></div>', '<div class="hp-bank-visual-name">' + defaultName + "</div>", '<div class="hp-bank-visual-right">' + defaultAccountNumberCharacters + "</div>", '<div class="hp-bank-visual-left">' + defaultRoutingNumberCharacters + "</div>", "</div>", '<div class="hp-input-wrapper">', '<div class="hp-input hp-input-fullname">', '<input placeholder="Enter Full Name" name="name" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "name") + '" type="text">', "</div>", '<div class="hp-break" >', "{{inputHtml}}", "</div>", '<button class="hp-submit">' + hp.Utils.defaults.defaultButtonLabel + "</button>", '<p class="info">* Please note that bank account (ACH) transactions may take up to 3 days to process. This time period varies depending on the your issuing bank. For more information please visit us at <a href="https://www.elavonpayments.com/" target="_blank">https://elavonpayments.com</a>.</p>', "</div>"].join("");
+    var $inputHtml = ['<div class="hp-input hp-input-account hp-input-left">', '<input placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>", '<div class="hp-input hp-input-routing hp-input-right">', '<input placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>"].join("");
 
     if (hp.Utils.defaults.swapAchInputs) {
-      $inputHtml = ['<div class="hp-input hp-input-routing hp-input-left">', '<input placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', '</div>', '<div class="hp-input hp-input-account hp-input-right">', '<input placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', '</div>'].join("");
+      $inputHtml = ['<div class="hp-input hp-input-routing hp-input-left">', '<input placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>", '<div class="hp-input hp-input-account hp-input-right">', '<input placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>"].join("");
     }
 
     $html = $html.replace("{{inputHtml}}", $inputHtml);
@@ -6251,7 +6281,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       return $visualfullname.html(hp.Utils.defaults.defaultName);
     }
 
-    name = name.replace(/[0-9]/g, '');
+    name = name.replace(/[0-9]/g, "");
     this.formData.name = name;
     $visualfullname.text(this.formData.name);
   };
@@ -6259,7 +6289,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
   BankAccount.prototype.attachEvents = function () {
     this.detachEvents();
     var $this = this;
-    $this.$content.find(".hp-input-account input").payment('restrictNumeric').on("keyup, keydown, keypress, change, input", function () {
+    $this.$content.find(".hp-input-account input").payment("restrictNumeric").on("keyup, keydown, keypress, change, input", function () {
       var that = $(this),
           count = that.val().length;
 
@@ -6295,7 +6325,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       }, 0);
     }
 
-    $this.$content.find(".hp-input-routing input").payment('restrictNumeric').on("keyup, keydown, keypress, change, input", function (e) {
+    $this.$content.find(".hp-input-routing input").payment("restrictNumeric").on("keyup, keydown, keypress, change, input", function (e) {
       var that = $(this),
           count = that.val().length;
 
@@ -6364,14 +6394,14 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     if (hp.Utils.defaults.paymentType == hp.PaymentType.CHARGE) {
       requestModel = {
-        "charge": {
-          "chargeRequest": {
-            "correlationId": hp.Utils.getCorrelationId(),
-            "token": hp.Utils.getSession().sessionToken,
-            "transactionId": $this.transactionId,
-            "properties": accountProperties,
-            "amount": hp.Utils.getAmount(),
-            "__request": createPaymentInstrumentRequest
+        charge: {
+          chargeRequest: {
+            correlationId: hp.Utils.getCorrelationId(),
+            token: hp.Utils.getSession().sessionToken,
+            transactionId: $this.transactionId,
+            properties: accountProperties,
+            amount: hp.Utils.getAmount(),
+            __request: createPaymentInstrumentRequest
           }
         }
       };
@@ -6379,13 +6409,13 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     if (hp.Utils.defaults.paymentType == hp.PaymentType.REFUND) {
       requestModel = {
-        "refund": {
-          "refundRequest": {
-            "correlationId": hp.Utils.getCorrelationId(),
-            "token": hp.Utils.getSession().sessionToken,
-            "properties": accountProperties,
-            "amount": hp.Utils.getAmount(),
-            "__request": createPaymentInstrumentRequest
+        refund: {
+          refundRequest: {
+            correlationId: hp.Utils.getCorrelationId(),
+            token: hp.Utils.getSession().sessionToken,
+            properties: accountProperties,
+            amount: hp.Utils.getAmount(),
+            __request: createPaymentInstrumentRequest
           }
         }
       };
@@ -6393,8 +6423,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     hp.Utils.makeRequest(requestModel).then(hp.Utils.buildResultObjectByType).then(function (promiseResponse) {
       $this.$parent.trigger("hp.submit", {
-        "type": hp.RequestTypes.CHARGE,
-        "res": promiseResponse
+        type: hp.RequestTypes.CHARGE,
+        res: promiseResponse
       });
     }).fail(function (promiseResponse) {
       if (typeof promiseResponse.responseJSON !== "undefined") {
@@ -6402,8 +6432,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       }
 
       $this.$parent.trigger("hp.submit", {
-        "type": hp.RequestTypes.ERROR,
-        "res": promiseResponse
+        type: hp.RequestTypes.ERROR,
+        res: promiseResponse
       });
     });
   };
@@ -6414,14 +6444,14 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     if (hp.Utils.defaults.paymentType == hp.PaymentType.CHARGE) {
       requestModel = {
-        "charge": {
-          "chargeRequest": {
-            "correlationId": hp.Utils.getCorrelationId(),
-            "token": hp.Utils.getSession().sessionToken,
-            "transactionId": $this.transactionId,
-            "instrumentId": $this.instrumentId,
-            "amount": hp.Utils.getAmount(),
-            "__request": res.request
+        charge: {
+          chargeRequest: {
+            correlationId: hp.Utils.getCorrelationId(),
+            token: hp.Utils.getSession().sessionToken,
+            transactionId: $this.transactionId,
+            instrumentId: $this.instrumentId,
+            amount: hp.Utils.getAmount(),
+            __request: res.request
           }
         }
       };
@@ -6429,14 +6459,14 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     if (hp.Utils.defaults.paymentType == hp.PaymentType.REFUND) {
       requestModel = {
-        "refund": {
-          "refundRequest": {
-            "correlationId": hp.Utils.getCorrelationId(),
-            "token": hp.Utils.getSession().sessionToken,
-            "instrumentId": $this.instrumentId,
-            "amount": hp.Utils.getAmount(),
-            "entryType": hp.Utils.defaults.entryType,
-            "__request": res.request
+        refund: {
+          refundRequest: {
+            correlationId: hp.Utils.getCorrelationId(),
+            token: hp.Utils.getSession().sessionToken,
+            instrumentId: $this.instrumentId,
+            amount: hp.Utils.getAmount(),
+            entryType: hp.Utils.defaults.entryType,
+            __request: res.request
           }
         }
       };
@@ -6444,8 +6474,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     hp.Utils.makeRequest(requestModel).then(hp.Utils.buildResultObjectByType).then(function (promiseResponse) {
       $this.$parent.trigger("hp.submit", {
-        "type": hp.RequestTypes.CHARGE,
-        "res": promiseResponse
+        type: hp.RequestTypes.CHARGE,
+        res: promiseResponse
       });
     }).fail(function (promiseResponse) {
       if (typeof promiseResponse.responseJSON !== "undefined") {
@@ -6453,8 +6483,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       }
 
       $this.$parent.trigger("hp.submit", {
-        "type": hp.RequestTypes.ERROR,
-        "res": promiseResponse
+        type: hp.RequestTypes.ERROR,
+        res: promiseResponse
       });
     });
   };
@@ -6484,24 +6514,24 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     hp.Utils.showLoader();
     $submit.attr("disabled", "disabled").text("Processing payment...");
     var createPaymentInstrumentRequest = {
-      "createPaymentInstrument": {
-        "createPaymentInstrumentRequest": {
-          "correlationId": hp.Utils.getCorrelationId(),
-          "transactionId": $this.transactionId,
-          "customerToken": hp.Utils.getCustomerToken(),
-          "instrumentId": hp.Utils.getInstrumentId(),
-          "token": hp.Utils.getSession().sessionToken,
-          "name": $this.formData.name,
-          "properties": {
-            "accountNumber": $this.formData.accountNumber,
-            "routingNumber": $this.formData.routingNumber,
-            "bankName": $this.formData.name,
-            "customerToken": hp.Utils.getCustomerToken(),
-            "instrumentId": hp.Utils.getInstrumentId()
+      createPaymentInstrument: {
+        createPaymentInstrumentRequest: {
+          correlationId: hp.Utils.getCorrelationId(),
+          transactionId: $this.transactionId,
+          customerToken: hp.Utils.getCustomerToken(),
+          instrumentId: hp.Utils.getInstrumentId(),
+          token: hp.Utils.getSession().sessionToken,
+          name: $this.formData.name,
+          properties: {
+            accountNumber: $this.formData.accountNumber,
+            routingNumber: $this.formData.routingNumber,
+            bankName: $this.formData.name,
+            customerToken: hp.Utils.getCustomerToken(),
+            instrumentId: hp.Utils.getInstrumentId()
           },
-          "billingAddress": {
-            "addressLine1": hp.Utils.defaults.billingAddress.addressLine1,
-            "postalCode": hp.Utils.defaults.billingAddress.postalCode
+          billingAddress: {
+            addressLine1: hp.Utils.defaults.billingAddress.addressLine1,
+            postalCode: hp.Utils.defaults.billingAddress.postalCode
           }
         }
       }
@@ -6514,8 +6544,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     hp.Utils.makeRequest(createPaymentInstrumentRequest).then(function (res) {
       if (res.isException) {
         $this.$parent.trigger("hp.submit", {
-          "type": 9,
-          "res": res
+          type: 9,
+          res: res
         });
         return;
       }
@@ -6523,8 +6553,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       $this.instrumentId = res.instrumentId;
       $this.transactionId = typeof res.transactionId !== "undefined" ? res.transactionId : $this.transactionId;
       $this.$parent.trigger("hp.submit", {
-        "type": 0,
-        "res": res
+        type: 0,
+        res: res
       });
       $this.handleCharge(res);
     }).fail(function (err) {
@@ -6533,8 +6563,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       }
 
       $this.$parent.trigger("hp.submit", {
-        "type": 9,
-        "res": err
+        type: 9,
+        res: err
       });
     });
   };
@@ -6651,7 +6681,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       throw new Error("hosted-payments.code.js : Cannot create template. Arguments are null or undefined.");
     }
 
-    var $html = ['<div class="hp-code-title">To begin: Swipe a card or scan a barcode.</div>', '<div class="hp-code-image"></div>', '<div class="hp-card-visual hp-card-visual-flat">', '<div class="hp-card-visual-number">' + defaultCardCharacters + '</div>', '<div class="hp-card-visual-name">' + defaultNameOnCardName + '</div>', '<div class="hp-card-visual-expiry">', '<span class="hp-card-visual-expiry-label">Month/Year</span>', '<span class="hp-card-visual-expiry-label-alt">Valid Thru</span>', '<span class="hp-card-visual-expiry-value"><span class="hp-card-visual-expiry-month">' + defaultDateCharacters + '</span><span>/</span><span class="hp-card-visual-expiry-year">' + defaultDateCharacters + '</span></span>', '</div>', '</div>'].join("");
+    var $html = ['<div class="hp-code-title">To begin: Swipe a card or scan a barcode.</div>', '<div class="hp-code-image"></div>', '<div class="hp-card-visual hp-card-visual-flat">', '<div class="hp-card-visual-number">' + defaultCardCharacters + "</div>", '<div class="hp-card-visual-name">' + defaultNameOnCardName + "</div>", '<div class="hp-card-visual-expiry">', '<span class="hp-card-visual-expiry-label">Month/Year</span>', '<span class="hp-card-visual-expiry-label-alt">Valid Thru</span>', '<span class="hp-card-visual-expiry-value"><span class="hp-card-visual-expiry-month">' + defaultDateCharacters + '</span><span>/</span><span class="hp-card-visual-expiry-year">' + defaultDateCharacters + "</span></span>", "</div>", "</div>"].join("");
     return $html;
   };
 
@@ -6692,14 +6722,14 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     if (hp.Utils.defaults.paymentType == hp.PaymentType.CHARGE) {
       requestModel = {
-        "charge": {
-          "chargeRequest": {
-            "correlationId": hp.Utils.getCorrelationId(),
-            "token": hp.Utils.getSession().sessionToken,
-            "transactionId": $this.transactionId,
-            "properties": cardProperties,
-            "amount": hp.Utils.getAmount(),
-            "__request": createInstrumentRequest
+        charge: {
+          chargeRequest: {
+            correlationId: hp.Utils.getCorrelationId(),
+            token: hp.Utils.getSession().sessionToken,
+            transactionId: $this.transactionId,
+            properties: cardProperties,
+            amount: hp.Utils.getAmount(),
+            __request: createInstrumentRequest
           }
         }
       };
@@ -6707,13 +6737,13 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     if (hp.Utils.defaults.paymentType == hp.PaymentType.REFUND) {
       requestModel = {
-        "refund": {
-          "refundRequest": {
-            "correlationId": hp.Utils.getCorrelationId(),
-            "token": hp.Utils.getSession().sessionToken,
-            "properties": cardProperties,
-            "amount": hp.Utils.getAmount(),
-            "__request": createInstrumentRequest
+        refund: {
+          refundRequest: {
+            correlationId: hp.Utils.getCorrelationId(),
+            token: hp.Utils.getSession().sessionToken,
+            properties: cardProperties,
+            amount: hp.Utils.getAmount(),
+            __request: createInstrumentRequest
           }
         }
       };
@@ -6721,8 +6751,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     hp.Utils.makeRequest(requestModel).then(hp.Utils.buildResultObjectByType).then(function (promiseResponse) {
       $this.$parent.trigger("hp.submit", {
-        "type": hp.RequestTypes.CHARGE,
-        "res": promiseResponse
+        type: hp.RequestTypes.CHARGE,
+        res: promiseResponse
       });
     }).fail(function (promiseResponse) {
       if (typeof promiseResponse.responseJSON !== "undefined") {
@@ -6730,8 +6760,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       }
 
       $this.$parent.trigger("hp.submit", {
-        "type": hp.RequestTypes.ERROR,
-        "res": promiseResponse
+        type: hp.RequestTypes.ERROR,
+        res: promiseResponse
       });
     });
   };
@@ -6741,23 +6771,23 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
         $this = this,
         cardBalance = 0;
     var errorResponse = {
-      "status": "Error",
-      "message": "The payment instrument provided had no remaining funds and will not be applied to the split payment.",
-      "created_on": createdOn,
-      "token": sessionId
+      status: "Error",
+      message: "The payment instrument provided had no remaining funds and will not be applied to the split payment.",
+      created_on: createdOn,
+      token: sessionId
     };
     var requestModel = {};
 
     if (hp.Utils.defaults.paymentType == hp.PaymentType.CHARGE) {
       requestModel = {
-        "charge": {
-          "chargeRequest": {
-            "correlationId": hp.Utils.getCorrelationId(),
-            "token": hp.Utils.getSession().sessionToken,
-            "transactionId": $this.transactionId,
-            "instrumentId": res.instrumentId,
-            "amount": hp.Utils.getAmount(),
-            "__request": res.request
+        charge: {
+          chargeRequest: {
+            correlationId: hp.Utils.getCorrelationId(),
+            token: hp.Utils.getSession().sessionToken,
+            transactionId: $this.transactionId,
+            instrumentId: res.instrumentId,
+            amount: hp.Utils.getAmount(),
+            __request: res.request
           }
         }
       };
@@ -6765,13 +6795,13 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     if (hp.Utils.defaults.paymentType == hp.PaymentType.REFUND) {
       requestModel = {
-        "refund": {
-          "refundRequest": {
-            "correlationId": hp.Utils.getCorrelationId(),
-            "token": hp.Utils.getSession().sessionToken,
-            "instrumentId": res.instrumentId,
-            "amount": hp.Utils.getAmount(),
-            "__request": res.request
+        refund: {
+          refundRequest: {
+            correlationId: hp.Utils.getCorrelationId(),
+            token: hp.Utils.getSession().sessionToken,
+            instrumentId: res.instrumentId,
+            amount: hp.Utils.getAmount(),
+            __request: res.request
           }
         }
       };
@@ -6779,8 +6809,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     hp.Utils.makeRequest(requestModel).then(hp.Utils.buildResultObjectByType).then(function (promiseResponse) {
       $this.$parent.trigger("hp.submit", {
-        "type": hp.RequestTypes.CHARGE,
-        "res": promiseResponse
+        type: hp.RequestTypes.CHARGE,
+        res: promiseResponse
       });
     }).fail(function (promiseResponse) {
       if (typeof promiseResponse.responseJSON !== "undefined") {
@@ -6788,8 +6818,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       }
 
       $this.$parent.trigger("hp.submit", {
-        "type": hp.RequestTypes.ERROR,
-        "res": promiseResponse
+        type: hp.RequestTypes.ERROR,
+        res: promiseResponse
       });
     });
   };
@@ -6799,8 +6829,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     if (!data.is_valid) {
       $this.$parent.trigger("hp.submit", {
-        "type": hp.RequestTypes.ERROR,
-        "res": "Bad swipe. Please try again."
+        type: hp.RequestTypes.ERROR,
+        res: "Bad swipe. Please try again."
       });
       return;
     }
@@ -6848,28 +6878,28 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     if ($this.formData._isValid && $this.formData.ksn !== "" && !$this.formData._isEMoney) {
       cardProperties = {
-        "trackOne": $this.formData.trackOne,
-        "trackTwo": $this.formData.trackTwo,
-        "trackThree": $this.formData.trackThree,
-        "ksn": $this.formData.ksn
+        trackOne: $this.formData.trackOne,
+        trackTwo: $this.formData.trackTwo,
+        trackThree: $this.formData.trackThree,
+        ksn: $this.formData.ksn
       };
     }
 
     if (this.formData._isValid && $this.formData.ksn === "" && !$this.formData._isEMoney) {
       cardProperties = {
-        "trackOne": $this.formData.trackOne,
-        "trackTwo": $this.formData.trackTwo,
-        "trackThree": "",
-        "ksn": ""
+        trackOne: $this.formData.trackOne,
+        trackTwo: $this.formData.trackTwo,
+        trackThree: "",
+        ksn: ""
       };
     }
 
     if (this.formData._isValid && $this.formData._isEMoney) {
       cardProperties = {
-        "cardNumber": $this.formData.cardNumber.replace(/\s/gi, ""),
-        "cvv": "999",
-        "expirationDate": $this.formData.expMonth + "/" + $this.formData.expYear,
-        "nameOnCard": $this.formData.nameOnCard
+        cardNumber: $this.formData.cardNumber.replace(/\s/gi, ""),
+        cvv: "999",
+        expirationDate: $this.formData.expMonth + "/" + $this.formData.expYear,
+        nameOnCard: $this.formData.nameOnCard
       };
     }
 
@@ -6877,20 +6907,20 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     cardProperties["instrumentId"] = hp.Utils.getInstrumentId();
     hp.Utils.promptAvs().then(function () {
       var createInstrumentRequest = {
-        "createPaymentInstrument": {
-          "createPaymentInstrumentRequest": {
-            "correlationId": hp.Utils.getCorrelationId(),
-            "customerToken": hp.Utils.getCustomerToken(),
-            "instrumentId": hp.Utils.getInstrumentId(),
-            "transactionId": $this.transactionId,
-            "token": hp.Utils.getSession().sessionToken,
-            "name": $this.formData.nameOnCard,
-            "properties": cardProperties,
-            "billingAddress": {
-              "addressLine1": hp.Utils.defaults.billingAddress.addressLine1,
-              "postalCode": hp.Utils.defaults.billingAddress.postalCode
+        createPaymentInstrument: {
+          createPaymentInstrumentRequest: {
+            correlationId: hp.Utils.getCorrelationId(),
+            customerToken: hp.Utils.getCustomerToken(),
+            instrumentId: hp.Utils.getInstrumentId(),
+            transactionId: $this.transactionId,
+            token: hp.Utils.getSession().sessionToken,
+            name: $this.formData.nameOnCard,
+            properties: cardProperties,
+            billingAddress: {
+              addressLine1: hp.Utils.defaults.billingAddress.addressLine1,
+              postalCode: hp.Utils.defaults.billingAddress.postalCode
             },
-            "__swipe": $this.formData
+            __swipe: $this.formData
           }
         }
       };
@@ -6911,8 +6941,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
       if (res.isException) {
         $this.$parent.trigger("hp.submit", {
-          "type": hp.RequestTypes.ERROR,
-          "res": res
+          type: hp.RequestTypes.ERROR,
+          res: res
         });
         return;
       }
@@ -6921,8 +6951,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       $this.transactionId = typeof res.transactionId !== "undefined" ? res.transactionId : $this.transactionId;
       hp.Utils.showLoader();
       $this.$parent.trigger("hp.submit", {
-        "type": 0,
-        "res": res
+        type: 0,
+        res: res
       });
       $this.handleCharge(res);
     }).fail(function (err) {
@@ -6931,8 +6961,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       }
 
       $this.$parent.trigger("hp.submit", {
-        "type": hp.RequestTypes.ERROR,
-        "res": err
+        type: hp.RequestTypes.ERROR,
+        res: err
       });
     });
   };
@@ -7009,35 +7039,35 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       cancelMessage = "Cancelled... Please try again.",
       buildingLinkMessage = "Building deeplink...";
   var messages = {
-    "Success": authorizationInProgressMessage,
-    "BeginSale": transactionInProgressMessage,
-    "BeginAuth": authorizationInProgressMessage,
-    "Login": terminalActiveMessage,
-    "LoginSuccess": terminalActiveMessage,
-    "ExecuteCommand": terminalActiveMessage,
-    "DisplayAmount": transactionInProgressMessage,
-    "DisplayForm": transactionInProgressMessage,
-    "FindTermsAndConditions": transactionInProgressMessage,
-    "InsertOrSwipe": transactionInProgressMessage,
-    "Idle": transactionInProgressMessage,
-    "Offline": errorMessage,
-    "ProcessingError": errorMessage,
-    "ReadCardRequest": transactionInProgressMessage,
-    "SetEmvPaymentType": authorizationInProgressMessage,
-    "Gratuity": waitingForSignatureMessage,
-    "CardInserted": authorizationInProgressMessage,
-    "CardRemoved": authorizationInProgressMessage,
-    "WaitingForSignature": waitingForSignatureMessage,
-    "DownloadingSignature": waitingForSignatureMessage,
-    "Signature": waitingForSignatureMessage,
-    "SignatureBlocks": waitingForSignatureMessage,
-    "StopTransaction": authorizationInProgressMessage,
-    "TermsAndConditions": authorizationInProgressMessage,
-    "Cancelled": cancelMessage,
-    "Connected": terminalActiveMessage,
-    "Declined": errorMessage,
-    "Error": errorMessage,
-    "GetMerchantCredentials": buildingLinkMessage
+    Success: authorizationInProgressMessage,
+    BeginSale: transactionInProgressMessage,
+    BeginAuth: authorizationInProgressMessage,
+    Login: terminalActiveMessage,
+    LoginSuccess: terminalActiveMessage,
+    ExecuteCommand: terminalActiveMessage,
+    DisplayAmount: transactionInProgressMessage,
+    DisplayForm: transactionInProgressMessage,
+    FindTermsAndConditions: transactionInProgressMessage,
+    InsertOrSwipe: transactionInProgressMessage,
+    Idle: transactionInProgressMessage,
+    Offline: errorMessage,
+    ProcessingError: errorMessage,
+    ReadCardRequest: transactionInProgressMessage,
+    SetEmvPaymentType: authorizationInProgressMessage,
+    Gratuity: waitingForSignatureMessage,
+    CardInserted: authorizationInProgressMessage,
+    CardRemoved: authorizationInProgressMessage,
+    WaitingForSignature: waitingForSignatureMessage,
+    DownloadingSignature: waitingForSignatureMessage,
+    Signature: waitingForSignatureMessage,
+    SignatureBlocks: waitingForSignatureMessage,
+    StopTransaction: authorizationInProgressMessage,
+    TermsAndConditions: authorizationInProgressMessage,
+    Cancelled: cancelMessage,
+    Connected: terminalActiveMessage,
+    Declined: errorMessage,
+    Error: errorMessage,
+    GetMerchantCredentials: buildingLinkMessage
   };
 
   var getMessage = function getMessage(event) {
@@ -7208,10 +7238,10 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       }
 
       var errorResponse = {
-        "status": "Error",
-        "message": message,
-        "created_on": createdOn,
-        "token": sessionId
+        status: "Error",
+        message: message,
+        created_on: createdOn,
+        token: sessionId
       };
 
       if (!hp.Utils.shouldErrorPostBack()) {
@@ -7229,7 +7259,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       return "";
     }
 
-    var $html = ['<div class="hp-transvault-visual">', '<a class="hp-submit-refresh" href="javascript:;" title="Refresh Transvault">', '<img class="hp-submit-refresh-img" src="https://cdn.rawgit.com/etsms/0f62d83b5d3bf18ba57cb14648d913ac/raw/c5f48f7882ad1f48196450fa296caf05f674f48b/refresh-icon.svg" alt="Refresh Transvault Button" />', '</a>', '<div class="hp-transvault-visual-image {{isAlt}}">', '<img class="event event-default" src="https://cdn.rawgit.com/etsms/786cb7bdd1d077acc10d7d7e08a4241f/raw/58a2ec726610c18c21716ae6023f7c6d776b5a71/terminal-loading.svg" alt="Status" />', '</div>', '<p class="hp-input-transvault-message {{isAlt}}">', 'Disconnected <span></span>', '</p>', '<button class="hp-submit hp-submit-danger">Cancel Request</button>', '</div>'].join("");
+    var $html = ['<div class="hp-transvault-visual">', '<a class="hp-submit-refresh" href="javascript:;" title="Refresh Transvault">', '<img class="hp-submit-refresh-img" src="https://cdn.rawgit.com/etsms/0f62d83b5d3bf18ba57cb14648d913ac/raw/c5f48f7882ad1f48196450fa296caf05f674f48b/refresh-icon.svg" alt="Refresh Transvault Button" />', "</a>", '<div class="hp-transvault-visual-image {{isAlt}}">', '<img class="event event-default" src="https://cdn.rawgit.com/etsms/786cb7bdd1d077acc10d7d7e08a4241f/raw/58a2ec726610c18c21716ae6023f7c6d776b5a71/terminal-loading.svg" alt="Status" />', "</div>", '<p class="hp-input-transvault-message {{isAlt}}">', "Disconnected <span></span>", "</p>", '<button class="hp-submit hp-submit-danger">Cancel Request</button>', "</div>"].join("");
     $html = $html.replace(/{{isAlt}}/gi, hp.Utils.getTerminalId().startsWith("1") || hp.Utils.getTerminalId().startsWith("3") ? "alt" : "");
     return $html;
   };
@@ -7337,7 +7367,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
      */
 
     $formElement.addClass("hp-form-transvault-app-link");
-    var html = ['<div class="hp-app-link-container hp-page-active">', '<div>', '<a target="_parent" class="hp-submit hp-submit-redirect" href="' + emoneyMobileAppUrl + '">Start Transaction</a>', '</div>', '</div>'].join("");
+    var html = ['<div class="hp-app-link-container hp-page-active">', "<div>", '<a target="_parent" class="hp-submit hp-submit-redirect" href="' + emoneyMobileAppUrl + '">Start Transaction</a>', "</div>", "</div>"].join("");
     /*
      * Remove existing form if present
      */
@@ -7513,42 +7543,42 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     }
 
     var successResponse = {
-      "status": "Success",
-      "message": $.trim(props.RD),
-      "amount": props.TA,
-      "token": hp.Utils.getSession().sessionToken,
-      "anti_forgery_token": hp.Utils.defaults.antiForgeryToken,
-      "transaction_id": props.ETT,
-      "transaction_sequence_number": props.TSN,
-      "transaction_approval_code": props.AC,
-      "transaction_avs_street_passed": true,
-      "transaction_avs_postal_code_passed": true,
-      "transaction_currency": props.TCCT,
-      "transaction_status_indicator": props.TSI,
-      "transaction_type": props.TT,
-      "transaction_tax": props.TAX,
-      "transaction_surcharge": props.SA,
-      "transaction_gratuity": props.GA,
-      "transaction_cashback": props.CBA,
-      "transaction_total": props.VA,
-      "instrument_id": props.ACCT,
-      "instrument_type": props.CRDT,
-      "instrument_method": props.PM,
-      "instrument_last_four": props.AN,
-      "instrument_routing_last_four": "",
-      "instrument_expiration_date": props.ED,
-      "instrument_verification_method": props.CVMD,
-      "instrument_entry_type": props.CEM,
-      "instrument_entry_type_description": props.EMD,
-      "instrument_verification_results": props.TVR,
-      "created_on": new Date().toISOString(),
-      "customer_name": props.CHN,
-      "customer_signature": props.SD,
-      "correlation_id": $this.correlationId,
-      "customer_token": hp.Utils.getCustomerToken(),
-      "application_identifier": props.AID,
-      "application_response_code": props.ARC,
-      "application_issuer_data": props.IAD
+      status: "Success",
+      message: $.trim(props.RD),
+      amount: props.TA,
+      token: hp.Utils.getSession().sessionToken,
+      anti_forgery_token: hp.Utils.defaults.antiForgeryToken,
+      transaction_id: props.ETT,
+      transaction_sequence_number: props.TSN,
+      transaction_approval_code: props.AC,
+      transaction_avs_street_passed: true,
+      transaction_avs_postal_code_passed: true,
+      transaction_currency: props.TCCT,
+      transaction_status_indicator: props.TSI,
+      transaction_type: props.TT,
+      transaction_tax: props.TAX,
+      transaction_surcharge: props.SA,
+      transaction_gratuity: props.GA,
+      transaction_cashback: props.CBA,
+      transaction_total: props.VA,
+      instrument_id: props.ACCT,
+      instrument_type: props.CRDT,
+      instrument_method: props.PM,
+      instrument_last_four: props.AN,
+      instrument_routing_last_four: "",
+      instrument_expiration_date: props.ED,
+      instrument_verification_method: props.CVMD,
+      instrument_entry_type: props.CEM,
+      instrument_entry_type_description: props.EMD,
+      instrument_verification_results: props.TVR,
+      created_on: new Date().toISOString(),
+      customer_name: props.CHN,
+      customer_signature: props.SD,
+      correlation_id: $this.correlationId,
+      customer_token: hp.Utils.getCustomerToken(),
+      application_identifier: props.AID,
+      application_response_code: props.ARC,
+      application_issuer_data: props.IAD
     };
     $this.$parent.trigger("hp.transvaultSuccess", successResponse);
     $this.removeAppRedirectLinkForm();
@@ -7572,17 +7602,17 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     }
 
     this.sendMessage({
-      "transvault": {
-        "transvaultRequest": {
-          "token": token,
-          "amount": amount,
-          "transactionId": this.transactionId,
-          "correlationId": "HP:FROM-GUI",
-          "terminalId": this.terminalId,
-          "action": "CANCEL",
-          "browserId": this.browserId,
-          "shouldVoid": hp.Utils.defaults.shouldVoidOnCancel,
-          "documentIndex": hp.Utils.defaults.documentIndex
+      transvault: {
+        transvaultRequest: {
+          token: token,
+          amount: amount,
+          transactionId: this.transactionId,
+          correlationId: "HP:FROM-GUI",
+          terminalId: this.terminalId,
+          action: "CANCEL",
+          browserId: this.browserId,
+          shouldVoid: hp.Utils.defaults.shouldVoidOnCancel,
+          documentIndex: hp.Utils.defaults.documentIndex
         }
       }
     });
@@ -7605,17 +7635,17 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     }
 
     $this.sendMessage({
-      "transvault": {
-        "transvaultRequest": {
-          "token": token,
-          "amount": amount,
-          "transactionId": $this.transactionId,
-          "correlationId": "HP:FROM-GUI",
-          "terminalId": $this.terminalId,
-          "action": "CANCEL",
-          "browserId": $this.browserId,
-          "shouldVoid": hp.Utils.defaults.shouldVoidOnCancel,
-          "documentIndex": hp.Utils.defaults.documentIndex
+      transvault: {
+        transvaultRequest: {
+          token: token,
+          amount: amount,
+          transactionId: $this.transactionId,
+          correlationId: "HP:FROM-GUI",
+          terminalId: $this.terminalId,
+          action: "CANCEL",
+          browserId: $this.browserId,
+          shouldVoid: hp.Utils.defaults.shouldVoidOnCancel,
+          documentIndex: hp.Utils.defaults.documentIndex
         }
       }
     });
@@ -7632,13 +7662,13 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       nav.append($("<li />", {
         "class": "hp-hide-list",
         css: {
-          "position": "absolute",
-          "top": "0",
-          "left": "0",
-          "height": "100%",
-          "width": "100%",
+          position: "absolute",
+          top: "0",
+          left: "0",
+          height: "100%",
+          width: "100%",
           "z-index": "100",
-          "background": "rgba(255, 255, 255, .7)"
+          background: "rgba(255, 255, 255, .7)"
         }
       }));
     }
@@ -7673,10 +7703,10 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       if (messageObject.key === "HoldCall") {
         hp.Utils.makeRequest({
           "void": {
-            "voidRequest": {
-              "token": hp.Utils.getSession().sessionToken,
-              "transactionId": $this.transactionId,
-              "amount": hp.Utils.getAmount()
+            voidRequest: {
+              token: hp.Utils.getSession().sessionToken,
+              transactionId: $this.transactionId,
+              amount: hp.Utils.getAmount()
             }
           }
         }).then(hp.Utils.log, hp.Utils.log);
@@ -7732,17 +7762,17 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       }
 
       $this.sendMessage({
-        "transvault": {
-          "transvaultRequest": {
-            "token": token,
-            "amount": amount,
-            "transactionId": $this.transactionId,
-            "correlationId": $this.correlationId,
-            "entryType": hp.EntryType.DEVICE_CAPTURED,
-            "terminalId": $this.terminalId,
-            "action": hp.Utils.defaults.paymentType,
-            "browserId": $this.browserId,
-            "documentIndex": hp.Utils.defaults.documentIndex
+        transvault: {
+          transvaultRequest: {
+            token: token,
+            amount: amount,
+            transactionId: $this.transactionId,
+            correlationId: $this.correlationId,
+            entryType: hp.EntryType.DEVICE_CAPTURED,
+            terminalId: $this.terminalId,
+            action: hp.Utils.defaults.paymentType,
+            browserId: $this.browserId,
+            documentIndex: hp.Utils.defaults.documentIndex
           }
         }
       });
@@ -7766,7 +7796,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       var socketOptions = {
         withCredentials: false,
         jsonp: false,
-        transport: ['webSockets'],
+        transport: ["webSockets"],
         waitForPageLoad: true
       };
       $this.transvaultHub.connection.start(socketOptions).done(startHandler).fail(errorHandler);
@@ -7875,70 +7905,70 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
   defaultFormat = /(\d{1,4})/g;
   $.payment.cards = cards = [{
-    type: 'maestro',
+    type: "maestro",
     patterns: [5018, 502, 503, 506, 56, 58, 639, 6220, 67],
     format: defaultFormat,
     length: [12, 13, 14, 15, 16, 17, 18, 19],
     cvcLength: [3],
     luhn: true
   }, {
-    type: 'forbrugsforeningen',
+    type: "forbrugsforeningen",
     patterns: [600],
     format: defaultFormat,
     length: [16],
     cvcLength: [3],
     luhn: true
   }, {
-    type: 'dankort',
+    type: "dankort",
     patterns: [5019],
     format: defaultFormat,
     length: [16],
     cvcLength: [3],
     luhn: true
   }, {
-    type: 'visa',
+    type: "visa",
     patterns: [4],
     format: defaultFormat,
     length: [13, 16],
     cvcLength: [3],
     luhn: true
   }, {
-    type: 'mastercard',
+    type: "mastercard",
     patterns: [51, 52, 53, 54, 55, 22, 23, 24, 25, 26, 27],
     format: defaultFormat,
     length: [16],
     cvcLength: [3],
     luhn: true
   }, {
-    type: 'amex',
+    type: "amex",
     patterns: [34, 37],
     format: /(\d{1,4})(\d{1,6})?(\d{1,5})?/,
     length: [15],
     cvcLength: [3, 4],
     luhn: true
   }, {
-    type: 'dinersclub',
+    type: "dinersclub",
     patterns: [30, 36, 38, 39],
     format: /(\d{1,4})(\d{1,6})?(\d{1,4})?/,
     length: [14],
     cvcLength: [3],
     luhn: true
   }, {
-    type: 'discover',
+    type: "discover",
     patterns: [60, 64, 65, 622],
     format: defaultFormat,
     length: [16],
     cvcLength: [3],
     luhn: true
   }, {
-    type: 'unionpay',
+    type: "unionpay",
     patterns: [62, 88],
     format: defaultFormat,
     length: [16, 17, 18, 19],
     cvcLength: [3],
     luhn: false
   }, {
-    type: 'jcb',
+    type: "jcb",
     patterns: [35],
     format: defaultFormat,
     length: [16],
@@ -7949,7 +7979,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
   cardFromNumber = function cardFromNumber(num) {
     var card, p, pattern, _i, _j, _len, _len1, _ref;
 
-    num = (num + '').replace(/\D/g, '');
+    num = (num + "").replace(/\D/g, "");
 
     for (_i = 0, _len = cards.length; _i < _len; _i++) {
       card = cards[_i];
@@ -7957,7 +7987,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
       for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
         pattern = _ref[_j];
-        p = pattern + '';
+        p = pattern + "";
 
         if (num.substr(0, p.length) === p) {
           return card;
@@ -7983,7 +8013,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
     odd = true;
     sum = 0;
-    digits = (num + '').split('').reverse();
+    digits = (num + "").split("").reverse();
 
     for (_i = 0, _len = digits.length; _i < _len; _i++) {
       digit = digits[_i];
@@ -8006,7 +8036,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
   hasTextSelected = function hasTextSelected($target) {
     var _ref;
 
-    if ($target.prop('selectionStart') != null && $target.prop('selectionStart') !== $target.prop('selectionEnd')) {
+    if ($target.prop("selectionStart") != null && $target.prop("selectionStart") !== $target.prop("selectionEnd")) {
       return true;
     }
 
@@ -8023,7 +8053,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     var currPair, cursor, digit, error, last, prevPair;
 
     try {
-      cursor = $target.prop('selectionStart');
+      cursor = $target.prop("selectionStart");
     } catch (_error) {
       error = _error;
       cursor = null;
@@ -8047,8 +8077,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
         }
       }
 
-      $target.prop('selectionStart', cursor);
-      return $target.prop('selectionEnd', cursor);
+      $target.prop("selectionStart", cursor);
+      return $target.prop("selectionEnd", cursor);
     }
   };
 
@@ -8056,13 +8086,13 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     var chars, chr, fullWidth, halfWidth, idx, value, _i, _len;
 
     if (str == null) {
-      str = '';
+      str = "";
     }
 
     fullWidth = "\uFF10\uFF11\uFF12\uFF13\uFF14\uFF15\uFF16\uFF17\uFF18\uFF19";
-    halfWidth = '0123456789';
-    value = '';
-    chars = str.split('');
+    halfWidth = "0123456789";
+    value = "";
+    chars = str.split("");
 
     for (_i = 0, _len = chars.length; _i < _len; _i++) {
       chr = chars[_i];
@@ -8085,7 +8115,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       var value;
       value = $target.val();
       value = replaceFullWidthChars(value);
-      value = value.replace(/\D/g, '');
+      value = value.replace(/\D/g, "");
       return safeVal(value, $target);
     });
   };
@@ -8113,7 +8143,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     $target = $(e.currentTarget);
     value = $target.val();
     card = cardFromNumber(value + digit);
-    length = (value.replace(/\D/g, '') + digit).length;
+    length = (value.replace(/\D/g, "") + digit).length;
     upperLength = 16;
 
     if (card) {
@@ -8124,11 +8154,11 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       return;
     }
 
-    if ($target.prop('selectionStart') != null && $target.prop('selectionStart') !== value.length) {
+    if ($target.prop("selectionStart") != null && $target.prop("selectionStart") !== value.length) {
       return;
     }
 
-    if (card && card.type === 'amex') {
+    if (card && card.type === "amex") {
       re = /^(\d{4}|\d{4}\s\d{6})$/;
     } else {
       re = /(?:^|\s)(\d{4})$/;
@@ -8137,12 +8167,12 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     if (re.test(value)) {
       e.preventDefault();
       return setTimeout(function () {
-        return $target.val(value + ' ' + digit);
+        return $target.val(value + " " + digit);
       });
     } else if (re.test(value + digit)) {
       e.preventDefault();
       return setTimeout(function () {
-        return $target.val(value + digit + ' ');
+        return $target.val(value + digit + " ");
       });
     }
   };
@@ -8156,19 +8186,19 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       return;
     }
 
-    if ($target.prop('selectionStart') != null && $target.prop('selectionStart') !== value.length) {
+    if ($target.prop("selectionStart") != null && $target.prop("selectionStart") !== value.length) {
       return;
     }
 
     if (/\d\s$/.test(value)) {
       e.preventDefault();
       return setTimeout(function () {
-        return $target.val(value.replace(/\d\s$/, ''));
+        return $target.val(value.replace(/\d\s$/, ""));
       });
     } else if (/\s\d?$/.test(value)) {
       e.preventDefault();
       return setTimeout(function () {
-        return $target.val(value.replace(/\d$/, ''));
+        return $target.val(value.replace(/\d$/, ""));
       });
     }
   };
@@ -8196,7 +8226,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     $target = $(e.currentTarget);
     val = $target.val() + digit;
 
-    if (/^\d$/.test(val) && val !== '0' && val !== '1') {
+    if (/^\d$/.test(val) && val !== "0" && val !== "1") {
       e.preventDefault();
       return setTimeout(function () {
         return $target.val("0" + val + " / ");
@@ -8237,14 +8267,14 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     var $target, val, which;
     which = String.fromCharCode(e.which);
 
-    if (!(which === '/' || which === ' ')) {
+    if (!(which === "/" || which === " ")) {
       return;
     }
 
     $target = $(e.currentTarget);
     val = $target.val();
 
-    if (/^\d$/.test(val) && val !== '0') {
+    if (/^\d$/.test(val) && val !== "0") {
       return $target.val("0" + val + " / ");
     }
   };
@@ -8258,14 +8288,14 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       return;
     }
 
-    if ($target.prop('selectionStart') != null && $target.prop('selectionStart') !== value.length) {
+    if ($target.prop("selectionStart") != null && $target.prop("selectionStart") !== value.length) {
       return;
     }
 
     if (/\d\s\/\s$/.test(value)) {
       e.preventDefault();
       return setTimeout(function () {
-        return $target.val(value.replace(/\d\s\/\s$/, ''));
+        return $target.val(value.replace(/\d\s\/\s$/, ""));
       });
     }
   };
@@ -8277,7 +8307,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       var value;
       value = $target.val();
       value = replaceFullWidthChars(value);
-      value = value.replace(/\D/g, '').slice(0, 4);
+      value = value.replace(/\D/g, "").slice(0, 4);
       return safeVal(value, $target);
     });
   };
@@ -8318,7 +8348,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       return;
     }
 
-    value = ($target.val() + digit).replace(/\D/g, '');
+    value = ($target.val() + digit).replace(/\D/g, "");
     card = cardFromNumber(value);
 
     if (card) {
@@ -8342,7 +8372,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     }
 
     value = $target.val() + digit;
-    value = value.replace(/\D/g, '');
+    value = value.replace(/\D/g, "");
 
     if (value.length > 6) {
       return false;
@@ -8370,7 +8400,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     var $target, allTypes, card, cardType, val;
     $target = $(e.currentTarget);
     val = $target.val();
-    cardType = $.payment.cardType(val) || 'unknown';
+    cardType = $.payment.cardType(val) || "unknown";
 
     if (!$target.hasClass(cardType)) {
       allTypes = function () {
@@ -8387,53 +8417,53 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
         return _results;
       }();
 
-      $target.removeClass('unknown');
-      $target.removeClass(allTypes.join(' '));
+      $target.removeClass("unknown");
+      $target.removeClass(allTypes.join(" "));
       $target.addClass(cardType);
-      $target.toggleClass('identified', cardType !== 'unknown');
-      return $target.trigger('payment.cardType', cardType);
+      $target.toggleClass("identified", cardType !== "unknown");
+      return $target.trigger("payment.cardType", cardType);
     }
   };
 
   $.payment.fn.formatCardCVC = function () {
-    this.on('keypress', restrictNumeric);
-    this.on('keypress', restrictCVC);
-    this.on('paste', reFormatCVC);
-    this.on('change', reFormatCVC);
-    this.on('input', reFormatCVC);
+    this.on("keypress", restrictNumeric);
+    this.on("keypress", restrictCVC);
+    this.on("paste", reFormatCVC);
+    this.on("change", reFormatCVC);
+    this.on("input", reFormatCVC);
     return this;
   };
 
   $.payment.fn.formatCardExpiry = function () {
-    this.on('keypress', restrictNumeric);
-    this.on('keypress', restrictExpiry);
-    this.on('keypress', formatExpiry);
-    this.on('keypress', formatForwardSlashAndSpace);
-    this.on('keypress', formatForwardExpiry);
-    this.on('keydown', formatBackExpiry);
-    this.on('change', reFormatExpiry);
-    this.on('input', reFormatExpiry);
+    this.on("keypress", restrictNumeric);
+    this.on("keypress", restrictExpiry);
+    this.on("keypress", formatExpiry);
+    this.on("keypress", formatForwardSlashAndSpace);
+    this.on("keypress", formatForwardExpiry);
+    this.on("keydown", formatBackExpiry);
+    this.on("change", reFormatExpiry);
+    this.on("input", reFormatExpiry);
     return this;
   };
 
   $.payment.fn.formatCardNumber = function () {
-    this.on('keypress', restrictNumeric);
-    this.on('keypress', restrictCardNumber);
-    this.on('keypress', formatCardNumber);
-    this.on('keydown', formatBackCardNumber);
-    this.on('keyup', setCardType);
-    this.on('paste', reFormatCardNumber);
-    this.on('change', reFormatCardNumber);
-    this.on('input', reFormatCardNumber);
-    this.on('input', setCardType);
+    this.on("keypress", restrictNumeric);
+    this.on("keypress", restrictCardNumber);
+    this.on("keypress", formatCardNumber);
+    this.on("keydown", formatBackCardNumber);
+    this.on("keyup", setCardType);
+    this.on("paste", reFormatCardNumber);
+    this.on("change", reFormatCardNumber);
+    this.on("input", reFormatCardNumber);
+    this.on("input", setCardType);
     return this;
   };
 
   $.payment.fn.restrictNumeric = function () {
-    this.on('keypress', restrictNumeric);
-    this.on('paste', reFormatNumeric);
-    this.on('change', reFormatNumeric);
-    this.on('input', reFormatNumeric);
+    this.on("keypress", restrictNumeric);
+    this.on("paste", reFormatNumeric);
+    this.on("change", reFormatNumeric);
+    this.on("input", reFormatNumeric);
     return this;
   };
 
@@ -8463,7 +8493,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
   $.payment.validateCardNumber = function (num) {
     var card, _ref;
 
-    num = (num + '').replace(/\s+|-/g, '');
+    num = (num + "").replace(/\s+|-/g, "");
 
     if (!/^\d+$/.test(num)) {
       return false;
@@ -8481,7 +8511,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
   $.payment.validateCardExpiry = function (month, year) {
     var currentTime, expiry, _ref;
 
-    if ((typeof month === 'undefined' ? 'undefined' : _typeof(month)) === 'object' && 'month' in month) {
+    if ((typeof month === "undefined" ? "undefined" : _typeof(month)) === "object" && "month" in month) {
       _ref = month, month = _ref.month, year = _ref.year;
     }
 
@@ -8554,7 +8584,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
   $.payment.formatCardNumber = function (num) {
     var card, groups, upperLength, _ref;
 
-    num = num.replace(/\D/g, '');
+    num = num.replace(/\D/g, "");
     card = cardFromNumber(num);
 
     if (!card) {
@@ -8565,7 +8595,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     num = num.slice(0, upperLength);
 
     if (card.format.global) {
-      return (_ref = num.match(card.format)) != null ? _ref.join(' ') : void 0;
+      return (_ref = num.match(card.format)) != null ? _ref.join(" ") : void 0;
     } else {
       groups = card.format.exec(num);
 
@@ -8577,7 +8607,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       groups = $.grep(groups, function (n) {
         return n;
       });
-      return groups.join(' ');
+      return groups.join(" ");
     }
   };
 
@@ -8586,23 +8616,23 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
     parts = expiry.match(/^\D*(\d{1,2})(\D+)?(\d{1,4})?/);
 
     if (!parts) {
-      return '';
+      return "";
     }
 
-    mon = parts[1] || '';
-    sep = parts[2] || '';
-    year = parts[3] || '';
+    mon = parts[1] || "";
+    sep = parts[2] || "";
+    year = parts[3] || "";
 
     if (year.length > 0) {
-      sep = ' / ';
-    } else if (sep === ' /') {
+      sep = " / ";
+    } else if (sep === " /") {
       mon = mon.substring(0, 1);
-      sep = '';
+      sep = "";
     } else if (mon.length === 2 || sep.length > 0) {
-      sep = ' / ';
-    } else if (mon.length === 1 && mon !== '0' && mon !== '1') {
+      sep = " / ";
+    } else if (mon.length === 1 && mon !== "0" && mon !== "1") {
       mon = "0" + mon;
-      sep = ' / ';
+      sep = " / ";
     }
 
     return mon + sep + year;
@@ -8615,14 +8645,14 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
   $.fn.pos = function (options) {
     //define instance for use in child functions
     var $this = $(this),
-        cardNumberRegex = new RegExp(/^(?:%B|\;)([0-9]+)/ig),
-        nameOnCardRegex = new RegExp(/(?:\^(.*)\^)/ig),
-        expirationDateRegex = new RegExp(/(?:\^(?:.*)\^|=)(\d{4})/ig),
-        trackRegex = new RegExp(/\|([A-Z0-9]+)(?=\|)/ig),
-        unencryptedTrackRegex = new RegExp(/^(.*?\?)(;.*)/ig),
+        cardNumberRegex = new RegExp(/^(?:%B|\;)([0-9]+)/gi),
+        nameOnCardRegex = new RegExp(/(?:\^(.*)\^)/gi),
+        expirationDateRegex = new RegExp(/(?:\^(?:.*)\^|=)(\d{4})/gi),
+        trackRegex = new RegExp(/\|([A-Z0-9]+)(?=\|)/gi),
+        unencryptedTrackRegex = new RegExp(/^(.*?\?)(;.*)/gi),
         hasTrack = false;
     var data = {
-      swipe: ''
+      swipe: ""
     }; //set default options
 
     defaults = {
@@ -8762,14 +8792,14 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
           result.name_on_card = $.trim(result.name_on_card.replace("undefined", ""));
           $this.trigger($this.options.offEventName, result);
           $this.options.onScanSwipe(result);
-          data.swipe = '';
+          data.swipe = "";
         }
       }
     });
   };
 })(jQuery, window, document);
 /*
- *  jQuery Hosted Payments - v4.0.8
+ *  jQuery Hosted Payments - v4.0.9
  *
  *  Made by Erik Zettersten
  *  Under MIT License
@@ -8779,7 +8809,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 (function ($, window, document, undefined) {
   var pluginName = "hp",
       defaults = {};
-  defaults.version = "v4.0.8";
+  defaults.version = "v4.0.9";
   defaults.amount = 0;
   defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
   defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
