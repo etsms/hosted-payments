@@ -3131,18 +3131,26 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     };
     log("Replace plan request: ", requestPayload);
 
+    showLoader();
+
     try {
       makeRequest(requestPayload).then(function (replacePlanResponse) {
         log("Replace plan response: ", replacePlanResponse);
 
         if (replacePlanResponse.error !== undefined) {
+          showError("Could not replace payment plan.");
           callback(replacePlanResponse.error, null);
           return;
         }
 
         callback(null, replacePlanResponse.replacePlanResponse);
+        hideLoader();
+
       }, function (replacePlanResponseError) {
+
         var err = replacePlanResponseError.responseJSON;
+        
+        showError("Could not replace payment plan.");
         log("Replace plan error: ", err);
 
         if (err.error !== undefined) {
@@ -3153,6 +3161,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         callback(err, null);
       });
     } catch (err) {
+      showError("Could not replace payment plan.");
       log("Replace plan exception: ", err);
       callback(err, null);
     }
