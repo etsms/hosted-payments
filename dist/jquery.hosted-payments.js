@@ -3109,62 +3109,60 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   };
 
   var replacePaymentPlan = function replacePaymentPlan(customerToken, instrumentId, planId, callback) {
-    var accessToken = getSession().sessionToken;
+    setTimeout(function () {
+      var accessToken = getSession().sessionToken;
 
-    if (accessToken === undefined) {
-      throw new Error("AccessToken was invalid or unspecified.");
-    }
-
-    if (callback === undefined || typeof callback !== "function") {
-      throw new Error("A callback was not provided.");
-    }
-
-    var requestPayload = {
-      replacePlan: {
-        replacePlanRequest: {
-          token: accessToken,
-          customerToken: customerToken,
-          instrumentId: instrumentId,
-          planId: planId
-        }
+      if (accessToken === undefined) {
+        throw new Error("AccessToken was invalid or unspecified.");
       }
-    };
-    log("Replace plan request: ", requestPayload);
 
-    showLoader();
+      if (callback === undefined || typeof callback !== "function") {
+        throw new Error("A callback was not provided.");
+      }
 
-    try {
-      makeRequest(requestPayload).then(function (replacePlanResponse) {
-        log("Replace plan response: ", replacePlanResponse);
+      var requestPayload = {
+        replacePlan: {
+          replacePlanRequest: {
+            token: accessToken,
+            customerToken: customerToken,
+            instrumentId: instrumentId,
+            planId: planId
+          }
+        }
+      };
+      log("Replace plan request: ", requestPayload);
+      showLoader();
 
-        if (replacePlanResponse.error !== undefined) {
+      try {
+        makeRequest(requestPayload).then(function (replacePlanResponse) {
+          log("Replace plan response: ", replacePlanResponse);
+
+          if (replacePlanResponse.error !== undefined) {
+            showError("Could not replace payment plan.");
+            callback(replacePlanResponse.error, null);
+            return;
+          }
+
+          callback(null, replacePlanResponse.replacePlanResponse);
+          hideLoader();
+        }, function (replacePlanResponseError) {
+          var err = replacePlanResponseError.responseJSON;
           showError("Could not replace payment plan.");
-          callback(replacePlanResponse.error, null);
-          return;
-        }
+          log("Replace plan error: ", err);
 
-        callback(null, replacePlanResponse.replacePlanResponse);
-        hideLoader();
+          if (err.error !== undefined) {
+            callback(err.error, null);
+            return;
+          }
 
-      }, function (replacePlanResponseError) {
-
-        var err = replacePlanResponseError.responseJSON;
-        
+          callback(err, null);
+        });
+      } catch (err) {
         showError("Could not replace payment plan.");
-        log("Replace plan error: ", err);
-
-        if (err.error !== undefined) {
-          callback(err.error, null);
-          return;
-        }
-
+        log("Replace plan exception: ", err);
         callback(err, null);
-      });
-    } catch (err) {
-      showError("Could not replace payment plan.");
-      log("Replace plan exception: ", err);
-      callback(err, null);
-    }
+      }
+    }, 0);
   };
 
   var setPaymentService = function setPaymentService(serivceType) {
