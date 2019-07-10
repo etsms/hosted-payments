@@ -3108,12 +3108,17 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     };
   };
 
-  var replacePaymentPlan = function replacePaymentPlan(customerToken, instrumentId, planId, callback) {
+  var replacePaymentPlan = function replacePaymentPlan(instrumentId, planId, callback) {
     setTimeout(function () {
       var accessToken = getSession().sessionToken;
+      var customerToken = getCustomerToken();
 
-      if (accessToken === undefined) {
+      if (accessToken === null || accessToken === undefined) {
         throw new Error("AccessToken was invalid or unspecified.");
+      }
+
+      if (customerToken === null || customerToken === undefined) {
+        throw new Error("CustomerToken was invalid or unspecified.");
       }
 
       if (callback === undefined || typeof callback !== "function") {
@@ -3124,7 +3129,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         replacePlan: {
           replacePlanRequest: {
             token: accessToken,
-            customerToken: customerToken,
+            customerToken: getCustomerToken(),
             instrumentId: instrumentId,
             planId: planId
           }
@@ -8806,7 +8811,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   };
 })(jQuery, window, document);
 /*
- *  jQuery Hosted Payments - v4.0.9
+ *  jQuery Hosted Payments - v4.1.0
  *
  *  Made by Erik Zettersten
  *  Under MIT License
@@ -8816,7 +8821,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 (function ($, window, document, undefined) {
   var pluginName = "hp",
       defaults = {};
-  defaults.version = "v4.0.9";
+  defaults.version = "v4.1.0";
   defaults.amount = 0;
   defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
   defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
