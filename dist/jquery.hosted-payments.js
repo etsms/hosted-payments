@@ -3110,35 +3110,37 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   var replacePaymentPlan = function replacePaymentPlan(instrumentId, planId, callback) {
     setTimeout(function () {
-      var accessToken = getSession().sessionToken;
-      var customerToken = getCustomerToken();
-
-      if (accessToken === null || accessToken === undefined) {
-        throw new Error("AccessToken was invalid or unspecified.");
-      }
-
-      if (customerToken === null || customerToken === undefined) {
-        throw new Error("CustomerToken was invalid or unspecified.");
-      }
-
-      if (callback === undefined || typeof callback !== "function") {
-        throw new Error("A callback was not provided.");
-      }
-
-      var requestPayload = {
-        replacePlan: {
-          replacePlanRequest: {
-            token: accessToken,
-            customerToken: getCustomerToken(),
-            instrumentId: instrumentId,
-            planId: planId
-          }
-        }
-      };
-      log("Replace plan request: ", requestPayload);
-      showLoader();
 
       try {
+        var accessToken = getSession().sessionToken;
+        var customerToken = getCustomerToken();
+
+        if (accessToken === null || accessToken === undefined) {
+          throw new Error("hosted-payments.payment-plan.js : AccessToken was invalid or unspecified.");
+        }
+
+        if (customerToken === null || customerToken === undefined) {
+          throw new Error("hosted-payments.payment-plan.js : CustomerToken was invalid or unspecified.");
+        }
+
+        if (callback === undefined || typeof callback !== "function") {
+          throw new Error("hosted-payments.payment-plan.js : A callback was not provided.");
+        }
+
+        var requestPayload = {
+          replacePlan: {
+            replacePlanRequest: {
+              token: accessToken,
+              customerToken: getCustomerToken(),
+              instrumentId: instrumentId,
+              planId: planId
+            }
+          }
+        };
+        
+        log("Replace plan request: ", requestPayload);
+        showLoader();
+
         makeRequest(requestPayload).then(function (replacePlanResponse) {
           log("Replace plan response: ", replacePlanResponse);
 
@@ -5699,7 +5701,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       $this.handleNotify();
       var $el = $(this);
       setTimeout(function () {
-        if ($this.formData.name.length != 1) {
+        if ($this.formData.name && $this.formData.name.length != 1) {
           $el.val($this.formData.name);
         }
       });
@@ -8811,7 +8813,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   };
 })(jQuery, window, document);
 /*
- *  jQuery Hosted Payments - v4.1.0
+ *  jQuery Hosted Payments - v4.1.1
  *
  *  Made by Erik Zettersten
  *  Under MIT License
@@ -8821,7 +8823,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 (function ($, window, document, undefined) {
   var pluginName = "hp",
       defaults = {};
-  defaults.version = "v4.1.0";
+  defaults.version = "v4.1.1";
   defaults.amount = 0;
   defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
   defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
