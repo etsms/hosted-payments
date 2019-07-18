@@ -3150,7 +3150,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
             return;
           }
 
-          callback(null, replacePlanResponse.replacePlanResponse);
+          callback(null, replacePlanResponse);
           hideLoader();
         }, function (replacePlanResponseError) {
           var err = replacePlanResponseError.responseJSON;
@@ -8827,7 +8827,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   };
 })(jQuery, window, document);
 /*
- *  jQuery Hosted Payments - v4.1.3
+ *  jQuery Hosted Payments - v4.1.4
  *
  *  Made by Erik Zettersten
  *  Under MIT License
@@ -8837,7 +8837,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 (function ($, window, document, undefined) {
   var pluginName = "hp",
       defaults = {};
-  defaults.version = "v4.1.3";
+  defaults.version = "v4.1.4";
   defaults.amount = 0;
   defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
   defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
