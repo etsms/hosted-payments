@@ -4024,6 +4024,9 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   requestTypes.SIGNATURE = "signature";
   requestTypes.SIGNATURE_REQUEST = "signatureRequest";
   requestTypes.SIGNATURE_RESPONSE = "signatureResponse";
+  requestTypes.REPLACEPLAN = "replacePlan";
+  requestTypes.REPLACEPLAN_REQUEST = "replacePlanRequest";
+  requestTypes.REPLACEPLAN_RESPONSE = "replacePlanResponse";
 
   var getObjectResponseFromData = function getObjectResponseFromData(data) {
     var memberName = "";
@@ -4080,6 +4083,12 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       responseMemberName = requestTypes.SIGNATURE_RESPONSE;
     }
 
+    if (requestTypes.REPLACEPLAN in data) {
+      memberName = requestTypes.REPLACEPLAN;
+      requestMemberName = requestTypes.REPLACEPLAN_REQUEST;
+      responseMemberName = requestTypes.REPLACEPLAN_RESPONSE;
+    }
+
     if (requestTypes.CHARGE_RESPONSE in data) {
       memberName = requestTypes.CHARGE_RESPONSE;
       isResponse = true;
@@ -4117,6 +4126,11 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
     if (requestTypes.SIGNATURE_RESPONSE in data) {
       memberName = requestTypes.SIGNATURE_RESPONSE;
+      isResponse = true;
+    }
+
+    if (requestTypes.REPLACEPLAN_RESPONSE in data) {
+      memberName = requestTypes.REPLACEPLAN_RESPONSE;
       isResponse = true;
     }
 
@@ -8813,7 +8827,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   };
 })(jQuery, window, document);
 /*
- *  jQuery Hosted Payments - v4.1.2
+ *  jQuery Hosted Payments - v4.1.3
  *
  *  Made by Erik Zettersten
  *  Under MIT License
@@ -8823,7 +8837,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 (function ($, window, document, undefined) {
   var pluginName = "hp",
       defaults = {};
-  defaults.version = "v4.1.2";
+  defaults.version = "v4.1.3";
   defaults.amount = 0;
   defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
   defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
