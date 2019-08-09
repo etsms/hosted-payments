@@ -42,10 +42,10 @@ $scriptBlock = @{
 **
 "@
     "Restoring..."
-    dotnet restore
+    # dotnet restore
     
     "Building..."
-    dotnet build 
+    # dotnet build 
   }
   vb6 = {
 @"
