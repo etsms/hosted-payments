@@ -1,0 +1,71 @@
+pipeline {
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
+  }
+  agent {
+    label 'DATL-6CLCXK2'
+  }
+  parameters {
+    string(name: 'buildName', defaultValue: 'hosted-payments.js', description: 'what is the build/repo name?')
+    string(name: 'buildProject', defaultValue: 'EW', description: 'what is the project name?')
+    string(name: 'buildType', defaultValue: 'other', description: 'what is the project type (dotnetcore, vb6, or other)?')
+    string(name: 'version', defaultValue: '0.0.0', description: 'what is the project version?')
+    string(name: 'buildOutput', defaultValue: "", description: 'where does the project output its build content?')
+  }
+  stages {
+    stage('Setup') {
+      steps {
+        echo "Executing build for branch: ${branch_name}"
+        fileExists '/ci/build.ps1'
+        fileExists '/ci/test.ps1'
+        fileExists '/ci/archive.ps1'
+        fileExists '/ci/fortify-scan.ps1'
+        bat label: 'jenkins setup', script: '''
+          SET APPDATA=C:\\Users\\jenkins\\AppData\\Roaming
+          SET LOCALAPPDATA=C:\\Users\\jenkins\\AppData\\Local
+          SET USERPROFILE=C:\\Users\\jenkins'''
+      }
+    }
+    stage('Build') {
+      steps {
+        powershell label: 'build script', script: ".\\ci\\build.ps1 ${env.WORKSPACE} ${params.buildType} ${params.buildName} ${params.version}"
+      }
+    }
+    stage('Test') {
+      steps {
+        powershell label: 'test script', script: ".\\ci\\test.ps1 ${env.WORKSPACE} ${params.buildType} ${params.buildName} ${params.version}"
+      }
+    }
+    stage('Archive') {
+      steps {
+        powershell label: 'archive script', script: ".\\ci\\archive.ps1 ${env.WORKSPACE} ${params.buildType} ${params.buildName} ${params.version} ${params.buildOutput}"
+        archiveArtifacts artifacts: "/${params.buildName}*.zip", onlyIfSuccessful: true
+      }
+    }
+    stage('Scan') {
+      when { 
+        expression { return branch_name =~ /(release\/*|scan\/*)/ }
+      }
+      steps {
+        powershell label: 'scan script', script: ".\\ci\\fortify-scan.ps1 ${env.WORKSPACE} ${params.buildType} ${params.buildName} ${params.version}"
+      }
+    }
+  }
+  post {
+    always {
+      cleanWs()
+    }
+    success {
+      rocketSend channel: 'hosted-payments.js', message: "build #${env.BUILD_ID} for version ${params.version} was successful!"
+      rocketSend channel: 'emoney-jenkins', message: "build #${env.BUILD_ID} for version ${params.version} was successful!"
+    }
+    failure {
+      rocketSend channel: 'hosted-payments.js', message: "build #${env.BUILD_ID} for version ${params.version} was a failure..."
+      rocketSend channel: 'emoney-jenkins', message: "build #${env.BUILD_ID} for version ${params.version} was a failure..."
+    }
+    changed {
+      rocketSend channel: 'emoney-jenkins', message: "${params.buildName} pipeline was changed #${env.BUILD_ID}..."
+    }
+  }
+}
+
