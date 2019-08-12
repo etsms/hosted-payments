@@ -22,7 +22,6 @@ Starting archive.ps1...
 "@
 Set-Location $workspace
 
-
 $scriptBlock = @{
   dotnetcore = {
 @"
@@ -31,11 +30,16 @@ $scriptBlock = @{
 **
 "@
 
-    "Zipping Development files from here: $($buildName)\Debug"
-    "  To the destination: $($buildName)-v$($version)-Debug+$($env:BUILD_NUMBER).zip"
-    Compress-Archive `
-      -Path ".\Debug\*" `
-      -DestinationPath "$($buildName)-v$($version)-Debug+$($env:BUILD_NUMBER).zip"
+    $source = "$workspace\Debug"
+    $destination = "$($buildName)-v$($version)-Debug+$($env:BUILD_NUMBER).zip"
+
+    if (Test-Path $source) {
+      "Zipping Development files from here: $($buildName)\Debug"
+      "  To the destination: $($buildName)-v$($version)-Debug+$($env:BUILD_NUMBER).zip"
+      Compress-Archive `
+        -Path "$source\*" `
+        -DestinationPath $destination
+    }
   }
   other = {
 @"
@@ -44,11 +48,16 @@ $scriptBlock = @{
 **
 "@
 
-    "Zipping Development files from here: $workspace\$buildName\bin\Debug\*"
-    "  To the destination: $($buildName)-v$($version)-Debug+$($env:BUILD_NUMBER).zip"
-    Compress-Archive `
-      -Path "$workspace\$buildName\bin\Debug\*" `
-      -DestinationPath "$($buildName)-v$($version)-Debug+$($env:BUILD_NUMBER).zip"
+    $source = "$workspace\$buildName\bin\Debug"
+    $destination = "$($buildName)-v$($version)-Debug+$($env:BUILD_NUMBER).zip"
+
+    if (Test-Path $source) {
+      "Zipping Development files from here: $source\*"
+      "  To the destination: $destination"
+      Compress-Archive `
+        -Path "$source\*" `
+        -DestinationPath $destination
+    }
   }
   vb6 = {
 @"

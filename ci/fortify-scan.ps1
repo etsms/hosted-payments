@@ -4,13 +4,15 @@ param(
   [string]$buildType,
   [string]$buildId="hosted-payments.jsDEV",
   [string]$repo="hosted-payments.js",
-  [string]$scan="cloud",#choose 'cloud' (RECCOMENDED) for scanning in the cloud, 'local' for scanning on the Jenkins server
+  [ValidateSet("cloud","local")]
+  [string]$scan="cloud",#choose 'cloud' (RECCOMENDED) for scanning in the cloud, 'local' for scanning on a machine/server instead of fortify ssc
   [string]$appName="EMONEY_SUITE",#Application Name in SSC
   [string]$appVersion="EMONEY_SUITE.hp_js.ALL",#Application version in SSC
   [string]$FortifyURL="https://fortifyssc.us.bank-dns.com/ssc",
   [string]$FortifyTOKEN="af4a77f4-e4be-4beb-a986-6378eb71846b",#token generated in Adminsitration tab of Fortify SSC dashboard
-  [string]$fortifyBuildType="{{NEEDS SPECIFICATION}}",#choose from 'MSBuild', 'Default', or 'SQL' (what else can go here)
-  [string]$filesToScan="$repo\**\*"#default scans all files in the repo
+  [ValidateSet("MSBuild","Default", "SQL")]
+  [string]$fortifyBuildType="Default",#choose from 'MSBuild', 'Default', or 'SQL' (what else can go here)
+  [string]$filesToScan="$workspace\**\*"#default scans all files in the repo
 )
 
 @"
@@ -40,23 +42,6 @@ else {
 $env:PATH += $msBuildPath
 #set paths to any other compilers needed
 
-#error checking for variable names
-if (!($fortifyBuildType -eq "MSBuild" -Or $fortifyBuildType -eq "Default" -Or $fortifyBuildType -eq "SQL"))
-{
-  "Error: buildType variable needs to be 'MSBuild', 'Default', or 'SQL'"
-  "buildType currently is $fortifyBuildType"
-  return
-}
-
-if (!($scan -eq "cloud" -Or $scan -eq "local"))
-{
-  "Error: scan variable needs to be 'local' or 'scan'"
-  "scan currently is $scan"
-  return
-}
-
-### Fortify steps probably won't change ###
-
 #Build cleaning and translation based on the type of project
 if ($fortifyBuildType -eq "Default") { # this scans all files in the repo with no building
   "Initating clean and translation of a Default build..."
@@ -72,14 +57,12 @@ if ($fortifyBuildType -eq "MSBuild") { # compiles the project using MSBuild befo
   sourceanalyzer -b $buildId MSBuild $repo.sln /property:"Configuration=Debug" #expects repo.sln at the root of the project
 }
 
-
 if ($fortifyBuildType -eq "SQL"){ # default SQL translation from Fortify
   "Initating clean and translation of an SQL build..."
   sourceanalyzer -b $buildId -clean
   sourceanalyzer -b $buildId -Dcom.fortify.sca.fileextensions.sql=TSQL *.sql
   sourceanalyzer -b $buildId -show-files
 }
-
 
 # Scanning portion
 if ($scan -eq "cloud"){

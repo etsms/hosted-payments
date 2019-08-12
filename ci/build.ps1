@@ -62,10 +62,12 @@ $scriptBlock = @{
     $fileExists = $false
 
     $time = 30
-
-    while (!($fileExists)) {
-      "Waiting for .dll to compile - ($time seconds)"
-
+    $numberOfChecks = 0
+    while (($numberOfChecks -lt 20) -and !($fileExists)) {
+      "Waiting for .dll to compile - ($($time * $numberOfChecks) seconds)"
+      
+      $numberOfChecks += 1
+      
       Start-Sleep -Seconds $time
       
       $fileExists = (Test-Path ".\release\$($buildName)_v$($version).dll" -PathType Leaf)

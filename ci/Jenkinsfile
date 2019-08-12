@@ -39,7 +39,7 @@ pipeline {
     stage('Archive') {
       steps {
         powershell label: 'archive script', script: ".\\ci\\archive.ps1 ${env.WORKSPACE} ${params.buildType} ${params.buildName} ${params.version} ${params.buildOutput}"
-        archiveArtifacts artifacts: "/${params.buildName}*.zip", onlyIfSuccessful: true
+        archiveArtifacts artifacts: "/${params.buildName}*.zip", allowEmptyArchive: true, onlyIfSuccessful: true
       }
     }
     stage('Scan') {
