@@ -22,53 +22,18 @@ Starting archive.ps1...
 "@
 Set-Location $workspace
 
-$scriptBlock = @{
-  dotnetcore = {
 @"
 **
 ** running $buildType script block...
 **
 "@
 
-    $source = "$workspace\Debug"
-    $destination = "$($buildName)-v$($version)-Debug+$($env:BUILD_NUMBER).zip"
+$destination = "$($buildName)-v$($version)-Debug+$($env:BUILD_NUMBER).zip"
 
-    if (Test-Path $source) {
-      "Zipping Development files from here: $($buildName)\Debug"
-      "  To the destination: $($buildName)-v$($version)-Debug+$($env:BUILD_NUMBER).zip"
-      Compress-Archive `
-        -Path "$source\*" `
-        -DestinationPath $destination
-    }
-  }
-  other = {
-@"
-**
-** running $buildType script block...
-**
-"@
-
-    $source = "$workspace\$buildName\bin\Debug"
-    $destination = "$($buildName)-v$($version)-Debug+$($env:BUILD_NUMBER).zip"
-
-    if (Test-Path $source) {
-      "Zipping Development files from here: $source\*"
-      "  To the destination: $destination"
-      Compress-Archive `
-        -Path "$source\*" `
-        -DestinationPath $destination
-    }
-  }
-  vb6 = {
-@"
-**
-** running $buildType script block...
-**
-"@
-  }
+if (Test-Path $workspace) {
+  "Zipping Development files from here: $workspace"
+  "  To the destination: $destination"
+  Get-ChildItem $workspace -Exclude @("ci","cd") | Compress-Archive -DestinationPath $destination
 }
-
-Invoke-Command $scriptBlock.$buildType
-
 
 "Finishing archive.ps1..."
