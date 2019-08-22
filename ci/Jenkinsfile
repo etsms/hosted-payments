@@ -47,7 +47,16 @@ pipeline {
         expression { return branch_name =~ /(release\/*|scan\/*)/ }
       }
       steps {
-        powershell label: 'scan script', script: ".\\ci\\fortify-scan.ps1 ${env.WORKSPACE} ${params.buildType} ${params.buildName} ${params.version}"
+        build job: 'EMoney-Fortify', 
+        parameters: [
+          string(name: "buildId", value: "${params.buildName}-dev"),  
+          string(name: 'appName', value: 'EMONEY_SUITE'), 
+          string(name: 'appVersion', value: 'EMONEY_SUITE.hp_js.ALL'), 
+          string(name: "repo", value: "${params.buildName}"), 
+          string(name: "proj", value: "${params.buildProject}"), 
+          string(name: "branchName", value: "${branch_name}")
+        ] 
+        // powershell label: 'scan script', script: ".\\ci\\fortify-scan.ps1 ${env.WORKSPACE} ${params.buildType} ${params.buildName} ${params.version}"
       }
     }
   }
