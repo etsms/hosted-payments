@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <div id="ets" data-default-button-label="test"></div>
+    <div id="ets"  data-default-button-label="test"></div>
     <script>
 
         var transactionId = hp.Utils.generateGUID();
@@ -39,6 +39,8 @@
             disableAutocomplete: false,
             checkHttpsConnection: false
         });
+
+        console.log(hp.Utils.getCustomerInfo());
 
     </script>
 </body>
