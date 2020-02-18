@@ -4,7 +4,7 @@ Hosted Payments is a comprehensive, browser-based financial transaction toolset
 [![](https://data.jsdelivr.com/v1/package/gh/etsms/hosted-payments/badge)](https://www.jsdelivr.com/package/gh/etsms/hosted-payments)
 
 ## Get Started
-Visit https://www.etsms.com/docs/hosted-payments
+Visit https://elavonpayments.com/docs/hp/docs/
 
 ### Import Hosted Payments
 
@@ -76,4 +76,4 @@ Note: This package requires **jQuery v3** or greater. To obtain jQuery, please v
 
 
 ## Support
-Visit https://www.etsms.com/support
+Visit https://elavonpayments.com/support
