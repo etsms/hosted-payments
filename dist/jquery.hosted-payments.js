@@ -9331,6 +9331,7 @@ if (window._typeof === undefined) {
         hp.Utils.setPaymentInstrument();
         hp.Utils.signIn().then(function() {
             hp.Utils.setupPluginInstances($element);
+            hp.Utils.defaults.eventCallback($element);
         });
     };
 
