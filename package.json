@@ -43,7 +43,9 @@
         "gulp-serve": "*",
         "gulp-util": "^3.0.8",
         "gulp-watch": "^5.0.1",
-        "lodash.template": ">=4.5.0"
+        "lodash.template": ">=4.5.0",
+        "minimist": ">=1.2.3",
+        "kind-of": ">=6.0.3"
     },
     "repository": {
         "type": "git",
