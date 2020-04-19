@@ -2,7 +2,7 @@
 
 (function($, window, document, undefined) {
     var pluginName = "loyalty";
-    var version = "v4.2.4";
+    var version = "v4.2.5";
     var defaults = {
         baseUrl: "https://app.emoney.com/loyalty/",
         issuerId: null,
