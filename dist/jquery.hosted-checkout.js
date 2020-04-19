@@ -2,7 +2,7 @@
 
 (function ($, window, document, undefined) {
   var pluginName = "checkout";
-  var version = "v4.2.6";
+  var version = "v4.2.7";
   var defaults = {
     id: null,
     publicKey: null,
@@ -78,15 +78,15 @@
     }
 
     if (this.options.successRedirectUrl == null) {
-        this.options.successRedirectUrl = currentLocation.href + (currentLocation.hasQuery ? "&" : "?") + "checkoutAction=success" + this.options.id + "&checkoutIssuer=" + this.options.issuerId;
+        this.options.successRedirectUrl = currentLocation.href + (currentLocation.hasQuery ? "&" : "?") + "checkoutAction=success&checkoutId=" + this.options.id + "&checkoutIssuer=" + this.options.issuerId;
     }
 
     if (this.options.declineCallbackUrl == null) {
-        this.options.declineCallbackUrl = currentLocation.href + (currentLocation.hasQuery ? "&" : "?") + "checkoutAction=decline" + this.options.id + "&checkoutIssuer=" + this.options.issuerId;
+        this.options.declineCallbackUrl = currentLocation.href + (currentLocation.hasQuery ? "&" : "?") + "checkoutAction=decline&checkoutId=" + this.options.id + "&checkoutIssuer=" + this.options.issuerId;
     }
 
     if (this.options.errorRedirectUrl == null) {
-        this.options.errorRedirectUrl = currentLocation.href + (currentLocation.hasQuery ? "&" : "?") + "checkoutAction=error" + this.options.id + "&checkoutIssuer=" + this.options.issuerId;
+        this.options.errorRedirectUrl = currentLocation.href + (currentLocation.hasQuery ? "&" : "?") + "checkoutAction=error&checkoutId=" + this.options.id + "&checkoutIssuer=" + this.options.issuerId;
     }
 
     $.ajaxSetup({
