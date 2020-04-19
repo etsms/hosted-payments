@@ -1,14 +1,8 @@
 "use strict";
 
-require("core-js/modules/es6.regexp.to-string");
-
-require("core-js/modules/es6.date.to-string");
-
-require("core-js/modules/es6.object.to-string");
-
 (function($, window, document, undefined) {
     var pluginName = "checkout";
-    var version = "v4.0.6";
+    var version = "v4.2.1";
     var defaults = {
         id: null,
         publicKey: null,
