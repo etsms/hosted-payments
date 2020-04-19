@@ -2,7 +2,7 @@
 
 (function($, window, document, undefined) {
     var pluginName = "eshop";
-    var version = "v4.2.1";
+    var version = "v4.2.4";
     var defaults = {
         issuerId: null,
         apiKey: null,

@@ -2,7 +2,7 @@
 
 (function($, window, document, undefined) {
     var pluginName = "checkout";
-    var version = "v4.2.1";
+    var version = "v4.2.4";
     var defaults = {
         id: null,
         publicKey: null,

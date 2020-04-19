@@ -4211,7 +4211,7 @@ if (window._typeof === undefined) {
         }
 
         setTimeout(function() {
-            var template = ['<div class="hp-avs-prompt">', '<div class="hp-avs-prompt-container">', "<p>Billing Address</p>", '<div class="hp-avs-prompt-left">', '<label class="hp-label-avs" for="avsStreet">Address <span class="hp-avs-required">*</span></label>', '<div class="hp-input hp-input-avs hp-input-avs-street">', '<input placeholder="Street Address" value="' + hp.Utils.defaults.billingAddress.addressLine1 + '" name="avsStreet" id="avsStreet" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "address-line1") + '" type="text" pattern="\\d*">', "</div>", "</div>", '<div class="hp-avs-prompt-right">', '<div class="hp-pull-left">', '<label class="hp-label-avs" for="avsZip">City</label>', '<div class="hp-input hp-input-avs hp-input-avs-city">', '<input placeholder="City" name="city" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text">', "</div>", "</div>", '<div class="hp-pull-left">', '<label class="hp-label-avs" for="avsZip">State</label>', '<div class="hp-input hp-input-avs hp-input-avs-state">', '<input placeholder="State" name="state" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text">', "</div>", "</div>", '<div class="hp-pull-left">', '<label class="hp-label-avs" for="avsZip">Zip <span class="hp-avs-required">*</span></label>', '<div class="hp-input hp-input-avs hp-input-avs-zip">', '<input placeholder="Zipcode" value="' + hp.Utils.defaults.billingAddress.postalCode + '" name="avsZip" id="avsZip" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "postal-code") + '" type="text" pattern="\\d*">', "</div>", "</div>", "</div>", '<br class="hp-break" />', "<hr>", '<button class="hp-submit hp-avs-submit">' + hp.Utils.defaults.defaultButtonLabel + "</button>", hp.Utils.defaults.allowAvsSkip ? '<a class="hp-avs-skip" href="javascript:;">Skip \'Address Verification\'</a>' : "", "</div>", "</div>"].join("");
+            var template = ['<div class="hp-avs-prompt">', '<div class="hp-avs-prompt-container">', "<p>Billing Address</p>", '<div class="hp-avs-prompt-left">', '<label class="hp-label-avs" for="avsStreet">Address <span class="hp-avs-required">*</span></label>', '<div class="hp-input hp-input-avs hp-input-avs-street">', '<input placeholder="Street Address" value="' + hp.Utils.defaults.billingAddress.addressLine1 + '" name="avsStreet" id="avsStreet" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "address-line1") + '" type="text">', "</div>", "</div>", '<div class="hp-avs-prompt-right">', '<div class="hp-pull-left">', '<label class="hp-label-avs" for="avsZip">City</label>', '<div class="hp-input hp-input-avs hp-input-avs-city">', '<input placeholder="City" name="city" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text">', "</div>", "</div>", '<div class="hp-pull-left">', '<label class="hp-label-avs" for="avsZip">State</label>', '<div class="hp-input hp-input-avs hp-input-avs-state">', '<input placeholder="State" name="state" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text">', "</div>", "</div>", '<div class="hp-pull-left">', '<label class="hp-label-avs" for="avsZip">Zip <span class="hp-avs-required">*</span></label>', '<div class="hp-input hp-input-avs hp-input-avs-zip">', '<input placeholder="Zipcode" value="' + hp.Utils.defaults.billingAddress.postalCode + '" name="avsZip" id="avsZip" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "postal-code") + '" type="text" pattern="\\d*">', "</div>", "</div>", "</div>", '<br class="hp-break" />', "<hr>", '<button class="hp-submit hp-avs-submit">' + hp.Utils.defaults.defaultButtonLabel + "</button>", hp.Utils.defaults.allowAvsSkip ? '<a class="hp-avs-skip" href="javascript:;">Skip \'Address Verification\'</a>' : "", "</div>", "</div>"].join("");
             $element.prepend(template);
             var $avsPrompt = $element.find(".hp-avs-prompt"),
                 avsZipValue = "",
@@ -8934,7 +8934,7 @@ if (window._typeof === undefined) {
     };
 })(jQuery, window, document);
 /*
- *  jQuery Hosted Payments - v4.2.0
+ *  jQuery Hosted Payments - v4.2.4
  *
  *  Made by Erik Zettersten
  *  Under MIT License
@@ -8946,7 +8946,7 @@ if (window._typeof === undefined) {
     var pluginName = "hp";
     var defaults = {};
 
-    defaults.version = "v4.2.0";
+    defaults.version = "v4.2.4";
     defaults.amount = 0;
     defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
     defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
@@ -9331,6 +9331,7 @@ if (window._typeof === undefined) {
         hp.Utils.setPaymentInstrument();
         hp.Utils.signIn().then(function() {
             hp.Utils.setupPluginInstances($element);
+            hp.Utils.defaults.eventCallback($element);
         });
     };
 
