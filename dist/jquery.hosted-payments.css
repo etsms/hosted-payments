@@ -311,15 +311,18 @@
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
+  -moz-box-shadow: inset 0 0 0 4px #fff, 0 11px 25px -15px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow: inset 0 0 0 4px #fff, 0 11px 25px -15px rgba(0, 0, 0, 0.15);
+  box-shadow: inset 0 0 0 4px #fff, 0 11px 25px -15px rgba(0, 0, 0, 0.15);
   font-family: "Segoe UI Light", "Segoe UI", "Selawik Light", "Arial", sans-serif;
   font-weight: 400;
   font-size: 16px !important;
-  background: #FDFDFD;
+  background: linear-gradient(to bottom, #ffffff, #f0f0f0);
   max-width: 644px;
   position: relative;
   border: 1px solid #f3f3f3;
 }
-/* line 40, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 40, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 .hp div, .hp span, .hp applet, .hp object, .hp iframe,
 .hp h1, .hp h2, .hp h3, .hp h4, .hp h5, .hp h6, .hp p, .hp blockquote, .hp pre,
 .hp a, .hp abbr, .hp acronym, .hp address, .hp big, .hp cite, .hp code,
@@ -340,31 +343,31 @@
   font-size: 100%;
   vertical-align: baseline;
 }
-/* line 55, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 55, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 .hp table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-/* line 57, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 57, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 .hp caption, .hp th, .hp td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
-/* line 59, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 59, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 .hp q, .hp blockquote {
   quotes: none;
 }
-/* line 103, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 103, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 .hp q:before, .hp q:after, .hp blockquote:before, .hp blockquote:after {
   content: "";
   content: none;
 }
-/* line 61, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 61, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 .hp a img {
   border: none;
 }
-/* line 116, ../src/jquery.hosted-payments.sass */
+/* line 117, ../src/jquery.hosted-payments.sass */
 .hp hr {
   margin: 30px;
   padding: 0;
@@ -372,17 +375,17 @@
   height: 1px;
   background: #e4e6ea;
 }
-/* line 123, ../src/jquery.hosted-payments.sass */
+/* line 124, ../src/jquery.hosted-payments.sass */
 .hp .hide,
 .hp .hp-page {
   display: none !important;
 }
-/* line 127, ../src/jquery.hosted-payments.sass */
+/* line 128, ../src/jquery.hosted-payments.sass */
 .hp .show,
 .hp .hp-page-active {
   display: block !important;
 }
-/* line 131, ../src/jquery.hosted-payments.sass */
+/* line 132, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container,
 .hp .hp-error-container,
 .hp .hp-app-link-container {
@@ -393,7 +396,7 @@
   display: none;
   z-index: 10;
 }
-/* line 139, ../src/jquery.hosted-payments.sass */
+/* line 140, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container.hp-loading-container-active, .hp .hp-loading-container.hp-error-container-active, .hp .hp-loading-container.hp-page-active,
 .hp .hp-error-container.hp-loading-container-active,
 .hp .hp-error-container.hp-error-container-active,
@@ -413,13 +416,13 @@
   background: rgba(255, 255, 255, 0.93);
   border: 1px solid #9CA3B3;
 }
-/* line 150, ../src/jquery.hosted-payments.sass */
+/* line 151, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container.hp-error-container-active,
 .hp .hp-error-container.hp-error-container-active,
 .hp .hp-app-link-container.hp-error-container-active {
   min-height: 420px;
 }
-/* line 153, ../src/jquery.hosted-payments.sass */
+/* line 154, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container .hp-error-text,
 .hp .hp-error-container .hp-error-text,
 .hp .hp-app-link-container .hp-error-text {
@@ -428,7 +431,7 @@
   margin: 30px 0 0 30px;
   display: block;
 }
-/* line 159, ../src/jquery.hosted-payments.sass */
+/* line 160, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container .hp-error-disclaimer,
 .hp .hp-error-container .hp-error-disclaimer,
 .hp .hp-app-link-container .hp-error-disclaimer {
@@ -436,14 +439,14 @@
   margin: 30px;
 }
 @media screen and (max-width: 656px) {
-  /* line 159, ../src/jquery.hosted-payments.sass */
+  /* line 160, ../src/jquery.hosted-payments.sass */
   .hp .hp-loading-container .hp-error-disclaimer,
   .hp .hp-error-container .hp-error-disclaimer,
   .hp .hp-app-link-container .hp-error-disclaimer {
     width: auto;
   }
 }
-/* line 166, ../src/jquery.hosted-payments.sass */
+/* line 167, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container .hp-error-message,
 .hp .hp-error-container .hp-error-message,
 .hp .hp-app-link-container .hp-error-message {
@@ -451,7 +454,7 @@
   margin: 0 0 0 30px;
   color: #9CA3B3;
 }
-/* line 171, ../src/jquery.hosted-payments.sass */
+/* line 172, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container .hp-loading-text,
 .hp .hp-error-container .hp-loading-text,
 .hp .hp-app-link-container .hp-loading-text {
@@ -466,14 +469,14 @@
   color: #007aff;
 }
 @media screen and (max-width: 656px) {
-  /* line 171, ../src/jquery.hosted-payments.sass */
+  /* line 172, ../src/jquery.hosted-payments.sass */
   .hp .hp-loading-container .hp-loading-text,
   .hp .hp-error-container .hp-loading-text,
   .hp .hp-app-link-container .hp-loading-text {
     display: none;
   }
 }
-/* line 185, ../src/jquery.hosted-payments.sass */
+/* line 186, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container .hp-loading,
 .hp .hp-error-container .hp-loading,
 .hp .hp-app-link-container .hp-loading {
@@ -484,7 +487,7 @@
   margin-left: -28.66667px;
   margin-top: -35px;
 }
-/* line 197, ../src/jquery.hosted-payments.sass */
+/* line 198, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container .hp-loading span,
 .hp .hp-error-container .hp-loading span,
 .hp .hp-app-link-container .hp-loading span {
@@ -500,7 +503,7 @@
   -webkit-animation: hp-loading 0.4s infinite alternate;
   animation: hp-loading 0.4s infinite alternate;
 }
-/* line 208, ../src/jquery.hosted-payments.sass */
+/* line 209, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container .hp-loading span:nth-of-type(2),
 .hp .hp-error-container .hp-loading span:nth-of-type(2),
 .hp .hp-app-link-container .hp-loading span:nth-of-type(2) {
@@ -509,7 +512,7 @@
   -webkit-animation-delay: 0.2s;
   animation-delay: 0.2s;
 }
-/* line 212, ../src/jquery.hosted-payments.sass */
+/* line 213, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container .hp-loading span:nth-of-type(3),
 .hp .hp-error-container .hp-loading span:nth-of-type(3),
 .hp .hp-app-link-container .hp-loading span:nth-of-type(3) {
@@ -518,7 +521,7 @@
   -webkit-animation-delay: 0.4s;
   animation-delay: 0.4s;
 }
-/* line 216, ../src/jquery.hosted-payments.sass */
+/* line 217, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container .hp-loading span:nth-of-type(4),
 .hp .hp-error-container .hp-loading span:nth-of-type(4),
 .hp .hp-app-link-container .hp-loading span:nth-of-type(4) {
@@ -527,7 +530,7 @@
   -webkit-animation-delay: 0.6s;
   animation-delay: 0.6s;
 }
-/* line 221, ../src/jquery.hosted-payments.sass */
+/* line 222, ../src/jquery.hosted-payments.sass */
 .hp .hp-submit {
   margin: 0;
   padding: 0;
@@ -552,25 +555,25 @@
   margin-top: 8px;
 }
 @media screen and (max-width: 656px) {
-  /* line 221, ../src/jquery.hosted-payments.sass */
+  /* line 222, ../src/jquery.hosted-payments.sass */
   .hp .hp-submit {
     font-size: 12px;
   }
 }
-/* line 243, ../src/jquery.hosted-payments.sass */
+/* line 244, ../src/jquery.hosted-payments.sass */
 .hp .hp-submit:focus, .hp .hp-submit:hover {
   outline: none;
   background: #0f82ff;
   border: 1px solid #0069db;
 }
-/* line 248, ../src/jquery.hosted-payments.sass */
+/* line 249, ../src/jquery.hosted-payments.sass */
 .hp .hp-submit:active {
   -moz-box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.25);
   -webkit-box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.25);
   box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.25);
   top: 1px;
 }
-/* line 252, ../src/jquery.hosted-payments.sass */
+/* line 253, ../src/jquery.hosted-payments.sass */
 .hp .hp-submit:disabled {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);
   opacity: 0.7;
@@ -580,37 +583,37 @@
   top: 1px;
   cursor: default;
 }
-/* line 258, ../src/jquery.hosted-payments.sass */
+/* line 259, ../src/jquery.hosted-payments.sass */
 .hp .hp-submit.hp-submit-danger {
   background: #eb3b4c;
   border: 1px solid #e91f32;
   text-shadow: 0 1px 1px #e91f32;
 }
-/* line 263, ../src/jquery.hosted-payments.sass */
+/* line 264, ../src/jquery.hosted-payments.sass */
 .hp .hp-submit.hp-submit-danger:focus, .hp .hp-submit.hp-submit-danger:hover {
   outline: none;
   background: #ed4958;
   border: 1px solid #ea283b;
 }
-/* line 268, ../src/jquery.hosted-payments.sass */
+/* line 269, ../src/jquery.hosted-payments.sass */
 .hp .hp-submit.hp-submit-success {
   background: #57be00;
   border: 1px solid #49a000;
   text-shadow: 0 1px 1px #49a000;
 }
-/* line 273, ../src/jquery.hosted-payments.sass */
+/* line 274, ../src/jquery.hosted-payments.sass */
 .hp .hp-submit.hp-submit-success:focus, .hp .hp-submit.hp-submit-success:hover {
   outline: none;
   background: #5ece00;
   border: 1px solid #4eaa00;
 }
-/* line 278, ../src/jquery.hosted-payments.sass */
+/* line 279, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-wrapper {
   margin: 24px auto 0;
   position: relative;
   max-width: 400px;
 }
-/* line 283, ../src/jquery.hosted-payments.sass */
+/* line 284, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-code-message {
   background: #fff;
   padding: 10px 14px;
@@ -619,60 +622,60 @@
   border-top: 3px solid #FF2400;
   font-size: 100% !important;
 }
-/* line 291, ../src/jquery.hosted-payments.sass */
+/* line 292, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-code-message strong {
   font-weight: bold !important;
 }
 @media screen and (max-width: 656px) {
-  /* line 283, ../src/jquery.hosted-payments.sass */
+  /* line 284, ../src/jquery.hosted-payments.sass */
   .hp .hp-input-code-message {
     margin-top: 0 !important;
   }
 }
-/* line 297, ../src/jquery.hosted-payments.sass */
+/* line 298, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-container {
   overflow: hidden;
   position: relative;
   display: inline-block;
 }
-/* line 302, ../src/jquery.hosted-payments.sass */
+/* line 303, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-container.hp-input-container-date {
   *zoom: 1;
   overflow: visible;
   width: 50%;
 }
-/* line 38, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .hp .hp-input-container.hp-input-container-date:after {
   content: "";
   display: table;
   clear: both;
 }
 @media screen and (max-width: 656px) {
-  /* line 302, ../src/jquery.hosted-payments.sass */
+  /* line 303, ../src/jquery.hosted-payments.sass */
   .hp .hp-input-container.hp-input-container-date {
     width: 100%;
     margin-top: 6px;
   }
 }
-/* line 311, ../src/jquery.hosted-payments.sass */
+/* line 312, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-container.hp-input-container-date .hp-input-month,
 .hp .hp-input-container.hp-input-container-date .hp-input-year {
   overflow: visible;
   *zoom: 1;
 }
-/* line 38, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .hp .hp-input-container.hp-input-container-date .hp-input-month:after,
 .hp .hp-input-container.hp-input-container-date .hp-input-year:after {
   content: "";
   display: table;
   clear: both;
 }
-/* line 316, ../src/jquery.hosted-payments.sass */
+/* line 317, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-container.hp-input-container-date .hp-input-month.hp-input-active,
 .hp .hp-input-container.hp-input-container-date .hp-input-year.hp-input-active {
-  background: #fffceb;
+  background: linear-gradient(to bottom, #f1cd00 -54%, #fffceb 6px);
 }
-/* line 320, ../src/jquery.hosted-payments.sass */
+/* line 321, ../src/jquery.hosted-payments.sass */
 .hp .hp-input {
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
@@ -690,7 +693,7 @@
   position: relative;
   height: 48px;
 }
-/* line 331, ../src/jquery.hosted-payments.sass */
+/* line 332, ../src/jquery.hosted-payments.sass */
 .hp .hp-input > input,
 .hp .hp-input > select {
   margin: 0;
@@ -699,60 +702,65 @@
   position: relative;
   display: block;
   border: 0 none;
-  background: #f3f3f3;
+  background: linear-gradient(to bottom, #a9a9a9 -54%, #ffffff 6px);
   min-height: 100%;
   font-size: 16px;
   font-family: "Segoe UI Light", "Segoe UI", "Selawik Light", "Arial", sans-serif;
   text-indent: 14px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
 }
-/* line 343, ../src/jquery.hosted-payments.sass */
+/* line 345, ../src/jquery.hosted-payments.sass */
 .hp .hp-input > input:hover, .hp .hp-input > input:focus,
 .hp .hp-input > select:hover,
 .hp .hp-input > select:focus {
   outline: none;
 }
-/* line 348, ../src/jquery.hosted-payments.sass */
+/* line 350, ../src/jquery.hosted-payments.sass */
 .hp .hp-input > input:hover, .hp .hp-input > input:focus {
-  background: #fffceb;
+  background: linear-gradient(to bottom, #f1cd00 -54%, #fffceb 6px);
   outline: none;
 }
-/* line 354, ../src/jquery.hosted-payments.sass */
+/* line 356, ../src/jquery.hosted-payments.sass */
 .hp .hp-input > select:hover, .hp .hp-input > select:focus {
   cursor: pointer;
+  background: linear-gradient(to bottom, #f1cd00 -54%, #fffceb 6px);
+  outline: none;
 }
-/* line 358, ../src/jquery.hosted-payments.sass */
+/* line 362, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-fullname {
   width: 100%;
 }
-/* line 361, ../src/jquery.hosted-payments.sass */
+/* line 365, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-fullname.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
-/* line 365, ../src/jquery.hosted-payments.sass */
+/* line 369, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-fullname > input {
   width: 100%;
 }
-/* line 368, ../src/jquery.hosted-payments.sass */
+/* line 372, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-email, .hp .hp-input.hp-input-password, .hp .hp-input.hp-input-code {
   width: 100%;
   display: block;
   margin: 7px auto 0;
 }
-/* line 373, ../src/jquery.hosted-payments.sass */
+/* line 377, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-email.hp-error, .hp .hp-input.hp-input-password.hp-error, .hp .hp-input.hp-input-code.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
-/* line 377, ../src/jquery.hosted-payments.sass */
+/* line 381, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-email > input, .hp .hp-input.hp-input-password > input, .hp .hp-input.hp-input-code > input {
   width: 100%;
 }
-/* line 380, ../src/jquery.hosted-payments.sass */
+/* line 384, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-left {
   -moz-border-radius: 4px 0 0 4px;
   -webkit-border-radius: 4px;
@@ -761,18 +769,18 @@
   float: left;
   border-right: 0 none;
 }
-/* line 386, ../src/jquery.hosted-payments.sass */
+/* line 390, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-left.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
-/* line 390, ../src/jquery.hosted-payments.sass */
+/* line 394, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-left > input {
   width: 100%;
 }
-/* line 393, ../src/jquery.hosted-payments.sass */
+/* line 397, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-right {
   -moz-border-radius: 0 4px 4px 0;
   -webkit-border-radius: 0;
@@ -780,18 +788,18 @@
   width: 50%;
   float: left;
 }
-/* line 398, ../src/jquery.hosted-payments.sass */
+/* line 402, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-right.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
-/* line 402, ../src/jquery.hosted-payments.sass */
+/* line 406, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-right > input {
   width: 100%;
 }
-/* line 405, ../src/jquery.hosted-payments.sass */
+/* line 409, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-cc {
   width: 50%;
   -moz-border-radius: 4px 0 0 4px;
@@ -800,7 +808,7 @@
   border-right: 0 none;
 }
 @media screen and (max-width: 656px) {
-  /* line 405, ../src/jquery.hosted-payments.sass */
+  /* line 409, ../src/jquery.hosted-payments.sass */
   .hp .hp-input.hp-input-cc {
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
@@ -809,19 +817,19 @@
     border: 1px solid #9CA3B3;
   }
 }
-/* line 416, ../src/jquery.hosted-payments.sass */
+/* line 420, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-cc > input,
 .hp .hp-input.hp-input-cc > select {
   width: 100%;
 }
-/* line 420, ../src/jquery.hosted-payments.sass */
+/* line 424, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-cc.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
-/* line 424, ../src/jquery.hosted-payments.sass */
+/* line 428, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-name {
   width: 50%;
   -moz-border-radius: 0 4px 4px 0;
@@ -829,7 +837,7 @@
   border-radius: 0 4px 4px 0;
 }
 @media screen and (max-width: 656px) {
-  /* line 424, ../src/jquery.hosted-payments.sass */
+  /* line 428, ../src/jquery.hosted-payments.sass */
   .hp .hp-input.hp-input-name {
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
@@ -838,19 +846,19 @@
     border: 1px solid #9CA3B3;
   }
 }
-/* line 434, ../src/jquery.hosted-payments.sass */
+/* line 438, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-name > input,
 .hp .hp-input.hp-input-name > select {
   width: 100%;
 }
-/* line 438, ../src/jquery.hosted-payments.sass */
+/* line 442, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-name.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
-/* line 442, ../src/jquery.hosted-payments.sass */
+/* line 446, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-month {
   width: 49%;
   margin-top: 0;
@@ -861,28 +869,32 @@
   border-right: 0 none;
 }
 @media screen and (max-width: 656px) {
-  /* line 442, ../src/jquery.hosted-payments.sass */
+  /* line 446, ../src/jquery.hosted-payments.sass */
   .hp .hp-input.hp-input-month {
     width: 50%;
   }
 }
-/* line 449, ../src/jquery.hosted-payments.sass */
+/* line 453, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-month:hover, .hp .hp-input.hp-input-month:focus, .hp .hp-input.hp-input-month:active {
-  background: #fffceb;
+  background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSItNTQlIiBzdG9wLWNvbG9yPSIjZjFjZDAwIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZmZmY2ViIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g') 6px;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(-54%, #f1cd00), color-stop(100%, #fffceb)) 6px;
+  background: -moz-linear-gradient(top, #f1cd00 -54%, #fffceb) 6px;
+  background: -webkit-linear-gradient(top, #f1cd00 -54%, #fffceb) 6px;
+  background: linear-gradient(to bottom, #f1cd00 -54%, #fffceb) 6px;
 }
-/* line 458, ../src/jquery.hosted-payments.sass */
+/* line 462, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-month > input,
 .hp .hp-input.hp-input-month > select {
   width: 100%;
 }
-/* line 462, ../src/jquery.hosted-payments.sass */
+/* line 466, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-month.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
-/* line 466, ../src/jquery.hosted-payments.sass */
+/* line 470, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-year {
   width: 49%;
   margin-top: 0;
@@ -892,55 +904,59 @@
   border-radius: 0 4px 4px 0;
 }
 @media screen and (max-width: 656px) {
-  /* line 466, ../src/jquery.hosted-payments.sass */
+  /* line 470, ../src/jquery.hosted-payments.sass */
   .hp .hp-input.hp-input-year {
     width: 50%;
   }
 }
-/* line 473, ../src/jquery.hosted-payments.sass */
+/* line 477, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-year:hover, .hp .hp-input.hp-input-year:focus, .hp .hp-input.hp-input-year:active {
-  background: #fffceb;
+  background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSItNTQlIiBzdG9wLWNvbG9yPSIjZjFjZDAwIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZmZmY2ViIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g') 6px;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(-54%, #f1cd00), color-stop(100%, #fffceb)) 6px;
+  background: -moz-linear-gradient(top, #f1cd00 -54%, #fffceb) 6px;
+  background: -webkit-linear-gradient(top, #f1cd00 -54%, #fffceb) 6px;
+  background: linear-gradient(to bottom, #f1cd00 -54%, #fffceb) 6px;
 }
-/* line 481, ../src/jquery.hosted-payments.sass */
+/* line 485, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-year > input,
 .hp .hp-input.hp-input-year > select {
   width: 100%;
 }
-/* line 485, ../src/jquery.hosted-payments.sass */
+/* line 489, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-year.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
-/* line 489, ../src/jquery.hosted-payments.sass */
+/* line 493, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-cvv {
   width: 50%;
 }
 @media screen and (max-width: 656px) {
-  /* line 489, ../src/jquery.hosted-payments.sass */
+  /* line 493, ../src/jquery.hosted-payments.sass */
   .hp .hp-input.hp-input-cvv {
     width: 100%;
     margin-top: 6px;
   }
 }
-/* line 496, ../src/jquery.hosted-payments.sass */
+/* line 500, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-cvv > input,
 .hp .hp-input.hp-input-cvv > select {
   width: 100%;
 }
-/* line 500, ../src/jquery.hosted-payments.sass */
+/* line 504, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-cvv.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
-/* line 504, ../src/jquery.hosted-payments.sass */
+/* line 508, ../src/jquery.hosted-payments.sass */
 .hp.hp-active {
   display: block;
 }
-/* line 507, ../src/jquery.hosted-payments.sass */
+/* line 511, ../src/jquery.hosted-payments.sass */
 .hp h3 {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -950,7 +966,7 @@
   text-transform: uppercase;
   padding: 17px 11px 15px;
 }
-/* line 514, ../src/jquery.hosted-payments.sass */
+/* line 518, ../src/jquery.hosted-payments.sass */
 .hp h2 {
   color: #2E3037;
   font-size: 30px;
@@ -959,7 +975,7 @@
   text-transform: none;
   position: relative;
 }
-/* line 522, ../src/jquery.hosted-payments.sass */
+/* line 526, ../src/jquery.hosted-payments.sass */
 .hp .text-muted {
   color: #9CA3B3;
   font-size: 17px;
@@ -969,7 +985,7 @@
   margin: 14px 0;
   line-height: normal;
 }
-/* line 531, ../src/jquery.hosted-payments.sass */
+/* line 535, ../src/jquery.hosted-payments.sass */
 .hp a,
 .hp a:link,
 .hp a:focus,
@@ -977,14 +993,14 @@
   color: #007aff;
   text-decoration: none;
 }
-/* line 538, ../src/jquery.hosted-payments.sass */
+/* line 542, ../src/jquery.hosted-payments.sass */
 .hp a:hover,
 .hp a:link:hover,
 .hp a:focus:hover,
 .hp a:visited:hover {
   color: #0062cc;
 }
-/* line 541, ../src/jquery.hosted-payments.sass */
+/* line 545, ../src/jquery.hosted-payments.sass */
 .hp .hp-row {
   *zoom: 1;
   -moz-box-sizing: border-box;
@@ -996,101 +1012,107 @@
   background: transparent;
   border: 1px solid #9CA3B3;
 }
-/* line 38, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .hp .hp-row:after {
   content: "";
   display: table;
   clear: both;
 }
-/* line 548, ../src/jquery.hosted-payments.sass */
+/* line 552, ../src/jquery.hosted-payments.sass */
 .hp .hp-row:after {
   clear: both;
 }
-/* line 551, ../src/jquery.hosted-payments.sass */
+/* line 555, ../src/jquery.hosted-payments.sass */
 .hp .hp-pull-left {
   float: left;
 }
-/* line 554, ../src/jquery.hosted-payments.sass */
+/* line 558, ../src/jquery.hosted-payments.sass */
 .hp .hp-pull-right {
   float: right;
 }
-/* line 557, ../src/jquery.hosted-payments.sass */
+/* line 561, ../src/jquery.hosted-payments.sass */
 .hp .hp-clearfix {
   overflow: hidden;
   *zoom: 1;
 }
-/* line 560, ../src/jquery.hosted-payments.sass */
+/* line 564, ../src/jquery.hosted-payments.sass */
 .hp .hp-col {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   float: left;
 }
-/* line 564, ../src/jquery.hosted-payments.sass */
+/* line 568, ../src/jquery.hosted-payments.sass */
 .hp .hp-break {
   overflow: hidden;
   *zoom: 1;
   clear: both;
 }
-/* line 568, ../src/jquery.hosted-payments.sass */
+/* line 572, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left {
   width: 185px;
   margin: 0 0 13px 0;
   min-height: 460px;
 }
 @media screen and (max-width: 656px) {
-  /* line 568, ../src/jquery.hosted-payments.sass */
+  /* line 572, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-left {
     width: 64px;
     margin: 0;
   }
 }
-/* line 577, ../src/jquery.hosted-payments.sass */
+/* line 581, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left p {
   color: #9CA3B3;
 }
-/* line 580, ../src/jquery.hosted-payments.sass */
+/* line 584, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav {
   list-style: none;
+  -moz-box-shadow: 0 2px 0 white;
+  -webkit-box-shadow: 0 2px 0 white;
+  box-shadow: 0 2px 0 white;
 }
 @media screen and (max-width: 656px) {
-  /* line 580, ../src/jquery.hosted-payments.sass */
+  /* line 584, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-left .hp-nav {
     margin: 0;
   }
-  /* line 586, ../src/jquery.hosted-payments.sass */
+  /* line 591, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-left .hp-nav li.hp-type {
     margin: 0;
     text-align: center;
   }
-  /* line 590, ../src/jquery.hosted-payments.sass */
+  /* line 595, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-left .hp-nav li.hp-type a {
     text-indent: 0px !important;
     border-bottom: 1px solid #9CA3B3;
     padding: 14px;
   }
-  /* line 595, ../src/jquery.hosted-payments.sass */
+  /* line 600, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-left .hp-nav li.hp-type a > img {
     display: block;
     position: static !important;
     margin: 0 auto;
   }
 }
-/* line 604, ../src/jquery.hosted-payments.sass */
+/* line 609, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type.hp-active a {
   background: #f3f3f3;
+  -moz-box-shadow: inset -4px 0 #007aff;
+  -webkit-box-shadow: inset -4px 0 #007aff;
+  box-shadow: inset -4px 0 #007aff;
 }
-/* line 607, ../src/jquery.hosted-payments.sass */
+/* line 613, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type:last-child a {
   border-bottom: 1px solid #9CA3B3;
 }
-/* line 610, ../src/jquery.hosted-payments.sass */
+/* line 616, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type:first-child a {
   -moz-border-radius: 3px 0 0 0;
   -webkit-border-radius: 3px;
   border-radius: 3px 0 0 0;
 }
-/* line 613, ../src/jquery.hosted-payments.sass */
+/* line 619, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type a {
   position: relative;
   display: block;
@@ -1101,71 +1123,72 @@
   margin: 0;
   border-bottom: 1px solid #e9e9e9;
   text-indent: 46px;
+  background: white;
 }
 @media screen and (max-width: 656px) {
-  /* line 613, ../src/jquery.hosted-payments.sass */
+  /* line 619, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-left .hp-nav .hp-type a {
     overflow: hidden !important;
     height: auto !important;
   }
 }
-/* line 629, ../src/jquery.hosted-payments.sass */
+/* line 636, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type a span {
   display: block;
 }
 @media screen and (max-width: 656px) {
-  /* line 613, ../src/jquery.hosted-payments.sass */
+  /* line 619, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-left .hp-nav .hp-type a {
     height: 22px;
     line-height: 22px;
     text-indent: 22px;
   }
-  /* line 638, ../src/jquery.hosted-payments.sass */
+  /* line 645, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-left .hp-nav .hp-type a img {
     margin: 0 !important;
   }
 }
 @media screen and (max-width: 656px) {
-  /* line 643, ../src/jquery.hosted-payments.sass */
+  /* line 650, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-left .hp-nav .hp-type a span {
     display: none;
   }
 }
-/* line 646, ../src/jquery.hosted-payments.sass */
+/* line 653, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type a img {
   width: 32px;
   position: absolute;
   left: 7px;
   top: 50%;
 }
-/* line 652, ../src/jquery.hosted-payments.sass */
+/* line 659, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type.hp-transvault img {
   width: auto;
   height: 28px;
   margin-top: -14px;
   margin-left: 4px;
 }
-/* line 658, ../src/jquery.hosted-payments.sass */
+/* line 665, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type.hp-cc img {
   width: 30px;
   margin-top: -11px;
 }
-/* line 662, ../src/jquery.hosted-payments.sass */
+/* line 669, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type.hp-gc img {
   width: 31px;
   margin-top: -9px;
   left: 8px;
 }
-/* line 667, ../src/jquery.hosted-payments.sass */
+/* line 674, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type.hp-bank img {
   margin-top: -9px;
 }
-/* line 670, ../src/jquery.hosted-payments.sass */
+/* line 677, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type.hp-code img {
   width: 33px;
   margin-top: -12px;
 }
-/* line 674, ../src/jquery.hosted-payments.sass */
+/* line 681, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure {
   width: 160px;
   position: absolute;
@@ -1174,12 +1197,12 @@
   font-size: 11px;
 }
 @media screen and (max-width: 656px) {
-  /* line 674, ../src/jquery.hosted-payments.sass */
+  /* line 681, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-left .hp-secure {
     display: none;
   }
 }
-/* line 684, ../src/jquery.hosted-payments.sass */
+/* line 691, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-secure-icon,
 .hp .hp-col-left .hp-secure .hp-secure-bottom {
   overflow: hidden;
@@ -1188,27 +1211,28 @@
   padding: 12px;
   border: 1px solid #6C5893;
 }
-/* line 691, ../src/jquery.hosted-payments.sass */
+/* line 698, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-secure-icon {
   margin-top: 15px;
   border-radius: 8px 8px 0 0;
   border-bottom: 0 none;
   color: #6C5893;
   font-weight: bold;
+  background: white;
 }
-/* line 698, ../src/jquery.hosted-payments.sass */
+/* line 706, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-secure-icon img {
   width: 30px;
   float: left;
   display: block;
 }
-/* line 703, ../src/jquery.hosted-payments.sass */
+/* line 711, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-secure-icon span {
   float: left;
   display: block;
   margin: 0 10px 0;
 }
-/* line 708, ../src/jquery.hosted-payments.sass */
+/* line 716, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-secure-bottom {
   background: #6C5893;
   color: #fff;
@@ -1220,23 +1244,23 @@
   box-shadow: inset 0px 2px 5px #604d86;
   border-top: 1px solid #3d2173;
 }
-/* line 717, ../src/jquery.hosted-payments.sass */
+/* line 725, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-secure-bottom > div {
   font-weight: bold;
 }
-/* line 720, ../src/jquery.hosted-payments.sass */
+/* line 728, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-secure-bottom .hp-secure-bottom-left {
   float: left;
 }
-/* line 723, ../src/jquery.hosted-payments.sass */
+/* line 731, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-secure-bottom .hp-secure-bottom-right {
   float: right;
 }
-/* line 726, ../src/jquery.hosted-payments.sass */
+/* line 734, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-cards {
   width: 185px;
 }
-/* line 729, ../src/jquery.hosted-payments.sass */
+/* line 737, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-cards-icons {
   width: 37px;
   display: inline-block;
@@ -1244,24 +1268,24 @@
   margin-bottom: 3px;
   margin-top: 0;
 }
-/* line 736, ../src/jquery.hosted-payments.sass */
+/* line 744, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-version-refund {
   color: #EA2D3F;
 }
-/* line 740, ../src/jquery.hosted-payments.sass */
+/* line 748, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right {
   width: 100%;
   margin-left: -185px;
   padding-left: 185px;
 }
 @media screen and (max-width: 656px) {
-  /* line 740, ../src/jquery.hosted-payments.sass */
+  /* line 748, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right {
     margin-left: -64px;
     padding-left: 64px;
   }
 }
-/* line 749, ../src/jquery.hosted-payments.sass */
+/* line 757, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -1269,43 +1293,46 @@
   display: none;
   border-left: 1px solid #9CA3B3;
   padding: 22px 13px;
-  min-height: 470px;
+  min-height: 473px;
+  -moz-box-shadow: inset 1px 0 white;
+  -webkit-box-shadow: inset 1px 0 white;
+  box-shadow: inset 1px 0 white;
 }
 @media screen and (max-width: 656px) {
-  /* line 749, ../src/jquery.hosted-payments.sass */
+  /* line 757, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-content {
     padding-top: 14px;
   }
 }
-/* line 759, ../src/jquery.hosted-payments.sass */
+/* line 768, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content.hp-content-active {
   display: block;
 }
-/* line 764, ../src/jquery.hosted-payments.sass */
+/* line 773, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-card-mastercard .hp-card-visual {
   background: url("https://cdn.rawgit.com/etsms/06c4abb2eb1d2f96d92b6892d2a43f27/raw/0460bf4278b8edef61e8473f714d7ae4b47ba278/card-mastercard-icon.svg");
 }
-/* line 769, ../src/jquery.hosted-payments.sass */
+/* line 778, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-card-jcb .hp-card-visual {
   background: url("https://cdn.rawgit.com/etsms/b8a752ef3d34b40d53b1b562a776c47b/raw/89ca2d943aca117b027c59e471a2043c36e88340/card-jcb-icon.svg");
 }
-/* line 774, ../src/jquery.hosted-payments.sass */
+/* line 783, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-card-visa .hp-card-visual {
   background: url("https://cdn.rawgit.com/etsms/1571151ad4067e266702bb4c3c871c02/raw/77a2144d53e4ed1877e2b08013f458811b0f4779/card-visa-icon.svg");
 }
-/* line 779, ../src/jquery.hosted-payments.sass */
+/* line 788, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-card-discover .hp-card-visual {
   background: url("https://cdn.rawgit.com/etsms/182b0859a18bc74343497b6976eb3927/raw/91d44da3831c30bfe03abd1ae0eb8822f64260f4/card-discover-icon.svg");
 }
-/* line 784, ../src/jquery.hosted-payments.sass */
+/* line 793, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-card-amex .hp-card-visual {
   background: url("https://cdn.rawgit.com/etsms/0767ed5dcb6f4be147a8bf4415369878/raw/16db87eb2570886baff4bc7a1b3c9f9af73c8a24/card-amex-icon.svg");
 }
-/* line 789, ../src/jquery.hosted-payments.sass */
+/* line 798, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-card-emoney .hp-card-visual {
   background: url("https://cdn.rawgit.com/etsms/e727d5dc9d0f07040bc8386396c2c3f2/raw/68040df254f3ac57234dff942e5fac5f38846a84/card-emoney-icon.svg");
 }
-/* line 793, ../src/jquery.hosted-payments.sass */
+/* line 802, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -1322,7 +1349,7 @@
   margin: 0 auto 0;
 }
 @media screen and (max-width: 656px) {
-  /* line 793, ../src/jquery.hosted-payments.sass */
+  /* line 802, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual {
     -moz-background-size: cover !important;
     -o-background-size: cover !important;
@@ -1331,7 +1358,7 @@
   }
 }
 @media screen and (max-width: 420px) {
-  /* line 793, ../src/jquery.hosted-payments.sass */
+  /* line 802, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual {
     -moz-border-radius: 12px;
     -webkit-border-radius: 12px;
@@ -1344,35 +1371,35 @@
     width: 100%;
     font-size: 14px;
   }
-  /* line 817, ../src/jquery.hosted-payments.sass */
+  /* line 826, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual .hp-card-visual-name {
     bottom: 34px !important;
     font-size: 14px !important;
     left: 25px !important;
   }
-  /* line 822, ../src/jquery.hosted-payments.sass */
+  /* line 831, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual .hp-card-visual-number {
     font-size: 14px !important;
     top: 50px !important;
     left: 25px !important;
   }
-  /* line 827, ../src/jquery.hosted-payments.sass */
+  /* line 836, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry-label-alt {
     display: none !important;
   }
-  /* line 830, ../src/jquery.hosted-payments.sass */
+  /* line 839, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry {
     bottom: 16px !important;
     right: -3px !important;
     width: 75px !important;
   }
-  /* line 835, ../src/jquery.hosted-payments.sass */
+  /* line 844, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry-value {
     font-size: 14px !important;
   }
 }
 @media screen and (max-width: 500px) {
-  /* line 793, ../src/jquery.hosted-payments.sass */
+  /* line 802, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual {
     -moz-border-radius: 12px;
     -webkit-border-radius: 12px;
@@ -1385,34 +1412,34 @@
     height: 127px;
     width: 100%;
   }
-  /* line 845, ../src/jquery.hosted-payments.sass */
+  /* line 854, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual .hp-card-visual-name {
     bottom: 34px !important;
     font-size: 14px !important;
     left: 25px !important;
   }
-  /* line 850, ../src/jquery.hosted-payments.sass */
+  /* line 859, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual .hp-card-visual-number {
     font-size: 14px !important;
     top: 50px !important;
     left: 25px !important;
   }
-  /* line 855, ../src/jquery.hosted-payments.sass */
+  /* line 864, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry-label-alt {
     display: none !important;
   }
-  /* line 858, ../src/jquery.hosted-payments.sass */
+  /* line 867, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry {
     bottom: 16px !important;
     right: -3px !important;
     width: 75px !important;
   }
-  /* line 863, ../src/jquery.hosted-payments.sass */
+  /* line 872, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry-value {
     font-size: 14px !important;
   }
 }
-/* line 866, ../src/jquery.hosted-payments.sass */
+/* line 875, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual > div {
   -moz-transition: all 150ms linear;
   -o-transition: all 150ms linear;
@@ -1425,7 +1452,7 @@
   font-weight: 600;
   color: #fff;
 }
-/* line 875, ../src/jquery.hosted-payments.sass */
+/* line 884, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual .hp-card-visual-logo {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
@@ -1436,12 +1463,12 @@
   top: 30px;
   right: 0px;
 }
-/* line 881, ../src/jquery.hosted-payments.sass */
+/* line 890, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual .hp-card-visual-number {
   top: 100px;
   left: 35px;
 }
-/* line 885, ../src/jquery.hosted-payments.sass */
+/* line 894, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual .hp-card-visual-name {
   font-size: 23px;
   bottom: 50px;
@@ -1449,13 +1476,13 @@
   font-weight: 400;
   text-transform: uppercase;
 }
-/* line 892, ../src/jquery.hosted-payments.sass */
+/* line 901, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry {
   bottom: 45px;
   right: 15px;
   width: 75px;
 }
-/* line 897, ../src/jquery.hosted-payments.sass */
+/* line 906, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry-label,
 .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry-label-alt {
   position: absolute;
@@ -1463,60 +1490,60 @@
   text-transform: uppercase;
   font-weight: 400;
 }
-/* line 904, ../src/jquery.hosted-payments.sass */
+/* line 913, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry-label {
   top: -40px;
 }
-/* line 907, ../src/jquery.hosted-payments.sass */
+/* line 916, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry-label-alt {
   width: 45px;
   text-align: right;
   left: -52px;
   top: -28px;
 }
-/* line 913, ../src/jquery.hosted-payments.sass */
+/* line 922, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry-value {
   position: absolute;
   font-size: 22px;
   text-transform: uppercase;
   top: -30px;
 }
-/* line 919, ../src/jquery.hosted-payments.sass */
+/* line 928, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual.hp-card-visual-flat {
-  -moz-box-shadow: none;
-  -webkit-box-shadow: none;
-  box-shadow: none;
+  -moz-box-shadow: inset 0 0 0 1px #9CA3B3;
+  -webkit-box-shadow: inset 0 0 0 1px #9CA3B3;
+  box-shadow: inset 0 0 0 1px #9CA3B3;
   background: #f3f3f5;
   border: 0 none;
 }
-/* line 925, ../src/jquery.hosted-payments.sass */
+/* line 934, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual.hp-card-visual-flat > div {
   color: #9CA3B3;
 }
-/* line 928, ../src/jquery.hosted-payments.sass */
+/* line 937, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual.hp-card-visual-flat.hp-card-visual-flat-active {
   border-width: 2px;
   border-color: #6ce56c;
 }
-/* line 935, ../src/jquery.hosted-payments.sass */
+/* line 944, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual.hp-card-visual-flat.hp-card-visual-flat-active > div {
   text-shadow: none;
   color: #6ce56c;
 }
-/* line 939, ../src/jquery.hosted-payments.sass */
+/* line 948, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-transvault {
   position: relative;
 }
-/* line 942, ../src/jquery.hosted-payments.sass */
+/* line 951, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-transvault .hp-transvault-visual-image {
   text-align: center;
   margin-top: 24px;
 }
-/* line 946, ../src/jquery.hosted-payments.sass */
+/* line 955, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-transvault .hp-transvault-visual-image img.event {
   width: 106px;
 }
-/* line 949, ../src/jquery.hosted-payments.sass */
+/* line 958, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-transvault .hp-submit-refresh {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
   opacity: 0.8;
@@ -1533,15 +1560,15 @@
   width: 24px;
   background: rgba(80, 175, 0, 0.1);
 }
-/* line 962, ../src/jquery.hosted-payments.sass */
+/* line 971, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-transvault .hp-submit-refresh:hover {
   background: rgba(80, 175, 0, 0.2);
 }
-/* line 965, ../src/jquery.hosted-payments.sass */
+/* line 974, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-transvault .hp-submit-refresh img.hp-submit-refresh-img {
   width: 100%;
 }
-/* line 968, ../src/jquery.hosted-payments.sass */
+/* line 977, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-transvault .hp-submit {
   position: absolute;
   bottom: 45px;
@@ -1551,7 +1578,7 @@
   margin: 0 0 0 -170px;
   width: 340px;
 }
-/* line 977, ../src/jquery.hosted-payments.sass */
+/* line 986, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-transvault p.hp-input-transvault-message {
   width: 100%;
   font-size: 2em;
@@ -1559,13 +1586,13 @@
   color: #007aff;
   margin-top: -14px;
 }
-/* line 986, ../src/jquery.hosted-payments.sass */
+/* line 995, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-gc hr {
   margin: 0;
   margin-bottom: 20px;
   position: relative;
 }
-/* line 991, ../src/jquery.hosted-payments.sass */
+/* line 1000, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-gc hr:before {
   content: "OR";
   position: absolute;
@@ -1579,24 +1606,24 @@
   padding: 5px;
   margin-left: -11px;
 }
-/* line 1006, ../src/jquery.hosted-payments.sass */
+/* line 1015, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-gc .hp-input-group .hp-input-gc {
   margin-bottom: 20px;
 }
-/* line 1009, ../src/jquery.hosted-payments.sass */
+/* line 1018, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-gc .hp-input-group .hp-submit {
   width: auto;
   margin: 6px 0 0 0;
 }
-/* line 1013, ../src/jquery.hosted-payments.sass */
+/* line 1022, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-gc .hp-input-group .hp-input {
   width: 250px;
 }
-/* line 1016, ../src/jquery.hosted-payments.sass */
+/* line 1025, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-gc .hp-input-group .hp-input input {
   width: 250px;
 }
-/* line 1019, ../src/jquery.hosted-payments.sass */
+/* line 1028, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -1607,7 +1634,7 @@
   margin: 0 auto;
 }
 @media screen and (max-width: 656px) {
-  /* line 1019, ../src/jquery.hosted-payments.sass */
+  /* line 1028, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-bank-visual {
     -moz-transform:  scale(0.49, 0.49) rotateZ(0) translate(50%, 0) skew(0, 0);
     -ms-transform:  scale(0.49, 0.49) rotateZ(0) translate(50%, 0) skew(0, 0);
@@ -1621,7 +1648,7 @@
   }
 }
 @media screen and (max-width: 420px) {
-  /* line 1019, ../src/jquery.hosted-payments.sass */
+  /* line 1028, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-bank-visual {
     -moz-transform:  scale(0.49, 0.49) rotateZ(0) translate(0, 0) skew(0, 0);
     -ms-transform:  scale(0.49, 0.49) rotateZ(0) translate(0, 0) skew(0, 0);
@@ -1633,42 +1660,42 @@
     transform-origin: left bottom;
   }
 }
-/* line 1035, ../src/jquery.hosted-payments.sass */
+/* line 1044, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual > div {
   font-family: "Bitstream Vera Sans Mono", Consolas, Courier, monospace;
   position: absolute;
   font-size: 20px;
   color: #f3f3f3;
 }
-/* line 1041, ../src/jquery.hosted-payments.sass */
+/* line 1050, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual .hp-bank-visual-image {
   background: url("https://cdn.rawgit.com/etsms/c8f6b08c4daeb7e44e95bc7546437589/raw/42e8585705d2f917d0aa27f64fe42b589cb4fb12/card-ach-icon.svg");
   height: 173px;
   width: 400px;
 }
-/* line 1046, ../src/jquery.hosted-payments.sass */
+/* line 1055, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual .hp-bank-visual-name {
   top: 37px;
   left: 23px;
   text-transform: uppercase;
 }
-/* line 1051, ../src/jquery.hosted-payments.sass */
+/* line 1060, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual .hp-bank-visual-left {
   bottom: 31px;
   left: 26px;
   font-size: 16px;
 }
-/* line 1056, ../src/jquery.hosted-payments.sass */
+/* line 1065, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual .hp-bank-visual-right {
   bottom: 31px;
   left: 186px;
   font-size: 16px;
 }
-/* line 1063, ../src/jquery.hosted-payments.sass */
+/* line 1072, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank .slider-container {
   padding-top: 30px;
 }
-/* line 1072, ../src/jquery.hosted-payments.sass */
+/* line 1081, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank p,
 .hp .hp-col-right .hp-content-cc p,
 .hp .hp-col-right .hp-content-emoney p,
@@ -1679,7 +1706,7 @@
   text-align: center;
   margin: 24px 0 0;
 }
-/* line 1078, ../src/jquery.hosted-payments.sass */
+/* line 1087, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank h4,
 .hp .hp-col-right .hp-content-cc h4,
 .hp .hp-col-right .hp-content-emoney h4,
@@ -1689,7 +1716,7 @@
   color: #8e96a8;
   text-align: center;
 }
-/* line 1083, ../src/jquery.hosted-payments.sass */
+/* line 1092, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank .callout,
 .hp .hp-col-right .hp-content-cc .callout,
 .hp .hp-col-right .hp-content-emoney .callout,
@@ -1700,7 +1727,7 @@
   margin: 14px 0;
 }
 @media screen and (max-width: 656px) {
-  /* line 1083, ../src/jquery.hosted-payments.sass */
+  /* line 1092, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-content-bank .callout,
   .hp .hp-col-right .hp-content-cc .callout,
   .hp .hp-col-right .hp-content-emoney .callout,
@@ -1709,7 +1736,7 @@
     display: none;
   }
 }
-/* line 1091, ../src/jquery.hosted-payments.sass */
+/* line 1100, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank .callout p,
 .hp .hp-col-right .hp-content-cc .callout p,
 .hp .hp-col-right .hp-content-emoney .callout p,
@@ -1718,7 +1745,7 @@
   margin: 0 0 17px;
   padding: 0;
 }
-/* line 1095, ../src/jquery.hosted-payments.sass */
+/* line 1104, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank .hp-code-title,
 .hp .hp-col-right .hp-content-cc .hp-code-title,
 .hp .hp-col-right .hp-content-emoney .hp-code-title,
@@ -1731,7 +1758,7 @@
   margin: 20px 0;
 }
 @media screen and (max-width: 656px) {
-  /* line 1095, ../src/jquery.hosted-payments.sass */
+  /* line 1104, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-content-bank .hp-code-title,
   .hp .hp-col-right .hp-content-cc .hp-code-title,
   .hp .hp-col-right .hp-content-emoney .hp-code-title,
@@ -1740,7 +1767,7 @@
     margin: 5px 0 15px;
   }
 }
-/* line 1105, ../src/jquery.hosted-payments.sass */
+/* line 1114, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank .hp-input-cvv-image,
 .hp .hp-col-right .hp-content-cc .hp-input-cvv-image,
 .hp .hp-col-right .hp-content-emoney .hp-input-cvv-image,
@@ -1753,7 +1780,7 @@
   top: 7px;
   right: 7px;
 }
-/* line 1115, ../src/jquery.hosted-payments.sass */
+/* line 1124, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank.hp-content-card-amex .hp-input-cvv-image,
 .hp .hp-col-right .hp-content-cc.hp-content-card-amex .hp-input-cvv-image,
 .hp .hp-col-right .hp-content-emoney.hp-content-card-amex .hp-input-cvv-image,
@@ -1761,7 +1788,7 @@
 .hp .hp-col-right .hp-content-code.hp-content-card-amex .hp-input-cvv-image {
   background: url("https://cdn.rawgit.com/etsms/c3d3179f1eaec8cfa7572e0641b767d0/raw/f98391c6432913e6f7eaeb789fb1d47b56522bfe/card-cvv-icon.svg");
 }
-/* line 1118, ../src/jquery.hosted-payments.sass */
+/* line 1127, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt {
   -moz-transition: all 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
   -o-transition: all 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -1785,22 +1812,22 @@
   border: 1px solid #9CA3B3;
   opacity: 0;
 }
-/* line 1131, ../src/jquery.hosted-payments.sass */
+/* line 1140, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt.active {
   opacity: 1;
 }
-/* line 1134, ../src/jquery.hosted-payments.sass */
+/* line 1143, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt-container {
   padding: 30px;
 }
-/* line 1137, ../src/jquery.hosted-payments.sass */
+/* line 1146, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt-container > p {
   font-size: 2.7em;
   color: #007aff;
   display: block;
   margin-bottom: 15px;
 }
-/* line 1143, ../src/jquery.hosted-payments.sass */
+/* line 1152, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt-container hr {
   margin: 0 0 30px 0;
   padding: 0;
@@ -1808,105 +1835,125 @@
   height: 1px;
   background: #e4e6ea;
 }
-/* line 1150, ../src/jquery.hosted-payments.sass */
+/* line 1159, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt-container a {
   text-align: center;
   display: block;
   margin: 15px auto;
 }
 @media screen and (max-width: 656px) {
-  /* line 1157, ../src/jquery.hosted-payments.sass */
+  /* line 1166, ../src/jquery.hosted-payments.sass */
   .hp .hp-avs-prompt-container > p {
     font-size: 18px;
     margin-bottom: 7px;
   }
-  /* line 1161, ../src/jquery.hosted-payments.sass */
+  /* line 1170, ../src/jquery.hosted-payments.sass */
   .hp .hp-avs-prompt-container hr {
     margin: 3px 0 12px;
   }
-  /* line 1164, ../src/jquery.hosted-payments.sass */
+  /* line 1173, ../src/jquery.hosted-payments.sass */
   .hp .hp-avs-prompt-container a {
     margin: 7px auto;
     font-size: 12px;
   }
 }
-/* line 1169, ../src/jquery.hosted-payments.sass */
+/* line 1178, ../src/jquery.hosted-payments.sass */
 .hp .hp-label-avs {
   display: block;
-  font-size: 1.8em;
-  color: #9CA3B3;
+  font-size: 1.3em;
+  color: #23262d;
 }
 @media screen and (max-width: 656px) {
-  /* line 1169, ../src/jquery.hosted-payments.sass */
+  /* line 1178, ../src/jquery.hosted-payments.sass */
   .hp .hp-label-avs {
     font-size: 14px;
   }
 }
-/* line 1177, ../src/jquery.hosted-payments.sass */
+/* line 1186, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt-right,
 .hp .hp-avs-prompt-left {
   display: block;
   margin-bottom: 15px;
 }
 @media screen and (max-width: 656px) {
-  /* line 1177, ../src/jquery.hosted-payments.sass */
+  /* line 1186, ../src/jquery.hosted-payments.sass */
   .hp .hp-avs-prompt-right,
   .hp .hp-avs-prompt-left {
     margin-bottom: 4px;
   }
 }
-/* line 1185, ../src/jquery.hosted-payments.sass */
+/* line 1194, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt-right {
   margin-bottom: 0;
 }
-/* line 1188, ../src/jquery.hosted-payments.sass */
+/* line 1197, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-street {
   width: 100%;
 }
-/* line 1191, ../src/jquery.hosted-payments.sass */
+/* line 1200, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-street > input {
   width: 100%;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
 }
-/* line 1194, ../src/jquery.hosted-payments.sass */
+/* line 1204, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-state {
   width: 112px;
 }
-/* line 1197, ../src/jquery.hosted-payments.sass */
+/* line 1207, ../src/jquery.hosted-payments.sass */
+.hp .hp-input-avs-state > input {
+  width: 100%;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+/* line 1211, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-zip {
   width: 144px;
 }
-/* line 1200, ../src/jquery.hosted-payments.sass */
+/* line 1214, ../src/jquery.hosted-payments.sass */
+.hp .hp-input-avs-zip > input {
+  width: 100%;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+/* line 1218, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-city {
   width: 234px;
 }
-/* line 1203, ../src/jquery.hosted-payments.sass */
+/* line 1221, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-city > input {
   width: 100%;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
 }
-/* line 1206, ../src/jquery.hosted-payments.sass */
+/* line 1225, ../src/jquery.hosted-payments.sass */
 .hp .hp-pull-left {
   float: left;
   margin-right: 30px;
   margin-bottom: 30px;
 }
 @media screen and (max-width: 656px) {
-  /* line 1206, ../src/jquery.hosted-payments.sass */
+  /* line 1225, ../src/jquery.hosted-payments.sass */
   .hp .hp-pull-left {
     margin-bottom: 4px;
   }
 }
-/* line 1214, ../src/jquery.hosted-payments.sass */
+/* line 1233, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-required {
   color: #EA2D3F;
 }
 
-/* line 1217, ../src/jquery.hosted-payments.sass */
+/* line 1236, ../src/jquery.hosted-payments.sass */
 .hp-form-emoney,
 .hp-form-code {
   position: relative;
 }
 
-/* line 1223, ../src/jquery.hosted-payments.sass */
+/* line 1242, ../src/jquery.hosted-payments.sass */
 .hp-form-success .hp-success-visual {
   background: url("https://cdn.rawgit.com/etsms/ca4ba00053a7b640c57fb9a89b364360/raw/9b754b7db0e60c8d020cead418e2376b94f6223d/success-icon.svg");
   font: 0/0 serif;
@@ -1917,25 +1964,25 @@
   margin: 85px auto 30px;
 }
 @media screen and (max-width: 656px) {
-  /* line 1232, ../src/jquery.hosted-payments.sass */
+  /* line 1251, ../src/jquery.hosted-payments.sass */
   .hp-form-success .hp-success-visual {
     margin-top: 15px;
   }
-  /* line 1235, ../src/jquery.hosted-payments.sass */
+  /* line 1254, ../src/jquery.hosted-payments.sass */
   .hp-form-success .text-muted {
     display: none;
   }
 }
 
-/* line 1238, ../src/jquery.hosted-payments.sass */
+/* line 1257, ../src/jquery.hosted-payments.sass */
 .hp-form-transvault-app-link {
   height: 84px;
 }
-/* line 1241, ../src/jquery.hosted-payments.sass */
+/* line 1260, ../src/jquery.hosted-payments.sass */
 .hp-form-transvault-app-link .hp-row {
   display: none;
 }
-/* line 1244, ../src/jquery.hosted-payments.sass */
+/* line 1263, ../src/jquery.hosted-payments.sass */
 .hp-form-transvault-app-link .hp-submit-redirect {
   padding: 16px 0;
   display: block;
@@ -1945,7 +1992,7 @@
 }
 
 @media screen and (max-width: 656px) {
-  /* line 1252, ../src/jquery.hosted-payments.sass */
+  /* line 1271, ../src/jquery.hosted-payments.sass */
   .hp.hp-form .hp-submit.hp-submit-danger {
     bottom: 4vh;
     left: 0;
@@ -1953,12 +2000,12 @@
     width: 80%;
   }
 
-  /* line 1258, ../src/jquery.hosted-payments.sass */
+  /* line 1277, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-content-transvault p.hp-input-transvault-message {
     font-size: 1rem;
   }
 
-  /* line 1262, ../src/jquery.hosted-payments.sass */
+  /* line 1281, ../src/jquery.hosted-payments.sass */
   .hp-form-transvault .hp-content-transvault,
   .hp-form-transvault .hp-col-left {
     min-height: 280px !important;

@@ -9,7 +9,7 @@
   height: 0;
   overflow: hidden;
 }
-/* line 40, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 40, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 #hp-eshop-wrapper div, #hp-eshop-wrapper span, #hp-eshop-wrapper applet, #hp-eshop-wrapper object, #hp-eshop-wrapper iframe,
 #hp-eshop-wrapper h1, #hp-eshop-wrapper h2, #hp-eshop-wrapper h3, #hp-eshop-wrapper h4, #hp-eshop-wrapper h5, #hp-eshop-wrapper h6, #hp-eshop-wrapper p, #hp-eshop-wrapper blockquote, #hp-eshop-wrapper pre,
 #hp-eshop-wrapper a, #hp-eshop-wrapper abbr, #hp-eshop-wrapper acronym, #hp-eshop-wrapper address, #hp-eshop-wrapper big, #hp-eshop-wrapper cite, #hp-eshop-wrapper code,
@@ -30,27 +30,27 @@
   font-size: 100%;
   vertical-align: baseline;
 }
-/* line 55, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 55, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 #hp-eshop-wrapper table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-/* line 57, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 57, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 #hp-eshop-wrapper caption, #hp-eshop-wrapper th, #hp-eshop-wrapper td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
-/* line 59, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 59, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 #hp-eshop-wrapper q, #hp-eshop-wrapper blockquote {
   quotes: none;
 }
-/* line 103, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 103, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 #hp-eshop-wrapper q:before, #hp-eshop-wrapper q:after, #hp-eshop-wrapper blockquote:before, #hp-eshop-wrapper blockquote:after {
   content: "";
   content: none;
 }
-/* line 61, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 61, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 #hp-eshop-wrapper a img {
   border: none;
 }

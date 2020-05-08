@@ -21,12 +21,6 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-if (window._typeof === undefined) {
-    window._typeof = function(arg) {
-        return typeof arg;
-    };
-}
-
 (function($, window, document, undefined) {
     "use strict"; // Get a regular interval for drawing to the screen
 
@@ -35,11 +29,10 @@ if (window._typeof === undefined) {
             window.setTimeout(callback, 1000 / 60);
         };
     }();
+    
     /*
      * Plugin Constructor
      */
-
-
     var pluginName = "jqSignature",
         defaults = {
             lineColor: "#222222",
@@ -246,7 +239,7 @@ if (window._typeof === undefined) {
     $.fn[pluginName] = function(options) {
         var args = arguments;
 
-        if (options === undefined || (typeof options === "undefined" ? "undefined" : _typeof(options)) === "object") {
+        if (options === undefined || (typeof options === "undefined" ? "undefined" : typeof(options)) === "object") {
             return this.each(function() {
                 if (!$.data(this, "plugin_" + pluginName)) {
                     $.data(this, "plugin_" + pluginName, new Signature(this, options));
@@ -1430,7 +1423,7 @@ if (window._typeof === undefined) {
                 return url;
             }
 
-            if ((typeof qs === "undefined" ? "undefined" : _typeof(qs)) === "object") {
+            if ((typeof qs === "undefined" ? "undefined" : typeof(qs)) === "object") {
                 return url + appender + $.param(qs);
             }
 
@@ -4605,8 +4598,7 @@ if (window._typeof === undefined) {
         }
 
         return false;
-    }; // Validate Credit Card Data
-
+    };
 
     var validateCreditCardData = function validateCreditCardData(formData, callback) {
         var errors = [];
@@ -8646,7 +8638,7 @@ if (window._typeof === undefined) {
     $.payment.validateCardExpiry = function(month, year) {
         var currentTime, expiry, _ref;
 
-        if ((typeof month === "undefined" ? "undefined" : _typeof(month)) === "object" && "month" in month) {
+        if ((typeof month === "undefined" ? "undefined" : typeof(month)) === "object" && "month" in month) {
             _ref = month, month = _ref.month, year = _ref.year;
         }
 
@@ -8942,10 +8934,8 @@ if (window._typeof === undefined) {
 
 
 (function($, window, document, undefined) {
-
     var pluginName = "hp";
     var defaults = {};
-
     defaults.version = "v4.2.7";
     defaults.amount = 0;
     defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
@@ -8961,6 +8951,7 @@ if (window._typeof === undefined) {
     defaults.defaultButtonLabel = "Submit Payment";
     defaults.paymentTypeOrder = [0, 1];
     defaults.paymentService = hp.PaymentService.EFT; // EFT, EMONEY, TEST
+
     defaults.defaultAccountNumberCharacters = "&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;";
     defaults.defaultRoutingNumberCharacters = "&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;";
     defaults.correlationId = "";
@@ -8971,7 +8962,9 @@ if (window._typeof === undefined) {
     defaults.transactionId = "";
     defaults.apiKey = "";
     defaults.paymentType = hp.PaymentType.CHARGE; // "CHARGE", "REFUND", "CREATE_INSTRUMENT"
+
     defaults.entryType = hp.EntryType.KEYED_CARD_NOT_PRESENT; // "DEVICE_CAPTURED", "KEYED_CARD_PRESENT", "KEYED_CARD_NOT_PRESENT"
+
     defaults.billingAddress = {};
     defaults.billingAddress.addressLine1 = "";
     defaults.billingAddress.postalCode = "";

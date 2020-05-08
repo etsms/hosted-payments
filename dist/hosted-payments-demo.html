@@ -37,7 +37,11 @@
             surchargeFee: 2,
             convenienceFee: 1,
             disableAutocomplete: false,
-            checkHttpsConnection: false
+            checkHttpsConnection: false,
+            allowAvsSkip: false,
+            promptForAvs: true,
+            swapAchInputs: true,
+            paymentTypeOrder: [0,1,2,3]
         });
 
         console.log(hp.Utils.getCustomerInfo());

@@ -15,7 +15,7 @@
   height: 58px;
   width: 260px;
 }
-/* line 40, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 40, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 .hp-button-wrap div, .hp-button-wrap span, .hp-button-wrap applet, .hp-button-wrap object, .hp-button-wrap iframe,
 .hp-button-wrap h1, .hp-button-wrap h2, .hp-button-wrap h3, .hp-button-wrap h4, .hp-button-wrap h5, .hp-button-wrap h6, .hp-button-wrap p, .hp-button-wrap blockquote, .hp-button-wrap pre,
 .hp-button-wrap a, .hp-button-wrap abbr, .hp-button-wrap acronym, .hp-button-wrap address, .hp-button-wrap big, .hp-button-wrap cite, .hp-button-wrap code,
@@ -36,27 +36,27 @@
   font-size: 100%;
   vertical-align: baseline;
 }
-/* line 55, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 55, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 .hp-button-wrap table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-/* line 57, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 57, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 .hp-button-wrap caption, .hp-button-wrap th, .hp-button-wrap td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
-/* line 59, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 59, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 .hp-button-wrap q, .hp-button-wrap blockquote {
   quotes: none;
 }
-/* line 103, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 103, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 .hp-button-wrap q:before, .hp-button-wrap q:after, .hp-button-wrap blockquote:before, .hp-button-wrap blockquote:after {
   content: "";
   content: none;
 }
-/* line 61, ../../../../../Ruby22-x64/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 61, ../../../../../Ruby26-x64/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 .hp-button-wrap a img {
   border: none;
 }
