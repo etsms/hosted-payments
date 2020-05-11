@@ -4354,6 +4354,10 @@
             hp.Utils.setSession(options.apiKey, true);
         }
 
+        if (typeof options.alternativeSubmitButton !== "undefined") {
+            hp.Utils.setAlternativeSubmitButton(options.alternativeSubmitButton);
+        }
+
         hp.Utils.log("Merging plugin defaults with newly provided options...");
         hp.Utils.defaults = jQuery.extend({}, hp.Utils.defaults, options);
         element.data(options);
@@ -4845,14 +4849,19 @@
         var deferred = jQuery.Deferred(); // Handle instance
 
         hp.Utils.createInstance($element, function(instance) {
+            
             // The same elements across many instances
-            var $this = $element,
-                $submit = $this.find(".hp-submit"),
-                $all = $this.find(".hp-input"),
-                clearInputs = $.noop();
+            var $this = $element;
+
             hp.Utils.checkHttpsConnection();
             instance.init();
             instance.attachEvents();
+
+            // hides old submit button
+            if (hp.Utils.hasAlternativeSubmitButton()) {
+                $this.find(".hp-submit").not(".hp-submit-danger").css("visibility", "hidden");
+            }
+
             /*
              * Transvault
              *      Methods for handling swipes through a terminal
@@ -4918,21 +4927,53 @@
         });
         return deferred;
     };
+    
     /*
      * Build APP url
      *  Sample: "emmerchant://{{paymentType}}/{{merchantCredentials}}?transactionId={{transactionId}}&token={{token}}&browserId={{browserId}}&correlationId={{correlationId}}&amount={{amount}}&entryType={{entryType}}"
      */
-
-
     var buildEMoneyMobileAppUrl = function buildEMoneyMobileAppUrl(paymentType, merchantCredentials, transactionId, token, browserId, correlationId, amount, hostUrl, entryType) {
         var url = hp.Utils.defaults.emoneyMobileAppUrl;
         return url.replace("{{paymentType}}", paymentType.toLowerCase()).replace("{{merchantCredentials}}", encodeURIComponent(merchantCredentials)).replace("{{transactionId}}", transactionId).replace("{{token}}", token).replace("{{browserId}}", browserId).replace("{{correlationId}}", encodeURIComponent(correlationId)).replace("{{amount}}", amount).replace("{{url}}", encodeURIComponent(hostUrl)).replace("{{entryType}}", encodeURIComponent(entryType));
     };
+
+    var setAlternativeSubmitButton = function setAlternativeSubmitButton(selector) {
+
+        if (hasAlternativeSubmitButton()) {
+            getAlternativeSubmitButton().off().text(getAlternativeSubmitButton().data("previousText"));
+        }
+
+        hp.Utils.defaults.alternativeSubmitButton = selector;
+        return getAlternativeSubmitButton();
+    };
+
+    var getAlternativeSubmitButton = function getAlternativeSubmitButton() {
+        var $newButton = $(hp.Utils.defaults.alternativeSubmitButton);
+        
+        if (!$newButton.data("previousText")) {
+            $newButton.data("previousText", $newButton.text().toString());
+        }
+        return $newButton.text(hp.Utils.defaults.defaultButtonLabel);
+    };
+
+    var hasAlternativeSubmitButton = function hasAlternativeSubmitButton() {
+        if (getAlternativeSubmitButton().length > 0) {
+            hp.Utils.log("Using alternative submit button with selector '" + hp.Utils.defaults.alternativeSubmitButton + "'.");
+            return true;
+        }
+        
+        hp.Utils.log("Could not find altnernative submit button selector '" + hp.Utils.defaults.alternativeSubmitButton + "'.");
+
+        return false;
+    };
+
     /*
      * Export "Utils"
      */
-
-
+    hp.Utils.previousAlternativeSubmitButtonText = "";
+    hp.Utils.setAlternativeSubmitButton = setAlternativeSubmitButton;
+    hp.Utils.getAlternativeSubmitButton = getAlternativeSubmitButton;
+    hp.Utils.hasAlternativeSubmitButton = hasAlternativeSubmitButton;
     hp.Utils.handleLegacyCssClassApplication = handleLegacyCssClassApplication;
     hp.Utils.makeRequest = makeRequest;
     hp.Utils.validateCreditCardData = validateCreditCardData;
@@ -5272,7 +5313,7 @@
         $month = this.$content.find(".hp-input-month select");
         $year = this.$content.find(".hp-input-year select");
         $name = this.$content.find(".hp-input-name input");
-        $submit = this.$content.find(".hp-submit");
+        $submit = hp.Utils.hasAlternativeSubmitButton() ? hp.Utils.getAlternativeSubmitButton() : this.$content.find(".hp-submit");
         $visualcc = this.$content.find(".hp-card-visual-number");
         $visualmonth = this.$content.find(".hp-card-visual-expiry-month");
         $visualyear = this.$content.find(".hp-card-visual-expiry-year");
@@ -6302,7 +6343,7 @@
         $visualbank = this.$content.find(".hp-bank-visual");
         $visualrouting = this.$content.find(".hp-bank-visual-left");
         $visualfullname = this.$content.find(".hp-bank-visual-name");
-        $submit = this.$content.find(".hp-submit");
+        $submit = hp.Utils.hasAlternativeSubmitButton() ? hp.Utils.getAlternativeSubmitButton() : this.$content.find(".hp-submit");
         $all = this.$content.find(".hp-input");
         this.transactionId = hp.Utils.defaults.transactionId;
     };
@@ -6344,7 +6385,13 @@
         this.$content.find(".hp-input-account input").off().val("");
         this.$content.find(".hp-input-fullname input").off().val(hp.Utils.defaults.customerName);
         this.$content.find(".hp-input-routing input").off().val("");
-        this.$content.find(".hp-submit").off();
+        
+        $submit.off();
+        
+        if (hp.Utils.hasAlternativeSubmitButton()) {
+           hp.Utils.getAlternativeSubmitButton().off();
+        }
+        
         this.$parent.trigger("hp.notify");
         this.handleNotify();
     };
@@ -6432,12 +6479,14 @@
             $this.$parent.trigger("hp.notify");
             $this.handleNotify();
         });
-        $this.$content.find(".hp-submit").on("click", function(e) {
+
+        $submit.on("click", function(e) {
             e.preventDefault();
             $this.handleSubmit();
             $this.$parent.trigger("hp.notify");
             $this.handleNotify();
         });
+
         this.$parent.trigger("hp.notify");
         this.handleNotify();
     };
@@ -7149,15 +7198,15 @@
 
 (function($, window, document, undefined) {
     "use strict";
+
     /*
      * Export "hp"
      */
-
     window.hp = hp || {};
+    
     /*
      * The default message shown when transactions are in progress...
      */
-
     var transactionInProgressMessage = "Transaction in progress... Don't refresh!",
         authorizationInProgressMessage = "Authorization in progress... Don't refresh!",
         terminalActiveMessage = "Terminal active... Don't refresh!",
@@ -7165,6 +7214,7 @@
         errorMessage = "Declined... Please try again.",
         cancelMessage = "Cancelled... Please try again.",
         buildingLinkMessage = "Building deeplink...";
+
     var messages = {
         Success: authorizationInProgressMessage,
         BeginSale: transactionInProgressMessage,
@@ -8927,7 +8977,7 @@
 })(jQuery, window, document);
 
 /*
- *  jQuery Hosted Payments - v4.3.1
+ *  jQuery Hosted Payments - v4.3.2
  *
  *  Made by Erik Zettersten
  *  Under MIT License
@@ -8935,7 +8985,7 @@
 (function($, window, document, undefined) {
     var pluginName = "hp";
     var defaults = {};
-    defaults.version = "v4.3.1";
+    defaults.version = "v4.3.2";
     defaults.amount = 0;
     defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
     defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
@@ -8996,6 +9046,7 @@
     defaults.convenienceFee = 0;
     defaults.surchargeFee = 0;
     defaults.disableAutocomplete = false;
+    defaults.alternativeSubmitButton = null;
 
     function Plugin(element, options) {
         this._name = pluginName;
@@ -9137,6 +9188,10 @@
             if ($element.data("documentIndex").toString() === "") {
                 hp.Utils.defaults.documentIndex = 1;
             }
+        }
+
+        if (typeof $element.data("alternativeSubmitButton") !== "undefined") {
+            hp.Utils.defaults.alternativeSubmitButton = $element.data("alternativeSubmitButton").toString();
         }
 
         if (typeof $element.data("customerToken") !== "undefined") {
