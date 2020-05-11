@@ -4957,6 +4957,11 @@
     };
 
     var hasAlternativeSubmitButton = function hasAlternativeSubmitButton() {
+
+        if (hp.Utils.defaults.alternativeSubmitButton == null) {
+            return false;
+        }
+
         if (getAlternativeSubmitButton().length > 0) {
             hp.Utils.log("Using alternative submit button with selector '" + hp.Utils.defaults.alternativeSubmitButton + "'.");
             return true;
@@ -8977,7 +8982,7 @@
 })(jQuery, window, document);
 
 /*
- *  jQuery Hosted Payments - v4.3.2
+ *  jQuery Hosted Payments - v4.3.3
  *
  *  Made by Erik Zettersten
  *  Under MIT License
@@ -8985,7 +8990,7 @@
 (function($, window, document, undefined) {
     var pluginName = "hp";
     var defaults = {};
-    defaults.version = "v4.3.2";
+    defaults.version = "v4.3.3";
     defaults.amount = 0;
     defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
     defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
