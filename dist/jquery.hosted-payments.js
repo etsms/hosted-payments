@@ -3623,7 +3623,7 @@
         }
 
         if (defaultAreas.indexOf(1) >= 0) {
-            bankAccount = '<div class="hp-content hp-content-bank">{{bankAccount}}</div>'.replace("{{bankAccount}}", hp.Utils.plugins.BankAccount.createTemplate(hp.Utils.defaults.defaultName, hp.Utils.defaults.defaultAccountNumberCharacters, hp.Utils.defaults.defaultRoutingNumberCharacters));
+            bankAccount = '<div class="hp-content hp-content-bank">{{bankAccount}}</div>'.replace("{{bankAccount}}", hp.Utils.plugins.BankAccount.createTemplate(hp.Utils.defaults.defaultName, hp.Utils.defaults.defaultAccountNumberCharacters, hp.Utils.defaults.defaultRoutingNumberCharacters, hp.Utils.defaults.defaultBank));
         }
 
         if (defaultAreas.indexOf(2) >= 0) {
@@ -4577,6 +4577,20 @@
             });
         }
 
+        if (typeof formData.bankName === "undefined" || formData.bankName === "") {
+            errors.push({
+                type: "bankName",
+                message: "Bank name cannot be empty."
+            });
+        }
+
+        if (typeof formData.bankName !== "undefined" && formData.bankName.length <= 1) {
+            errors.push({
+                type: "bankName",
+                message: "Bank name must be greater than one character."
+            });
+        }
+
         if (errors.length) {
             return callback(errors, formData);
         }
@@ -5403,7 +5417,43 @@
             return input.replace("{{monthList}}", generateMonthList()).replace("{{yearList}}", generateYearList());
         };
 
-        var $html = ['<div class="hp-card-visual">', '<div class="hp-card-visual-number">' + defaultCardCharacters + "</div>", '<div class="hp-card-visual-name">' + defaultNameOnCardName + "</div>", '<div class="hp-card-visual-expiry">', '<span class="hp-card-visual-expiry-label">Month/Year</span>', '<span class="hp-card-visual-expiry-label-alt">Valid Thru</span>', '<span class="hp-card-visual-expiry-value"><span class="hp-card-visual-expiry-month">' + defaultDateCharacters + '</span><span>/</span><span class="hp-card-visual-expiry-year">' + defaultDateCharacters + "</span></span>", "</div>", "</div>", '<div class="hp-input-wrapper">', '<div class="hp-input hp-input-cc">', '<input placeholder="Enter Card Number" name="cardnumber" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-number") + '" type="text" pattern="\\d*">', "</div>", '<div class="hp-input hp-input-name">', '<input placeholder="Enter Full Name" name="ccname" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-name") + '" type="text">', "</div>", '<div class="hp-input-container hp-input-container-date">', '<div class="hp-input hp-input-month">', '<select autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-exp-month") + '" name="cc-exp">', "{{monthList}}", "</select>", "</div>", '<div class="hp-input hp-input-year">', '<select autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-exp-year") + '" name="cc-exp">', "{{yearList}}", "</select>", "</div>", "</div>", '<div class="hp-input hp-input-third hp-input-cvv">', '<input placeholder="Enter CVV" name="cvc" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-csc") + '" type="text" pattern="\\d*">', '<span class="hp-input-cvv-image"></span>', "</div>", '<button class="hp-submit">' + (hp.Utils.defaults.promptForAvs ? "Verify Billing Address &#10144;" : hp.Utils.defaults.defaultButtonLabel) + "</button>", "</div>"].join("");
+        var $html = [
+            '<div class="hp-card-visual">', 
+                '<div class="hp-card-visual-number">' + defaultCardCharacters + "</div>", 
+                '<div class="hp-card-visual-name">' + defaultNameOnCardName + "</div>", 
+                '<div class="hp-card-visual-expiry">', 
+                    '<span class="hp-card-visual-expiry-label">Month/Year</span>', 
+                    '<span class="hp-card-visual-expiry-label-alt">Valid Thru</span>', 
+                    '<span class="hp-card-visual-expiry-value"><span class="hp-card-visual-expiry-month">' + defaultDateCharacters + '</span><span>/</span><span class="hp-card-visual-expiry-year">' + defaultDateCharacters + "</span></span>", 
+                "</div>", 
+            "</div>", 
+            '<div class="hp-input-wrapper">', 
+                '<div class="hp-input hp-input-cc">', 
+                    '<input placeholder="Enter Card Number" name="cardnumber" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-number") + '" type="text" pattern="\\d*">', 
+                "</div>", 
+                '<div class="hp-input hp-input-name">', 
+                    '<input placeholder="Enter Full Name" name="ccname" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-name") + '" type="text">', 
+                "</div>", 
+                '<div class="hp-input-container hp-input-container-date">', 
+                    '<div class="hp-input hp-input-month">', 
+                        '<select autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-exp-month") + '" name="cc-exp">', 
+                            "{{monthList}}", 
+                        "</select>", 
+                    "</div>", 
+                    '<div class="hp-input hp-input-year">', 
+                        '<select autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-exp-year") + '" name="cc-exp">', 
+                            "{{yearList}}", 
+                        "</select>", 
+                    "</div>", 
+                "</div>", 
+                '<div class="hp-input hp-input-third hp-input-cvv">', 
+                    '<input placeholder="Enter CVV" name="cvc" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-csc") + '" type="text" pattern="\\d*">', 
+                        '<span class="hp-input-cvv-image"></span>', 
+                    "</div>", 
+                    '<button class="hp-submit">' + (hp.Utils.defaults.promptForAvs ? "Verify Billing Address &#10144;" : hp.Utils.defaults.defaultButtonLabel) + "</button>", 
+                "</div>"
+            ].join("");
+
         return parseDatesTemplates($html);
     };
 
@@ -6319,14 +6369,17 @@
     }
 
     var $fullname = null,
+        $bankName = null,
         $accountNumber = null,
         $routingNumber = null,
         $visualaccount = null,
         $visualbank = null,
         $visualrouting = null,
         $visualfullname = null,
+        $visualbankname = null,
         $all = null,
         $submit;
+        
     var sessionId = "",
         createdOn = new Date().toISOString();
 
@@ -6344,10 +6397,12 @@
         $fullname = this.$content.find(".hp-input-fullname input");
         $accountNumber = this.$content.find(".hp-input-account input");
         $routingNumber = this.$content.find(".hp-input-routing input");
+        $bankName = this.$content.find(".hp-input-bank input");
         $visualaccount = this.$content.find(".hp-bank-visual-right");
         $visualbank = this.$content.find(".hp-bank-visual");
         $visualrouting = this.$content.find(".hp-bank-visual-left");
         $visualfullname = this.$content.find(".hp-bank-visual-name");
+        $visualbankname = this.$content.find(".hp-bank-visual-bank");
         $submit = hp.Utils.hasAlternativeSubmitButton() ? hp.Utils.getAlternativeSubmitButton() : this.$content.find(".hp-submit");
         $all = this.$content.find(".hp-input");
         this.transactionId = hp.Utils.defaults.transactionId;
@@ -6363,10 +6418,11 @@
         $visualfullname.html(hp.Utils.defaults.defaultName);
         $visualaccount.html(hp.Utils.defaults.defaultAccountNumberCharacters);
         $visualrouting.html(hp.Utils.defaults.defaultRoutingNumberCharacters);
+        $visualbankname.html(hp.Utils.defaults.defaultBank);
         $visualbank.parent().removeClass().addClass("hp-content hp-content-bank hp-content-active");
     };
 
-    BankAccount.prototype.createTemplate = function(defaultName, defaultAccountNumberCharacters, defaultRoutingNumberCharacters) {
+    BankAccount.prototype.createTemplate = function(defaultName, defaultAccountNumberCharacters, defaultRoutingNumberCharacters, defaultBank) {
         if (hp.Utils.defaults.paymentTypeOrder.indexOf(1) < 0) {
             return "";
         }
@@ -6375,14 +6431,52 @@
             throw new Error("hosted-payments.bank-account.js : Cannot create template. Arguments are null or undefined.");
         }
 
-        var $html = ['<div class="hp-bank-visual">', '<div class="hp-bank-visual-image"></div>', '<div class="hp-bank-visual-logo"></div>', '<div class="hp-bank-visual-name">' + defaultName + "</div>", '<div class="hp-bank-visual-right">' + defaultAccountNumberCharacters + "</div>", '<div class="hp-bank-visual-left">' + defaultRoutingNumberCharacters + "</div>", "</div>", '<div class="hp-input-wrapper">', '<div class="hp-input hp-input-fullname">', '<input placeholder="Enter Full Name" name="name" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "name") + '" type="text">', "</div>", '<div class="hp-break" >', "{{inputHtml}}", "</div>", '<button class="hp-submit">' + hp.Utils.defaults.defaultButtonLabel + "</button>", '<p class="info">* Please note that bank account (ACH) transactions may take up to 3 days to process. This time period varies depending on the your issuing bank. For more information please visit us at <a href="https://www.elavonpayments.com/" target="_blank">https://elavonpayments.com</a>.</p>', "</div>"].join("");
-        var $inputHtml = ['<div class="hp-input hp-input-account hp-input-left">', '<input placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>", '<div class="hp-input hp-input-routing hp-input-right">', '<input placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>"].join("");
+        var $html = [
+            '<div class="hp-bank-visual">', 
+                '<div class="hp-bank-visual-image"></div>', 
+                '<div class="hp-bank-visual-logo"></div>', 
+                '<div class="hp-bank-visual-bank">' + defaultBank + "</div>", 
+                '<div class="hp-bank-visual-name">' + defaultName + "</div>", 
+                '<div class="hp-bank-visual-right">' + defaultAccountNumberCharacters + "</div>", 
+                '<div class="hp-bank-visual-left">' + defaultRoutingNumberCharacters + "</div>", 
+            "</div>", 
+            '<div class="hp-input-wrapper">', 
+                '<div class="hp-input hp-input-bank">', 
+                    '<input placeholder="Enter Bank Name" name="bankName" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "bankName") + '" type="text">', 
+                "</div>",  
+                '<div class="hp-input hp-input-fullname">', 
+                    '<input placeholder="Enter Full Name" name="name" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "name") + '" type="text">', 
+                "</div>", 
+                '<div class="hp-break" >', 
+                    "{{inputHtml}}", 
+                "</div>", 
+                '<button class="hp-submit">' + hp.Utils.defaults.defaultButtonLabel + "</button>", 
+                '<p class="info">* Please note that bank account (ACH) transactions may take up to 3 days to process. This time period varies depending on the your issuing bank. For more information please visit us at <a href="https://www.elavonpayments.com/" target="_blank">https://elavonpayments.com</a>.</p>', 
+            "</div>"
+        ].join("");
+
+        var $inputHtml = [
+            '<div class="hp-input hp-input-account hp-input-left">', 
+                '<input placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', 
+            "</div>", 
+            '<div class="hp-input hp-input-routing hp-input-right">', 
+                '<input placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', 
+            "</div>"
+        ].join("");
 
         if (hp.Utils.defaults.swapAchInputs) {
-            $inputHtml = ['<div class="hp-input hp-input-routing hp-input-left">', '<input placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>", '<div class="hp-input hp-input-account hp-input-right">', '<input placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>"].join("");
+            $inputHtml = [
+                '<div class="hp-input hp-input-routing hp-input-left">', 
+                    '<input placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', 
+                "</div>", 
+                '<div class="hp-input hp-input-account hp-input-right">', 
+                    '<input placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', 
+                "</div>"
+            ].join("");
         }
 
         $html = $html.replace("{{inputHtml}}", $inputHtml);
+
         return $html;
     };
 
@@ -6390,6 +6484,7 @@
         this.$content.find(".hp-input-account input").off().val("");
         this.$content.find(".hp-input-fullname input").off().val(hp.Utils.defaults.customerName);
         this.$content.find(".hp-input-routing input").off().val("");
+        this.$content.find(".hp-input-bank input").off().val("");
         
         $submit.off();
         
@@ -6408,6 +6503,16 @@
 
         this.formData.routingNumber = $.trim(routingNumber);
         $visualrouting.text(this.formData.routingNumber);
+    };
+
+    BankAccount.prototype.handleBankInput = function(bankName) {
+        if (bankName === "") {
+            return $visualbankname.html(hp.Utils.defaults.defaultBank);
+        }
+        
+        bankName = bankName.replace(/[0-9]/g, "");
+        this.formData.bankName = $.trim(bankName);
+        $visualbankname.text(this.formData.bankName);
     };
 
     BankAccount.prototype.handleAccountInput = function(accountNumber) {
@@ -6430,33 +6535,56 @@
     };
 
     BankAccount.prototype.attachEvents = function() {
+
         this.detachEvents();
+
         var $this = this;
-        $this.$content.find(".hp-input-account input").payment("restrictNumeric").on("keyup, keydown, keypress, change, input", function() {
-            var that = $(this),
-                count = that.val().length;
 
-            if (count > 16) {
-                var value = that.val().substr(0, 16);
-                that.val(value);
-            }
+        $this.$content
+            .find(".hp-input-account input")
+            .payment("restrictNumeric")
+            .on("keyup, keydown, keypress, change, input", function() {
 
-            var accountNumber = $(this).val();
-            $this.$parent.removeClass("hp-back");
-            $this.$content.removeClass().addClass("hp-content hp-content-bank hp-content-active");
-            $this.handleAccountInput(accountNumber);
-            $this.$parent.trigger("hp.account", accountNumber);
-            $this.$parent.trigger("hp.notify");
-            $this.handleNotify();
-        });
-        $this.$content.find(".hp-input-fullname input").on("keyup, keydown, keypress, change, input", function() {
-            var name = $(this).val();
-            $this.$parent.removeClass("hp-back");
-            $this.handleNameInput(name);
-            $this.$parent.trigger("hp.name", name);
-            $this.$parent.trigger("hp.notify");
-            $this.handleNotify();
-        });
+                var that = $(this),
+                    count = that.val().length;
+
+                if (count > 16) {
+                    var value = that.val().substr(0, 16);
+                    that.val(value);
+                }
+
+                var accountNumber = $(this).val();
+                $this.$parent.removeClass("hp-back");
+                $this.$content.removeClass().addClass("hp-content hp-content-bank hp-content-active");
+                $this.handleAccountInput(accountNumber);
+                $this.$parent.trigger("hp.account", accountNumber);
+                $this.$parent.trigger("hp.notify");
+                $this.handleNotify();
+            });
+
+        $this.$content
+            .find(".hp-input-fullname input")
+            .on("keyup, keydown, keypress, change, input", function() {
+                var name = $(this).val();
+                $this.$parent.removeClass("hp-back");
+                $this.handleNameInput(name);
+                $this.$parent.trigger("hp.name", name);
+                $this.$parent.trigger("hp.notify");
+                $this.handleNotify();
+            });
+            
+
+        $this.$content
+            .find(".hp-input-bank input")
+            .on("keyup, keydown, keypress, change, input", function() {
+                var name = $(this).val();
+                $this.$parent.removeClass("hp-back");
+                $this.handleBankInput(name);
+                $this.$parent.trigger("hp.bank", name);
+                $this.$parent.trigger("hp.notify");
+                $this.handleNotify();
+            });
+            
 
         if (hp.Utils.defaults.customerName !== "") {
             setTimeout(function() {
@@ -6468,22 +6596,25 @@
             }, 0);
         }
 
-        $this.$content.find(".hp-input-routing input").payment("restrictNumeric").on("keyup, keydown, keypress, change, input", function(e) {
-            var that = $(this),
-                count = that.val().length;
+        $this.$content
+            .find(".hp-input-routing input").payment("restrictNumeric")
+            .on("keyup, keydown, keypress, change, input", function() {
 
-            if (count > 9) {
-                var value = that.val().substr(0, 9);
-                that.val(value);
-            }
+                var that = $(this),
+                    count = that.val().length;
 
-            var routingNumber = $(this).val();
-            $this.$parent.removeClass("hp-back");
-            $this.handleRoutingInput(routingNumber);
-            $this.$parent.trigger("hp.routing", routingNumber);
-            $this.$parent.trigger("hp.notify");
-            $this.handleNotify();
-        });
+                if (count > 9) {
+                    var value = that.val().substr(0, 9);
+                    that.val(value);
+                }
+
+                var routingNumber = $(this).val();
+                $this.$parent.removeClass("hp-back");
+                $this.handleRoutingInput(routingNumber);
+                $this.$parent.trigger("hp.routing", routingNumber);
+                $this.$parent.trigger("hp.notify");
+                $this.handleNotify();
+            });
 
         $submit.on("click", function(e) {
             e.preventDefault();
@@ -6498,7 +6629,9 @@
 
     BankAccount.prototype.handleNotify = function() {
         var $this = this;
+
         hp.Utils.validateBankAccountData(this.formData, function(error, data) {
+
             $all.removeClass("hp-error");
 
             if (!error) {
@@ -6522,6 +6655,13 @@
                 if (error[err].type === "name") {
                     if ($fullname.val() !== "") {
                         $fullname.parent().addClass("hp-error");
+                    }
+                }
+                console.log(error[err])
+
+                if (error[err].type === "bankName") {
+                    if ($bankName.val() !== "") {
+                        $bankName.parent().addClass("hp-error");
                     }
                 }
             }
@@ -6686,7 +6826,7 @@
                     properties: {
                         accountNumber: $this.formData.accountNumber,
                         routingNumber: $this.formData.routingNumber,
-                        bankName: $this.formData.name,
+                        bankName: $this.formData.bankName,
                         customerToken: hp.Utils.getCustomerToken(),
                         instrumentId: hp.Utils.getInstrumentId()
                     },
@@ -8982,7 +9122,7 @@
 })(jQuery, window, document);
 
 /*
- *  jQuery Hosted Payments - v4.3.3
+ *  jQuery Hosted Payments - v4.4.0
  *
  *  Made by Erik Zettersten
  *  Under MIT License
@@ -8990,7 +9130,7 @@
 (function($, window, document, undefined) {
     var pluginName = "hp";
     var defaults = {};
-    defaults.version = "v4.3.3";
+    defaults.version = "v4.4.0";
     defaults.amount = 0;
     defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
     defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
@@ -9008,6 +9148,7 @@
 
     defaults.defaultAccountNumberCharacters = "&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;";
     defaults.defaultRoutingNumberCharacters = "&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;";
+    defaults.defaultBank = "Your Bank";
     defaults.correlationId = "";
     defaults.successCallback = $.noop;
     defaults.errorCallback = $.noop;

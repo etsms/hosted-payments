@@ -12,9 +12,6 @@
 <body>
     <div id="ets"  data-default-button-label="test"></div>
 
-    <button class="my-own-button">My own button 1</button>
-    <button class="my-own-button-2">My own button 2</button>
-
     <script>
 
         var transactionId = hp.Utils.generateGUID();
@@ -45,7 +42,7 @@
             allowAvsSkip: false,
             promptForAvs: true,
             swapAchInputs: true,
-            paymentTypeOrder: [0,1,2,3]
+            paymentTypeOrder: [1]
         });
 
         console.log(hp.Utils.getCustomerInfo());

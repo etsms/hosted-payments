@@ -14,22 +14,22 @@ gulp.task(
 gulp.task("build", () =>
   gulp
     .src("dist/*.js")
-    .pipe(
-      babel({
-        presets: [
-          [
-            "@babel/env",
-            {
-              useBuiltIns: "entry",
-              corejs: {
-                version: 3
-              },
-              exclude: ['transform-typeof-symbol']
-            }
-          ]
-        ]
-      })
-    )
+    // .pipe(
+    //   babel({
+    //     presets: [
+    //       [
+    //         "@babel/env",
+    //         {
+    //           useBuiltIns: "entry",
+    //           corejs: {
+    //             version: 3
+    //           },
+    //           exclude: ['transform-typeof-symbol']
+    //         }
+    //       ]
+    //     ]
+    //   })
+    // )
     .pipe(beautify.validate())
     .pipe(
       beautify({
