@@ -3731,19 +3731,19 @@
     var setTimer = function setTimer(ttl) {
 
         if (ttl === null || ttl === undefined) {
-            ttl = 1200000; // 20min in m
-        } else {
-            ttl = ttl * 1000;
+            ttl = 1200; // 20min in ms
         }
+        
+        ttl = ttl * 1000;
 
-        log("Setting session timeout to: " + ttl);
+        hp.Utils.log("Setting session timeout to: " + ttl);
 
         if (_timer !== null) {
             window.clearTimeout(_timer);
         }
 
         _timer = window.setTimeout(function(){
-            log("Session timed out!");
+            hp.Utils.log("Session timed out!");
             handleError();
         }, ttl);
     };
