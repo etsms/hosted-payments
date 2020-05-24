@@ -103,7 +103,7 @@
     opacity: 0;
   }
 }
-/* line 55, ../src/jquery.hosted-payments.sass */
+/* line 68, ../src/jquery.hosted-payments.sass */
 .hinge, .hp .hp-col-right .hp-card-visual.hp-card-visual-flat.hp-card-visual-flat-active {
   -moz-animation-name: hinge;
   -webkit-animation-name: hinge;
@@ -185,7 +185,7 @@
     transform: translateX(10px);
   }
 }
-/* line 78, ../src/jquery.hosted-payments.sass */
+/* line 91, ../src/jquery.hosted-payments.sass */
 .animated-fast {
   -moz-animation-duration: 300ms;
   -webkit-animation-duration: 300ms;
@@ -198,7 +198,7 @@
   animation-timing-function: linear-ease-out;
 }
 
-/* line 83, ../src/jquery.hosted-payments.sass */
+/* line 96, ../src/jquery.hosted-payments.sass */
 .animated, .hp .hp-col-right .hp-card-visual {
   -moz-animation-duration: 1s;
   -webkit-animation-duration: 1s;
@@ -211,7 +211,7 @@
   animation-timing-function: linear-ease-out;
 }
 
-/* line 88, ../src/jquery.hosted-payments.sass */
+/* line 101, ../src/jquery.hosted-payments.sass */
 .shake, .hp-card-invalid, .hp-bank-invalid, .hp-em-invalid {
   -moz-animation-name: shake;
   -webkit-animation-name: shake;
@@ -221,7 +221,7 @@
   animation-iteration-count: infinite;
 }
 
-/* line 92, ../src/jquery.hosted-payments.sass */
+/* line 105, ../src/jquery.hosted-payments.sass */
 .hp {
   all: unset;
   -moz-box-sizing: border-box;
@@ -290,7 +290,7 @@
 .hp a img {
   border: none;
 }
-/* line 108, ../src/jquery.hosted-payments.sass */
+/* line 122, ../src/jquery.hosted-payments.sass */
 .hp hr {
   margin: 30px;
   padding: 0;
@@ -298,27 +298,27 @@
   height: 1px;
   background: #dedede;
 }
-/* line 115, ../src/jquery.hosted-payments.sass */
+/* line 129, ../src/jquery.hosted-payments.sass */
 .hp strong {
   font-weight: bold;
 }
-/* line 118, ../src/jquery.hosted-payments.sass */
+/* line 132, ../src/jquery.hosted-payments.sass */
 .hp .hide,
 .hp .hp-page {
   display: none !important;
 }
-/* line 122, ../src/jquery.hosted-payments.sass */
+/* line 136, ../src/jquery.hosted-payments.sass */
 .hp .show,
 .hp .hp-page-active {
   display: block !important;
 }
-/* line 126, ../src/jquery.hosted-payments.sass */
+/* line 140, ../src/jquery.hosted-payments.sass */
 .hp .hp-emoney-logo {
   width: 80px;
   margin: 0 0 0 -1px;
   padding: 0;
 }
-/* line 131, ../src/jquery.hosted-payments.sass */
+/* line 145, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container,
 .hp .hp-error-container,
 .hp .hp-app-link-container {
@@ -329,7 +329,7 @@
   display: none;
   z-index: 10;
 }
-/* line 140, ../src/jquery.hosted-payments.sass */
+/* line 154, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container.hp-loading-container-active, .hp .hp-loading-container.hp-error-container-active, .hp .hp-loading-container.hp-page-active,
 .hp .hp-error-container.hp-loading-container-active,
 .hp .hp-error-container.hp-error-container-active,
@@ -349,13 +349,13 @@
   background: rgba(255, 255, 255, 0.93);
   border: 1px solid #9e9e9e;
 }
-/* line 152, ../src/jquery.hosted-payments.sass */
+/* line 166, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container.hp-error-container-active,
 .hp .hp-error-container.hp-error-container-active,
 .hp .hp-app-link-container.hp-error-container-active {
   min-height: 420px;
 }
-/* line 155, ../src/jquery.hosted-payments.sass */
+/* line 169, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container .hp-error-text,
 .hp .hp-error-container .hp-error-text,
 .hp .hp-app-link-container .hp-error-text {
@@ -364,7 +364,7 @@
   margin: 30px 0 0 30px;
   display: block;
 }
-/* line 161, ../src/jquery.hosted-payments.sass */
+/* line 175, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container .hp-error-disclaimer,
 .hp .hp-error-container .hp-error-disclaimer,
 .hp .hp-app-link-container .hp-error-disclaimer {
@@ -372,14 +372,14 @@
   margin: 30px;
 }
 @media screen and (max-width: 656px) {
-  /* line 161, ../src/jquery.hosted-payments.sass */
+  /* line 175, ../src/jquery.hosted-payments.sass */
   .hp .hp-loading-container .hp-error-disclaimer,
   .hp .hp-error-container .hp-error-disclaimer,
   .hp .hp-app-link-container .hp-error-disclaimer {
     width: auto;
   }
 }
-/* line 168, ../src/jquery.hosted-payments.sass */
+/* line 182, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container .hp-error-message,
 .hp .hp-error-container .hp-error-message,
 .hp .hp-app-link-container .hp-error-message {
@@ -387,7 +387,7 @@
   margin: 0 0 0 30px;
   color: #9e9e9e;
 }
-/* line 173, ../src/jquery.hosted-payments.sass */
+/* line 187, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container .hp-loading-text,
 .hp .hp-error-container .hp-loading-text,
 .hp .hp-app-link-container .hp-loading-text {
@@ -402,14 +402,14 @@
   color: #2196f3;
 }
 @media screen and (max-width: 656px) {
-  /* line 173, ../src/jquery.hosted-payments.sass */
+  /* line 187, ../src/jquery.hosted-payments.sass */
   .hp .hp-loading-container .hp-loading-text,
   .hp .hp-error-container .hp-loading-text,
   .hp .hp-app-link-container .hp-loading-text {
     display: none;
   }
 }
-/* line 187, ../src/jquery.hosted-payments.sass */
+/* line 201, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container .hp-loading,
 .hp .hp-error-container .hp-loading,
 .hp .hp-app-link-container .hp-loading {
@@ -420,7 +420,7 @@
   margin-left: -28.66667px;
   margin-top: -35px;
 }
-/* line 199, ../src/jquery.hosted-payments.sass */
+/* line 213, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container .hp-loading span,
 .hp .hp-error-container .hp-loading span,
 .hp .hp-app-link-container .hp-loading span {
@@ -436,7 +436,7 @@
   -webkit-animation: hp-loading 0.4s infinite alternate;
   animation: hp-loading 0.4s infinite alternate;
 }
-/* line 211, ../src/jquery.hosted-payments.sass */
+/* line 225, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container .hp-loading span:nth-of-type(2),
 .hp .hp-error-container .hp-loading span:nth-of-type(2),
 .hp .hp-app-link-container .hp-loading span:nth-of-type(2) {
@@ -445,7 +445,7 @@
   -webkit-animation-delay: 0.2s;
   animation-delay: 0.2s;
 }
-/* line 216, ../src/jquery.hosted-payments.sass */
+/* line 230, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container .hp-loading span:nth-of-type(3),
 .hp .hp-error-container .hp-loading span:nth-of-type(3),
 .hp .hp-app-link-container .hp-loading span:nth-of-type(3) {
@@ -454,7 +454,7 @@
   -webkit-animation-delay: 0.4s;
   animation-delay: 0.4s;
 }
-/* line 221, ../src/jquery.hosted-payments.sass */
+/* line 235, ../src/jquery.hosted-payments.sass */
 .hp .hp-loading-container .hp-loading span:nth-of-type(4),
 .hp .hp-error-container .hp-loading span:nth-of-type(4),
 .hp .hp-app-link-container .hp-loading span:nth-of-type(4) {
@@ -463,7 +463,7 @@
   -webkit-animation-delay: 0.6s;
   animation-delay: 0.6s;
 }
-/* line 226, ../src/jquery.hosted-payments.sass */
+/* line 240, ../src/jquery.hosted-payments.sass */
 .hp .hp-submit {
   margin: 0;
   padding: 0;
@@ -488,25 +488,25 @@
   margin-top: 8px;
 }
 @media screen and (max-width: 656px) {
-  /* line 226, ../src/jquery.hosted-payments.sass */
+  /* line 240, ../src/jquery.hosted-payments.sass */
   .hp .hp-submit {
     font-size: 12px;
   }
 }
-/* line 250, ../src/jquery.hosted-payments.sass */
+/* line 264, ../src/jquery.hosted-payments.sass */
 .hp .hp-submit:focus, .hp .hp-submit:hover {
   outline: none;
   background: #309df4;
   border: 1px solid #0c84e4;
 }
-/* line 255, ../src/jquery.hosted-payments.sass */
+/* line 269, ../src/jquery.hosted-payments.sass */
 .hp .hp-submit:active {
   -moz-box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.25);
   -webkit-box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.25);
   box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.25);
   top: 1px;
 }
-/* line 260, ../src/jquery.hosted-payments.sass */
+/* line 274, ../src/jquery.hosted-payments.sass */
 .hp .hp-submit:disabled {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);
   opacity: 0.7;
@@ -516,37 +516,37 @@
   top: 1px;
   cursor: default;
 }
-/* line 267, ../src/jquery.hosted-payments.sass */
+/* line 281, ../src/jquery.hosted-payments.sass */
 .hp .hp-submit.hp-submit-danger {
   background: #f55145;
   border: 1px solid #ea1c0d;
   text-shadow: 0 1px 1px #ea1c0d;
 }
-/* line 272, ../src/jquery.hosted-payments.sass */
+/* line 286, ../src/jquery.hosted-payments.sass */
 .hp .hp-submit.hp-submit-danger:focus, .hp .hp-submit.hp-submit-danger:hover {
   outline: none;
   background: #f65e53;
   border: 1px solid #f43e31;
 }
-/* line 277, ../src/jquery.hosted-payments.sass */
+/* line 291, ../src/jquery.hosted-payments.sass */
 .hp .hp-submit.hp-submit-success {
   background: #57be00;
   border: 1px solid #49a000;
   text-shadow: 0 1px 1px #49a000;
 }
-/* line 282, ../src/jquery.hosted-payments.sass */
+/* line 296, ../src/jquery.hosted-payments.sass */
 .hp .hp-submit.hp-submit-success:focus, .hp .hp-submit.hp-submit-success:hover {
   outline: none;
   background: #5ece00;
   border: 1px solid #4eaa00;
 }
-/* line 287, ../src/jquery.hosted-payments.sass */
+/* line 301, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-wrapper {
   margin: 24px auto 0;
   position: relative;
   max-width: 400px;
 }
-/* line 292, ../src/jquery.hosted-payments.sass */
+/* line 306, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-code-message {
   background: #fff;
   padding: 10px 14px;
@@ -555,23 +555,23 @@
   border-top: 3px solid #FF2400;
   font-size: 100% !important;
 }
-/* line 300, ../src/jquery.hosted-payments.sass */
+/* line 314, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-code-message strong {
   font-weight: bold !important;
 }
 @media screen and (max-width: 656px) {
-  /* line 292, ../src/jquery.hosted-payments.sass */
+  /* line 306, ../src/jquery.hosted-payments.sass */
   .hp .hp-input-code-message {
     margin-top: 0 !important;
   }
 }
-/* line 306, ../src/jquery.hosted-payments.sass */
+/* line 320, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-container {
   overflow: hidden;
   position: relative;
   display: inline-block;
 }
-/* line 311, ../src/jquery.hosted-payments.sass */
+/* line 325, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-container.hp-input-container-ach {
   *zoom: 1;
   overflow: visible;
@@ -586,7 +586,7 @@
   display: table;
   clear: both;
 }
-/* line 320, ../src/jquery.hosted-payments.sass */
+/* line 334, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-container.hp-input-container-date {
   *zoom: 1;
   overflow: visible;
@@ -599,13 +599,13 @@
   clear: both;
 }
 @media screen and (max-width: 656px) {
-  /* line 320, ../src/jquery.hosted-payments.sass */
+  /* line 334, ../src/jquery.hosted-payments.sass */
   .hp .hp-input-container.hp-input-container-date {
     width: 100%;
     margin-top: 6px;
   }
 }
-/* line 331, ../src/jquery.hosted-payments.sass */
+/* line 345, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-container.hp-input-container-date .hp-input-month,
 .hp .hp-input-container.hp-input-container-date .hp-input-year {
   overflow: visible;
@@ -618,12 +618,12 @@
   display: table;
   clear: both;
 }
-/* line 337, ../src/jquery.hosted-payments.sass */
+/* line 351, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-container.hp-input-container-date .hp-input-month.hp-input-active,
 .hp .hp-input-container.hp-input-container-date .hp-input-year.hp-input-active {
   background: linear-gradient(to bottom, #f1cd00 -54%, #fffceb 6px);
 }
-/* line 340, ../src/jquery.hosted-payments.sass */
+/* line 354, ../src/jquery.hosted-payments.sass */
 .hp .hp-input {
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
@@ -641,7 +641,7 @@
   position: relative;
   height: 48px;
 }
-/* line 352, ../src/jquery.hosted-payments.sass */
+/* line 366, ../src/jquery.hosted-payments.sass */
 .hp .hp-input > input,
 .hp .hp-input > select {
   margin: 0;
@@ -659,83 +659,83 @@
   -webkit-border-radius: 4px;
   border-radius: 4px;
 }
-/* line 367, ../src/jquery.hosted-payments.sass */
+/* line 381, ../src/jquery.hosted-payments.sass */
 .hp .hp-input > input:hover, .hp .hp-input > input:focus,
 .hp .hp-input > select:hover,
 .hp .hp-input > select:focus {
   outline: none;
 }
-/* line 371, ../src/jquery.hosted-payments.sass */
+/* line 385, ../src/jquery.hosted-payments.sass */
 .hp .hp-input > select {
   -moz-appearance: none;
   -webkit-appearance: none;
 }
-/* line 375, ../src/jquery.hosted-payments.sass */
+/* line 389, ../src/jquery.hosted-payments.sass */
 .hp .hp-input > input:hover, .hp .hp-input > input:focus {
   background: linear-gradient(to bottom, #f1cd00 -54%, #fffceb 6px);
   outline: none;
 }
-/* line 381, ../src/jquery.hosted-payments.sass */
+/* line 395, ../src/jquery.hosted-payments.sass */
 .hp .hp-input > select:hover, .hp .hp-input > select:focus {
   cursor: pointer;
   background: linear-gradient(to bottom, #f1cd00 -54%, #fffceb 6px);
   outline: none;
 }
-/* line 387, ../src/jquery.hosted-payments.sass */
+/* line 401, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-fullname {
   width: 100%;
 }
-/* line 390, ../src/jquery.hosted-payments.sass */
+/* line 404, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-fullname.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
-/* line 395, ../src/jquery.hosted-payments.sass */
+/* line 409, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-fullname > input {
   width: 100%;
 }
-/* line 398, ../src/jquery.hosted-payments.sass */
+/* line 412, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-bank, .hp .hp-input.hp-input-ach-type {
   width: 60%;
 }
-/* line 402, ../src/jquery.hosted-payments.sass */
+/* line 416, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-bank.hp-error, .hp .hp-input.hp-input-ach-type.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
-/* line 407, ../src/jquery.hosted-payments.sass */
+/* line 421, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-bank > input,
 .hp .hp-input.hp-input-bank > select, .hp .hp-input.hp-input-ach-type > input,
 .hp .hp-input.hp-input-ach-type > select {
   width: 100%;
 }
-/* line 411, ../src/jquery.hosted-payments.sass */
+/* line 425, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-ach-type {
   width: calc(40% - 6px);
   margin-left: 6px;
 }
-/* line 415, ../src/jquery.hosted-payments.sass */
+/* line 429, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-email, .hp .hp-input.hp-input-password, .hp .hp-input.hp-input-code {
   width: 100%;
   display: block;
   margin: 7px auto 0;
 }
-/* line 420, ../src/jquery.hosted-payments.sass */
+/* line 434, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-email.hp-error, .hp .hp-input.hp-input-password.hp-error, .hp .hp-input.hp-input-code.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
-/* line 425, ../src/jquery.hosted-payments.sass */
+/* line 439, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-email > input, .hp .hp-input.hp-input-password > input, .hp .hp-input.hp-input-code > input {
   width: 100%;
 }
-/* line 428, ../src/jquery.hosted-payments.sass */
+/* line 442, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-left {
   -moz-border-radius: 4px 0 0 4px;
   -webkit-border-radius: 4px;
@@ -744,18 +744,18 @@
   float: left;
   border-right: 0 none;
 }
-/* line 435, ../src/jquery.hosted-payments.sass */
+/* line 449, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-left.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
-/* line 440, ../src/jquery.hosted-payments.sass */
+/* line 454, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-left > input {
   width: 100%;
 }
-/* line 443, ../src/jquery.hosted-payments.sass */
+/* line 457, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-right {
   -moz-border-radius: 0 4px 4px 0;
   -webkit-border-radius: 0;
@@ -763,18 +763,18 @@
   width: 50%;
   float: left;
 }
-/* line 449, ../src/jquery.hosted-payments.sass */
+/* line 463, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-right.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
-/* line 454, ../src/jquery.hosted-payments.sass */
+/* line 468, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-right > input {
   width: 100%;
 }
-/* line 457, ../src/jquery.hosted-payments.sass */
+/* line 471, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-cc {
   width: 50%;
   -moz-border-radius: 4px 0 0 4px;
@@ -783,7 +783,7 @@
   border-right: 0 none;
 }
 @media screen and (max-width: 656px) {
-  /* line 457, ../src/jquery.hosted-payments.sass */
+  /* line 471, ../src/jquery.hosted-payments.sass */
   .hp .hp-input.hp-input-cc {
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
@@ -792,19 +792,19 @@
     border: 1px solid #9e9e9e;
   }
 }
-/* line 471, ../src/jquery.hosted-payments.sass */
+/* line 485, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-cc > input,
 .hp .hp-input.hp-input-cc > select {
   width: 100%;
 }
-/* line 475, ../src/jquery.hosted-payments.sass */
+/* line 489, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-cc.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
-/* line 480, ../src/jquery.hosted-payments.sass */
+/* line 494, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-name {
   width: 50%;
   -moz-border-radius: 0 4px 4px 0;
@@ -812,7 +812,7 @@
   border-radius: 0 4px 4px 0;
 }
 @media screen and (max-width: 656px) {
-  /* line 480, ../src/jquery.hosted-payments.sass */
+  /* line 494, ../src/jquery.hosted-payments.sass */
   .hp .hp-input.hp-input-name {
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
@@ -821,19 +821,19 @@
     border: 1px solid #9e9e9e;
   }
 }
-/* line 492, ../src/jquery.hosted-payments.sass */
+/* line 506, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-name > input,
 .hp .hp-input.hp-input-name > select {
   width: 100%;
 }
-/* line 496, ../src/jquery.hosted-payments.sass */
+/* line 510, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-name.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
-/* line 501, ../src/jquery.hosted-payments.sass */
+/* line 515, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-month {
   width: 49%;
   margin-top: 0;
@@ -844,12 +844,12 @@
   border-right: 0 none;
 }
 @media screen and (max-width: 656px) {
-  /* line 501, ../src/jquery.hosted-payments.sass */
+  /* line 515, ../src/jquery.hosted-payments.sass */
   .hp .hp-input.hp-input-month {
     width: 50%;
   }
 }
-/* line 509, ../src/jquery.hosted-payments.sass */
+/* line 523, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-month:hover, .hp .hp-input.hp-input-month:focus, .hp .hp-input.hp-input-month:active {
   background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSItNTQlIiBzdG9wLWNvbG9yPSIjZjFjZDAwIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZmZmY2ViIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g') 6px;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(-54%, #f1cd00), color-stop(100%, #fffceb)) 6px;
@@ -857,19 +857,19 @@
   background: -webkit-linear-gradient(top, #f1cd00 -54%, #fffceb) 6px;
   background: linear-gradient(to bottom, #f1cd00 -54%, #fffceb) 6px;
 }
-/* line 519, ../src/jquery.hosted-payments.sass */
+/* line 533, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-month > input,
 .hp .hp-input.hp-input-month > select {
   width: 100%;
 }
-/* line 523, ../src/jquery.hosted-payments.sass */
+/* line 537, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-month.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
-/* line 528, ../src/jquery.hosted-payments.sass */
+/* line 542, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-year {
   width: 49%;
   margin-top: 0;
@@ -879,12 +879,12 @@
   border-radius: 0 4px 4px 0;
 }
 @media screen and (max-width: 656px) {
-  /* line 528, ../src/jquery.hosted-payments.sass */
+  /* line 542, ../src/jquery.hosted-payments.sass */
   .hp .hp-input.hp-input-year {
     width: 50%;
   }
 }
-/* line 536, ../src/jquery.hosted-payments.sass */
+/* line 550, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-year:hover, .hp .hp-input.hp-input-year:focus, .hp .hp-input.hp-input-year:active {
   background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSItNTQlIiBzdG9wLWNvbG9yPSIjZjFjZDAwIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZmZmY2ViIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g') 6px;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(-54%, #f1cd00), color-stop(100%, #fffceb)) 6px;
@@ -892,46 +892,46 @@
   background: -webkit-linear-gradient(top, #f1cd00 -54%, #fffceb) 6px;
   background: linear-gradient(to bottom, #f1cd00 -54%, #fffceb) 6px;
 }
-/* line 544, ../src/jquery.hosted-payments.sass */
+/* line 558, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-year > input,
 .hp .hp-input.hp-input-year > select {
   width: 100%;
 }
-/* line 548, ../src/jquery.hosted-payments.sass */
+/* line 562, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-year.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
-/* line 553, ../src/jquery.hosted-payments.sass */
+/* line 567, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-cvv {
   width: 50%;
 }
 @media screen and (max-width: 656px) {
-  /* line 553, ../src/jquery.hosted-payments.sass */
+  /* line 567, ../src/jquery.hosted-payments.sass */
   .hp .hp-input.hp-input-cvv {
     width: 100%;
     margin-top: 6px;
   }
 }
-/* line 561, ../src/jquery.hosted-payments.sass */
+/* line 575, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-cvv > input,
 .hp .hp-input.hp-input-cvv > select {
   width: 100%;
 }
-/* line 565, ../src/jquery.hosted-payments.sass */
+/* line 579, ../src/jquery.hosted-payments.sass */
 .hp .hp-input.hp-input-cvv.hp-error {
   border-color: red;
   -moz-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   -webkit-box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
   box-shadow: inset 0px 0px 1px red, 0px 0px 1px red !important;
 }
-/* line 570, ../src/jquery.hosted-payments.sass */
+/* line 584, ../src/jquery.hosted-payments.sass */
 .hp.hp-active {
   display: block;
 }
-/* line 573, ../src/jquery.hosted-payments.sass */
+/* line 587, ../src/jquery.hosted-payments.sass */
 .hp h3 {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -941,7 +941,7 @@
   text-transform: uppercase;
   padding: 17px 11px 15px;
 }
-/* line 581, ../src/jquery.hosted-payments.sass */
+/* line 595, ../src/jquery.hosted-payments.sass */
 .hp h2 {
   color: #2E3037;
   font-size: 30px;
@@ -950,7 +950,7 @@
   text-transform: none;
   position: relative;
 }
-/* line 589, ../src/jquery.hosted-payments.sass */
+/* line 603, ../src/jquery.hosted-payments.sass */
 .hp .text-muted {
   color: #9e9e9e;
   font-size: 17px;
@@ -960,7 +960,7 @@
   margin: 14px 0;
   line-height: normal;
 }
-/* line 598, ../src/jquery.hosted-payments.sass */
+/* line 612, ../src/jquery.hosted-payments.sass */
 .hp a,
 .hp a:link,
 .hp a:focus,
@@ -968,14 +968,14 @@
   color: #2196f3;
   text-decoration: none;
 }
-/* line 605, ../src/jquery.hosted-payments.sass */
+/* line 619, ../src/jquery.hosted-payments.sass */
 .hp a:hover,
 .hp a:link:hover,
 .hp a:focus:hover,
 .hp a:visited:hover {
   color: #0c7cd5;
 }
-/* line 608, ../src/jquery.hosted-payments.sass */
+/* line 622, ../src/jquery.hosted-payments.sass */
 .hp .hp-row {
   *zoom: 1;
   -moz-box-sizing: border-box;
@@ -993,54 +993,54 @@
   display: table;
   clear: both;
 }
-/* line 616, ../src/jquery.hosted-payments.sass */
+/* line 630, ../src/jquery.hosted-payments.sass */
 .hp .hp-row:after {
   clear: both;
 }
-/* line 619, ../src/jquery.hosted-payments.sass */
+/* line 633, ../src/jquery.hosted-payments.sass */
 .hp .hp-pull-left {
   float: left;
 }
-/* line 622, ../src/jquery.hosted-payments.sass */
+/* line 636, ../src/jquery.hosted-payments.sass */
 .hp .hp-pull-right {
   float: right;
 }
-/* line 625, ../src/jquery.hosted-payments.sass */
+/* line 639, ../src/jquery.hosted-payments.sass */
 .hp .hp-clearfix {
   overflow: hidden;
   *zoom: 1;
 }
-/* line 628, ../src/jquery.hosted-payments.sass */
+/* line 642, ../src/jquery.hosted-payments.sass */
 .hp .hp-col {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   float: left;
 }
-/* line 633, ../src/jquery.hosted-payments.sass */
+/* line 647, ../src/jquery.hosted-payments.sass */
 .hp .hp-break {
   overflow: hidden;
   *zoom: 1;
   clear: both;
 }
-/* line 638, ../src/jquery.hosted-payments.sass */
+/* line 652, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left {
   width: 185px;
   margin: 0 0 13px 0;
   min-height: 460px;
 }
 @media screen and (max-width: 656px) {
-  /* line 638, ../src/jquery.hosted-payments.sass */
+  /* line 652, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-left {
     width: 64px;
     margin: 0;
   }
 }
-/* line 648, ../src/jquery.hosted-payments.sass */
+/* line 662, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left p {
   color: #6b6b6b;
 }
-/* line 651, ../src/jquery.hosted-payments.sass */
+/* line 665, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav {
   list-style: none;
   -moz-box-shadow: 0 2px 0 #fff;
@@ -1048,46 +1048,46 @@
   box-shadow: 0 2px 0 #fff;
 }
 @media screen and (max-width: 656px) {
-  /* line 651, ../src/jquery.hosted-payments.sass */
+  /* line 665, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-left .hp-nav {
     margin: 0;
   }
-  /* line 659, ../src/jquery.hosted-payments.sass */
+  /* line 673, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-left .hp-nav li.hp-type {
     margin: 0;
     text-align: center;
   }
-  /* line 663, ../src/jquery.hosted-payments.sass */
+  /* line 677, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-left .hp-nav li.hp-type a {
     text-indent: 0px !important;
     border-bottom: 1px solid #9e9e9e;
     padding: 14px;
   }
-  /* line 668, ../src/jquery.hosted-payments.sass */
+  /* line 682, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-left .hp-nav li.hp-type a > img {
     display: block;
     position: static !important;
     margin: 0 auto;
   }
 }
-/* line 676, ../src/jquery.hosted-payments.sass */
+/* line 690, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type.hp-active a {
   background: #f3f3f3;
   -moz-box-shadow: inset -4px 0 #2196f3;
   -webkit-box-shadow: inset -4px 0 #2196f3;
   box-shadow: inset -4px 0 #2196f3;
 }
-/* line 681, ../src/jquery.hosted-payments.sass */
+/* line 695, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type:last-child a {
   border-bottom: 1px solid #9e9e9e;
 }
-/* line 684, ../src/jquery.hosted-payments.sass */
+/* line 698, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type:first-child a {
   -moz-border-radius: 3px 0 0 0;
   -webkit-border-radius: 3px;
   border-radius: 3px 0 0 0;
 }
-/* line 687, ../src/jquery.hosted-payments.sass */
+/* line 701, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type a {
   position: relative;
   display: block;
@@ -1100,69 +1100,69 @@
   background: #fff;
 }
 @media screen and (max-width: 656px) {
-  /* line 687, ../src/jquery.hosted-payments.sass */
+  /* line 701, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-left .hp-nav .hp-type a {
     overflow: hidden !important;
     height: auto !important;
   }
 }
-/* line 705, ../src/jquery.hosted-payments.sass */
+/* line 719, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type a span {
   display: block;
 }
 @media screen and (max-width: 656px) {
-  /* line 687, ../src/jquery.hosted-payments.sass */
+  /* line 701, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-left .hp-nav .hp-type a {
     height: 22px;
     line-height: 22px;
     text-indent: 22px;
   }
-  /* line 715, ../src/jquery.hosted-payments.sass */
+  /* line 729, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-left .hp-nav .hp-type a img {
     margin: 0 !important;
   }
 }
 @media screen and (max-width: 656px) {
-  /* line 720, ../src/jquery.hosted-payments.sass */
+  /* line 734, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-left .hp-nav .hp-type a span {
     display: none;
   }
 }
-/* line 724, ../src/jquery.hosted-payments.sass */
+/* line 738, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type a img {
   width: 32px;
   position: absolute;
   left: 7px;
   top: 50%;
 }
-/* line 730, ../src/jquery.hosted-payments.sass */
+/* line 744, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type.hp-transvault img {
   width: auto;
   height: 28px;
   margin-top: -14px;
   margin-left: 4px;
 }
-/* line 736, ../src/jquery.hosted-payments.sass */
+/* line 750, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type.hp-cc img {
   width: 30px;
   margin-top: -11px;
 }
-/* line 740, ../src/jquery.hosted-payments.sass */
+/* line 754, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type.hp-gc img {
   width: 31px;
   margin-top: -9px;
   left: 8px;
 }
-/* line 745, ../src/jquery.hosted-payments.sass */
+/* line 759, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type.hp-bank img {
   margin-top: -9px;
 }
-/* line 748, ../src/jquery.hosted-payments.sass */
+/* line 762, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-nav .hp-type.hp-code img {
   width: 33px;
   margin-top: -12px;
 }
-/* line 752, ../src/jquery.hosted-payments.sass */
+/* line 766, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure {
   width: 160px;
   position: absolute;
@@ -1171,12 +1171,12 @@
   font-size: 11px;
 }
 @media screen and (max-width: 656px) {
-  /* line 752, ../src/jquery.hosted-payments.sass */
+  /* line 766, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-left .hp-secure {
     display: none;
   }
 }
-/* line 762, ../src/jquery.hosted-payments.sass */
+/* line 777, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-secure-bottom {
   overflow: hidden;
   *zoom: 1;
@@ -1186,23 +1186,23 @@
   margin-top: 7px;
   padding-top: 7px;
 }
-/* line 770, ../src/jquery.hosted-payments.sass */
+/* line 786, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-secure-bottom > div {
   font-weight: bold;
 }
-/* line 773, ../src/jquery.hosted-payments.sass */
+/* line 789, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-secure-bottom .hp-secure-bottom-left {
   float: left;
 }
-/* line 776, ../src/jquery.hosted-payments.sass */
+/* line 792, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-secure-bottom .hp-secure-bottom-right {
   float: right;
 }
-/* line 779, ../src/jquery.hosted-payments.sass */
+/* line 795, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-cards {
   width: 185px;
 }
-/* line 782, ../src/jquery.hosted-payments.sass */
+/* line 798, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-cards-icons {
   width: 37px;
   height: 24px;
@@ -1212,28 +1212,28 @@
   margin-top: 0;
   background-color: #9e9e9e;
 }
-/* line 791, ../src/jquery.hosted-payments.sass */
+/* line 807, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-version-charge {
   color: #2196f3;
 }
-/* line 794, ../src/jquery.hosted-payments.sass */
+/* line 810, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-version-refund {
   color: #f44336;
 }
-/* line 797, ../src/jquery.hosted-payments.sass */
+/* line 813, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right {
   width: 100%;
   margin-left: -185px;
   padding-left: 185px;
 }
 @media screen and (max-width: 656px) {
-  /* line 797, ../src/jquery.hosted-payments.sass */
+  /* line 813, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right {
     margin-left: -64px;
     padding-left: 64px;
   }
 }
-/* line 807, ../src/jquery.hosted-payments.sass */
+/* line 823, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -1247,40 +1247,40 @@
   box-shadow: inset 1px 0 #fff;
 }
 @media screen and (max-width: 656px) {
-  /* line 807, ../src/jquery.hosted-payments.sass */
+  /* line 823, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-content {
     padding-top: 14px;
   }
 }
-/* line 821, ../src/jquery.hosted-payments.sass */
+/* line 837, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content.hp-content-active {
   display: block;
 }
-/* line 825, ../src/jquery.hosted-payments.sass */
-.hp .hp-col-right .hp-content-card-mastercard .hp-card-visual {
-  background: url("https://cdn.rawgit.com/etsms/06c4abb2eb1d2f96d92b6892d2a43f27/raw/0460bf4278b8edef61e8473f714d7ae4b47ba278/card-mastercard-icon.svg");
-}
-/* line 829, ../src/jquery.hosted-payments.sass */
-.hp .hp-col-right .hp-content-card-jcb .hp-card-visual {
-  background: url("https://cdn.rawgit.com/etsms/b8a752ef3d34b40d53b1b562a776c47b/raw/89ca2d943aca117b027c59e471a2043c36e88340/card-jcb-icon.svg");
-}
-/* line 833, ../src/jquery.hosted-payments.sass */
-.hp .hp-col-right .hp-content-card-visa .hp-card-visual {
-  background: url("https://cdn.rawgit.com/etsms/1571151ad4067e266702bb4c3c871c02/raw/77a2144d53e4ed1877e2b08013f458811b0f4779/card-visa-icon.svg");
-}
-/* line 837, ../src/jquery.hosted-payments.sass */
-.hp .hp-col-right .hp-content-card-discover .hp-card-visual {
-  background: url("https://cdn.rawgit.com/etsms/182b0859a18bc74343497b6976eb3927/raw/91d44da3831c30bfe03abd1ae0eb8822f64260f4/card-discover-icon.svg");
-}
 /* line 841, ../src/jquery.hosted-payments.sass */
-.hp .hp-col-right .hp-content-card-amex .hp-card-visual {
-  background: url("https://cdn.rawgit.com/etsms/0767ed5dcb6f4be147a8bf4415369878/raw/16db87eb2570886baff4bc7a1b3c9f9af73c8a24/card-amex-icon.svg");
+.hp .hp-col-right .hp-content-card-mastercard .hp-card-visual {
+  background: url("https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/background-mastercard.png");
 }
 /* line 845, ../src/jquery.hosted-payments.sass */
-.hp .hp-col-right .hp-content-card-emoney .hp-card-visual {
-  background: url("https://cdn.rawgit.com/etsms/e727d5dc9d0f07040bc8386396c2c3f2/raw/68040df254f3ac57234dff942e5fac5f38846a84/card-emoney-icon.svg");
+.hp .hp-col-right .hp-content-card-jcb .hp-card-visual {
+  background: url("https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/background-jcb.png");
 }
-/* line 848, ../src/jquery.hosted-payments.sass */
+/* line 849, ../src/jquery.hosted-payments.sass */
+.hp .hp-col-right .hp-content-card-visa .hp-card-visual {
+  background: url("https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/background-visa.png");
+}
+/* line 853, ../src/jquery.hosted-payments.sass */
+.hp .hp-col-right .hp-content-card-discover .hp-card-visual {
+  background: url("https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/background-discover.png");
+}
+/* line 857, ../src/jquery.hosted-payments.sass */
+.hp .hp-col-right .hp-content-card-amex .hp-card-visual {
+  background: url("https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/background-amex.png");
+}
+/* line 861, ../src/jquery.hosted-payments.sass */
+.hp .hp-col-right .hp-content-card-emoney .hp-card-visual {
+  background: url("https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/background-emoney.png");
+}
+/* line 864, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -1297,7 +1297,7 @@
   margin: 0 auto 0;
 }
 @media screen and (max-width: 656px) {
-  /* line 848, ../src/jquery.hosted-payments.sass */
+  /* line 864, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual {
     -moz-background-size: cover !important;
     -o-background-size: cover !important;
@@ -1306,7 +1306,7 @@
   }
 }
 @media screen and (max-width: 420px) {
-  /* line 848, ../src/jquery.hosted-payments.sass */
+  /* line 864, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual {
     -moz-border-radius: 12px;
     -webkit-border-radius: 12px;
@@ -1319,35 +1319,35 @@
     width: 100%;
     font-size: 14px;
   }
-  /* line 874, ../src/jquery.hosted-payments.sass */
+  /* line 890, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual .hp-card-visual-name {
     bottom: 34px !important;
     font-size: 14px !important;
     left: 25px !important;
   }
-  /* line 879, ../src/jquery.hosted-payments.sass */
+  /* line 895, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual .hp-card-visual-number {
     font-size: 14px !important;
     top: 50px !important;
     left: 25px !important;
   }
-  /* line 884, ../src/jquery.hosted-payments.sass */
+  /* line 900, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry-label-alt {
     display: none !important;
   }
-  /* line 887, ../src/jquery.hosted-payments.sass */
+  /* line 903, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry {
     bottom: 16px !important;
     right: -3px !important;
     width: 75px !important;
   }
-  /* line 892, ../src/jquery.hosted-payments.sass */
+  /* line 908, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry-value {
     font-size: 14px !important;
   }
 }
 @media screen and (max-width: 500px) {
-  /* line 848, ../src/jquery.hosted-payments.sass */
+  /* line 864, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual {
     -moz-border-radius: 12px;
     -webkit-border-radius: 12px;
@@ -1360,34 +1360,34 @@
     height: 127px;
     width: 100%;
   }
-  /* line 904, ../src/jquery.hosted-payments.sass */
+  /* line 920, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual .hp-card-visual-name {
     bottom: 34px !important;
     font-size: 14px !important;
     left: 25px !important;
   }
-  /* line 909, ../src/jquery.hosted-payments.sass */
+  /* line 925, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual .hp-card-visual-number {
     font-size: 14px !important;
     top: 50px !important;
     left: 25px !important;
   }
-  /* line 914, ../src/jquery.hosted-payments.sass */
+  /* line 930, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry-label-alt {
     display: none !important;
   }
-  /* line 917, ../src/jquery.hosted-payments.sass */
+  /* line 933, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry {
     bottom: 16px !important;
     right: -3px !important;
     width: 75px !important;
   }
-  /* line 922, ../src/jquery.hosted-payments.sass */
+  /* line 938, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry-value {
     font-size: 14px !important;
   }
 }
-/* line 926, ../src/jquery.hosted-payments.sass */
+/* line 942, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual > div {
   -moz-transition: all 150ms linear;
   -o-transition: all 150ms linear;
@@ -1400,7 +1400,7 @@
   font-weight: 600;
   color: #fff;
 }
-/* line 936, ../src/jquery.hosted-payments.sass */
+/* line 952, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual .hp-card-visual-logo {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
@@ -1411,12 +1411,12 @@
   top: 30px;
   right: 0px;
 }
-/* line 943, ../src/jquery.hosted-payments.sass */
+/* line 959, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual .hp-card-visual-number {
   top: 100px;
   left: 35px;
 }
-/* line 947, ../src/jquery.hosted-payments.sass */
+/* line 963, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual .hp-card-visual-name {
   font-size: 23px;
   bottom: 50px;
@@ -1424,13 +1424,13 @@
   font-weight: 400;
   text-transform: uppercase;
 }
-/* line 954, ../src/jquery.hosted-payments.sass */
+/* line 970, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry {
   bottom: 45px;
   right: 15px;
   width: 75px;
 }
-/* line 959, ../src/jquery.hosted-payments.sass */
+/* line 975, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry-label,
 .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry-label-alt {
   position: absolute;
@@ -1438,57 +1438,57 @@
   text-transform: uppercase;
   font-weight: 400;
 }
-/* line 966, ../src/jquery.hosted-payments.sass */
+/* line 982, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry-label {
   top: -40px;
 }
-/* line 969, ../src/jquery.hosted-payments.sass */
+/* line 985, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry-label-alt {
   width: 45px;
   text-align: right;
   left: -52px;
   top: -28px;
 }
-/* line 975, ../src/jquery.hosted-payments.sass */
+/* line 991, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual .hp-card-visual-expiry-value {
   position: absolute;
   font-size: 22px;
   text-transform: uppercase;
   top: -30px;
 }
-/* line 981, ../src/jquery.hosted-payments.sass */
+/* line 997, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual.hp-card-visual-flat {
   background: #6b6b6b;
   border: 0 none;
 }
-/* line 986, ../src/jquery.hosted-payments.sass */
+/* line 1001, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual.hp-card-visual-flat > div {
   color: #fff;
 }
-/* line 989, ../src/jquery.hosted-payments.sass */
+/* line 1004, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual.hp-card-visual-flat.hp-card-visual-flat-active {
   border-width: 2px;
   border-color: #6ce56c;
 }
-/* line 995, ../src/jquery.hosted-payments.sass */
+/* line 1010, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual.hp-card-visual-flat.hp-card-visual-flat-active > div {
   text-shadow: none;
   color: #6ce56c;
 }
-/* line 1000, ../src/jquery.hosted-payments.sass */
+/* line 1015, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-transvault {
   position: relative;
 }
-/* line 1003, ../src/jquery.hosted-payments.sass */
+/* line 1018, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-transvault .hp-transvault-visual-image {
   text-align: center;
   margin-top: 24px;
 }
-/* line 1007, ../src/jquery.hosted-payments.sass */
+/* line 1022, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-transvault .hp-transvault-visual-image img.event {
   width: 106px;
 }
-/* line 1010, ../src/jquery.hosted-payments.sass */
+/* line 1025, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-transvault .hp-submit-refresh {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
   opacity: 0.8;
@@ -1505,15 +1505,15 @@
   width: 24px;
   background: rgba(80, 175, 0, 0.1);
 }
-/* line 1024, ../src/jquery.hosted-payments.sass */
+/* line 1039, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-transvault .hp-submit-refresh:hover {
   background: rgba(80, 175, 0, 0.2);
 }
-/* line 1027, ../src/jquery.hosted-payments.sass */
+/* line 1042, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-transvault .hp-submit-refresh img.hp-submit-refresh-img {
   width: 100%;
 }
-/* line 1030, ../src/jquery.hosted-payments.sass */
+/* line 1045, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-transvault .hp-submit {
   position: absolute;
   bottom: 45px;
@@ -1523,7 +1523,7 @@
   margin: 0 0 0 -170px;
   width: 340px;
 }
-/* line 1039, ../src/jquery.hosted-payments.sass */
+/* line 1054, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-transvault p.hp-input-transvault-message {
   width: 100%;
   font-size: 2em;
@@ -1531,13 +1531,13 @@
   color: #2196f3;
   margin-top: -14px;
 }
-/* line 1047, ../src/jquery.hosted-payments.sass */
+/* line 1062, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-gc hr {
   margin: 0;
   margin-bottom: 20px;
   position: relative;
 }
-/* line 1052, ../src/jquery.hosted-payments.sass */
+/* line 1067, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-gc hr:before {
   content: "OR";
   position: absolute;
@@ -1551,24 +1551,24 @@
   padding: 5px;
   margin-left: -11px;
 }
-/* line 1066, ../src/jquery.hosted-payments.sass */
+/* line 1081, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-gc .hp-input-group .hp-input-gc {
   margin-bottom: 20px;
 }
-/* line 1069, ../src/jquery.hosted-payments.sass */
+/* line 1084, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-gc .hp-input-group .hp-submit {
   width: auto;
   margin: 6px 0 0 0;
 }
-/* line 1073, ../src/jquery.hosted-payments.sass */
+/* line 1088, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-gc .hp-input-group .hp-input {
   width: 250px;
 }
-/* line 1076, ../src/jquery.hosted-payments.sass */
+/* line 1091, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-gc .hp-input-group .hp-input input {
   width: 250px;
 }
-/* line 1079, ../src/jquery.hosted-payments.sass */
+/* line 1094, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -1579,7 +1579,7 @@
   margin: 0 auto;
 }
 @media screen and (max-width: 656px) {
-  /* line 1079, ../src/jquery.hosted-payments.sass */
+  /* line 1094, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-bank-visual {
     -moz-transform:  scale(0.49, 0.49) rotateZ(0) translate(50%, 0) skew(0, 0);
     -ms-transform:  scale(0.49, 0.49) rotateZ(0) translate(50%, 0) skew(0, 0);
@@ -1593,7 +1593,7 @@
   }
 }
 @media screen and (max-width: 420px) {
-  /* line 1079, ../src/jquery.hosted-payments.sass */
+  /* line 1094, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-bank-visual {
     -moz-transform:  scale(0.49, 0.49) rotateZ(0) translate(0, 0) skew(0, 0);
     -ms-transform:  scale(0.49, 0.49) rotateZ(0) translate(0, 0) skew(0, 0);
@@ -1605,39 +1605,39 @@
     transform-origin: left bottom;
   }
 }
-/* line 1097, ../src/jquery.hosted-payments.sass */
+/* line 1112, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual > div {
   font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace !important;
   position: absolute;
   font-size: 20px;
   color: #f3f3f3;
 }
-/* line 1103, ../src/jquery.hosted-payments.sass */
+/* line 1118, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual .hp-bank-visual-image {
-  background: url("https://cdn.rawgit.com/etsms/c8f6b08c4daeb7e44e95bc7546437589/raw/42e8585705d2f917d0aa27f64fe42b589cb4fb12/card-ach-icon.svg");
+  background: url("https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/background-ach.png");
   height: 173px;
   width: 400px;
   background-color: #9e9e9e;
 }
-/* line 1109, ../src/jquery.hosted-payments.sass */
+/* line 1124, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual .hp-bank-visual-name {
   top: 37px;
   left: 23px;
   text-transform: uppercase;
 }
-/* line 1114, ../src/jquery.hosted-payments.sass */
+/* line 1129, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual .hp-bank-visual-left {
   bottom: 31px;
   left: 26px;
   font-size: 16px;
 }
-/* line 1119, ../src/jquery.hosted-payments.sass */
+/* line 1134, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual .hp-bank-visual-right {
   bottom: 31px;
   left: 186px;
   font-size: 16px;
 }
-/* line 1124, ../src/jquery.hosted-payments.sass */
+/* line 1139, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual .hp-bank-visual-bank {
   top: 19px;
   left: 20px;
@@ -1647,11 +1647,11 @@
   color: #476d6d;
   text-shadow: 0 1px 1px #74c4bb;
 }
-/* line 1134, ../src/jquery.hosted-payments.sass */
+/* line 1149, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank .slider-container {
   padding-top: 30px;
 }
-/* line 1142, ../src/jquery.hosted-payments.sass */
+/* line 1157, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank p,
 .hp .hp-col-right .hp-content-cc p,
 .hp .hp-col-right .hp-content-emoney p,
@@ -1662,7 +1662,7 @@
   text-align: center;
   margin: 24px 0 0;
 }
-/* line 1148, ../src/jquery.hosted-payments.sass */
+/* line 1163, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank h4,
 .hp .hp-col-right .hp-content-cc h4,
 .hp .hp-col-right .hp-content-emoney h4,
@@ -1672,7 +1672,7 @@
   color: #919191;
   text-align: center;
 }
-/* line 1153, ../src/jquery.hosted-payments.sass */
+/* line 1168, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank .callout,
 .hp .hp-col-right .hp-content-cc .callout,
 .hp .hp-col-right .hp-content-emoney .callout,
@@ -1683,7 +1683,7 @@
   margin: 14px 0;
 }
 @media screen and (max-width: 656px) {
-  /* line 1153, ../src/jquery.hosted-payments.sass */
+  /* line 1168, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-content-bank .callout,
   .hp .hp-col-right .hp-content-cc .callout,
   .hp .hp-col-right .hp-content-emoney .callout,
@@ -1692,7 +1692,7 @@
     display: none;
   }
 }
-/* line 1162, ../src/jquery.hosted-payments.sass */
+/* line 1177, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank .callout p,
 .hp .hp-col-right .hp-content-cc .callout p,
 .hp .hp-col-right .hp-content-emoney .callout p,
@@ -1701,7 +1701,7 @@
   margin: 0 0 17px;
   padding: 0;
 }
-/* line 1166, ../src/jquery.hosted-payments.sass */
+/* line 1181, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank .hp-code-title,
 .hp .hp-col-right .hp-content-cc .hp-code-title,
 .hp .hp-col-right .hp-content-emoney .hp-code-title,
@@ -1714,7 +1714,7 @@
   margin: 20px 0;
 }
 @media screen and (max-width: 656px) {
-  /* line 1166, ../src/jquery.hosted-payments.sass */
+  /* line 1181, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-content-bank .hp-code-title,
   .hp .hp-col-right .hp-content-cc .hp-code-title,
   .hp .hp-col-right .hp-content-emoney .hp-code-title,
@@ -1723,28 +1723,28 @@
     margin: 5px 0 15px;
   }
 }
-/* line 1176, ../src/jquery.hosted-payments.sass */
+/* line 1191, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank .hp-input-cvv-image,
 .hp .hp-col-right .hp-content-cc .hp-input-cvv-image,
 .hp .hp-col-right .hp-content-emoney .hp-input-cvv-image,
 .hp .hp-col-right .hp-content-transvault .hp-input-cvv-image,
 .hp .hp-col-right .hp-content-code .hp-input-cvv-image {
-  background: url("https://cdn.rawgit.com/etsms/ee77db08d015bf1c09ca99e4caeaa872/raw/2cbaae7111594584deabe5c19e53313a46e5df75/card-cvv-icon-alt.svg");
+  background: url("https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/icon-cvvalt.png");
   height: 33px;
   width: 50px;
   position: absolute;
   top: 7px;
   right: 7px;
 }
-/* line 1185, ../src/jquery.hosted-payments.sass */
+/* line 1200, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank.hp-content-card-amex .hp-input-cvv-image,
 .hp .hp-col-right .hp-content-cc.hp-content-card-amex .hp-input-cvv-image,
 .hp .hp-col-right .hp-content-emoney.hp-content-card-amex .hp-input-cvv-image,
 .hp .hp-col-right .hp-content-transvault.hp-content-card-amex .hp-input-cvv-image,
 .hp .hp-col-right .hp-content-code.hp-content-card-amex .hp-input-cvv-image {
-  background: url("https://cdn.rawgit.com/etsms/c3d3179f1eaec8cfa7572e0641b767d0/raw/f98391c6432913e6f7eaeb789fb1d47b56522bfe/card-cvv-icon.svg");
+  background: url("https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/icon-cvv.png");
 }
-/* line 1188, ../src/jquery.hosted-payments.sass */
+/* line 1203, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt {
   -moz-transition: all 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
   -o-transition: all 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -1768,22 +1768,22 @@
   border: 1px solid #9e9e9e;
   opacity: 0;
 }
-/* line 1202, ../src/jquery.hosted-payments.sass */
+/* line 1217, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt.active {
   opacity: 1;
 }
-/* line 1205, ../src/jquery.hosted-payments.sass */
+/* line 1220, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt-container {
   padding: 30px;
 }
-/* line 1208, ../src/jquery.hosted-payments.sass */
+/* line 1223, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt-container > p {
   font-size: 2.7em;
   color: #2196f3;
   display: block;
   margin-bottom: 15px;
 }
-/* line 1214, ../src/jquery.hosted-payments.sass */
+/* line 1229, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt-container hr {
   margin: 0 0 30px 0;
   padding: 0;
@@ -1791,127 +1791,127 @@
   height: 1px;
   background: #dedede;
 }
-/* line 1221, ../src/jquery.hosted-payments.sass */
+/* line 1236, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt-container a {
   text-align: center;
   display: block;
   margin: 15px auto;
 }
 @media screen and (max-width: 656px) {
-  /* line 1227, ../src/jquery.hosted-payments.sass */
+  /* line 1242, ../src/jquery.hosted-payments.sass */
   .hp .hp-avs-prompt-container > p {
     font-size: 18px;
     margin-bottom: 7px;
   }
-  /* line 1231, ../src/jquery.hosted-payments.sass */
+  /* line 1246, ../src/jquery.hosted-payments.sass */
   .hp .hp-avs-prompt-container hr {
     margin: 3px 0 12px;
   }
-  /* line 1234, ../src/jquery.hosted-payments.sass */
+  /* line 1249, ../src/jquery.hosted-payments.sass */
   .hp .hp-avs-prompt-container a {
     margin: 7px auto;
     font-size: 12px;
   }
 }
-/* line 1238, ../src/jquery.hosted-payments.sass */
+/* line 1253, ../src/jquery.hosted-payments.sass */
 .hp .hp-label-avs {
   display: block;
   font-size: 1.3em;
   color: #1f1f1f;
 }
 @media screen and (max-width: 656px) {
-  /* line 1238, ../src/jquery.hosted-payments.sass */
+  /* line 1253, ../src/jquery.hosted-payments.sass */
   .hp .hp-label-avs {
     font-size: 14px;
   }
 }
-/* line 1246, ../src/jquery.hosted-payments.sass */
+/* line 1261, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt-right,
 .hp .hp-avs-prompt-left {
   display: block;
   margin-bottom: 15px;
 }
 @media screen and (max-width: 656px) {
-  /* line 1246, ../src/jquery.hosted-payments.sass */
+  /* line 1261, ../src/jquery.hosted-payments.sass */
   .hp .hp-avs-prompt-right,
   .hp .hp-avs-prompt-left {
     margin-bottom: 4px;
   }
 }
-/* line 1254, ../src/jquery.hosted-payments.sass */
+/* line 1269, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt-right {
   margin-bottom: 0;
 }
-/* line 1257, ../src/jquery.hosted-payments.sass */
+/* line 1272, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-street {
   width: 100%;
 }
-/* line 1260, ../src/jquery.hosted-payments.sass */
+/* line 1275, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-street > input {
   width: 100%;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
 }
-/* line 1265, ../src/jquery.hosted-payments.sass */
+/* line 1280, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-state {
   width: 112px;
 }
-/* line 1268, ../src/jquery.hosted-payments.sass */
+/* line 1283, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-state > input {
   width: 100%;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
 }
-/* line 1273, ../src/jquery.hosted-payments.sass */
+/* line 1288, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-zip {
   width: 144px;
 }
-/* line 1276, ../src/jquery.hosted-payments.sass */
+/* line 1291, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-zip > input {
   width: 100%;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
 }
-/* line 1281, ../src/jquery.hosted-payments.sass */
+/* line 1296, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-city {
   width: 234px;
 }
-/* line 1284, ../src/jquery.hosted-payments.sass */
+/* line 1299, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-city > input {
   width: 100%;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
 }
-/* line 1289, ../src/jquery.hosted-payments.sass */
+/* line 1304, ../src/jquery.hosted-payments.sass */
 .hp .hp-pull-left {
   float: left;
   margin-right: 30px;
   margin-bottom: 30px;
 }
 @media screen and (max-width: 656px) {
-  /* line 1289, ../src/jquery.hosted-payments.sass */
+  /* line 1304, ../src/jquery.hosted-payments.sass */
   .hp .hp-pull-left {
     margin-bottom: 4px;
   }
 }
-/* line 1297, ../src/jquery.hosted-payments.sass */
+/* line 1312, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-required {
   color: #f44336;
 }
 
-/* line 1300, ../src/jquery.hosted-payments.sass */
+/* line 1315, ../src/jquery.hosted-payments.sass */
 .hp-form-emoney,
 .hp-form-code {
   position: relative;
 }
 
-/* line 1305, ../src/jquery.hosted-payments.sass */
+/* line 1320, ../src/jquery.hosted-payments.sass */
 .hp-form-success .hp-success-visual {
-  background: url("https://cdn.rawgit.com/etsms/ca4ba00053a7b640c57fb9a89b364360/raw/9b754b7db0e60c8d020cead418e2376b94f6223d/success-icon.svg");
+  background: url("https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/icon-success.png");
   font: 0/0 serif;
   text-shadow: none;
   color: transparent;
@@ -1920,25 +1920,25 @@
   margin: 85px auto 30px;
 }
 @media screen and (max-width: 656px) {
-  /* line 1315, ../src/jquery.hosted-payments.sass */
+  /* line 1330, ../src/jquery.hosted-payments.sass */
   .hp-form-success .hp-success-visual {
     margin-top: 15px;
   }
-  /* line 1318, ../src/jquery.hosted-payments.sass */
+  /* line 1333, ../src/jquery.hosted-payments.sass */
   .hp-form-success .text-muted {
     display: none;
   }
 }
 
-/* line 1321, ../src/jquery.hosted-payments.sass */
+/* line 1336, ../src/jquery.hosted-payments.sass */
 .hp-form-transvault-app-link {
   height: 84px;
 }
-/* line 1324, ../src/jquery.hosted-payments.sass */
+/* line 1339, ../src/jquery.hosted-payments.sass */
 .hp-form-transvault-app-link .hp-row {
   display: none;
 }
-/* line 1327, ../src/jquery.hosted-payments.sass */
+/* line 1342, ../src/jquery.hosted-payments.sass */
 .hp-form-transvault-app-link .hp-submit-redirect {
   padding: 16px 0;
   display: block;
@@ -1948,7 +1948,7 @@
 }
 
 @media screen and (max-width: 656px) {
-  /* line 1335, ../src/jquery.hosted-payments.sass */
+  /* line 1350, ../src/jquery.hosted-payments.sass */
   .hp.hp-form .hp-submit.hp-submit-danger {
     bottom: 4vh;
     left: 0;
@@ -1956,14 +1956,223 @@
     width: 80%;
   }
 
-  /* line 1341, ../src/jquery.hosted-payments.sass */
+  /* line 1356, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-content-transvault p.hp-input-transvault-message {
     font-size: 1rem;
   }
 
-  /* line 1345, ../src/jquery.hosted-payments.sass */
+  /* line 1360, ../src/jquery.hosted-payments.sass */
   .hp-form-transvault .hp-content-transvault,
   .hp-form-transvault .hp-col-left {
     min-height: 280px !important;
   }
+}
+/* line 1364, ../src/jquery.hosted-payments.sass */
+.hp-sprite {
+  background-image: url("https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/sprite.png");
+  background-repeat: no-repeat;
+  display: block;
+}
+
+/* line 1369, ../src/jquery.hosted-payments.sass */
+.sprite-background-ach {
+  width: 400px;
+  height: 173px;
+  background-position: -1px -1px;
+}
+
+/* line 1374, ../src/jquery.hosted-payments.sass */
+.sprite-background-amex {
+  width: 398px;
+  height: 236px;
+  background-position: -1px -176px;
+}
+
+/* line 1379, ../src/jquery.hosted-payments.sass */
+.sprite-background-diners {
+  width: 398px;
+  height: 236px;
+  background-position: -5px -418px;
+}
+
+/* line 1384, ../src/jquery.hosted-payments.sass */
+.sprite-background-discover {
+  width: 398px;
+  height: 236px;
+  background-position: -1px -660px;
+}
+
+/* line 1389, ../src/jquery.hosted-payments.sass */
+.sprite-background-emoney {
+  width: 398px;
+  height: 236px;
+  background-position: -1px -898px;
+}
+
+/* line 1394, ../src/jquery.hosted-payments.sass */
+.sprite-background-jcb {
+  width: 398px;
+  height: 236px;
+  background-position: -1px -1136px;
+}
+
+/* line 1399, ../src/jquery.hosted-payments.sass */
+.sprite-background-mastercard {
+  width: 398px;
+  height: 236px;
+  background-position: -1px -1374px;
+}
+
+/* line 1404, ../src/jquery.hosted-payments.sass */
+.sprite-background-visa {
+  width: 398px;
+  height: 236px;
+  background-position: -1px -1612px;
+}
+
+/* line 1409, ../src/jquery.hosted-payments.sass */
+.sprite-card-ach {
+  width: 42px;
+  height: 26px;
+  background-position: -1px -1850px;
+}
+
+/* line 1414, ../src/jquery.hosted-payments.sass */
+.sprite-card-amex {
+  width: 42px;
+  height: 26px;
+  background-position: -1px -1878px;
+}
+
+/* line 1419, ../src/jquery.hosted-payments.sass */
+.sprite-card-diners {
+  width: 42px;
+  height: 26px;
+  background-position: -1px -1906px;
+}
+
+/* line 1424, ../src/jquery.hosted-payments.sass */
+.sprite-card-discover {
+  width: 42px;
+  height: 26px;
+  background-position: -1px -1934px;
+}
+
+/* line 1429, ../src/jquery.hosted-payments.sass */
+.sprite-card-emoney {
+  width: 42px;
+  height: 26px;
+  background-position: -1px -1962px;
+}
+
+/* line 1434, ../src/jquery.hosted-payments.sass */
+.sprite-card-gift {
+  width: 42px;
+  height: 26px;
+  background-position: -1px -1990px;
+}
+
+/* line 1439, ../src/jquery.hosted-payments.sass */
+.sprite-card-jcb {
+  width: 42px;
+  height: 26px;
+  background-position: -1px -2018px;
+}
+
+/* line 1444, ../src/jquery.hosted-payments.sass */
+.sprite-card-mastercard {
+  width: 42px;
+  height: 26px;
+  background-position: -1px -2046px;
+}
+
+/* line 1449, ../src/jquery.hosted-payments.sass */
+.sprite-card-visa {
+  width: 42px;
+  height: 26px;
+  background-position: -1px -2074px;
+}
+
+/* line 1454, ../src/jquery.hosted-payments.sass */
+.sprite-icon-cvv {
+  width: 50px;
+  height: 33px;
+  background-position: -1px -2102px;
+}
+
+/* line 1459, ../src/jquery.hosted-payments.sass */
+.sprite-icon-cvvalt {
+  width: 50px;
+  height: 33px;
+  background-position: -1px -2137px;
+}
+
+/* line 1464, ../src/jquery.hosted-payments.sass */
+.sprite-icon-refresh {
+  width: 24px;
+  height: 24px;
+  background-position: -1px -2172px;
+}
+
+/* line 1469, ../src/jquery.hosted-payments.sass */
+.sprite-icon-shield {
+  width: 58px;
+  height: 64px;
+  background-position: -1px -2198px;
+}
+
+/* line 1474, ../src/jquery.hosted-payments.sass */
+.sprite-icon-success {
+  width: 128px;
+  height: 128px;
+  background-position: -1px -2264px;
+}
+
+/* line 1479, ../src/jquery.hosted-payments.sass */
+.sprite-logo {
+  width: 80px;
+  height: 8px;
+  background-position: -1px -2394px;
+}
+
+/* line 1484, ../src/jquery.hosted-payments.sass */
+.sprite-nav-ach {
+  width: 39px;
+  height: 39px;
+  background-position: -1px -2404px;
+}
+
+/* line 1489, ../src/jquery.hosted-payments.sass */
+.sprite-nav-creditcard {
+  width: 39px;
+  height: 39px;
+  background-position: -1px -2445px;
+}
+
+/* line 1494, ../src/jquery.hosted-payments.sass */
+.sprite-nav-gift {
+  width: 39px;
+  height: 39px;
+  background-position: -1px -2486px;
+}
+
+/* line 1499, ../src/jquery.hosted-payments.sass */
+.sprite-nav-sign {
+  width: 39px;
+  height: 39px;
+  background-position: -1px -2527px;
+}
+
+/* line 1504, ../src/jquery.hosted-payments.sass */
+.sprite-nav-swipe {
+  width: 39px;
+  height: 39px;
+  background-position: -1px -2568px;
+}
+
+/* line 1509, ../src/jquery.hosted-payments.sass */
+.sprite-nav-transvault {
+  width: 39px;
+  height: 39px;
+  background-position: -1px -2609px;
 }

@@ -20,249 +20,6 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
-(function($, window, document, undefined) {
-    "use strict"; // Get a regular interval for drawing to the screen
-
-    window.requestAnimFrame = function(callback) {
-        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimaitonFrame || function(callback) {
-            window.setTimeout(callback, 1000 / 60);
-        };
-    }();
-
-    /*
-     * Plugin Constructor
-     */
-    var pluginName = "jqSignature",
-        defaults = {
-            lineColor: "#222222",
-            lineWidth: 1,
-            border: "1px dashed #AAAAAA",
-            background: "transparent",
-            width: 300,
-            height: 100,
-            autoFit: false
-        },
-        canvasFixture = "<canvas></canvas>",
-        idCounter = 0;
-
-    function Signature(element, options) {
-        // DOM elements/objects
-        this.element = element;
-        this.$element = $(this.element);
-        this.canvas = false;
-        this.$canvas = false;
-        this.ctx = false; // Drawing state
-
-        this.drawing = false;
-        this.currentPos = {
-            x: 0,
-            y: 0
-        };
-        this.lastPos = this.currentPos; // Determine plugin settings
-
-        this._data = this.$element.data();
-        this.settings = $.extend({}, defaults, options, this._data); // Initialize the plugin
-
-        this.init();
-        this.points = [-81, -251];
-    }
-
-    Signature.prototype = {
-        // Initialize the signature canvas
-        init: function init() {
-            this.id = "jq-signature-canvas-" + ++idCounter; // Set up the canvas
-
-            this.$canvas = $(canvasFixture).appendTo(this.$element);
-            this.$canvas.attr({
-                width: this.settings.width,
-                height: this.settings.height
-            });
-            this.$canvas.css({
-                boxSizing: "border-box",
-                width: this.settings.width + "px",
-                height: this.settings.height + "px",
-                border: this.settings.border,
-                background: this.settings.background,
-                cursor: "crosshair"
-            });
-            this.$canvas.attr("id", this.id); // Fit canvas to width of parent
-
-            if (this.settings.autoFit === true) {
-                this._resizeCanvas(); // TODO - allow for dynamic canvas resizing
-                // (need to save canvas state before changing width to avoid getting cleared)
-                // var timeout = false;
-                // $(window).on('resize', $.proxy(function(e) {
-                //   clearTimeout(timeout);
-                //   timeout = setTimeout($.proxy(this._resizeCanvas, this), 250);
-                // }, this));
-
-            }
-
-            this.canvas = this.$canvas[0];
-
-            this._resetCanvas(); // Listen for pointer/mouse/touch events
-            // TODO - PointerEvent isn't fully supported, but eventually do something like this:
-            // if (window.PointerEvent) {
-            //  this.$canvas.parent().css('-ms-touch-action', 'none');
-            //  this.$canvas.on("pointerdown MSPointerDown", $.proxy(this._downHandler, this));
-            //   this.$canvas.on("pointermove MSPointerMove", $.proxy(this._moveHandler, this));
-            //  this.$canvas.on("pointerup MSPointerUp", $.proxy(this._upHandler, this));
-            // }
-            // else {
-            //   this.$canvas.on('mousedown touchstart', $.proxy(this._downHandler, this));
-            //   this.$canvas.on('mousemove touchmove', $.proxy(this._moveHandler, this));
-            //   this.$canvas.on('mouseup touchend', $.proxy(this._upHandler, this));
-            // }
-
-
-            this.$canvas.on("mousedown touchstart", $.proxy(this._downHandler, this));
-            this.$canvas.on("mousemove touchmove", $.proxy(this._moveHandler, this));
-            this.$canvas.on("mouseup touchend", $.proxy(this._upHandler, this)); // Start drawing
-
-            var that = this;
-
-            (function drawLoop() {
-                window.requestAnimFrame(drawLoop);
-
-                that._renderCanvas();
-            })();
-        },
-        // Clear the canvas
-        clearCanvas: function clearCanvas() {
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-            this._resetCanvas();
-        },
-        // Get the content of the canvas as a base64 data URL
-        getDataURL: function getDataURL() {
-            return this.canvas.toDataURL();
-        },
-        // Get the content of the canvas as a base64 data URL
-        getDataPoints: function getDataPoints() {
-            return JSON.stringify(this.points).replace("[", "").replace("]", "");
-        },
-        // Handle the start of a signature
-        _downHandler: function _downHandler(e) {
-            this.drawing = true;
-            this.lastPos = this.currentPos = this._getPosition(e); // Prevent scrolling, etc
-
-            $("body").css("overflow", "hidden");
-            e.preventDefault();
-        },
-        // Handle mouse/touch moves during a signature
-        _moveHandler: function _moveHandler(e) {
-            this.currentPos = this._getPosition(e);
-
-            this._setPointsDown();
-
-            e.preventDefault();
-        },
-        // Handle the end of a signature
-        _upHandler: function _upHandler(e) {
-            this.drawing = false;
-
-            this._setPointsUp(); // Trigger a change event
-
-
-            var changedEvent = $.Event("jq.signature.changed");
-            this.$element.trigger(changedEvent); // Allow scrolling again
-
-            $("body").css("overflow", "auto");
-            e.preventDefault();
-        },
-        // Get the position of the mouse/touch
-        _getPosition: function _getPosition(event) {
-            var xPos, yPos, rect;
-            rect = this.canvas.getBoundingClientRect();
-            if (event.originalEvent) event = event.originalEvent; // Touch event
-
-            if (event.type.indexOf("touch") !== -1) {
-                // event.constructor === TouchEvent
-                xPos = event.touches[0].clientX - rect.left;
-                yPos = event.touches[0].clientY - rect.top;
-            } // Mouse event
-            else {
-                xPos = event.clientX - rect.left;
-                yPos = event.clientY - rect.top;
-            }
-
-            return {
-                x: xPos,
-                y: yPos
-            };
-        },
-        _setPointsDown: function _setPointsDown() {
-            if (this.drawing) {
-                this.points.push(this.currentPos.x);
-                this.points.push(this.currentPos.y);
-            }
-        },
-        _setPointsUp: function _setPointsUp() {
-            this.points.push(-81);
-            this.points.push(-251);
-        },
-        // Render the signature to the canvas
-        _renderCanvas: function _renderCanvas() {
-            if (this.drawing) {
-                this.ctx.beginPath();
-                this.ctx.moveTo(this.lastPos.x, this.lastPos.y);
-                this.ctx.lineTo(this.currentPos.x, this.currentPos.y);
-                this.ctx.stroke();
-                this.lastPos = this.currentPos;
-            }
-        },
-        _resetPoints: function _resetPoints() {
-            this.points = [];
-
-            this._setPointsUp();
-        },
-        // Reset the canvas context
-        _resetCanvas: function _resetCanvas() {
-            this.ctx = this.canvas.getContext("2d");
-            this.ctx.strokeStyle = this.settings.lineColor;
-            this.ctx.lineWidth = this.settings.lineWidth;
-
-            this._resetPoints();
-        },
-        // Resize the canvas element
-        _resizeCanvas: function _resizeCanvas() {
-            var width = this.$element.outerWidth();
-            this.$canvas.attr("width", width);
-            this.$canvas.css("width", width + "px");
-        }
-    };
-    /*
-     * Plugin wrapper and initialization
-     */
-
-    $.fn[pluginName] = function(options) {
-        var args = arguments;
-
-        if (options === undefined || (typeof options === "undefined" ? "undefined" : typeof(options)) === "object") {
-            return this.each(function() {
-                if (!$.data(this, "plugin_" + pluginName)) {
-                    $.data(this, "plugin_" + pluginName, new Signature(this, options));
-                }
-            });
-        } else if (typeof options === "string" && options[0] !== "_" && options !== "init") {
-            var returns;
-            this.each(function() {
-                var instance = $.data(this, "plugin_" + pluginName);
-
-                if (instance instanceof Signature && typeof instance[options] === "function") {
-                    returns = instance[options].apply(instance, Array.prototype.slice.call(args, 1));
-                }
-
-                if (options === "destroy") {
-                    $.data(this, "plugin_" + pluginName, null);
-                }
-            });
-            return returns !== undefined ? returns : this;
-        }
-    };
-})(jQuery, window, document);
-
 (function($, window, document, undefined) {
     var resources = {
         nojQuery: "jQuery was not found. Please ensure jQuery is referenced before the SignalR client JavaScript file.",
@@ -3068,7 +2825,6 @@
     hp.RequestTypes.CREATE_INSTRUMENT = 0;
     hp.RequestTypes.CHARGE = 1;
     hp.RequestTypes.REFUND = 2;
-    hp.RequestTypes.SIGNATURE = 3;
     hp.RequestTypes.ERROR = 9; // entry type
 
     hp.PaymentType = {};
@@ -3079,14 +2835,8 @@
     hp.PaymentType.ISSUE = "ISSUE";
     hp.PaymentType.GET_CARD_INFORMATION = "GET_CARD_INFORMATION";
     hp.PaymentType.DISPLAY_MERCHANT_DOCUMENT = "DISPLAY_MERCHANT_DOCUMENT";
-    hp.PaymentType.GIFTCARD_ISSUE = "GIFTCARD_ISSUE";
-    hp.PaymentType.GIFTCARD_ADD_VALUE = "GIFTCARD_ADD_VALUE";
-    hp.PaymentType.GIFTCARD_GET_CARD_BALANCE = "GIFTCARD_GET_CARD_BALANCE";
-    hp.PaymentType.GIFTCARD_REVERSE_ADD_VALUE = "GIFTCARD_REVERSE_ADD_VALUE";
-    hp.PaymentType.CAPTURE_SIGNATURE = "CAPTURE_SIGNATURE"; // exposes payments (for split payment methods)
 
     hp.Utils.payments = []; // expose inital boolean for embeded instrument
-
     hp.Utils.hasPaymentInstrument = false; // A variety of CSS based identifiers
 
     var handleLegacyCssClassApplication = function handleLegacyCssClassApplication(classPrefix, $form) {
@@ -3237,26 +2987,6 @@
 
             case "displaymerchantdocument":
                 result = hp.PaymentType.DISPLAY_MERCHANT_DOCUMENT;
-                break;
-
-            case "giftcardissue":
-                result = hp.PaymentType.GIFTCARD_ISSUE;
-                break;
-
-            case "giftcardaddvalue":
-                result = hp.PaymentType.GIFTCARD_ADD_VALUE;
-                break;
-
-            case "giftcardgetcardbalance":
-                result = hp.PaymentType.GIFTCARD_GET_CARD_BALANCE;
-                break;
-
-            case "giftcardreverseaddvalue":
-                result = hp.PaymentType.GIFTCARD_REVERSE_ADD_VALUE;
-                break;
-
-            case "capturesignature":
-                result = hp.PaymentType.CAPTURE_SIGNATURE;
                 break;
 
             case "preauth":
@@ -3475,9 +3205,21 @@
         hp.Utils.plugins.Code = new hp.Code($element);
         hp.Utils.plugins.Success = new hp.Success($element);
         hp.Utils.plugins.Transvault = new hp.Transvault($element);
-        hp.Utils.plugins.GiftCard = new hp.GiftCard($element);
-        hp.Utils.plugins.Signature = new hp.Signature($element);
-        $element.html($wrapper.replace("{{success}}", hp.Utils.plugins.Success.createTemplate().replace("{{redirectLabel}}", hp.Utils.defaults.defaultRedirectLabel).replace("{{successLabel}}", hp.Utils.defaults.defaultSuccessLabel)).replace(/{{phone}}/gi, hp.Utils.defaults.defaultPhone).replace("{{error}}", hp.Utils.defaults.defaultErrorLabel).replace("{{order}}", hp.Utils.createOrder()).replace("{{nav}}", hp.Utils.createNav()));
+
+        $element.html(
+            $wrapper
+                .replace(
+                    "{{success}}", 
+                    hp.Utils.plugins.Success.createTemplate()
+                        .replace("{{redirectLabel}}", hp.Utils.defaults.defaultRedirectLabel)
+                        .replace("{{successLabel}}", hp.Utils.defaults.defaultSuccessLabel)
+                )
+                .replace(/{{phone}}/gi, hp.Utils.defaults.defaultPhone)
+                .replace("{{error}}", hp.Utils.defaults.defaultErrorLabel)
+                .replace("{{order}}", hp.Utils.createOrder())
+                .replace("{{nav}}", hp.Utils.createNav())
+        );
+
         var $parent = $element.find(".hp"),
             $types = $parent.find(".hp-type"),
             activeClass = "hp-active";
@@ -3518,14 +3260,6 @@
                 if (!!$this.attr("class").match(/hp-transvault/gi)) {
                     callback(hp.Utils.plugins.Transvault);
                 }
-
-                if (!!$this.attr("class").match(/hp-gc/gi)) {
-                    callback(hp.Utils.plugins.GiftCard);
-                }
-
-                if (!!$this.attr("class").match(/hp-signature/gi)) {
-                    callback(hp.Utils.plugins.Signature);
-                }
             });
         }).eq(0).trigger("click");
     }; // success page
@@ -3542,21 +3276,7 @@
             deferred.resolve();
         }, timeout);
         return deferred;
-    }; // signature page
-
-
-    var showSignaturePage = function showSignaturePage(delay) {
-        var deferred = jQuery.Deferred(),
-            timeout = typeof delay === "undefined" ? 0 : delay;
-        setTimeout(function() {
-            $(".hp-app-link-container").removeClass("hp-page-active").hide();
-            $(".hp-form").removeClass("hp-form-transvault-app-link");
-            hp.Utils.plugins.Signature.init();
-            $(".hp-col-left .hp-type").off("click").removeClass("hp-active");
-            deferred.resolve();
-        }, timeout);
-        return deferred;
-    };
+    }; 
 
     var setAmount = function setAmount(amount) {
         hp.Utils.defaults.amount = Math.abs(Math.round10(parseFloat(amount), -2));
@@ -3606,9 +3326,7 @@
             creditCard = "",
             bankAccount = "",
             code = "",
-            transvault = "",
-            signature = "",
-            giftcard = "";
+            transvault = "";
 
         if (defaultAreas.indexOf(0) >= 0) {
             creditCard = '<li class="hp-type hp-cc"><a href="javascript:void(0);"><img src="https://cdn.rawgit.com/etsms/9e2e4c55564ca8eba12f9fa3e7064299/raw/93965040e6e421e1851bfe7a15af92bdc722fa43/credt-card-icon.svg" alt="Credit Card" /> <span>Credit Card</span></a></li>';
@@ -3626,14 +3344,6 @@
             transvault = '<li class="hp-type hp-transvault"><a href="javascript:void(0);"><img src="https://cdn.rawgit.com/etsms/5363122967f20bd31d6630529cb17c3f/raw/0a0ae6a30247ced8ed5c0c85f2b42072b59b8fba/transvault-icon.svg" alt="Hosted Transvault" /> <span>Transvault</span></a></li>';
         }
 
-        if (defaultAreas.indexOf(4) >= 0) {
-            giftcard = '<li class="hp-type hp-gc"><a href="javascript:void(0);"><img src="https://cdn.rawgit.com/etsms/2e9f0f3bb754a7910ffbdbd16ea9926a/raw/27ce16494e375ff8d04deb918ffd76d743397488/gift-icon.svg" alt="Gift Card" /> <span>Gift Card</span></a></li>';
-        }
-
-        if (defaultAreas.indexOf(5) >= 0) {
-            signature = '<li class="hp-type hp-signature"><a href="javascript:void(0);"><img src="https://cdn.rawgit.com/etsms/d0f7a8a7fc4fd889fb932990e757eaf8/raw/b5477130ac9d74273c4078944418ce850cc733a7/signature-icon.svg" alt="Signature" /> <span>Signature</span></a></li>';
-        }
-
         for (var i = 0; i < defaultAreas.length; i++) {
             if (defaultAreas[i] === 0) {
                 html += creditCard;
@@ -3650,14 +3360,6 @@
             if (defaultAreas[i] === 3) {
                 html += transvault;
             }
-
-            if (defaultAreas[i] === 4) {
-                html += giftcard;
-            }
-
-            if (defaultAreas[i] === 5) {
-                html += signature;
-            }
         }
 
         return html;
@@ -3669,9 +3371,7 @@
             creditCard = "",
             bankAccount = "",
             code = "",
-            transvault = "",
-            signature = "",
-            giftcard = "";
+            transvault = "";
 
         if (defaultAreas.indexOf(0) >= 0) {
             creditCard = '<div class="hp-content hp-content-cc">{{creditCard}}</div>'.replace("{{creditCard}}", hp.Utils.plugins.CreditCard.createTemplate(hp.Utils.defaults.defaultCardCharacters, hp.Utils.defaults.defaultNameOnCardName, hp.Utils.defaults.defaultDateCharacters));
@@ -3689,14 +3389,6 @@
             transvault = '<div class="hp-content hp-content-transvault">{{transvault}}</div>'.replace("{{transvault}}", hp.Utils.plugins.Transvault.createTemplate());
         }
 
-        if (defaultAreas.indexOf(4) >= 0) {
-            giftcard = '<div class="hp-content hp-content-gc">{{giftcard}}</div>'.replace("{{giftcard}}", hp.Utils.plugins.GiftCard.createTemplate(hp.Utils.defaults.defaultCardCharacters, hp.Utils.defaults.defaultNameOnCardName, +new Date().getFullYear().toString().substring(2, 4) + 3));
-        }
-
-        if (defaultAreas.indexOf(5) >= 0) {
-            signature = '<div class="hp-content hp-content-signature">{{signature}}</div>'.replace("{{signature}}", hp.Utils.plugins.Signature.createTemplate());
-        }
-
         for (var i = 0; i < defaultAreas.length; i++) {
             if (defaultAreas[i] === 0) {
                 html += creditCard;
@@ -3712,14 +3404,6 @@
 
             if (defaultAreas[i] === 3) {
                 html += transvault;
-            }
-
-            if (defaultAreas[i] === 4) {
-                html += giftcard;
-            }
-
-            if (defaultAreas[i] === 5) {
-                html += signature;
             }
         }
 
@@ -3804,24 +3488,12 @@
             instrument_verification_results: "",
             created_on: new Date().toISOString(),
             customer_name: "",
-            customer_signature: "https://images.pmoney.com/00000000",
+            customer_signature: "https://images.emoney.com/00000000",
             anti_forgery_token: hp.Utils.defaults.antiForgeryToken,
             application_identifier: "Hosted Payments",
             application_response_code: "",
             application_issuer_data: ""
         };
-    };
-
-    var buildSignatureResultObject = function buildSignatureResultObject(response) {
-        var deferred = jQuery.Deferred();
-        var baseResponse = buildSuccessResultObject();
-        baseResponse.amount = 0;
-        baseResponse.transaction_type = 0;
-        baseResponse.message = "Signature captured";
-        baseResponse.transaction_type = hp.PaymentType.CAPTURE_SIGNATURE;
-        baseResponse.customer_signature = response.signatureUrl;
-        deferred.resolve([baseResponse]);
-        return deferred;
     };
 
     var buildResultObjectByType = function buildResultObjectByType(response) {
@@ -4045,7 +3717,7 @@
                             responses[currentCount].transaction_sequence_number = statusResponse.properties.sequenceNumber;
                             responses[currentCount].transaction_avs_postal_code_passed = isACH ? true : statusResponse.properties.postalCodeCheck;
                             responses[currentCount].transaction_avs_street_passed = isACH ? true : statusResponse.properties.addressLine1Check;
-                            responses[currentCount].customer_signature = statusResponse.properties.signatureRef === null || statusResponse.properties.signatureRef === undefined || statusResponse.properties.signatureRef === "" ? "https://images.pmoney.com/00000000" : statusResponse.properties.signatureRef;
+                            responses[currentCount].customer_signature = statusResponse.properties.signatureRef === null || statusResponse.properties.signatureRef === undefined || statusResponse.properties.signatureRef === "" ? "https://images.emoney.com/00000000" : statusResponse.properties.signatureRef;
                             responses[currentCount].message = (responses[currentCount].message + " " + (statusResponse.properties.message + ".")).toLowerCase().replace(" .", "");
                             responses[currentCount].instrument_verification_results = isACH ? false : true;
                             responses[currentCount].instrument_verification_method = isACH ? "" : "SIGNATURE";
@@ -4090,7 +3762,7 @@
                 successResponse.transaction_approval_code = isACH ? "" : statusResponse.properties.approvalCode;
                 successResponse.transaction_avs_postal_code_passed = isACH ? true : statusResponse.properties.postalCodeCheck;
                 successResponse.transaction_avs_street_passed = isACH ? true : statusResponse.properties.addressLine1Check;
-                successResponse.customer_signature = statusResponse.properties.signatureRef === null || statusResponse.properties.signatureRef === undefined || statusResponse.properties.signatureRef === "" ? "https://images.pmoney.com/00000000" : statusResponse.properties.signatureRef;
+                successResponse.customer_signature = statusResponse.properties.signatureRef === null || statusResponse.properties.signatureRef === undefined || statusResponse.properties.signatureRef === "" ? "https://images.emoney.com/00000000" : statusResponse.properties.signatureRef;
                 successResponse.message = (successResponse.message + " " + (statusResponse.properties.message + ".")).toLowerCase().replace(" .", "");
                 successResponse.instrument_verification_results = isACH ? false : true;
                 successResponse.instrument_verification_method = isACH ? "" : "SIGNATURE";
@@ -4132,9 +3804,6 @@
     requestTypes.STATUS = "status";
     requestTypes.STATUS_REQUEST = "statusRequest";
     requestTypes.STATUS_RESPONSE = "statusResponse";
-    requestTypes.SIGNATURE = "signature";
-    requestTypes.SIGNATURE_REQUEST = "signatureRequest";
-    requestTypes.SIGNATURE_RESPONSE = "signatureResponse";
     requestTypes.REPLACEPLAN = "replacePlan";
     requestTypes.REPLACEPLAN_REQUEST = "replacePlanRequest";
     requestTypes.REPLACEPLAN_RESPONSE = "replacePlanResponse";
@@ -4188,12 +3857,6 @@
             responseMemberName = requestTypes.STATUS_RESPONSE;
         }
 
-        if (requestTypes.SIGNATURE in data) {
-            memberName = requestTypes.SIGNATURE;
-            requestMemberName = requestTypes.SIGNATURE_REQUEST;
-            responseMemberName = requestTypes.SIGNATURE_RESPONSE;
-        }
-
         if (requestTypes.REPLACEPLAN in data) {
             memberName = requestTypes.REPLACEPLAN;
             requestMemberName = requestTypes.REPLACEPLAN_REQUEST;
@@ -4232,11 +3895,6 @@
 
         if (requestTypes.STATUS_RESPONSE in data) {
             memberName = requestTypes.STATUS_RESPONSE;
-            isResponse = true;
-        }
-
-        if (requestTypes.SIGNATURE_RESPONSE in data) {
-            memberName = requestTypes.SIGNATURE_RESPONSE;
             isResponse = true;
         }
 
@@ -4281,8 +3939,46 @@
         }
 
         setTimeout(function() {
-            var template = ['<div class="hp-avs-prompt">', '<div class="hp-avs-prompt-container">', "<p>Billing Address</p>", '<div class="hp-avs-prompt-left">', '<label class="hp-label-avs" for="avsStreet">Address <span class="hp-avs-required">*</span></label>', '<div class="hp-input hp-input-avs hp-input-avs-street">', '<input placeholder="Street Address" value="' + hp.Utils.defaults.billingAddress.addressLine1 + '" name="avsStreet" id="avsStreet" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "address-line1") + '" type="text">', "</div>", "</div>", '<div class="hp-avs-prompt-right">', '<div class="hp-pull-left">', '<label class="hp-label-avs" for="avsZip">City</label>', '<div class="hp-input hp-input-avs hp-input-avs-city">', '<input placeholder="City" name="city" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text">', "</div>", "</div>", '<div class="hp-pull-left">', '<label class="hp-label-avs" for="avsZip">State</label>', '<div class="hp-input hp-input-avs hp-input-avs-state">', '<input placeholder="State" name="state" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text">', "</div>", "</div>", '<div class="hp-pull-left">', '<label class="hp-label-avs" for="avsZip">Zip <span class="hp-avs-required">*</span></label>', '<div class="hp-input hp-input-avs hp-input-avs-zip">', '<input placeholder="Zipcode" value="' + hp.Utils.defaults.billingAddress.postalCode + '" name="avsZip" id="avsZip" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "postal-code") + '" type="text" pattern="\\d*">', "</div>", "</div>", "</div>", '<br class="hp-break" />', "<hr>", '<button class="hp-submit hp-avs-submit">' + hp.Utils.defaults.defaultButtonLabel + "</button>", hp.Utils.defaults.allowAvsSkip ? '<a class="hp-avs-skip" href="javascript:;">Skip \'Address Verification\'</a>' : "", "</div>", "</div>"].join("");
+            var template = [
+                '<div class="hp-avs-prompt">', 
+                    '<div class="hp-avs-prompt-container">', 
+                        "<p>Billing Address</p>", 
+                        '<div class="hp-avs-prompt-left">', 
+                            '<label class="hp-label-avs" for="avsStreet">Address <span class="hp-avs-required">*</span></label>', 
+                            '<div class="hp-input hp-input-avs hp-input-avs-street">', 
+                                '<input placeholder="Street Address" value="' + hp.Utils.defaults.billingAddress.addressLine1 + '" name="avsStreet" id="avsStreet" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "address-line1") + '" type="text">', 
+                            "</div>", 
+                        "</div>", 
+                        '<div class="hp-avs-prompt-right">', 
+                            '<div class="hp-pull-left">', 
+                                '<label class="hp-label-avs" for="avsCity">City</label>', 
+                                '<div class="hp-input hp-input-avs hp-input-avs-city">', 
+                                    '<input placeholder="City" id="avsCity" name="avsCity" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text">', 
+                                "</div>", 
+                            "</div>", 
+                            '<div class="hp-pull-left">', 
+                                '<label class="hp-label-avs" for="avsState">State</label>', 
+                                '<div class="hp-input hp-input-avs hp-input-avs-state">', 
+                                    '<input placeholder="State" id="avsState" name="avsState" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text">', 
+                                "</div>", 
+                            "</div>", 
+                            '<div class="hp-pull-left">', 
+                                '<label class="hp-label-avs" for="avsZip">Zip <span class="hp-avs-required">*</span></label>', 
+                                '<div class="hp-input hp-input-avs hp-input-avs-zip">', 
+                                    '<input placeholder="Zipcode" value="' + hp.Utils.defaults.billingAddress.postalCode + '" name="avsZip" id="avsZip" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "postal-code") + '" type="text" pattern="\\d*">', 
+                                "</div>", 
+                            "</div>", 
+                        "</div>", 
+                        '<br class="hp-break" />', 
+                        "<hr>", 
+                        '<button class="hp-submit hp-avs-submit">' + hp.Utils.defaults.defaultButtonLabel + "</button>", 
+                        hp.Utils.defaults.allowAvsSkip ? '<a class="hp-avs-skip" href="javascript:;">Skip \'Address Verification\'</a>' : "", 
+                    "</div>", 
+                "</div>"
+            ].join("");
+
             $element.prepend(template);
+
             var $avsPrompt = $element.find(".hp-avs-prompt"),
                 avsZipValue = "",
                 avsStreetValue = "";
@@ -4987,7 +4683,7 @@
              */
 
 
-            if (instance.isCode() || instance.isBankAccount() || instance.isCreditCard() || instance.isGiftCard() || instance.isSignature()) {
+            if (instance.isCode() || instance.isBankAccount() || instance.isCreditCard()) {
                 /*
                  * Make sure Transvault is disconnected
                  */
@@ -4998,11 +4694,6 @@
 
                 $this.off().on("hp.notify", hp.Utils.defaults.eventCallback).on("hp.submit", function(e, eventResponse) {
                     if (eventResponse.type === hp.RequestTypes.CHARGE) {
-                        instance.handleSuccess(eventResponse.res);
-                        hp.Utils.hideLoader();
-                    }
-
-                    if (eventResponse.type === hp.RequestTypes.SIGNATURE) {
                         instance.handleSuccess(eventResponse.res);
                         hp.Utils.hideLoader();
                     }
@@ -5081,7 +4772,6 @@
     hp.Utils.buildAntiForgeryInput = buildAntiForgeryInput;
     hp.Utils.createInstance = createInstance;
     hp.Utils.showSuccessPage = showSuccessPage;
-    hp.Utils.showSignaturePage = showSignaturePage;
     hp.Utils.getAmount = getAmount;
     hp.Utils.setAmount = setAmount;
     hp.Utils.setCustomerInfo = setCustomerInfo;
@@ -5092,7 +4782,6 @@
     hp.Utils.getBalance = getBalance;
     hp.Utils.formatCurrency = formatCurrency;
     hp.Utils.buildResultObjectByType = buildResultObjectByType;
-    hp.Utils.buildSignatureResultObject = buildSignatureResultObject;
     hp.Utils.generateGUID = generateGUID;
     hp.Utils.createOrder = createOrder;
     hp.Utils.createNav = createNav;
@@ -5183,174 +4872,10 @@
         return false;
     };
 
-    Success.prototype.isGiftCard = function() {
-        return false;
-    };
-
-    Success.prototype.isSignature = function() {
-        return false;
-    };
     /*
      * Export "Success"
      */
-
-
     hp.Success = Success;
-})(jQuery, window, document);
-
-(function($, window, document, undefined) {
-    "use strict";
-    /*
-     * Export "hp"
-     */
-
-    window.hp = hp || {};
-
-    function Signature($element) {
-        this.context = null;
-        this.$parent = null;
-        this.$content = null;
-        this.hasChanged = false;
-        this.$element = $element;
-        this.formData = {
-            _isValid: false
-        };
-    }
-
-    Signature.prototype.init = function() {
-        var context = hp.Utils.handleLegacyCssClassApplication("signature", this.$element),
-            $parent = context.parent,
-            $content = context.content;
-        $parent.find(".icon.signature").addClass("animate").show();
-        this.context = context;
-        this.$parent = $parent;
-        this.$content = $content;
-        this.$signature = this.$parent.find(".hp-js-signature").jqSignature({
-            autoFit: true,
-            lineColor: "#007aff",
-            height: 320,
-            border: "0 none"
-        });
-        var that = this;
-        this.$signature.on("jq.signature.changed", function(e) {
-            if (!that.hasChanged) {
-                that.hasChanged = true;
-                that.enableButtons();
-            }
-        });
-        this.$parent.find(".hp-dismiss-icon").off("click").on("click", function() {
-            hp.Utils.reset();
-        });
-    };
-
-    Signature.prototype.createTemplate = function() {
-        var $html = ['<div class="hp-signature-visual">', '<div class="hp-signature-container">', '<a class="hp-dismiss-icon" href="javascript:;">&times</a>', '<div class="hp-js-signature">', "</div>", '<div class="hp-submit-group">', '<button disabled="disabled" class="hp-submit hp-submit-danger">Clear Signature</button>', '<button disabled="disabled" class="hp-submit hp-submit-success">Submit Signature</button>', "</div>", "</div>", "</div>"].join("");
-        return $html;
-    };
-
-    Signature.prototype.showSuccess = function(delay) {
-        return hp.Utils.showSuccessPage(delay);
-    };
-
-    Signature.prototype.attachEvents = function() {};
-
-    Signature.prototype.detachEvents = function() {};
-
-    Signature.prototype.handleSignature = function() {
-        var signature = this.$signature.jqSignature("getDataPoints"),
-            that = this,
-            requestModel = {
-                signature: {
-                    signatureRequest: {
-                        token: hp.Utils.getSession().sessionToken,
-                        correlationId: hp.Utils.getCorrelationId(),
-                        transactionId: hp.Utils.defaults.transactionId,
-                        data: signature
-                    }
-                }
-            };
-        hp.Utils.showLoader();
-        hp.Utils.makeRequest(requestModel).then(hp.Utils.buildSignatureResultObject).then(function(promiseResponse) {
-            that.$parent.trigger("hp.submit", {
-                type: hp.RequestTypes.SIGNATURE,
-                res: promiseResponse
-            });
-        }).fail(function(promiseResponse) {
-            if (typeof promiseResponse.responseJSON !== "undefined") {
-                promiseResponse = promiseResponse.responseJSON;
-            }
-
-            that.$parent.trigger("hp.submit", {
-                type: hp.RequestTypes.ERROR,
-                res: promiseResponse
-            });
-        });
-    };
-
-    Signature.prototype.handleError = function(res) {
-        hp.Utils.handleError(res);
-        this.clearInputs();
-    };
-
-    Signature.prototype.clearInputs = function() {
-        this.$signature.jqSignature("clearCanvas");
-    };
-
-    Signature.prototype.enableButtons = function() {
-        var that = this;
-        this.$parent.find(".hp-submit-group .hp-submit").removeAttr("disabled");
-        this.$parent.find(".hp-submit-group .hp-submit-success").off("click").on("click", function() {
-            that.handleSignature();
-        });
-        this.$parent.find(".hp-submit-group .hp-submit-danger").off("click").on("click", function() {
-            that.$signature.jqSignature("clearCanvas");
-            that.hasChanged = false;
-            that.$parent.find(".hp-submit-group .hp-submit").attr("disabled", "disabled");
-        });
-    };
-
-    Signature.prototype.handleSuccess = function(res) {
-        hp.Utils.handleSuccess(res);
-        this.showSuccess();
-    };
-
-    Signature.prototype.isCreditCard = function() {
-        return false;
-    };
-
-    Signature.prototype.isBankAccount = function() {
-        return false;
-    };
-
-    Signature.prototype.isEMoney = function() {
-        return false;
-    };
-
-    Signature.prototype.isSuccessPage = function() {
-        return false;
-    };
-
-    Signature.prototype.isCode = function() {
-        return false;
-    };
-
-    Signature.prototype.isGiftCard = function() {
-        return false;
-    };
-
-    Signature.prototype.isSignature = function() {
-        return true;
-    };
-
-    Signature.prototype.isTransvault = function() {
-        return false;
-    };
-    /*
-     * Export "Signature"
-     */
-
-
-    hp.Signature = Signature;
 })(jQuery, window, document);
 
 (function($, window, document, undefined) {
@@ -6059,371 +5584,10 @@
         return false;
     };
 
-    CreditCard.prototype.isGiftCard = function() {
-        return false;
-    };
-
-    CreditCard.prototype.isSignature = function() {
-        return false;
-    };
     /*
      * Export "Credit Card"
      */
-
-
     hp.CreditCard = CreditCard;
-})(jQuery, window, document);
-
-(function($, window, document, undefined) {
-    "use strict";
-    /*
-     * Export "hp"
-     */
-
-    window.hp = hp || {};
-    /*
-     * Gift Card Class
-     */
-
-    function GiftCard($element) {
-        this.context = null;
-        this.$parent = null;
-        this.$content = null;
-        this.$loader = null;
-        this.$element = $element;
-        this.formData = {
-            _isValid: false
-        };
-        this.currrentPage = 0;
-        this.transactionId = "";
-    }
-
-    var sessionId = "",
-        createdOn = new Date().toISOString();
-
-    GiftCard.prototype.init = function() {
-        sessionId = hp.Utils.getSession().sessionToken; // utils call
-
-        var context = hp.Utils.handleLegacyCssClassApplication("gc", this.$element),
-            $parent = context.parent,
-            $content = context.content; // Clean parent, notify on complete.
-
-        $parent.removeClass("hp-back").trigger("hp.notify");
-        this.context = context;
-        this.$parent = $parent;
-        this.$content = $content;
-        this.totalPages = $content.find(".hp-page").length;
-        this.currrentPage = 0;
-        this.transactionId = hp.Utils.defaults.transactionId;
-    };
-
-    GiftCard.prototype.clearInputs = function() {
-        this.formData = {
-            _isValid: false
-        };
-    };
-
-    GiftCard.prototype.createTemplate = function(defaultCardCharacters, defaultNameOnCardName, defaultDateCharacters) {
-        if (hp.Utils.defaults.paymentTypeOrder.indexOf(4) < 0) {
-            return "";
-        }
-
-        var $html = ['<div class="hp-page hp-page-0 hp-page-active">', "<h2>Swipe, scan, or manually<br /> enter a gift card.</h2><br />", '<div class="hp-card-visual">', '<div class="hp-card-visual-number">' + defaultCardCharacters + "</div>", '<div class="hp-card-visual-name">' + defaultNameOnCardName + "</div>", '<div class="hp-card-visual-expiry">', '<span class="hp-card-visual-expiry-label">Month/Year</span>', '<span class="hp-card-visual-expiry-label-alt">Valid Thru</span>', '<span class="hp-card-visual-expiry-value"><span class="hp-card-visual-expiry-month">12</span><span>/</span><span class="hp-card-visual-expiry-year">' + defaultDateCharacters + "</span></span>", "</div>", "</div>", '<div class="hp-input-wrapper">', '<div class="hp-input-group hp-clearfix">', '<div class="hp-input hp-input-gc hp-pull-left">', '<input placeholder="Enter Card Number" name="cardNumber" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-number") + '" type="text" pattern="\\d*">', "</div>", '<button class="hp-submit hp-pull-left">Submit</button>', "</div>", "<hr />", '<button class="hp-submit hp-submit-success">Issue a new Gift Card</button>', "</div>", "</div>", '<div class="hp-page hp-page-1">', "<h2>Page 1.</h2><br />", "</div>", '<div class="hp-page hp-page-2">', "<h2>Page 2.</h2><br />", "</div>", '<div class="hp-page hp-page-3">', "<h2>Page 3.</h2><br />", "</div>", '<div class="hp-page hp-page-4">', "<h2>Page 4.</h2><br />", "</div>", '<div class="hp-page hp-page-5">', "<h2>Page 5.</h2><br />", "</div>", "<br />"].join("");
-        return $html;
-    };
-
-    GiftCard.prototype.getCurrentPageElement = function() {
-        return this.$content.find(".hp-page-active").eq(0);
-    };
-
-    GiftCard.prototype.goTo = function(pageNumber) {
-        if (pageNumber === "first") {
-            pageNumber = 0;
-        }
-
-        if (pageNumber === "last") {
-            pageNumber = this.totalPages - 1;
-        }
-
-        var num = +pageNumber;
-
-        if (num < 0) {
-            num = 0;
-        }
-
-        if (num > this.totalPages) {
-            num = this.totalPages;
-        }
-
-        this.$content.find(".hp-page").removeClass("hp-page-active").filter(".hp-page-" + num).addClass("hp-page-active");
-        this.currrentPage = num;
-        this.$parent.trigger("hp.notify", {
-            type: "page",
-            value: num
-        });
-    };
-
-    GiftCard.prototype.next = function() {
-        var page = this.currrentPage + 1;
-        this.goTo(page === this.totalPages ? "first" : page);
-    };
-
-    GiftCard.prototype.prev = function() {
-        this.goTo(this.currrentPage === 0 ? "last" : this.currrentPage - 1);
-    };
-
-    GiftCard.prototype.showSuccess = function(delay) {
-        return hp.Utils.showSuccessPage(delay);
-    };
-
-    GiftCard.prototype.detachEvents = function() {
-        this.$parent.trigger("hp.notify");
-        this.handleNotify();
-    };
-
-    GiftCard.prototype.handleCharge = function(res) {
-        var that = this,
-            hasBalance = true,
-            cardBalance = 0;
-        var errorResponse = {
-            status: "Error",
-            message: "The payment instrument provided had no remaining funds and will not be applied to the split payment.",
-            created_on: createdOn,
-            token: sessionId
-        };
-        var requestModel = {
-            charge: {
-                chargeRequest: {
-                    correlationId: hp.Utils.getCorrelationId(),
-                    token: hp.Utils.getSession().sessionToken,
-                    transactionId: this.transactionId,
-                    instrumentId: this.instrumentId,
-                    entryType: hp.Utils.defaults.entryType,
-                    amount: hp.Utils.getAmount(),
-                    phone: hp.Utils.getCustomerInfo().customerPhone,
-                    email: hp.Utils.getCustomerInfo().customerEmail,
-                    sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
-                    sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
-                    __request: res.request
-                }
-            }
-        };
-
-        if (hp.Utils.defaults.surchargeFee > 0) {
-            requestModel.charge.chargeRequest.surchargeFee = hp.Utils.defaults.surchargeFee;
-        }
-
-        if (hp.Utils.defaults.convenienceFee > 0) {
-            requestModel.charge.chargeRequest.convenienceFee = hp.Utils.defaults.convenienceFee;
-        }
-
-        hp.Utils.makeRequest(requestModel).then(hp.Utils.buildResultObjectByType).then(function(promiseResponse) {
-            that.$parent.trigger("hp.submit", {
-                type: hp.RequestTypes.CHARGE,
-                res: promiseResponse
-            });
-        }).fail(function(promiseResponse) {
-            if (typeof promiseResponse.responseJSON !== "undefined") {
-                promiseResponse = promiseResponse.responseJSON;
-            }
-
-            that.$parent.trigger("hp.submit", {
-                type: hp.RequestTypes.ERROR,
-                res: promiseResponse
-            });
-        });
-    };
-
-    GiftCard.prototype.handleSubmit = function() {
-        var that = this;
-
-        if (!that.formData._isValid) {
-            return;
-        }
-
-        $submit.attr("disabled", "disabled").text("Submitting...");
-        hp.Utils.promptAvs().then(function() {
-            hp.Utils.showLoader();
-            return hp.Utils.makeRequest({
-                createPaymentInstrument: {
-                    createPaymentInstrumentRequest: {
-                        correlationId: hp.Utils.getCorrelationId(),
-                        customerToken: hp.Utils.getCustomerToken(),
-                        instrumentId: hp.Utils.getInstrumentId(),
-                        token: hp.Utils.getSession().sessionToken,
-                        name: that.formData.name,
-                        phone: hp.Utils.getCustomerInfo().customerPhone,
-                        email: hp.Utils.getCustomerInfo().customerEmail,
-                        sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
-                        sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
-                        properties: {
-                            cardNumber: that.formData.cardNumber,
-                            expirationDate: that.formData._expiryMonth + "/" + that.formData._expiryYear,
-                            cvv: that.formData.cvv,
-                            nameOnCard: that.formData.name,
-                            customerToken: hp.Utils.getCustomerToken(),
-                            instrumentId: hp.Utils.getInstrumentId()
-                        },
-                        billingAddress: {
-                            addressLine1: hp.Utils.defaults.billingAddress.addressLine1,
-                            postalCode: hp.Utils.defaults.billingAddress.postalCode
-                        }
-                    }
-                }
-            });
-        }).then(function(res) {
-            if (res.isException) {
-                that.$parent.trigger("hp.submit", {
-                    type: 9,
-                    res: res
-                });
-                return;
-            }
-
-            that.instrumentId = res.instrumentId;
-            that.transactionId = typeof res.transactionId !== "undefined" ? res.transactionId : that.transactionId;
-            that.$parent.trigger("hp.submit", {
-                type: 0,
-                res: res
-            });
-            that.handleCharge(res);
-        }).fail(function(err) {
-            if (typeof err.responseJSON !== "undefined") {
-                err = err.responseJSON;
-            }
-
-            that.$parent.trigger("hp.submit", {
-                type: 9,
-                res: err
-            });
-        });
-    };
-
-    GiftCard.prototype.handleSuccess = function(res) {
-        hp.Utils.handleSuccess(res);
-        this.showSuccess();
-    };
-
-    GiftCard.prototype.handleError = function(res) {
-        hp.Utils.handleError(res);
-        this.clearInputs();
-    };
-
-    GiftCard.prototype.addScanSwipeListener = function(first_argument) {
-        var $this = this;
-        $(document).pos({
-            onEventName: "hp.global_giftcard_start",
-            offEventName: "hp.global_giftcard_end",
-            onSwipeScan: function onSwipeScan(result) {
-                $this.handleSubmit(data);
-            }
-        });
-    };
-
-    GiftCard.prototype.attachEvents = function() {
-        var $this = this;
-        $this.$parent.on("hp.notify", function(e, args) {
-            if (typeof args === "undefined") {
-                return;
-            }
-
-            if (typeof args.type === "undefined") {
-                return;
-            }
-
-            if (args.type !== "page") {
-                return;
-            }
-
-            var pageNum = args.value,
-                pageFunc = "handlePage" + pageNum + "Events";
-
-            if (typeof $this[pageFunc] === "undefined") {
-                return;
-            }
-
-            $this[pageFunc]($this.getCurrentPageElement());
-        });
-        $this.handlePage0Events($this.getCurrentPageElement());
-        $this.handleNotify();
-    };
-
-    GiftCard.prototype.handlePage0Events = function(container) {
-        this.addScanSwipeListener();
-        container.find(".hp-input-gc input").payment("formatCardNumber");
-        container.find(".hp-input-gc .hp-submit").off().on("click", function(e) {});
-        console.log("handlePage0Events", container);
-    };
-
-    GiftCard.prototype.handlePage1Events = function(container) {
-        console.log("handlePage1Events", container);
-    };
-
-    GiftCard.prototype.handlePage2Events = function(container) {
-        console.log("handlePage2Events", container);
-    };
-
-    GiftCard.prototype.handlePage3Events = function(container) {
-        console.log("handlePage3Events", container);
-    };
-
-    GiftCard.prototype.handlePage4Events = function(container) {
-        console.log("handlePage4Events", container);
-    };
-
-    GiftCard.prototype.handlePage5Events = function(container) {
-        console.log("handlePage5Events", container);
-    };
-
-    GiftCard.prototype.handleNotify = function() {
-        var $this = this;
-        hp.Utils.validateCreditCardData(this.formData, function(error, data) {
-            if (!error) {
-                $this.formData._isValid = true;
-                return;
-            }
-
-            for (var err in error) {}
-        });
-    };
-
-    GiftCard.prototype.isCreditCard = function() {
-        return true;
-    };
-
-    GiftCard.prototype.isBankAccount = function() {
-        return false;
-    };
-
-    GiftCard.prototype.isEMoney = function() {
-        return false;
-    };
-
-    GiftCard.prototype.isCode = function() {
-        return false;
-    };
-
-    GiftCard.prototype.isSuccessPage = function() {
-        return false;
-    };
-
-    GiftCard.prototype.isTransvault = function() {
-        return false;
-    };
-
-    GiftCard.prototype.isGiftCard = function() {
-        return true;
-    };
-
-    GiftCard.prototype.isSignature = function() {
-        return false;
-    };
-    /*
-     * Export "Credit Card"
-     */
-
-
-    hp.GiftCard = GiftCard;
 })(jQuery, window, document);
 
 (function($, window, document, undefined) {
@@ -7013,19 +6177,9 @@
     BankAccount.prototype.isTransvault = function() {
         return false;
     };
-
-    BankAccount.prototype.isGiftCard = function() {
-        return false;
-    };
-
-    BankAccount.prototype.isSignature = function() {
-        return false;
-    };
     /*
      * Export "Bank Account"
      */
-
-
     hp.BankAccount = BankAccount;
 })(jQuery, window, document);
 
@@ -7446,18 +6600,9 @@
         return false;
     };
 
-    Code.prototype.isGiftCard = function() {
-        return false;
-    };
-
-    Code.prototype.isSignature = function() {
-        return false;
-    };
     /*
      * Export "Code"
      */
-
-
     hp.Code = Code;
 })(jQuery, window, document);
 
@@ -7843,7 +6988,7 @@
         }
 
         if (!props.SD) {
-            props.SD = "https://images.pmoney.com/00000000";
+            props.SD = "https://images.emoney.com/00000000";
         } else {
             props.SD = props.SD.toLowerCase();
         }
@@ -8288,18 +7433,9 @@
         return true;
     };
 
-    Transvault.prototype.isGiftCard = function() {
-        return false;
-    };
-
-    Transvault.prototype.isSignature = function() {
-        return false;
-    };
     /*
      * Export "Transvault"
      */
-
-
     hp.Transvault = Transvault;
 })(jQuery, window, document);
 
