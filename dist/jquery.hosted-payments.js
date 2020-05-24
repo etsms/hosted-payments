@@ -3409,12 +3409,67 @@
         if (shouldReset) {
             hp.Utils.reset();
         }
-    }; // sets up iframe DOM
-
-
+    }; 
+    
+    // sets up iframe DOM
     var createInstance = function createInstance($element, callback) {
         // Create wrapping HTML
-        var $wrapper = ['<div class="hp hp-form">', '<div class="hp-loading-container">', '<span class="hp-loading-text">Loading</span>', '<div class="hp-loading"><span></span><span></span><span></span><span></span></div>', "</div>", '<div class="hp-error-container">', '<span class="hp-error-text">{{error}} </span>', '<div class="hp-error-message"></div>', "<hr />", '<div class="hp-error-disclaimer">If you feel that the above error was made by a mistake please contact our support at {{phone}}. <br /><br /><a href="javascript:;">&times; Dismiss error</a></div>', "</div>", '<div class="hp-row">', '<div class="hp-col hp-col-left">', '<ul class="hp-nav">', "{{nav}}", "</ul>", '<div class="hp-secure">', '<a href="https://emoney.com" target="_blank" title="Powered by EMoney"><img class="hp-emoney-logo" src="https://app.emoney.com/Public/Styles/Images/logo-blue.svg" alt="Hosted Payments" /></a>', '<div class="hp-support">', "<strong>Help &amp; support</strong>", '<p>Having issues with your payments? Call us at <a href="tel:{{phone}}">{{phone}}</a>.</p>', "<br />", "</div>", '<div class="hp-cards">', '<img class="hp-cards-icons' + (hp.Utils.defaults.showAmex ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/amex.svg" alt="AMEX" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showDiners ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/diners.svg" alt="Diners" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showDiscover ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/discover.svg" alt="Discover" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showJcb ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/jcb.svg" alt="JCB" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showMasterCard ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/mastercard.svg" alt="Master Card" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showVisa ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/visa.svg" alt="VISA" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showEMoney ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/c2568c3f7343be79032ac7a717fa80de/raw/7923fdf2aacffbc6baf62454cc4213b46b943596/emoney-card-icon.svg" alt="EMoney" />', '<img class="hp-cards-icons' + (hp.Utils.defaults.showGift ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/cd2abb29142a84bb16fbeb3d07a7aefa/raw/a17760bdd23cf1d90c22c8a2235f8d6e6753663e/gift-card-icon.svg" alt="Gift Cards" />', "</div>", '<a class="hp-secure-icon" href="https://www.elavonpayments.com/" target="_blank" title="ETS - Electronic Transaction Systems">', '<img src="https://cdn.rawgit.com/etsms/a5b6be8ebd898748ec829538bd4b603e/raw/9691ef92d11b5a1608a73f5f46c427c4c494d0b9/secure-icon.svg" alt="Secured by ETS" />', "<span>Secured by <br />Elavon Inc.</span>", "</a>", '<div class="hp-secure-bottom">', '<div class="hp-secure-bottom-left">', '<span class="' + (hp.Utils.getAmount() === 0 ? "hide " : "") + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "hp-version-refund" : "hp-version-charge") + '">' + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "Refund" : "Charge") + ': <span class="hp-version-amount">' + hp.Utils.formatCurrency(hp.Utils.getAmount() + hp.Utils.defaults.surchargeFee + hp.Utils.defaults.convenienceFee) + "</span></span><br />", "</div>", '<div class="hp-secure-bottom-right">', hp.Utils.getVersion(), "</div>", "</div>", "</div>", "</div>", '<div class="hp-col hp-col-right">', "{{order}}", '<div class="hp-content hp-content-success">{{success}}</div>', "</div>", "</div>", "</div>"].join("");
+        var $wrapper = [
+            '<div class="hp hp-form">', 
+                '<div class="hp-loading-container">', 
+                    '<span class="hp-loading-text">Loading</span>', 
+                    '<div class="hp-loading"><span></span><span></span><span></span><span></span></div>', 
+                "</div>", 
+                '<div class="hp-error-container">', 
+                    '<span class="hp-error-text">{{error}} </span>', 
+                    '<div class="hp-error-message"></div>', 
+                    "<hr />", 
+                    '<div class="hp-error-disclaimer">If you feel that the above error was made by a mistake please contact our support at {{phone}}. <br /><br /><a href="javascript:;">&times; Dismiss error</a></div>', 
+                "</div>", 
+                '<div class="hp-row">', 
+                    '<div class="hp-col hp-col-left">', 
+                        '<ul class="hp-nav">', 
+                            "{{nav}}", 
+                        "</ul>", 
+                        '<div class="hp-secure">', 
+                            '<a href="https://emoney.com" target="_blank" title="Powered by EMoney">',
+                                '<img class="hp-emoney-logo" src="https://app.emoney.com/Public/Styles/Images/logo-blue.svg" alt="Hosted Payments" />',
+                            '</a>', 
+                            '<div class="hp-support">', 
+                                "<strong>Help &amp; support</strong>", 
+                                '<p>Call us at <a href="tel:{{phone}}">{{phone}}</a></p>', 
+                                "<br />", 
+                            "</div>", 
+                            '<div class="hp-cards">', 
+                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showAmex ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/amex.svg" alt="AMEX" />', 
+                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showDiners ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/diners.svg" alt="Diners" />', 
+                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showDiscover ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/discover.svg" alt="Discover" />', 
+                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showJcb ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/jcb.svg" alt="JCB" />', 
+                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showMasterCard ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/mastercard.svg" alt="Master Card" />', 
+                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showVisa ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/visa.svg" alt="VISA" />', 
+                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showEMoney ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/c2568c3f7343be79032ac7a717fa80de/raw/7923fdf2aacffbc6baf62454cc4213b46b943596/emoney-card-icon.svg" alt="EMoney" />', 
+                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showGift ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/cd2abb29142a84bb16fbeb3d07a7aefa/raw/a17760bdd23cf1d90c22c8a2235f8d6e6753663e/gift-card-icon.svg" alt="Gift Cards" />', 
+                            "</div>", 
+                            '<div class="hp-secure-bottom">', 
+                                '<div class="hp-secure-bottom-left">', 
+                                    '<span class="' + (hp.Utils.getAmount() === 0 ? "hide " : "") + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "hp-version-refund" : "hp-version-charge") + '">',
+                                        (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "Refund" : "Charge") + ': <span class="hp-version-amount">' + hp.Utils.formatCurrency(hp.Utils.getAmount() + hp.Utils.defaults.surchargeFee + hp.Utils.defaults.convenienceFee),
+                                    "</span>", 
+                                "</div>", 
+                                '<div class="hp-secure-bottom-right">', 
+                                    hp.Utils.getVersion(), 
+                                "</div>", 
+                            "</div>", 
+                        "</div>", 
+                    "</div>", 
+                    '<div class="hp-col hp-col-right">', 
+                        "{{order}}", 
+                        '<div class="hp-content hp-content-success">{{success}}</div>', 
+                    "</div>", 
+                "</div>", 
+            "</div>"
+        ].join("");
+
         hp.Utils.plugins.CreditCard = new hp.CreditCard($element);
         hp.Utils.plugins.BankAccount = new hp.BankAccount($element);
         hp.Utils.plugins.Code = new hp.Code($element);
@@ -4785,7 +4840,7 @@
     var handleError = function handleError(res) {
         var errorResponse = {
             status: "Error",
-            message: "Your session is no longer valid. Please refresh your page and try again.",
+            message: "Your session has expired.",
             created_on: new Date().toISOString(),
             token: getSession().sessionToken
         };
@@ -6370,6 +6425,7 @@
 
     var $fullname = null,
         $bankName = null,
+        $bankType = null,
         $accountNumber = null,
         $routingNumber = null,
         $visualaccount = null,
@@ -6398,6 +6454,7 @@
         $accountNumber = this.$content.find(".hp-input-account input");
         $routingNumber = this.$content.find(".hp-input-routing input");
         $bankName = this.$content.find(".hp-input-bank input");
+        $bankType = this.$content.find(".hp-input-ach-type select");
         $visualaccount = this.$content.find(".hp-bank-visual-right");
         $visualbank = this.$content.find(".hp-bank-visual");
         $visualrouting = this.$content.find(".hp-bank-visual-left");
@@ -6431,6 +6488,21 @@
             throw new Error("hosted-payments.bank-account.js : Cannot create template. Arguments are null or undefined.");
         }
 
+        var $accountType = [
+            "Checking",
+            "Savings"
+        ].map(function(value) {
+            return "<option value=" + value + ">" + value + "</option>";
+        });
+
+        var $accountTypeOptions = [
+            "<div class='hp-input hp-input-ach-type'>",
+                "<select autocomplete=", (hp.Utils.defaults.disableAutocomplete ? "off" : "ach-acct-type"), " name='ach-type'>",
+                    $accountType,
+                "</select>",
+            "</div>"
+        ].join("");
+
         var $html = [
             '<div class="hp-bank-visual">', 
                 '<div class="hp-bank-visual-image"></div>', 
@@ -6441,12 +6513,15 @@
                 '<div class="hp-bank-visual-left">' + defaultRoutingNumberCharacters + "</div>", 
             "</div>", 
             '<div class="hp-input-wrapper">', 
-                '<div class="hp-input hp-input-bank">', 
-                    '<input placeholder="Enter Bank Name" name="bankName" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "bankName") + '" type="text">', 
-                "</div>",  
                 '<div class="hp-input hp-input-fullname">', 
                     '<input placeholder="Enter Full Name" name="name" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "name") + '" type="text">', 
-                "</div>", 
+                "</div>",  
+                "<div class='hp-input-container hp-input-container-ach'>",
+                    '<div class="hp-input hp-input-bank">', 
+                        '<input placeholder="Enter Bank Name" name="bankName" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "bankName") + '" type="text">', 
+                    "</div>", 
+                    $accountTypeOptions,
+                "</div>",
                 '<div class="hp-break" >', 
                     "{{inputHtml}}", 
                 "</div>", 
@@ -6485,7 +6560,8 @@
         this.$content.find(".hp-input-fullname input").off().val(hp.Utils.defaults.customerName);
         this.$content.find(".hp-input-routing input").off().val("");
         this.$content.find(".hp-input-bank input").off().val("");
-        
+        this.$content.find(".hp-input-ach-type select").off();
+
         $submit.off();
         
         if (hp.Utils.hasAlternativeSubmitButton()) {
@@ -6513,6 +6589,10 @@
         bankName = bankName.replace(/[0-9]/g, "");
         this.formData.bankName = $.trim(bankName);
         $visualbankname.text(this.formData.bankName);
+    };
+
+    BankAccount.prototype.handleTypeSelect = function(achType) {
+        this.formData.bankType = $.trim(achType);
     };
 
     BankAccount.prototype.handleAccountInput = function(accountNumber) {
@@ -6572,7 +6652,18 @@
                 $this.$parent.trigger("hp.notify");
                 $this.handleNotify();
             });
-            
+        
+        $this.$content
+            .find(".hp-input-ach-type select")
+            .on("change", function() {
+                var name = $(this).val();
+                $this.$parent.removeClass("hp-back");
+                $this.handleTypeSelect(name);
+                $this.$parent.trigger("hp.bankType", name);
+                $this.$parent.trigger("hp.notify");
+                $this.handleNotify();
+            })
+            .trigger("change");
 
         $this.$content
             .find(".hp-input-bank input")
@@ -6657,7 +6748,6 @@
                         $fullname.parent().addClass("hp-error");
                     }
                 }
-                console.log(error[err])
 
                 if (error[err].type === "bankName") {
                     if ($bankName.val() !== "") {
@@ -6811,9 +6901,12 @@
             return;
         }
 
+        hp.Utils.log("formData", $this.formData);
+
         $submit.attr("disabled", "disabled").text("Submitting...");
         hp.Utils.showLoader();
         $submit.attr("disabled", "disabled").text("Processing payment...");
+
         var createPaymentInstrumentRequest = {
             createPaymentInstrument: {
                 createPaymentInstrumentRequest: {
@@ -6827,6 +6920,8 @@
                         accountNumber: $this.formData.accountNumber,
                         routingNumber: $this.formData.routingNumber,
                         bankName: $this.formData.bankName,
+                        bankType: $this.formData.bankType,
+                        accountHolderName: $this.formData.name,
                         customerToken: hp.Utils.getCustomerToken(),
                         instrumentId: hp.Utils.getInstrumentId()
                     },
@@ -9122,7 +9217,7 @@
 })(jQuery, window, document);
 
 /*
- *  jQuery Hosted Payments - v4.4.0
+ *  jQuery Hosted Payments - v4.4.1
  *
  *  Made by Erik Zettersten
  *  Under MIT License
@@ -9130,7 +9225,7 @@
 (function($, window, document, undefined) {
     var pluginName = "hp";
     var defaults = {};
-    defaults.version = "v4.4.0";
+    defaults.version = "v4.4.1";
     defaults.amount = 0;
     defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
     defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
