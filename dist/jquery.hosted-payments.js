@@ -3726,6 +3726,28 @@
         return html;
     };
 
+    var _timer = null;
+
+    var setTimer = function setTimer(ttl) {
+
+        if (ttl === null || ttl === undefined) {
+            ttl = 1200000; // 20min in m
+        } else {
+            ttl = ttl * 1000;
+        }
+
+        log("Setting session timeout to: " + ttl);
+
+        if (_timer !== null) {
+            window.clearTimeout(_timer);
+        }
+
+        _timer = window.setTimeout(function(){
+            log("Session timed out!");
+            handleError();
+        }, ttl);
+    };
+
     var setSession = function setSession(session, isApiKey) {
         var currentSession = getSession();
 
@@ -4464,8 +4486,10 @@
             }
         }).then(function(res) {
             hp.Utils.setSession(res.token);
+            hp.Utils.setTimer(res.ttl);
             deferred.resolve(res);
             hp.Utils.log("Sign In: Retrieved from server.");
+            hp.Utils.log("Sign In: Time remaining is (seconds) -> ", res.ttl);
         }, function(res) {
             if (typeof res === "undefined" || res === null || res === "") {
                 hp.Utils.reset();
@@ -5064,6 +5088,7 @@
     hp.Utils.getCustomerInfo = getCustomerInfo;
     hp.Utils.getSession = getSession;
     hp.Utils.setSession = setSession;
+    hp.Utils.setTimer = setTimer;
     hp.Utils.getBalance = getBalance;
     hp.Utils.formatCurrency = formatCurrency;
     hp.Utils.buildResultObjectByType = buildResultObjectByType;
@@ -9217,7 +9242,7 @@
 })(jQuery, window, document);
 
 /*
- *  jQuery Hosted Payments - v4.4.1
+ *  jQuery Hosted Payments - v4.4.2
  *
  *  Made by Erik Zettersten
  *  Under MIT License
@@ -9225,7 +9250,7 @@
 (function($, window, document, undefined) {
     var pluginName = "hp";
     var defaults = {};
-    defaults.version = "v4.4.1";
+    defaults.version = "v4.4.2";
     defaults.amount = 0;
     defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
     defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
