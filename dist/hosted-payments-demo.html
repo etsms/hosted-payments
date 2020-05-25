@@ -28,23 +28,18 @@
         }
 
         $("#ets").hp({
-            terminalId: "1016",
-            apiKey: "fcd5c59e-12e6-4d06-9bc8-7134144e00f9",
-            amount: 21,
+            apiKey: "3502b8ef-359a-47bb-8151-cf3ef5322a8c",
+            amount: 1.01,
             successCallback: callback,
             errorCallback: callback,
             debug: true,
             transactionId: transactionId,
-            surchargeFee: 2,
-            convenienceFee: 1,
             disableAutocomplete: false,
             checkHttpsConnection: false,
             allowAvsSkip: false,
             promptForAvs: true,
             swapAchInputs: true,
-            paymentTypeOrder: [0, 1, 2, 3, 4],
-            saveCustomer: true,
-            baseUrl: "http://localhost:4930/v3/adapters"
+            // saveCustomer: true
         });
 
     </script>
