@@ -1,4 +1,4 @@
-"use strict";
+
 /*!
  * Copyright (c) 2020 Elavon Inc
  *
@@ -2658,7 +2658,6 @@
 
 (function($, window, document, undefined) {
     /// <param name="$" type="jQuery" />
-    "use strict";
 
     if (typeof $.signalR !== "function") {
         throw new Error("SignalR: SignalR is not loaded. Please ensure jquery.signalR-x.js is referenced before ~/signalr/js.");
@@ -2746,7 +2745,6 @@
 })(jQuery, window, document);
 
 (function($, window, document, undefined) {
-    "use strict";
 
     if (!Math.round10) {
         Math.round10 = function(value, exp) {
@@ -3277,6 +3275,15 @@
         }, timeout);
         return deferred;
     }; 
+    
+    var escapeHTML = function escapeHTML(unsafeStr) {
+        return unsafeStr
+            .replace(/&/g, '')
+            .replace(/</g, '')
+            .replace(/>/g, '')
+            .replace(/\"/g, '')
+            .replace(/\'/g, '');
+    };
 
     var setAmount = function setAmount(amount) {
         hp.Utils.defaults.amount = Math.abs(Math.round10(parseFloat(amount), -2));
@@ -3939,33 +3946,106 @@
         }
 
         setTimeout(function() {
+
+            var states = {
+                "AL": "Alabama",
+                "AK": "Alaska",
+                "AS": "American Samoa",
+                "AZ": "Arizona",
+                "AR": "Arkansas",
+                "CA": "California",
+                "CO": "Colorado",
+                "CT": "Connecticut",
+                "DE": "Delaware",
+                "DC": "District Of Columbia",
+                "FM": "Federated States Of Micronesia",
+                "FL": "Florida",
+                "GA": "Georgia",
+                "GU": "Guam",
+                "HI": "Hawaii",
+                "ID": "Idaho",
+                "IL": "Illinois",
+                "IN": "Indiana",
+                "IA": "Iowa",
+                "KS": "Kansas",
+                "KY": "Kentucky",
+                "LA": "Louisiana",
+                "ME": "Maine",
+                "MH": "Marshall Islands",
+                "MD": "Maryland",
+                "MA": "Massachusetts",
+                "MI": "Michigan",
+                "MN": "Minnesota",
+                "MS": "Mississippi",
+                "MO": "Missouri",
+                "MT": "Montana",
+                "NE": "Nebraska",
+                "NV": "Nevada",
+                "NH": "New Hampshire",
+                "NJ": "New Jersey",
+                "NM": "New Mexico",
+                "NY": "New York",
+                "NC": "North Carolina",
+                "ND": "North Dakota",
+                "MP": "Northern Mariana Islands",
+                "OH": "Ohio",
+                "OK": "Oklahoma",
+                "OR": "Oregon",
+                "PW": "Palau",
+                "PA": "Pennsylvania",
+                "PR": "Puerto Rico",
+                "RI": "Rhode Island",
+                "SC": "South Carolina",
+                "SD": "South Dakota",
+                "TN": "Tennessee",
+                "TX": "Texas",
+                "UT": "Utah",
+                "VT": "Vermont",
+                "VI": "Virgin Islands",
+                "VA": "Virginia",
+                "WA": "Washington",
+                "WV": "West Virginia",
+                "WI": "Wisconsin",
+                "WY": "Wyoming"
+            };
+
+            var $stateOptions = Object
+                .keys(states)
+                .map(function(item){
+                    return "<option value='" + item + "'>" + states[item] + "</option>"
+                })
+                .join("");
+
             var template = [
                 '<div class="hp-avs-prompt">', 
                     '<div class="hp-avs-prompt-container">', 
+                        "<a class='hp-close' href='javascript:void(0);'>&larr; Go back?</a>",
                         "<p>Billing Address</p>", 
                         '<div class="hp-avs-prompt-left">', 
                             '<label class="hp-label-avs" for="avsStreet">Address <span class="hp-avs-required">*</span></label>', 
                             '<div class="hp-input hp-input-avs hp-input-avs-street">', 
-                                '<input placeholder="Street Address" value="' + hp.Utils.defaults.billingAddress.addressLine1 + '" name="avsStreet" id="avsStreet" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "address-line1") + '" type="text">', 
+                                '<input maxlength="60" placeholder="Street address" value="' + hp.Utils.defaults.billingAddress.addressLine1 + '" name="avsStreet" id="avsStreet" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "address-line1") + '" type="text">', 
                             "</div>", 
                         "</div>", 
                         '<div class="hp-avs-prompt-right">', 
                             '<div class="hp-pull-left">', 
                                 '<label class="hp-label-avs" for="avsCity">City</label>', 
                                 '<div class="hp-input hp-input-avs hp-input-avs-city">', 
-                                    '<input placeholder="City" id="avsCity" name="avsCity" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text">', 
+                                    '<input maxlength="40" placeholder="City" id="avsCity" name="avsCity" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text">', 
                                 "</div>", 
                             "</div>", 
                             '<div class="hp-pull-left">', 
                                 '<label class="hp-label-avs" for="avsState">State</label>', 
                                 '<div class="hp-input hp-input-avs hp-input-avs-state">', 
-                                    '<input placeholder="State" id="avsState" name="avsState" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text">', 
+                                    '<select id="avsState" name="avsState" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '">', 
+                                        $stateOptions,
+                                    '</select>',
                                 "</div>", 
                             "</div>", 
-                            '<div class="hp-pull-left">', 
+                            '<div class="hp-pull-left hp-no-margins">', 
                                 '<label class="hp-label-avs" for="avsZip">Zip <span class="hp-avs-required">*</span></label>', 
                                 '<div class="hp-input hp-input-avs hp-input-avs-zip">', 
-                                    '<input placeholder="Zipcode" value="' + hp.Utils.defaults.billingAddress.postalCode + '" name="avsZip" id="avsZip" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "postal-code") + '" type="text" pattern="\\d*">', 
+                                    '<input maxlength="5" pattern="\\d*" placeholder="Zipcode" value="' + hp.Utils.defaults.billingAddress.postalCode + '" name="avsZip" id="avsZip" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "postal-code") + '" type="text">', 
                                 "</div>", 
                             "</div>", 
                         "</div>", 
@@ -3983,35 +4063,92 @@
                 avsZipValue = "",
                 avsStreetValue = "";
 
+            var $submitAvs = $avsPrompt
+                .find(".hp-avs-submit")
+                .attr("disabled", "disabled");
+
+            var $goBack = $avsPrompt.find(".hp-close");
+
             var handleSubmit = function handleSubmit(e) {
+
                 e.preventDefault();
+
+                // prevents submit if enter button his pressed
+                if (e.type === "keyup" && e.originalEvent.code === "Enter")
+                {
+                    return;
+                }
+
                 hp.Utils.updateAvsInfo(avsStreetValue, avsZipValue);
+
                 $element.removeClass("hp-avs-active");
                 $avsPrompt.removeClass("active");
-                deferred.resolve();
+
                 setTimeout(function() {
                     $element.find(".hp-avs-prompt").remove();
+                    deferred.resolve();
                 }, 0);
             };
 
-            $avsPrompt.find(".hp-input-avs input").on("focus blur keyup", function(e) {
+            var onlyNumberKey = function onlyNumberKey(e) { 
+          
+                if (e.type !== "keyup") {
+                    return true;
+                }
+
+                var code = (e.which) 
+                    ? e.which 
+                    : e.keyCode;
+
+                if (code > 31 && (code < 48 || code > 57)) {
+                    return false; 
+                }
+
+                return true; 
+            };
+
+            $avsPrompt
+                .find(".hp-input-avs input")
+                .on("focus blur keyup", function(e) {
+                    e.preventDefault();
+                    var $this = $(this);
+                    var val = $this.val();
+
+                    if ($this.attr("name") === "avsStreet") {
+                        avsStreetValue = val;
+                    }
+
+                    if ($this.attr("name") === "avsZip") {
+
+                        if (!onlyNumberKey(e.originalEvent)) {
+
+                            var lastDigit = (val[val.length - 1]).match(/\d/);
+
+                            if (lastDigit == null) {
+                                val = val.substring(0, val.length - 1);
+                            }
+
+                            $this.val(val);
+                        }
+
+                        avsZipValue = val;
+                    }
+
+                    $submitAvs.attr("disabled", "disabled");
+
+                    if ((avsZipValue.length && avsZipValue.length >= 5) && (avsStreetValue.length && avsStreetValue.length >= 3)) {
+                        $submitAvs.removeAttr("disabled");
+                    }
+                });
+
+            $submitAvs.off().on("click", handleSubmit);
+
+            $goBack.off().on("click", function(e) {
                 e.preventDefault();
-
-                if ($(this).attr("name") === "avsStreet") {
-                    avsStreetValue = $(this).val();
-                }
-
-                if ($(this).attr("name") === "avsZip") {
-                    avsZipValue = $(this).val();
-                }
-
-                var keycode = e.keyCode ? e.keyCode : e.which;
-
-                if (keycode === 13) {
-                    handleSubmit(e);
-                }
+                $element.removeClass("hp-avs-active");
+                $element.find(".hp-avs-prompt").remove();
+                deferred.reject("cancelledAvsPrompt");
             });
-            $avsPrompt.find(".hp-avs-submit").on("click", handleSubmit);
 
             if (hp.Utils.defaults.allowAvsSkip) {
                 $avsPrompt.find(".hp-avs-skip").on("click", function(e) {
@@ -4417,7 +4554,7 @@
             });
         }
 
-        if (typeof formData.name === "undefined" || formData.name === "") {
+        if (typeof formData.name === "undefined" || formData.name === "" || formData.name === " ") {
             errors.push({
                 type: "name",
                 message: "Name on card cannot be empty."
@@ -4774,6 +4911,7 @@
     hp.Utils.showSuccessPage = showSuccessPage;
     hp.Utils.getAmount = getAmount;
     hp.Utils.setAmount = setAmount;
+    hp.Utils.escapeHTML = escapeHTML;
     hp.Utils.setCustomerInfo = setCustomerInfo;
     hp.Utils.getCustomerInfo = getCustomerInfo;
     hp.Utils.getSession = getSession;
@@ -4816,11 +4954,10 @@
 })(jQuery, window, document);
 
 (function($, window, document, undefined) {
-    "use strict";
+
     /*
      * Export "hp"
      */
-
     window.hp = hp || {};
 
     function Success($element) {
@@ -4834,10 +4971,13 @@
     }
 
     Success.prototype.init = function() {
+
         var context = hp.Utils.handleLegacyCssClassApplication("success", this.$element),
             $parent = context.parent,
             $content = context.content;
+
         $parent.find(".icon.success").addClass("animate").show();
+        
         this.context = context;
         this.$parent = $parent;
         this.$content = $content;
@@ -4879,16 +5019,15 @@
 })(jQuery, window, document);
 
 (function($, window, document, undefined) {
-    "use strict";
+
     /*
      * Export "hp"
      */
-
     window.hp = hp || {};
+
     /*
      * Credit Card Class
      */
-
     function CreditCard($element) {
         this.context = null;
         this.$parent = null;
@@ -4897,8 +5036,7 @@
         this.$element = $element;
         this.formData = {
             _isValid: false
-        }; // session
-
+        };
         this.instrumentId = "";
         this.transactionId = "";
     }
@@ -4914,8 +5052,8 @@
         $visualyear = null,
         $visualname = null,
         $visualcard = null,
-        $all = null,
-        $fancy = null;
+        $all = null;
+        
     var sessionId = "",
         createdOn = new Date().toISOString();
 
@@ -4945,7 +5083,6 @@
         $visualcard = this.$content.find(".hp-card-visual");
         $visualcard = this.$content.find(".hp-card-visual");
         $all = this.$content.find(".hp-input");
-        $fancy = $([$month, $year]);
         this.transactionId = hp.Utils.defaults.transactionId;
     };
 
@@ -4958,13 +5095,13 @@
         $visualyear.html(hp.Utils.defaults.defaultDateCharacters);
         $visualname.text(hp.Utils.defaults.defaultNameOnCardName);
         $visualcard.parent().removeClass().addClass("hp-content hp-content-cc hp-content-active");
-        $name.removeAttr("disabled").val("");
-        $month.removeAttr("disabled");
-        $year.removeAttr("disabled");
-        $cvv.removeAttr("disabled").val("");
-        $cc.removeAttr("disabled").val("");
+        $name.removeAttr("disabled").val("").trigger("keyup");
+        $month.removeAttr("disabled").val($month.val()).trigger("change");
+        $year.removeAttr("disabled").val($year.val()).trigger("change");
+        $cvv.removeAttr("disabled").val("").trigger("keyup");
+        $cc.removeAttr("disabled").val("").trigger("keyup");
         $submit.removeAttr("disabled");
-        $submit.text(hp.Utils.defaults.defaultButtonLabel);
+        $submit.html((hp.Utils.defaults.promptForAvs ? "Verify Billing Address &#10144;" : hp.Utils.defaults.defaultButtonLabel));
     };
 
     CreditCard.prototype.createTemplate = function(defaultCardCharacters, defaultNameOnCardName, defaultDateCharacters) {
@@ -5037,7 +5174,7 @@
                     '<input placeholder="Enter Card Number" name="cardnumber" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-number") + '" type="text" pattern="\\d*">', 
                 "</div>", 
                 '<div class="hp-input hp-input-name">', 
-                    '<input placeholder="Enter Full Name" name="ccname" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-name") + '" type="text">', 
+                    '<input maxlength="18" placeholder="Enter Full Name" name="ccname" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-name") + '" type="text">', 
                 "</div>", 
                 '<div class="hp-input-container hp-input-container-date">', 
                     '<div class="hp-input hp-input-month">', 
@@ -5139,7 +5276,9 @@
         }
 
         name = name.replace(/[0-9]/g, "");
-        this.formData.name = name;
+        
+        this.formData.name = hp.Utils.escapeHTML(name);
+
         $visualname.text(this.formData.name);
     };
 
@@ -5223,33 +5362,31 @@
             };
         }
 
-        hp.Utils.makeRequest(requestModel).then(hp.Utils.buildResultObjectByType).then(function(promiseResponse) {
-            that.$parent.trigger("hp.submit", {
-                type: hp.RequestTypes.CHARGE,
-                res: promiseResponse
-            });
-        }).fail(function(promiseResponse) {
-            if (typeof promiseResponse.responseJSON !== "undefined") {
-                promiseResponse = promiseResponse.responseJSON;
-            }
+        hp.Utils
+            .makeRequest(requestModel)
+            .then(hp.Utils.buildResultObjectByType)
+            .then(function(promiseResponse) {
+                that.$parent.trigger("hp.submit", {
+                    type: hp.RequestTypes.CHARGE,
+                    res: promiseResponse
+                });
+            })
+            .fail(function(promiseResponse) {
 
-            that.$parent.trigger("hp.submit", {
-                type: hp.RequestTypes.ERROR,
-                res: promiseResponse
+                if (typeof promiseResponse.responseJSON !== "undefined") {
+                    promiseResponse = promiseResponse.responseJSON;
+                }
+
+                that.$parent.trigger("hp.submit", {
+                    type: hp.RequestTypes.ERROR,
+                    res: promiseResponse
+                });
             });
-        });
     };
 
     CreditCard.prototype.handleCharge = function(res) {
-        var that = this,
-            hasBalance = true,
-            cardBalance = 0;
-        var errorResponse = {
-            status: "Error",
-            message: "The payment instrument provided had no remaining funds and will not be applied to the split payment.",
-            created_on: createdOn,
-            token: sessionId
-        };
+        
+        var that = this;
         var requestModel = {};
 
         if (hp.Utils.defaults.paymentType == hp.PaymentType.CHARGE) {
@@ -5323,25 +5460,34 @@
             };
         }
 
-        hp.Utils.makeRequest(requestModel).then(hp.Utils.buildResultObjectByType).then(function(promiseResponse) {
-            that.$parent.trigger("hp.submit", {
-                type: hp.RequestTypes.CHARGE,
-                res: promiseResponse
-            });
-        }).fail(function(promiseResponse) {
-            if (typeof promiseResponse.responseJSON !== "undefined") {
-                promiseResponse = promiseResponse.responseJSON;
-            }
+        hp.Utils
+            .makeRequest(requestModel)
+            .then(hp.Utils.buildResultObjectByType)
+            .then(function(promiseResponse) {
+                that.$parent.trigger("hp.submit", {
+                    type: hp.RequestTypes.CHARGE,
+                    res: promiseResponse
+                });
+            })
+            .fail(function(promiseResponse) {
 
-            that.$parent.trigger("hp.submit", {
-                type: hp.RequestTypes.ERROR,
-                res: promiseResponse
+                if (typeof promiseResponse.responseJSON !== "undefined") {
+                    promiseResponse = promiseResponse.responseJSON;
+                }
+
+                that.$parent.trigger("hp.submit", {
+                    type: hp.RequestTypes.ERROR,
+                    res: promiseResponse
+                });
+
             });
-        });
     };
 
     CreditCard.prototype.handleSubmit = function() {
+        
         var that = this;
+
+        this.handleNotify();
 
         if (!that.formData._isValid) {
             $visualcard.addClass("hp-card-invalid");
@@ -5352,72 +5498,94 @@
         }
 
         $submit.attr("disabled", "disabled").text("Submitting...");
-        hp.Utils.promptAvs().then(function() {
-            hp.Utils.showLoader();
-            var createInstrumentRequest = {
-                createPaymentInstrument: {
-                    createPaymentInstrumentRequest: {
-                        correlationId: hp.Utils.getCorrelationId(),
-                        customerToken: hp.Utils.getCustomerToken(),
-                        instrumentId: hp.Utils.getInstrumentId(),
-                        transactionId: that.transactionId,
-                        token: hp.Utils.getSession().sessionToken,
-                        name: that.formData.name,
-                        phone: hp.Utils.getCustomerInfo().customerPhone,
-                        email: hp.Utils.getCustomerInfo().customerEmail,
-                        sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
-                        sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
-                        properties: {
-                            cardNumber: that.formData.cardNumber,
-                            expirationDate: that.formData._expiryMonth + "/" + that.formData._expiryYear,
-                            cvv: that.formData.cvv,
-                            nameOnCard: that.formData.name,
+
+        hp.Utils
+            .promptAvs()
+            .then(function() {
+
+                hp.Utils.showLoader();
+
+                var createInstrumentRequest = {
+                    createPaymentInstrument: {
+                        createPaymentInstrumentRequest: {
+                            correlationId: hp.Utils.getCorrelationId(),
                             customerToken: hp.Utils.getCustomerToken(),
-                            instrumentId: hp.Utils.getInstrumentId()
-                        },
-                        billingAddress: {
-                            addressLine1: hp.Utils.defaults.billingAddress.addressLine1,
-                            postalCode: hp.Utils.defaults.billingAddress.postalCode
+                            instrumentId: hp.Utils.getInstrumentId(),
+                            transactionId: that.transactionId,
+                            token: hp.Utils.getSession().sessionToken,
+                            name: that.formData.name,
+                            phone: hp.Utils.getCustomerInfo().customerPhone,
+                            email: hp.Utils.getCustomerInfo().customerEmail,
+                            sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
+                            sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
+                            properties: {
+                                cardNumber: that.formData.cardNumber,
+                                expirationDate: that.formData._expiryMonth + "/" + that.formData._expiryYear,
+                                cvv: that.formData.cvv,
+                                nameOnCard: that.formData.name,
+                                customerToken: hp.Utils.getCustomerToken(),
+                                instrumentId: hp.Utils.getInstrumentId()
+                            },
+                            billingAddress: {
+                                addressLine1: hp.Utils.defaults.billingAddress.addressLine1,
+                                postalCode: hp.Utils.defaults.billingAddress.postalCode
+                            }
                         }
                     }
+                };
+
+                if (hp.Utils.defaults.saveCustomer) {
+                    return hp.Utils.makeRequest(createInstrumentRequest);
                 }
-            };
 
-            if (hp.Utils.defaults.saveCustomer) {
-                return hp.Utils.makeRequest(createInstrumentRequest);
-            }
+                that.handleChargeWithoutInstrument(createInstrumentRequest);
+                
+            })
+            .then(function(res) {
 
-            that.handleChargeWithoutInstrument(createInstrumentRequest);
-        }).then(function(res) {
-            if (!hp.Utils.defaults.saveCustomer) {
-                return;
-            }
+                if (!hp.Utils.defaults.saveCustomer) {
+                    return;
+                }
 
-            if (res.isException) {
+                if (res.isException) {
+
+                    that.$parent.trigger("hp.submit", {
+                        type: 9,
+                        res: res
+                    });
+
+                    return;
+                }
+
+                that.instrumentId = res.instrumentId;
+                that.transactionId = typeof res.transactionId !== "undefined" ? res.transactionId : that.transactionId;
+                
                 that.$parent.trigger("hp.submit", {
-                    type: 9,
+                    type: 0,
                     res: res
                 });
-                return;
-            }
 
-            that.instrumentId = res.instrumentId;
-            that.transactionId = typeof res.transactionId !== "undefined" ? res.transactionId : that.transactionId;
-            that.$parent.trigger("hp.submit", {
-                type: 0,
-                res: res
-            });
-            that.handleCharge(res);
-        }).fail(function(err) {
-            if (typeof err.responseJSON !== "undefined") {
-                err = err.responseJSON;
-            }
+                that.handleCharge(res);
 
-            that.$parent.trigger("hp.submit", {
-                type: 9,
-                res: err
+            })
+            .fail(function(err) {
+
+                if (err === "cancelledAvsPrompt") {
+                    $submit.removeAttr("disabled").html("Verify Billing Address &#10144;");
+                    that.clearInputs();
+                    return;
+                }
+
+                if (typeof err.responseJSON !== "undefined") {
+                    err = err.responseJSON;
+                }
+
+                that.$parent.trigger("hp.submit", {
+                    type: 9,
+                    res: err
+                });
+
             });
-        });
     };
 
     CreditCard.prototype.handleSuccess = function(res) {
@@ -5431,9 +5599,12 @@
     };
 
     CreditCard.prototype.attachEvents = function() {
+        
         this.detachEvents();
         var $this = this;
+
         hp.Utils.setContainerClass($this.$element);
+
         $cc.payment("formatCardNumber").on("keyup", function() {
             var cardNumber = $(this).val();
             var cardType = $.payment.cardType(cardNumber);
@@ -5448,6 +5619,7 @@
             $this.$parent.trigger("hp.notify");
             $this.handleNotify();
         });
+
         $cvv.payment("formatCardCVC").on("focus", function() {
             $this.$parent.addClass("hp-back");
             $this.$parent.trigger("hp.notify");
@@ -5459,6 +5631,7 @@
             $this.$parent.trigger("hp.notify");
             $this.handleNotify();
         });
+
         $name.on("focus", function() {
             $this.$parent.trigger("hp.notify");
             $this.handleNotify();
@@ -5494,6 +5667,7 @@
         }).on("blur", function(e) {
             $(".hp-input-active").removeClass("hp-input-active");
         }).trigger("change.fs");
+
         $year.on("focus", function(e) {
             $(".hp-input-active").removeClass("hp-input-active");
             $(this).parents(".hp-input").addClass("hp-input-active");
@@ -5507,22 +5681,26 @@
         }).on("blur", function(e) {
             $(".hp-input-active").removeClass("hp-input-active");
         }).trigger("change.fs");
+
         $submit.on("click", function(e) {
             e.preventDefault();
             $this.handleSubmit();
             $this.$parent.trigger("hp.notify");
             $this.handleNotify();
         });
+
         this.$parent.trigger("hp.notify");
         this.handleNotify();
     };
 
     CreditCard.prototype.handleNotify = function() {
+
         if (typeof this.formData._expiryYear !== "undefined" && typeof this.formData._expiryMonth !== "undefined") {
             this.formData.expirationDate = $.trim(this.formData._expiryMonth + this.formData._expiryYear.substring(2));
         }
 
         var $this = this;
+
         hp.Utils.validateCreditCardData(this.formData, function(error, data) {
             $all.removeClass("hp-error");
 
@@ -5591,7 +5769,6 @@
 })(jQuery, window, document);
 
 (function($, window, document, undefined) {
-    "use strict";
     /*
      * Export "hp"
      */
@@ -5703,11 +5880,11 @@
             "</div>", 
             '<div class="hp-input-wrapper">', 
                 '<div class="hp-input hp-input-fullname">', 
-                    '<input placeholder="Enter Full Name" name="name" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "name") + '" type="text">', 
+                    '<input maxlength="23" placeholder="Enter Full Name" name="name" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "name") + '" type="text">', 
                 "</div>",  
                 "<div class='hp-input-container hp-input-container-ach'>",
                     '<div class="hp-input hp-input-bank">', 
-                        '<input placeholder="Enter Bank Name" name="bankName" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "bankName") + '" type="text">', 
+                        '<input maxlength="30" placeholder="Enter Bank Name" name="bankName" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "bankName") + '" type="text">', 
                     "</div>", 
                     $accountTypeOptions,
                 "</div>",
@@ -5721,20 +5898,20 @@
 
         var $inputHtml = [
             '<div class="hp-input hp-input-account hp-input-left">', 
-                '<input placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', 
+                '<input maxlength="17" placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', 
             "</div>", 
             '<div class="hp-input hp-input-routing hp-input-right">', 
-                '<input placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', 
+                '<input maxlength="9" placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', 
             "</div>"
         ].join("");
 
         if (hp.Utils.defaults.swapAchInputs) {
             $inputHtml = [
                 '<div class="hp-input hp-input-routing hp-input-left">', 
-                    '<input placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', 
+                    '<input maxlength="9" placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', 
                 "</div>", 
                 '<div class="hp-input hp-input-account hp-input-right">', 
-                    '<input placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', 
+                    '<input maxlength="17" placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', 
                 "</div>"
             ].join("");
         }
@@ -5776,7 +5953,7 @@
         }
         
         bankName = bankName.replace(/[0-9]/g, "");
-        this.formData.bankName = $.trim(bankName);
+        this.formData.bankName = hp.Utils.escapeHTML($.trim(bankName));
         $visualbankname.text(this.formData.bankName);
     };
 
@@ -5799,7 +5976,7 @@
         }
 
         name = name.replace(/[0-9]/g, "");
-        this.formData.name = name;
+        this.formData.name = hp.Utils.escapeHTML($.trim(name));
         $visualfullname.text(this.formData.name);
     };
 
@@ -6184,7 +6361,6 @@
 })(jQuery, window, document);
 
 (function($, window, document, undefined) {
-    "use strict";
     /*
      * Export "hp"
      */
@@ -6607,7 +6783,6 @@
 })(jQuery, window, document);
 
 (function($, window, document, undefined) {
-    "use strict";
 
     /*
      * Export "hp"
@@ -8378,7 +8553,7 @@
 })(jQuery, window, document);
 
 /*
- *  jQuery Hosted Payments - v4.4.2
+ *  jQuery Hosted Payments - v4.4.3
  *
  *  Made by Erik Zettersten
  *  Under MIT License
@@ -8386,7 +8561,7 @@
 (function($, window, document, undefined) {
     var pluginName = "hp";
     var defaults = {};
-    defaults.version = "v4.4.2";
+    defaults.version = "v4.4.3";
     defaults.amount = 0;
     defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
     defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";

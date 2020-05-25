@@ -372,6 +372,7 @@ $spriteUrl: $cdnRootUrl + "/dist/images/sprite.png"
             border: 0 none
             background: linear-gradient(to bottom, darkgrey -54%, $pureWhite 6px)
             min-height: 100%
+            width: 100%
             font-size: 16px
             font-family: $fontFamily !important
             text-indent: 14px
@@ -398,29 +399,17 @@ $spriteUrl: $cdnRootUrl + "/dist/images/sprite.png"
                 background: linear-gradient(to bottom, #f1cd00 -54%, lighten(gold, 46%) 6px)
                 outline: none
 
+        &.hp-error          
+            border-color: $red
+            +box-shadow(inset 0px 0px 1px $red, 0px 0px 1px $red !important)
+
         &.hp-input-fullname
             width: 100%
-
-            &.hp-error
-                border-color: red
-
-                +box-shadow(inset 0px 0px 1px red, 0px 0px 1px red !important)
-
-            > input
-                width: 100%
 
         &.hp-input-bank,
         &.hp-input-ach-type
             width: 60%
 
-            &.hp-error
-                border-color: red
-
-                +box-shadow(inset 0px 0px 1px red, 0px 0px 1px red !important)
-
-            > input,
-            > select
-                width: 100%
 
         &.hp-input-ach-type
             width: calc(40% - 6px)
@@ -431,14 +420,6 @@ $spriteUrl: $cdnRootUrl + "/dist/images/sprite.png"
             display: block
             margin: 7px auto 0
 
-            &.hp-error
-                border-color: red
-
-                +box-shadow(inset 0px 0px 1px red, 0px 0px 1px red !important)
-
-            > input
-                width: 100%
-
         &.hp-input-left
             +border-radius(4px 0 0 4px)
 
@@ -446,27 +427,11 @@ $spriteUrl: $cdnRootUrl + "/dist/images/sprite.png"
             float: left
             border-right: 0 none
 
-            &.hp-error
-                border-color: red
-
-                +box-shadow(inset 0px 0px 1px red, 0px 0px 1px red !important)
-
-            > input
-                width: 100%
-
         &.hp-input-right
             +border-radius(0 4px 4px 0)
 
             width: 50%
             float: left
-
-            &.hp-error
-                border-color: red
-
-                +box-shadow(inset 0px 0px 1px red, 0px 0px 1px red !important)
-
-            > input
-                width: 100%
 
         &.hp-input-cc
             width: 50%
@@ -482,14 +447,6 @@ $spriteUrl: $cdnRootUrl + "/dist/images/sprite.png"
 
             border-right: 0 none
 
-            > input,
-            > select
-                width: 100%
-
-            &.hp-error
-                border-color: red
-
-                +box-shadow(inset 0px 0px 1px red, 0px 0px 1px red !important)
 
         &.hp-input-name
             width: 50%
@@ -503,14 +460,6 @@ $spriteUrl: $cdnRootUrl + "/dist/images/sprite.png"
 
             +border-radius(0 4px 4px 0)
 
-            > input,
-            > select
-                width: 100%
-
-            &.hp-error
-                border-color: red
-
-                +box-shadow(inset 0px 0px 1px red, 0px 0px 1px red !important)
 
         &.hp-input-month
             width: 49%
@@ -530,14 +479,6 @@ $spriteUrl: $cdnRootUrl + "/dist/images/sprite.png"
 
             border-right: 0 none
 
-            > input,
-            > select
-                width: 100%
-
-            &.hp-error
-                border-color: red
-
-                +box-shadow(inset 0px 0px 1px red, 0px 0px 1px red !important)
 
         &.hp-input-year
             width: 49%
@@ -555,14 +496,6 @@ $spriteUrl: $cdnRootUrl + "/dist/images/sprite.png"
             +background(#f3f3f3)
             +border-radius(0 4px 4px 0)
 
-            > input,
-            > select
-                width: 100%
-
-            &.hp-error
-                border-color: red
-
-                +box-shadow(inset 0px 0px 1px red, 0px 0px 1px red !important)
 
         &.hp-input-cvv
             width: 50%
@@ -572,14 +505,6 @@ $spriteUrl: $cdnRootUrl + "/dist/images/sprite.png"
                 margin-top: 6px
 
 
-            > input,
-            > select
-                width: 100%
-
-            &.hp-error
-                border-color: red
-
-                +box-shadow(inset 0px 0px 1px red, 0px 0px 1px red !important)
 
     &.hp-active
         display: block
@@ -1181,6 +1106,13 @@ $spriteUrl: $cdnRootUrl + "/dist/images/sprite.png"
 
     .hp-avs-prompt-container
         padding: 30px
+        position: relative
+
+        .hp-close
+            position: absolute
+            top: 0
+            right: 15px
+            color: $blue
 
         > p
             font-size: 2.7em
@@ -1240,9 +1172,9 @@ $spriteUrl: $cdnRootUrl + "/dist/images/sprite.png"
             +border-radius(4px)
 
     .hp-input-avs-state
-        width: 112px
+        width: 142px
 
-        > input
+        > select
             width: 100%
 
             +border-radius(4px)
@@ -1270,6 +1202,9 @@ $spriteUrl: $cdnRootUrl + "/dist/images/sprite.png"
 
         +breakpoint($mobilePortrait)
             margin-bottom: 4px
+
+        &.hp-no-margins 
+            margin: 0
 
     .hp-avs-required
         color: $red
