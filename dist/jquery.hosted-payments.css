@@ -1462,7 +1462,7 @@
 }
 /* line 1005, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual .hp-bank-visual-image {
-  background: url("https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/background-ach.png");
+  background: url("https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/sprite.png");
   height: 173px;
   width: 400px;
   background-color: #9e9e9e;

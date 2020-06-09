@@ -28,18 +28,22 @@
         }
 
         $("#ets").hp({
-            apiKey: "3502b8ef-359a-47bb-8151-cf3ef5322a8c",
-            amount: 1.01,
+            terminalId: "1016",
+            apiKey: "0d9fa16f-678e-465c-b193-c4a430789cee",
+            amount: 21,
             successCallback: callback,
             errorCallback: callback,
             debug: true,
             transactionId: transactionId,
+            surchargeFee: 2,
+            convenienceFee: 1,
             disableAutocomplete: false,
             checkHttpsConnection: false,
             allowAvsSkip: false,
             promptForAvs: true,
             swapAchInputs: true,
-            // saveCustomer: true
+            paymentTypeOrder: [1],
+            saveCustomer: true
         });
 
     </script>
