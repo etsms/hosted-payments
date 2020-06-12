@@ -3272,7 +3272,6 @@
     window.hp.Utils = hp.Utils || {}; // exposes defaults
 
     hp.Utils.defaults = {}; // exposes plugins
-
     hp.Utils.plugins = {}; // payment service type
 
     hp.PaymentService = {};
@@ -3333,7 +3332,7 @@
         var activeClass = "hp-content-active",
             currentClass = "hp-form-" + classPrefix,
             $hp = $form.find(".hp");
-        var $parent = $hp.removeClass("hp-form-emoney hp-form-transvault hp-form-bank hp-form-signature hp-form-code hp-form-cc hp-form-gc hp-form-success hp-form-error").addClass("hp hp-form").addClass(currentClass);
+        var $parent = $hp.removeClass("hp-form-transvault hp-form-bank hp-form-code hp-form-cc hp-form-success hp-form-error").addClass("hp hp-form").addClass(currentClass);
         $parent.find(".hp-content").removeClass(activeClass);
         var $content = $parent.find(".hp-content-" + classPrefix).addClass(activeClass);
         setTimeout(function() {
@@ -3544,6 +3543,13 @@
     };
 
     var generateGUID = function generateGUID() {
+
+        if (window.crypto && typeof window.crypto.getRandomValues === "function") {
+            return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+                (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+            );
+        }
+
         var d = null;
 
         if (window.performance && window.performance.now) {
@@ -3736,10 +3742,6 @@
                     callback(hp.Utils.plugins.BankAccount);
                 }
 
-                if (!!$this.attr("class").match(/hp-emoney/gi)) {
-                    callback(hp.Utils.plugins.EMoney);
-                }
-
                 if (!!$this.attr("class").match(/hp-code/gi)) {
                     // Takes focus off link so that a swipe may occur on the HP element
                     $this.find("a").blur();
@@ -3805,6 +3807,38 @@
         if (email !== undefined && email !== "") {
             hp.Utils.defaults.customerEmail = email;
         }
+    };
+
+    var getInstance = function getInstance() {
+
+        var $this = $(hp.Utils.__instance.element).find("> .hp").eq(0);
+
+        hp.Utils.log("Getting active instance: " , $this);
+
+        if (!!$this.attr("class").match(/hp-form-cc/gi)) {
+            return hp.Utils.plugins.CreditCard;
+        }
+
+        if (!!$this.attr("class").match(/hp-form-bank/gi)) {
+            return hp.Utils.plugins.BankAccount;
+        }
+
+        if (!!$this.attr("class").match(/hp-form-code/gi)) {
+            // Takes focus off link so that a swipe may occur on the HP element
+            $this.find("a").blur();
+            return hp.Utils.plugins.Code;
+        }
+
+        if (!!$this.attr("class").match(/hp-form-transvault/gi)) {
+            return hp.Utils.plugins.Transvault;
+        }
+
+        if (!!$this.attr("class").match(/hp-form-success/gi)) {
+            return hp.Utils.plugins.Success;
+        }
+
+        throw new Error("hosted-payments.utils.js - Could not find active plugin instance.");
+
     };
 
     var getCustomerInfo = function getCustomerInfo() {
@@ -4397,6 +4431,15 @@
         var deferred = jQuery.Deferred();
 
         if (!hp.Utils.defaults.promptForAvs) {
+            hp.Utils.log("The 'promptForAvs' option was turned off. Skipping AVS prompt.");
+            deferred.resolve();
+            return deferred;
+        }
+
+        var instance = hp.Utils.getInstance();
+
+        if (instance !== null && instance.isCode()) {
+            hp.Utils.log("The instance is a 'Code' instance. No AVS check required.");
             deferred.resolve();
             return deferred;
         }
@@ -4630,6 +4673,7 @@
             $element.addClass("hp-avs-active");
             $avsPrompt.addClass("active");
         }, 0);
+
         $element.find(".hp-input-avs-street input").focus();
         return deferred;
     }; 
@@ -4695,8 +4739,12 @@
             options.paymentService = hp.Utils.setPaymentService(options.paymentService);
         }
 
-        if (typeof options.amount !== "undefined") {
-            options.amount = hp.Utils.setAmount(options.amount);
+        if (typeof options.currencyLocale !== "undefined") {
+            hp.Utils.defaults.currencyLocale = options.currencyLocale;
+        }
+
+        if (typeof options.currencyCode !== "undefined") {
+            hp.Utils.defaults.currencyCode = options.currencyCode;
         }
 
         if (typeof options.convenienceFee !== "undefined") {
@@ -4705,6 +4753,10 @@
 
         if (typeof options.surchargeFee !== "undefined") {
             hp.Utils.defaults.surchargeFee = options.surchargeFee;
+        }
+
+        if (typeof options.amount !== "undefined") {
+            options.amount = hp.Utils.setAmount(options.amount);
         }
 
         if (typeof options.saveCustomer !== "undefined") {
@@ -4814,6 +4866,24 @@
     };
 
     var formatCurrency = function formatCurrency(amount) {
+
+        if (typeof window.Intl !== "undefined") {
+
+            var currencyCode = hp.Utils.defaults.currencyCode;
+            var currencyLocale = hp.Utils.defaults.currencyLocale;
+
+            hp.Utils.log("formatCurrency: Using Intl object for currency formatting.");
+            hp.Utils.log("formatCurrency: Using '" + currencyLocale + "' locale.");
+            hp.Utils.log("formatCurrency: Using '" + currencyCode + "' currency code.");
+
+            var formatter = new Intl.NumberFormat(currencyLocale, {
+                style: 'currency',
+                currency: currencyCode,
+            });
+              
+            return formatter.format(amount);
+        }
+
         var aDigits = amount.toFixed(2).split(".");
         aDigits[0] = aDigits[0].split("").reverse().join("").replace(/(\d{3})(?=\d)/g, "$1,").split("").reverse().join("");
         return "$" + aDigits.join(".");
@@ -5377,6 +5447,7 @@
     hp.Utils.escapeHTML = escapeHTML;
     hp.Utils.setCustomerInfo = setCustomerInfo;
     hp.Utils.getCustomerInfo = getCustomerInfo;
+    hp.Utils.getInstance = getInstance;
     hp.Utils.getSession = getSession;
     hp.Utils.setSession = setSession;
     hp.Utils.setTimer = setTimer;
@@ -5427,6 +5498,9 @@
      */
     window.hp = hp || {};
 
+    /*
+     * Success Class
+     */
     function Success($element) {
         this.context = null;
         this.$parent = null;
@@ -6242,15 +6316,15 @@
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the Apache License
 (function($, window, document, undefined) {
+
     /*
      * Export "hp"
      */
-
     window.hp = hp || {};
+
     /*
      * Bank Account Class
      */
-
     function BankAccount($element) {
         this.context = null;
         this.$parent = null;
@@ -6837,15 +6911,15 @@
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the Apache License
 (function($, window, document, undefined) {
+
     /*
      * Export "hp"
      */
-
     window.hp = hp || {};
+
     /*
      * Code Class
      */
-
     function Code($element) {
         this.context = null;
         this.$parent = null;
@@ -7453,11 +7527,10 @@
 
         return result;
     };
+
     /*
      * Transvault Class
      */
-
-
     function Transvault($element) {
         this.context = null;
         this.$parent = null;
@@ -9082,7 +9155,7 @@
     };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v4.4.5 */
+/* jQuery.HostedPayments - v4.4.6 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function($, window, document, undefined) {
@@ -9090,8 +9163,10 @@
     var pluginName = "hp";
     var defaults = {};
 
-    defaults.version = "v4.4.5";
+    defaults.version = "v4.4.6";
     defaults.amount = 0;
+    defaults.currencyLocale = "en-US";
+    defaults.currencyCode = "USD";
     defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
     defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
     defaults.defaultDateCharacters = "&middot;&middot;";
@@ -9171,10 +9246,6 @@
             options.paymentService = hp.Utils.setPaymentService(options.paymentService);
         }
 
-        if (typeof options.amount !== "undefined") {
-            options.amount = hp.Utils.setAmount(options.amount);
-        }
-
         if (typeof options.saveCustomer !== "undefined") {
             if (options.saveCustomer.toString() === "false") {
                 options.saveCustomer = false;
@@ -9196,6 +9267,11 @@
         }
 
         hp.Utils.defaults = jQuery.extend({}, defaults, options);
+
+        if (typeof options.amount !== "undefined") {
+            options.amount = hp.Utils.setAmount(options.amount);
+        }
+
         this.init();
         hp.Utils.__instance = this;
     };
@@ -9451,6 +9527,14 @@
             hp.Utils.defaults.paymentTypeOrder = $.trim($element.data("paymentTypeOrder").toString().replace(" ", "")).split(",").map(function(item) {
                 return +item;
             });
+        }
+
+        if (typeof $element.data("currencyLocale") !== "undefined") {
+            hp.Utils.defaults.currencyLocale = $element.data("currencyLocale").toString();
+        }
+
+        if (typeof $element.data("currencyCode") !== "undefined") {
+            hp.Utils.defaults.currencyCode = $element.data("currencyCode").toString();
         }
 
         if (typeof $element.data("amount") !== "undefined") {

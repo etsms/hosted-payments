@@ -14,6 +14,7 @@
 
     <script>
 
+
         var transactionId = hp.Utils.generateGUID();
 
         var callback = function(result) {
@@ -28,9 +29,8 @@
         }
 
         $("#ets").hp({
-            terminalId: "1016",
-            apiKey: "0d9fa16f-678e-465c-b193-c4a430789cee",
-            amount: 21,
+            apiKey: "2B3783A2-459B-4158-8A6D-FEAD9F0FB485",
+            amount: 1.5,
             successCallback: callback,
             errorCallback: callback,
             debug: true,
@@ -42,8 +42,8 @@
             allowAvsSkip: false,
             promptForAvs: true,
             swapAchInputs: true,
-            paymentTypeOrder: [1],
-            saveCustomer: true
+            paymentTypeOrder: [0],
+            baseUrl: "https://stage-htv.emoney.com/v3/adapters"
         });
 
     </script>
