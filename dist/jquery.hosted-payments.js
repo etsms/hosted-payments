@@ -3545,9 +3545,9 @@
     var generateGUID = function generateGUID() {
 
         if (window.crypto && typeof window.crypto.getRandomValues === "function") {
-            return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+            return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, function(c) {
                 (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-            );
+            });
         }
 
         var d = null;
@@ -7476,9 +7476,11 @@
 
                     var newlyParsedMessage = messageAsJson.Message;
 
-                    Object.keys(messageAsJson.ModelState).forEach(element => {
-                        newlyParsedMessage += " " + messageAsJson.ModelState[element];
-                    });
+                    Object
+                        .keys(messageAsJson.ModelState)
+                        .forEach(function(element) {
+                            newlyParsedMessage += " " + messageAsJson.ModelState[element];
+                        });
 
                     messageObject.message = newlyParsedMessage;
                     messageObject.key = "Error";
