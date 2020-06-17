@@ -3545,9 +3545,24 @@
     var generateGUID = function generateGUID() {
 
         if (window.crypto && typeof window.crypto.getRandomValues === "function") {
-            return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, function(c) {
-                (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-            });
+        
+            // If we have a cryptographically secure PRNG, use that
+            // https://stackoverflow.com/questions/6906916/collisions-when-generating-uuids-in-javascript
+            var buf = new Uint16Array(8);
+            
+            window.crypto.getRandomValues(buf);
+            
+            var S4 = function(num) {
+                var ret = num.toString(16);
+
+                while(ret.length < 4) {
+                    ret = "0"+ret;
+                }
+
+                return ret;
+            };
+
+            return (S4(buf[0])+S4(buf[1])+"-"+S4(buf[2])+"-"+S4(buf[3])+"-"+S4(buf[4])+"-"+S4(buf[5])+S4(buf[6])+S4(buf[7]));
         }
 
         var d = null;
@@ -9157,7 +9172,7 @@
     };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v4.4.6 */
+/* jQuery.HostedPayments - v4.4.7 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function($, window, document, undefined) {
@@ -9165,7 +9180,7 @@
     var pluginName = "hp";
     var defaults = {};
 
-    defaults.version = "v4.4.6";
+    defaults.version = "v4.4.7";
     defaults.amount = 0;
     defaults.currencyLocale = "en-US";
     defaults.currencyCode = "USD";
