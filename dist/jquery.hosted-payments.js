@@ -6844,6 +6844,10 @@
                     instrumentId: hp.Utils.getInstrumentId(),
                     token: hp.Utils.getSession().sessionToken,
                     name: $this.formData.name,
+                    phone: hp.Utils.getCustomerInfo().customerPhone,
+                    email: hp.Utils.getCustomerInfo().customerEmail,
+                    sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
+                    sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
                     properties: {
                         accountNumber: $this.formData.accountNumber,
                         routingNumber: $this.formData.routingNumber,
@@ -7237,6 +7241,7 @@
 
         cardProperties["customerToken"] = hp.Utils.getCustomerToken();
         cardProperties["instrumentId"] = hp.Utils.getInstrumentId();
+        
         hp.Utils.promptAvs().then(function() {
             var createInstrumentRequest = {
                 createPaymentInstrument: {
@@ -9172,7 +9177,7 @@
     };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v4.4.7 */
+/* jQuery.HostedPayments - v4.4.8 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function($, window, document, undefined) {
@@ -9180,7 +9185,7 @@
     var pluginName = "hp";
     var defaults = {};
 
-    defaults.version = "v4.4.7";
+    defaults.version = "v4.4.8";
     defaults.amount = 0;
     defaults.currencyLocale = "en-US";
     defaults.currencyCode = "USD";
