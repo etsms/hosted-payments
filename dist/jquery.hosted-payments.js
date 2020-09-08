@@ -3439,7 +3439,7 @@
         var errorMessage = [];
         
         if (!isBankAccountForm && !isCreditCardForm) {
-            errorMessage.push("The form is neither a credit card or bank account form. Defaulting to 'true'.");
+            errorMessage.push("The form is neither a credit card or bank account form.");
         }
 
         if (isBankAccountForm) {
@@ -3521,7 +3521,7 @@
         return { 
             isValid: errorMessage.lenth === 0,
             errors: errorMessage
-        }
+        };
     };
 
     var setEntryType = function setEntryType(entryType) {
