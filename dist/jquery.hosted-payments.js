@@ -3431,6 +3431,101 @@
         return result;
     };
 
+    var isFormValid = function () {
+
+        var isCreditCardForm = hp.Utils.plugins.CreditCard !== null && hp.Utils.plugins.CreditCard.$content !== null && hp.Utils.plugins.CreditCard.$content.is(":visible");
+        var isBankAccountForm = hp.Utils.plugins.BankAccount !== null && hp.Utils.plugins.BankAccount.$content !== null && hp.Utils.plugins.BankAccount.$content.is(":visible");
+
+        log("isCreditCard", isCreditCardForm);
+        log("isBankAccountForm", isBankAccountForm);
+
+        if (!isBankAccountForm && !isCreditCardForm) {
+            log("The form is neither a credit card or bank account form. Defaulting to 'true'.");
+            return true;
+        }
+
+        var element = null;
+        var errorMessage = [];
+
+        if (isBankAccountForm) {
+
+            element = hp.Utils.plugins.BankAccount.$content;
+            
+            var textOnlyPattern = /^[A-Za-z][-a-zA-Z ]+$/;
+
+            var customerName = element.find(".hp-input-fullname > input").val();
+            if (customerName.length < 3 || customerName.length > 23 || !textOnlyPattern.test(bankName)) {
+                errorMessage.push("The 'full name' field is either too short or too long.");
+            }
+
+            var bankName = element.find(".hp-input-bank > input").val();
+            if (bankName.length < 3 || bankName.length > 30 || !textOnlyPattern.test(bankName)) {
+                errorMessage.push("The 'bank name' field is either too short or too long.");
+            }
+ 
+            var routingNumber = element.find(".hp-input-routing > input").val();
+            if (routingNumber.length < 3 || routingNumber.length > 9) {
+                errorMessage.push("The 'routing number' field is either too short or too long.");
+            }
+
+            var accountNumber = element.find(".hp-input-account > input").val();
+            if (accountNumber.length < 3 || accountNumber.length > 17) {
+                errorMessage.push("The 'account number' field is either too short or too long.");
+            }
+            
+            hp.Utils.plugins.BankAccount.$parent.trigger("hp.notify");
+            hp.Utils.plugins.BankAccount.handleNotify();
+
+        } else if (isCreditCardForm) {
+
+            element = hp.Utils.plugins.CreditCard.$content;
+
+            var nameOnCard = element.find(".hp-input-name > input").val();
+            if (nameOnCard.length < 3 || nameOnCard.length > 18) {
+                errorMessage.push("The 'nameOnCard' field is either too short or too long.");
+            }
+
+            var cardNumber = element.find(".hp-input-cc > input").val().replace(/\s/gi, "");
+            if (!$.payment.validateCardNumber(cardNumber)) {
+                errorMessage.push("Card number is invalid.");
+            }
+
+            var cardType = $.payment.cardType(cardNumber);
+            var cvv = element.find(".hp-input-cvv > input").val();    
+            if (!$.payment.validateCardCVC(cvv, cardType)) {
+                errorMessage.push("CVV is not valid for this card type.");
+            }
+
+            var month = element.find(".hp-input-month > select").val();
+            var year = element.find(".hp-input-year > select").val();
+            if (!$.payment.validateCardExpiry(month, year)) {
+                errorMessage.push("Expiration date is invalid.");
+            }
+
+            var avsZip = hp.Utils.plugins.CreditCard.$element.find(".hp-input-avs-zip > input").val();
+            var avsStreet = hp.Utils.plugins.CreditCard.$element.find(".hp-input-avs-street > input").val();
+
+            if (hp.Utils.defaults.promptForAvs && !hp.Utils.defaults.allowAvsSkip) {
+                
+                if (avsZip === undefined || avsZip.length !== 5) {
+                    errorMessage.push("Zipcode must be 5 characters long.");
+                }
+
+                if (avsStreet === undefined || avsStreet.length < 3 || avsStreet.length > 60) {
+                    errorMessage.push("Enter a valid street address.");
+                }
+
+            }
+
+            hp.Utils.plugins.CreditCard.$parent.trigger("hp.notify");
+            hp.Utils.plugins.CreditCard.handleNotify();
+        }
+
+        log("isValid: ", errorMessage.length === 0, errorMessage);
+
+        return errorMessage.lenth === 0;
+    };
+
     var setEntryType = function setEntryType(entryType) {
         var result = hp.EntryType.KEYED_CARD_NOT_PRESENT;
         entryType = entryType.toString().toLowerCase().replace(/_/gi, "");
@@ -4618,9 +4713,7 @@
                     return true;
                 }
 
-                var code = (e.which) 
-                    ? e.which 
-                    : e.keyCode;
+                var code = (e.which) ? e.which : e.keyCode;
 
                 if (code > 31 && (code < 48 || code > 57)) {
                     return false; 
@@ -4994,6 +5087,7 @@
 
     var validateBankAccountData = function validateBankAccountData(formData, callback) {
         var errors = [];
+        var digitOnly = /^[0-9]+$/;
 
         if (typeof formData.accountNumber === "undefined" || formData.accountNumber === "") {
             errors.push({
@@ -5006,6 +5100,13 @@
             errors.push({
                 type: "accountNumber",
                 message: "The account number must be atleast 5 characters."
+            });
+        }
+
+        if (typeof formData.accountNumber !== "undefined" && !digitOnly.test(formData.accountNumber)) {
+            errors.push({
+                type: "accountNumber",
+                message: "The account number must be digits only."
             });
         }
 
@@ -5023,6 +5124,13 @@
             });
         }
 
+        if (typeof formData.routingNumber !== "undefined" && !digitOnly.test(formData.routingNumber)) {
+            errors.push({
+                type: "routingNumber",
+                message: "The routing number must be digits only."
+            });
+        }
+
         if (typeof formData.name === "undefined" || formData.name === "") {
             errors.push({
                 type: "name",
@@ -5037,6 +5145,13 @@
             });
         }
 
+        if (typeof formData.name !== "undefined" && digitOnly.test(formData.name)) {
+            errors.push({
+                type: "name",
+                message: "Name must not contain digits."
+            });
+        }
+
         if (typeof formData.bankName === "undefined" || formData.bankName === "") {
             errors.push({
                 type: "bankName",
@@ -5048,6 +5163,13 @@
             errors.push({
                 type: "bankName",
                 message: "Bank name must be greater than one character."
+            });
+        }
+
+        if (typeof formData.bankName !== "undefined" && digitOnly.test(formData.bankName)) {
+            errors.push({
+                type: "bankName",
+                message: "Bank name must not contain digits."
             });
         }
 
@@ -5484,6 +5606,7 @@
     hp.Utils.setPaymentInstrument = setPaymentInstrument;
     hp.Utils.log = log;
     hp.Utils.getVersion = getVersion;
+    hp.Utils.isFormValid = isFormValid;
     hp.Utils.setEntryType = setEntryType;
     hp.Utils.setPaymentType = setPaymentType;
     hp.Utils.updateAvsInfo = updateAvsInfo;
@@ -6191,7 +6314,7 @@
             $this.handleNotify();
         });
 
-        $name.on("focus", function() {
+        $name.payment("allowNumeric").on("focus", function() {
             $this.$parent.trigger("hp.notify");
             $this.handleNotify();
             $this.$parent.removeClass("hp-back");
@@ -6572,6 +6695,7 @@
 
         $this.$content
             .find(".hp-input-fullname input")
+            .payment("allowNumeric")
             .on("keyup, keydown, keypress, change, input", function() {
                 var name = $(this).val();
                 $this.$parent.removeClass("hp-back");
@@ -6595,6 +6719,7 @@
 
         $this.$content
             .find(".hp-input-bank input")
+            .payment("allowNumeric")
             .on("keyup, keydown, keypress, change, input", function() {
                 var name = $(this).val();
                 $this.$parent.removeClass("hp-back");
@@ -7210,6 +7335,7 @@
         $visualcode.addClass("hp-card-visual-flat-active");
         $this.formData._isValid = data.is_valid;
         $this.formData._isEMoney = data.is_emoney;
+
         var cardProperties = {};
 
         if ($this.formData._isValid && $this.formData.ksn !== "" && !$this.formData._isEMoney) {
@@ -7239,8 +7365,8 @@
             };
         }
 
-        cardProperties["customerToken"] = hp.Utils.getCustomerToken();
-        cardProperties["instrumentId"] = hp.Utils.getInstrumentId();
+        cardProperties.customerToken = hp.Utils.getCustomerToken();
+        cardProperties.instrumentId = hp.Utils.getInstrumentId();
         
         hp.Utils.promptAvs().then(function() {
             var createInstrumentRequest = {
@@ -7269,12 +7395,12 @@
             if (hp.Utils.defaults.saveCustomer) {
                 return hp.Utils.makeRequest(createInstrumentRequest);
             }
+
             /*
              * Since this doesn't return a promise, the following 'then' method will not execute
              */
-
-
             return $this.handleChargeWithoutInstrument(createInstrumentRequest);
+
         }).then(function(res) {
             if (!hp.Utils.defaults.saveCustomer) {
                 return;
@@ -8253,11 +8379,13 @@
         reFormatCardNumber,
         reFormatExpiry,
         reFormatNumeric,
+        reFormatString,
         replaceFullWidthChars,
         restrictCVC,
         restrictCardNumber,
         restrictExpiry,
         restrictNumeric,
+        allowNumeric,
         safeVal,
         setCardType,
         __slice = [].slice,
@@ -8495,6 +8623,17 @@
         });
     };
 
+    reFormatString = function reFormatString(e) {
+        var $target;
+        $target = $(e.currentTarget);
+        return setTimeout(function() {
+            var value;
+            value = $target.val();
+            value = value.replace(/[^0-9a-z ]/gi, '');
+            return safeVal(value, $target);
+        });
+    };
+
     reFormatCardNumber = function reFormatCardNumber(e) {
         var $target;
         $target = $(e.currentTarget);
@@ -8710,6 +8849,10 @@
         return !!/[\d\s]/.test(input);
     };
 
+    allowNumeric = function allowNumeric(e) {
+        return !restrictNumeric(e);
+    };
+
     restrictCardNumber = function restrictCardNumber(e) {
         var $target, card, digit, value;
         $target = $(e.currentTarget);
@@ -8839,6 +8982,14 @@
         this.on("paste", reFormatNumeric);
         this.on("change", reFormatNumeric);
         this.on("input", reFormatNumeric);
+        return this;
+    };
+
+    $.payment.fn.allowNumeric = function() {
+        this.on("keypress", allowNumeric);
+        this.on("paste", reFormatString);
+        this.on("change", reFormatString);
+        this.on("input", reFormatString);
         return this;
     };
 
@@ -9177,7 +9328,7 @@
     };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v4.4.8 */
+/* jQuery.HostedPayments - v4.4.9 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function($, window, document, undefined) {
@@ -9185,7 +9336,7 @@
     var pluginName = "hp";
     var defaults = {};
 
-    defaults.version = "v4.4.8";
+    defaults.version = "v4.4.9";
     defaults.amount = 0;
     defaults.currencyLocale = "en-US";
     defaults.currencyCode = "USD";
