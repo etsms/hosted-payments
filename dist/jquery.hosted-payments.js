@@ -4920,12 +4920,25 @@
 
         setTimeout(function() {
             hp.Utils.log("Reinitialized plugin with new options!");
-
             hp.Utils.__instance.init();
-
             hp.Utils.__instance = hp.Utils.__instance;
         });
     };
+
+    var handleCaptcha = function handleCaptcha() {
+        var deferred = jQuery.Deferred();
+        setTimeout(function(){
+            hp.Utils.log("Performing captcha check!", hp.Utils.defaults.captchaCallback);
+            if (hp.Utils.defaults.captchaCallback === undefined || hp.Utils.defaults.captchaCallback === null || typeof(hp.Utils.defaults.captchaCallback) !== "function" || hp.Utils.defaults.captchaCallback.length < 1) {
+                hp.Utils.log("The provided captchaCallback was not defined or was not a function: Type = ", typeof(hp.Utils.defaults.captchaCallback));
+                hp.Utils.log("--> Please make sure the callback includes 1 parameter. The parameter is a jQuery deferred object and shoud be resovled or rejected.");
+                deferred.reject();
+            } else {
+                hp.Utils.defaults.captchaCallback(deferred);
+            }
+        }, 0);
+        return deferred;
+    }; 
 
     var signIn = function signIn() {
         var deferred = jQuery.Deferred(),
@@ -4943,42 +4956,65 @@
             return deferred;
         }
 
-        hp.Utils.makeRequest({
-            signIn: {
-                signInRequest: {
-                    apiKey: apiKey
-                }
-            }
-        }).then(function(res) {
-            hp.Utils.setSession(res.token);
-            hp.Utils.setTimer(res.ttl);
-            deferred.resolve(res);
-            hp.Utils.log("Sign In: Retrieved from server.");
-            hp.Utils.log("Sign In: Time remaining is (seconds) -> ", res.ttl);
-        }, function(res) {
-            if (typeof res === "undefined" || res === null || res === "") {
-                hp.Utils.reset();
-                return;
-            }
+        hp.Utils.handleCaptcha()
+            .then(function() {
+                hp.Utils.makeRequest({
+                    signIn: {
+                        signInRequest: {
+                            apiKey: apiKey
+                        }
+                    }
+                }).then(function(res) {
+                    hp.Utils.setSession(res.token);
+                    hp.Utils.setTimer(res.ttl);
+                    deferred.resolve(res);
+                    hp.Utils.log("Sign In: Retrieved from server.");
+                    hp.Utils.log("Sign In: Time remaining is (seconds) -> ", res.ttl);
+                }, function(res) {
+                    if (typeof res === "undefined" || res === null || res === "") {
+                        hp.Utils.reset();
+                        return;
+                    }
 
-            var errorResponse = {
-                status: "Error",
-                message: "We're sorry. Payments cannot accepted at this time. Please try again later.",
-                created_on: createdOn,
-                token: sessionId
-            };
+                    var errorResponse = {
+                        status: "Error",
+                        message: "We're sorry. Payments cannot accepted at this time. Please try again later.",
+                        created_on: createdOn,
+                        token: sessionId
+                    };
 
-            if (!hp.Utils.shouldErrorPostBack()) {
-                hp.Utils.showError(errorResponse.message);
-                hp.Utils.defaults.errorCallback(errorResponse);
-            } else {
-                hp.Utils.buildFormFromObject(errorResponse).then(function($form) {
-                    $form.attr("action", hp.Utils.defaults.errorCallback).submit();
+                    if (!hp.Utils.shouldErrorPostBack()) {
+                        hp.Utils.showError(errorResponse.message);
+                        hp.Utils.defaults.errorCallback(errorResponse);
+                    } else {
+                        hp.Utils.buildFormFromObject(errorResponse).then(function($form) {
+                            $form.attr("action", hp.Utils.defaults.errorCallback).submit();
+                        });
+                    }
+
+                    deferred.reject();
                 });
-            }
+            }, function() {
 
-            deferred.reject();
-        });
+                var errorResponse = {
+                    status: "Error",
+                    message: "We're sorry. The provided captcha method was not successfull.",
+                    created_on: createdOn,
+                    token: sessionId
+                };
+
+                if (!hp.Utils.shouldErrorPostBack()) {
+                    hp.Utils.showError(errorResponse.message);
+                    hp.Utils.defaults.errorCallback(errorResponse);
+                } else {
+                    hp.Utils.buildFormFromObject(errorResponse).then(function($form) {
+                        $form.attr("action", hp.Utils.defaults.errorCallback).submit();
+                    });
+                }
+
+                deferred.reject();
+            });
+
         return deferred;
     };
 
@@ -5624,6 +5660,7 @@
     hp.Utils.handleError = handleError;
     hp.Utils.handleSuccess = handleSuccess;
     hp.Utils.signIn = signIn;
+    hp.Utils.handleCaptcha = handleCaptcha;
     hp.Utils.setupPluginInstances = setupPluginInstances;
     hp.Utils.reset = reset;
     hp.Utils.setPaymentService = setPaymentService;
@@ -9337,7 +9374,7 @@
     };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v4.4.11 */
+/* jQuery.HostedPayments - v4.4.12 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function($, window, document, undefined) {
@@ -9345,7 +9382,7 @@
     var pluginName = "hp";
     var defaults = {};
 
-    defaults.version = "v4.4.11";
+    defaults.version = "v4.4.12";
     defaults.amount = 0;
     defaults.currencyLocale = "en-US";
     defaults.currencyCode = "USD";
@@ -9369,6 +9406,7 @@
     defaults.successCallback = $.noop;
     defaults.errorCallback = $.noop;
     defaults.eventCallback = $.noop;
+    defaults.captchaCallback = function(promise) { promise.resolve(); };
     defaults.terminalId = "";
     defaults.transactionId = "";
     defaults.apiKey = "";
