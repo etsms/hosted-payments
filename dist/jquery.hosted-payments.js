@@ -3435,17 +3435,12 @@
 
         var isCreditCardForm = hp.Utils.plugins.CreditCard !== null && hp.Utils.plugins.CreditCard.$content !== null && hp.Utils.plugins.CreditCard.$content.is(":visible");
         var isBankAccountForm = hp.Utils.plugins.BankAccount !== null && hp.Utils.plugins.BankAccount.$content !== null && hp.Utils.plugins.BankAccount.$content.is(":visible");
-
-        log("isCreditCard", isCreditCardForm);
-        log("isBankAccountForm", isBankAccountForm);
-
-        if (!isBankAccountForm && !isCreditCardForm) {
-            log("The form is neither a credit card or bank account form. Defaulting to 'true'.");
-            return true;
-        }
-
         var element = null;
         var errorMessage = [];
+        
+        if (!isBankAccountForm && !isCreditCardForm) {
+            errorMessage.push("The form is neither a credit card or bank account form. Defaulting to 'true'.");
+        }
 
         if (isBankAccountForm) {
 
