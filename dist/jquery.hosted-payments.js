@@ -3523,7 +3523,10 @@
 
         log("isValid: ", errorMessage.length === 0, errorMessage);
 
-        return errorMessage.lenth === 0;
+        return { 
+            isValid: errorMessage.lenth === 0,
+            errors: errorMessage
+        }
     };
 
     var setEntryType = function setEntryType(entryType) {
