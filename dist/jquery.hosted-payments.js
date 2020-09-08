@@ -3470,7 +3470,8 @@
                     errorMessage.push("The 'account number' field is either too short or too long.");
                 }
                 
-                hp.Utils.plugins.BankAccount.$parent.trigger("hp.notify");
+                log("Triggering: hp.validate");
+                hp.Utils.plugins.BankAccount.$parent.trigger("hp.validate");
                 hp.Utils.plugins.BankAccount.handleNotify();
 
             } else if (isCreditCardForm) {
@@ -3514,7 +3515,8 @@
 
                 }
 
-                hp.Utils.plugins.CreditCard.$parent.trigger("hp.notify");
+                log("Triggering: hp.validate");
+                hp.Utils.plugins.CreditCard.$parent.trigger("hp.validate");
                 hp.Utils.plugins.CreditCard.handleNotify();
             }
 
@@ -9335,7 +9337,7 @@
     };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v4.4.10 */
+/* jQuery.HostedPayments - v4.4.11 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function($, window, document, undefined) {
@@ -9343,7 +9345,7 @@
     var pluginName = "hp";
     var defaults = {};
 
-    defaults.version = "v4.4.10";
+    defaults.version = "v4.4.11";
     defaults.amount = 0;
     defaults.currencyLocale = "en-US";
     defaults.currencyCode = "USD";
