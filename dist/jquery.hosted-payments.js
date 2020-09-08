@@ -3433,95 +3433,104 @@
 
     var isFormValid = function () {
 
-        var isCreditCardForm = hp.Utils.plugins.CreditCard !== null && hp.Utils.plugins.CreditCard.$content !== null && hp.Utils.plugins.CreditCard.$content.is(":visible");
-        var isBankAccountForm = hp.Utils.plugins.BankAccount !== null && hp.Utils.plugins.BankAccount.$content !== null && hp.Utils.plugins.BankAccount.$content.is(":visible");
-        var element = null;
-        var errorMessage = [];
-        
-        if (!isBankAccountForm && !isCreditCardForm) {
-            errorMessage.push("The form is neither a credit card or bank account form.");
-        }
+        try {
 
-        if (isBankAccountForm) {
-
-            element = hp.Utils.plugins.BankAccount.$content;
+            var isCreditCardForm = hp.Utils.plugins.CreditCard !== null && hp.Utils.plugins.CreditCard.$content !== null && hp.Utils.plugins.CreditCard.$content.is(":visible");
+            var isBankAccountForm = hp.Utils.plugins.BankAccount !== null && hp.Utils.plugins.BankAccount.$content !== null && hp.Utils.plugins.BankAccount.$content.is(":visible");
+            var element = null;
+            var errorMessage = [];
             
-            var textOnlyPattern = /^[A-Za-z][-a-zA-Z ]+$/;
-
-            var customerName = element.find(".hp-input-fullname > input").val();
-            if (customerName.length < 3 || customerName.length > 23 || !textOnlyPattern.test(bankName)) {
-                errorMessage.push("The 'full name' field is either too short or too long.");
+            if (!isBankAccountForm && !isCreditCardForm) {
+                errorMessage.push("The form is neither a credit card or bank account form.");
             }
 
-            var bankName = element.find(".hp-input-bank > input").val();
-            if (bankName.length < 3 || bankName.length > 30 || !textOnlyPattern.test(bankName)) {
-                errorMessage.push("The 'bank name' field is either too short or too long.");
-            }
- 
-            var routingNumber = element.find(".hp-input-routing > input").val();
-            if (routingNumber.length < 3 || routingNumber.length > 9) {
-                errorMessage.push("The 'routing number' field is either too short or too long.");
-            }
+            if (isBankAccountForm) {
 
-            var accountNumber = element.find(".hp-input-account > input").val();
-            if (accountNumber.length < 3 || accountNumber.length > 17) {
-                errorMessage.push("The 'account number' field is either too short or too long.");
-            }
-            
-            hp.Utils.plugins.BankAccount.$parent.trigger("hp.notify");
-            hp.Utils.plugins.BankAccount.handleNotify();
-
-        } else if (isCreditCardForm) {
-
-            element = hp.Utils.plugins.CreditCard.$content;
-
-            var nameOnCard = element.find(".hp-input-name > input").val();
-            if (nameOnCard.length < 3 || nameOnCard.length > 18) {
-                errorMessage.push("The 'nameOnCard' field is either too short or too long.");
-            }
-
-            var cardNumber = element.find(".hp-input-cc > input").val().replace(/\s/gi, "");
-            if (!$.payment.validateCardNumber(cardNumber)) {
-                errorMessage.push("Card number is invalid.");
-            }
-
-            var cardType = $.payment.cardType(cardNumber);
-            var cvv = element.find(".hp-input-cvv > input").val();    
-            if (!$.payment.validateCardCVC(cvv, cardType)) {
-                errorMessage.push("CVV is not valid for this card type.");
-            }
-
-            var month = element.find(".hp-input-month > select").val();
-            var year = element.find(".hp-input-year > select").val();
-            if (!$.payment.validateCardExpiry(month, year)) {
-                errorMessage.push("Expiration date is invalid.");
-            }
-
-            var avsZip = hp.Utils.plugins.CreditCard.$element.find(".hp-input-avs-zip > input").val();
-            var avsStreet = hp.Utils.plugins.CreditCard.$element.find(".hp-input-avs-street > input").val();
-
-            if (hp.Utils.defaults.promptForAvs && !hp.Utils.defaults.allowAvsSkip) {
+                element = hp.Utils.plugins.BankAccount.$content;
                 
-                if (avsZip === undefined || avsZip.length !== 5) {
-                    errorMessage.push("Zipcode must be 5 characters long.");
+                var textOnlyPattern = /^[A-Za-z][-a-zA-Z ]+$/;
+
+                var customerName = element.find(".hp-input-fullname > input").val();
+                if (customerName.length < 3 || customerName.length > 23 || !textOnlyPattern.test(bankName)) {
+                    errorMessage.push("The 'full name' field is either too short or too long.");
                 }
 
-                if (avsStreet === undefined || avsStreet.length < 3 || avsStreet.length > 60) {
-                    errorMessage.push("Enter a valid street address.");
+                var bankName = element.find(".hp-input-bank > input").val();
+                if (bankName.length < 3 || bankName.length > 30 || !textOnlyPattern.test(bankName)) {
+                    errorMessage.push("The 'bank name' field is either too short or too long.");
+                }
+    
+                var routingNumber = element.find(".hp-input-routing > input").val();
+                if (routingNumber.length < 3 || routingNumber.length > 9) {
+                    errorMessage.push("The 'routing number' field is either too short or too long.");
                 }
 
+                var accountNumber = element.find(".hp-input-account > input").val();
+                if (accountNumber.length < 3 || accountNumber.length > 17) {
+                    errorMessage.push("The 'account number' field is either too short or too long.");
+                }
+                
+                hp.Utils.plugins.BankAccount.$parent.trigger("hp.notify");
+                hp.Utils.plugins.BankAccount.handleNotify();
+
+            } else if (isCreditCardForm) {
+
+                element = hp.Utils.plugins.CreditCard.$content;
+
+                var nameOnCard = element.find(".hp-input-name > input").val();
+                if (nameOnCard.length < 3 || nameOnCard.length > 18) {
+                    errorMessage.push("The 'nameOnCard' field is either too short or too long.");
+                }
+
+                var cardNumber = element.find(".hp-input-cc > input").val().replace(/\s/gi, "");
+                if (!$.payment.validateCardNumber(cardNumber)) {
+                    errorMessage.push("Card number is invalid.");
+                }
+
+                var cardType = $.payment.cardType(cardNumber);
+                var cvv = element.find(".hp-input-cvv > input").val();    
+                if (!$.payment.validateCardCVC(cvv, cardType)) {
+                    errorMessage.push("CVV is not valid for this card type.");
+                }
+
+                var month = element.find(".hp-input-month > select").val();
+                var year = element.find(".hp-input-year > select").val();
+                if (!$.payment.validateCardExpiry(month, year)) {
+                    errorMessage.push("Expiration date is invalid.");
+                }
+
+                var avsZip = hp.Utils.plugins.CreditCard.$element.find(".hp-input-avs-zip > input").val();
+                var avsStreet = hp.Utils.plugins.CreditCard.$element.find(".hp-input-avs-street > input").val();
+
+                if (hp.Utils.defaults.promptForAvs && !hp.Utils.defaults.allowAvsSkip) {
+                    
+                    if (avsZip === undefined || avsZip.length !== 5) {
+                        errorMessage.push("Zipcode must be 5 characters long.");
+                    }
+
+                    if (avsStreet === undefined || avsStreet.length < 3 || avsStreet.length > 60) {
+                        errorMessage.push("Enter a valid street address.");
+                    }
+
+                }
+
+                hp.Utils.plugins.CreditCard.$parent.trigger("hp.notify");
+                hp.Utils.plugins.CreditCard.handleNotify();
             }
 
-            hp.Utils.plugins.CreditCard.$parent.trigger("hp.notify");
-            hp.Utils.plugins.CreditCard.handleNotify();
+            log("isValid: ", errorMessage.length === 0, errorMessage);
+
+            return { 
+                isValid: errorMessage.length === 0,
+                errors: errorMessage
+            };
+
+        } catch (err) {
+            return { 
+                isValid: false,
+                errors: [err.message]
+            };
         }
-
-        log("isValid: ", errorMessage.length === 0, errorMessage);
-
-        return { 
-            isValid: errorMessage.lenth === 0,
-            errors: errorMessage
-        };
     };
 
     var setEntryType = function setEntryType(entryType) {
@@ -9326,7 +9335,7 @@
     };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v4.4.9 */
+/* jQuery.HostedPayments - v4.4.10 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function($, window, document, undefined) {
@@ -9334,7 +9343,7 @@
     var pluginName = "hp";
     var defaults = {};
 
-    defaults.version = "v4.4.9";
+    defaults.version = "v4.4.10";
     defaults.amount = 0;
     defaults.currencyLocale = "en-US";
     defaults.currencyCode = "USD";
