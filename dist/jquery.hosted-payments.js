@@ -3451,22 +3451,22 @@
                 var textOnlyPattern = /^[A-Za-z][-a-zA-Z ]+$/;
 
                 var customerName = element.find(".hp-input-fullname > input").val();
-                if (customerName.length < 3 || customerName.length > 23 || !textOnlyPattern.test(bankName)) {
+                if (customerName.length < 1 || customerName.length > 23 || !textOnlyPattern.test(bankName)) {
                     errorMessage.push("The 'full name' field is either too short or too long.");
                 }
 
                 var bankName = element.find(".hp-input-bank > input").val();
-                if (bankName.length < 3 || bankName.length > 30 || !textOnlyPattern.test(bankName)) {
+                if (bankName.length < 1 || bankName.length > 30 || !textOnlyPattern.test(bankName)) {
                     errorMessage.push("The 'bank name' field is either too short or too long.");
                 }
     
                 var routingNumber = element.find(".hp-input-routing > input").val();
-                if (routingNumber.length < 3 || routingNumber.length > 9) {
+                if (routingNumber.length !== 9) {
                     errorMessage.push("The 'routing number' field is either too short or too long.");
                 }
 
                 var accountNumber = element.find(".hp-input-account > input").val();
-                if (accountNumber.length < 3 || accountNumber.length > 17) {
+                if (accountNumber.length <= 4 || accountNumber.length > 17) {
                     errorMessage.push("The 'account number' field is either too short or too long.");
                 }
                 
@@ -9374,7 +9374,7 @@
     };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v4.4.12 */
+/* jQuery.HostedPayments - v4.4.13 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function($, window, document, undefined) {
@@ -9382,7 +9382,7 @@
     var pluginName = "hp";
     var defaults = {};
 
-    defaults.version = "v4.4.12";
+    defaults.version = "v4.4.13";
     defaults.amount = 0;
     defaults.currencyLocale = "en-US";
     defaults.currencyCode = "USD";
