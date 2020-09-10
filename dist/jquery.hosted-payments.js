@@ -3277,7 +3277,8 @@
     hp.PaymentService = {};
     hp.PaymentService.EFT = "EFT";
     hp.PaymentService.EMONEY = "EMONEY";
-    hp.PaymentService.TEST = "TEST"; // entry type
+    hp.PaymentService.TEST = "TEST";
+    hp.PaymentService.TOKEN = "TEST";
 
     hp.EntryType = {};
     hp.EntryType.DEVICE_CAPTURED = "DEVICE_CAPTURED";
@@ -4950,9 +4951,34 @@
          */
 
         if (hp.Utils.defaults.paymentService === hp.PaymentService.TEST) {
-            hp.Utils.log("Sign In: Bypassed.");
-            hp.Utils.setSession(apiKey);
-            deferred.resolve(apiKey);
+            
+            hp.Utils
+                .handleCaptcha()
+                .then(function() {
+                    hp.Utils.log("Sign In: Bypassed.");
+                    hp.Utils.setSession(apiKey);
+                    deferred.resolve(apiKey);
+                }, function() {
+                    
+                    var errorResponse = {
+                        status: "Error",
+                        message: "We're sorry. The provided captcha method was not successfull.",
+                        created_on: createdOn,
+                        token: sessionId
+                    };
+    
+                    if (!hp.Utils.shouldErrorPostBack()) {
+                        hp.Utils.showError(errorResponse.message);
+                        hp.Utils.defaults.errorCallback(errorResponse);
+                    } else {
+                        hp.Utils.buildFormFromObject(errorResponse).then(function($form) {
+                            $form.attr("action", hp.Utils.defaults.errorCallback).submit();
+                        });
+                    }
+    
+                    deferred.reject();
+                });
+
             return deferred;
         }
 
@@ -7206,6 +7232,7 @@
             requestModel = {
                 charge: {
                     chargeRequest: {
+                        entryType: hp.EntryType.KEYED_CARD_PRESENT,
                         correlationId: hp.Utils.getCorrelationId(),
                         token: hp.Utils.getSession().sessionToken,
                         transactionId: $this.transactionId,
@@ -7225,6 +7252,7 @@
             requestModel = {
                 refund: {
                     refundRequest: {
+                        entryType: hp.EntryType.KEYED_CARD_PRESENT,
                         correlationId: hp.Utils.getCorrelationId(),
                         token: hp.Utils.getSession().sessionToken,
                         properties: cardProperties,
@@ -7272,6 +7300,7 @@
             requestModel = {
                 charge: {
                     chargeRequest: {
+                        entryType: hp.EntryType.KEYED_CARD_PRESENT,
                         correlationId: hp.Utils.getCorrelationId(),
                         token: hp.Utils.getSession().sessionToken,
                         transactionId: $this.transactionId,
@@ -7291,6 +7320,7 @@
             requestModel = {
                 refund: {
                     refundRequest: {
+                        entryType: hp.EntryType.KEYED_CARD_PRESENT,
                         correlationId: hp.Utils.getCorrelationId(),
                         token: hp.Utils.getSession().sessionToken,
                         instrumentId: res.instrumentId,
@@ -9365,7 +9395,7 @@
     };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v4.4.13 */
+/* jQuery.HostedPayments - v4.4.14 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function($, window, document, undefined) {
@@ -9373,7 +9403,7 @@
     var pluginName = "hp";
     var defaults = {};
 
-    defaults.version = "v4.4.13";
+    defaults.version = "v4.4.14";
     defaults.amount = 0;
     defaults.currencyLocale = "en-US";
     defaults.currencyCode = "USD";
