@@ -3451,7 +3451,7 @@
                 var textOnlyPattern = /^[A-Za-z][-a-zA-Z ]+$/;
 
                 var customerName = element.find(".hp-input-fullname > input").val();
-                if (customerName.length < 1 || customerName.length > 23 || !textOnlyPattern.test(bankName)) {
+                if (customerName.length < 1 || customerName.length > 23 || !textOnlyPattern.test(customerName)) {
                     errorMessage.push("The 'full name' field is either too short or too long.");
                 }
 
@@ -3479,7 +3479,7 @@
                 element = hp.Utils.plugins.CreditCard.$content;
 
                 var nameOnCard = element.find(".hp-input-name > input").val();
-                if (nameOnCard.length < 3 || nameOnCard.length > 18) {
+                if (nameOnCard.length < 2 || nameOnCard.length > 18) {
                     errorMessage.push("The 'nameOnCard' field is either too short or too long.");
                 }
 
@@ -6370,17 +6370,8 @@
             $this.$parent.trigger("hp.name", name);
             $this.$parent.trigger("hp.notify");
             $this.handleNotify();
-            var $el = $(this);
-            setTimeout(function() {
-                if ($this.formData.name && $this.formData.name.length != 1) {
-                    $el.val($this.formData.name);
-                }
-            });
         });
 
-        if (hp.Utils.defaults.customerName !== "") {
-            $name.trigger("keyup");
-        }
 
         $month.on("focus", function(e) {
             $(".hp-input-active").removeClass("hp-input-active");
