@@ -4550,11 +4550,13 @@
     var promptAvs = function promptAvs($element) {
         var deferred = jQuery.Deferred();
 
+        hp.Utils.defaults.eventCallback($element);
+
         if (!hp.Utils.defaults.promptForAvs) {
             hp.Utils.log("The 'promptForAvs' option was turned off. Skipping AVS prompt.");
             deferred.resolve();
             return deferred;
-        }
+        }        
 
         var instance = hp.Utils.getInstance();
 
@@ -4686,6 +4688,8 @@
 
             $element.prepend(template);
 
+            hp.Utils.defaults.eventCallback($element);
+
             var $avsPrompt = $element.find(".hp-avs-prompt"),
                 avsZipValue = "",
                 avsStreetValue = "";
@@ -4694,11 +4698,14 @@
                 .find(".hp-avs-submit")
                 .attr("disabled", "disabled");
 
+            hp.Utils.defaults.eventCallback($element);
+
             var $goBack = $avsPrompt.find(".hp-close");
 
             var handleSubmit = function handleSubmit(e) {
 
                 e.preventDefault();
+                hp.Utils.defaults.eventCallback(e);
 
                 // prevents submit if enter button his pressed
                 if (e.type === "keyup" && e.originalEvent.code === "Enter")
@@ -4710,8 +4717,6 @@
 
                 $element.removeClass("hp-avs-active");
                 $avsPrompt.removeClass("active");
-
-                hp.Utils.defaults.eventCallback(e);
 
                 setTimeout(function() {
                     $element.find(".hp-avs-prompt").remove();
@@ -4738,6 +4743,7 @@
                 .find(".hp-input-avs input")
                 .on("focus blur keyup", function(e) {
                     e.preventDefault();
+
                     var $this = $(this);
                     var val = $this.val();
 
@@ -9403,7 +9409,7 @@
     };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v4.4.16 */
+/* jQuery.HostedPayments - v4.4.17 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function($, window, document, undefined) {
@@ -9411,7 +9417,7 @@
     var pluginName = "hp";
     var defaults = {};
 
-    defaults.version = "v4.4.16";
+    defaults.version = "v4.4.17";
     defaults.amount = 0;
     defaults.currencyLocale = "en-US";
     defaults.currencyCode = "USD";
