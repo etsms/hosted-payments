@@ -4711,6 +4711,8 @@
                 $element.removeClass("hp-avs-active");
                 $avsPrompt.removeClass("active");
 
+                hp.Utils.defaults.eventCallback(e);
+
                 setTimeout(function() {
                     $element.find(".hp-avs-prompt").remove();
                     deferred.resolve();
@@ -4764,6 +4766,8 @@
                     if ((avsZipValue.length && avsZipValue.length >= 5) && (avsStreetValue.length && avsStreetValue.length >= 3)) {
                         $submitAvs.removeAttr("disabled");
                     }
+
+                    hp.Utils.defaults.eventCallback(e);
                 });
 
             $submitAvs.off().on("click", handleSubmit);
@@ -4772,6 +4776,7 @@
                 e.preventDefault();
                 $element.removeClass("hp-avs-active");
                 $element.find(".hp-avs-prompt").remove();
+                hp.Utils.defaults.eventCallback(e);
                 deferred.reject("cancelledAvsPrompt");
             });
 
@@ -4793,6 +4798,9 @@
         }, 0);
 
         $element.find(".hp-input-avs-street input").focus();
+        
+        hp.Utils.defaults.eventCallback($element);
+
         return deferred;
     }; 
 
