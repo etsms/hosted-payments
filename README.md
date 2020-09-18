@@ -79,4 +79,4 @@ Note: This package requires **jQuery v3** or greater. To obtain jQuery, please v
 
 
 ## Support
-Visit https://www.etsms.com/support
+Visit https://elavonpayments.com/support
