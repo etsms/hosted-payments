@@ -1,0 +1,38 @@
+export interface SucccessModel {
+        status: "Success" | "Error";
+        amount: Number;
+        message: string;
+        token: string;
+        transaction_id: string;
+        transaction_sequence_number: string;
+        transaction_approval_code: string;
+        transaction_avs_street_passed: boolean;
+        transaction_avs_postal_code_passed: boolean;
+        transaction_currency: string;
+        transaction_status_indicator: string;
+        transaction_type: "CHARGE" | "REFUND" | "CREATE_INSTRUMENT";
+        transaction_tax: number;
+        transaction_surcharge: number;
+        transaction_gratuity: number;
+        transaction_cashback: number;
+        transaction_total: number;
+        correlation_id: string;
+        customer_token: string;
+        instrument_id: string;
+        instrument_type: string;
+        instrument_method: "Other";
+        instrument_last_four: string;
+        instrument_routing_last_four: string;
+        instrument_expiration_date: string;
+        instrument_verification_method: string;
+        instrument_entry_type: "DEVICE_CAPTURED" | "KEYED_CARD_PRESENT" | "KEYED_CARD_NOT_PRESENT";
+        instrument_entry_type_description: "MAGNETIC_SWIPE" | "KEY_ENTRY";
+        instrument_verification_results: string;
+        created_on: Date;
+        customer_name: string;
+        customer_signature?: string;
+        anti_forgery_token?: string;
+        application_identifier: "Hosted Payments";
+        application_response_code?: string;
+        application_issuer_data?: string;
+}
