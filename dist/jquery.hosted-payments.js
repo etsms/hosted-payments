@@ -9414,7 +9414,7 @@
     };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v4.4.20 */
+/* jQuery.HostedPayments - v4.4.21 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function($, window, document, undefined) {
@@ -9422,7 +9422,7 @@
     var pluginName = "hp";
     var defaults = {};
 
-    defaults.version = "v4.4.20";
+    defaults.version = "v4.4.21";
     defaults.amount = 0;
     defaults.currencyLocale = "en-US";
     defaults.currencyCode = "USD";
