@@ -6412,6 +6412,11 @@
             $this.handleNotify();
         });
 
+        if (hp.Utils.defaults.customerName !== "") {
+            setTimeout(function() {
+                $name.trigger("keyup");
+            });
+        }
 
         $month.on("focus", function(e) {
             $(".hp-input-active").removeClass("hp-input-active");
@@ -9409,7 +9414,7 @@
     };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v4.4.17 */
+/* jQuery.HostedPayments - v4.4.18 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function($, window, document, undefined) {
@@ -9417,7 +9422,7 @@
     var pluginName = "hp";
     var defaults = {};
 
-    defaults.version = "v4.4.17";
+    defaults.version = "v4.4.18";
     defaults.amount = 0;
     defaults.currencyLocale = "en-US";
     defaults.currencyCode = "USD";
