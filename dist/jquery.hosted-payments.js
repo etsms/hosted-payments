@@ -1,7 +1,7 @@
 /* ASP.NET SignalR JavaScript Library 2.4.1 (http://signalr.net/) */
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0.
-(function ($, window, document, undefined) {
+(function($, window, document, undefined) {
 
     var resources = {
         nojQuery: "jQuery was not found. Please ensure jQuery is referenced before the SignalR client JavaScript file.",
@@ -35,7 +35,7 @@
         jsonpNotSupportedWithAccessToken: "The JSONP protocol does not support connections that require a Bearer token to connect, such as the Azure SignalR Service."
     };
 
-    if (typeof ($) !== "function") {
+    if (typeof($) !== "function") {
         // no jQuery!
         throw new Error(resources.nojQuery);
     }
@@ -63,12 +63,12 @@
             global: false,
             cache: false
         },
-        log = function (msg, logging) {
+        log = function(msg, logging) {
             if (logging === false) {
                 return;
             }
             var m;
-            if (typeof (window.console) === "undefined") {
+            if (typeof(window.console) === "undefined") {
                 return;
             }
             m = "[" + new Date().toTimeString() + "] SignalR: " + msg;
@@ -79,7 +79,7 @@
             }
         },
 
-        changeState = function (connection, expectedState, newState) {
+        changeState = function(connection, expectedState, newState) {
             if (expectedState === connection.state) {
                 connection.state = newState;
 
@@ -90,39 +90,39 @@
             return false;
         },
 
-        isDisconnecting = function (connection) {
+        isDisconnecting = function(connection) {
             return connection.state === signalR.connectionState.disconnected;
         },
 
-        supportsKeepAlive = function (connection) {
+        supportsKeepAlive = function(connection) {
             return connection._.keepAliveData.activated &&
                 connection.transport.supportsKeepAlive(connection);
         },
 
-        configureStopReconnectingTimeout = function (connection) {
+        configureStopReconnectingTimeout = function(connection) {
             var stopReconnectingTimeout,
                 onReconnectTimeout;
 
             // Check if this connection has already been configured to stop reconnecting after a specified timeout.
             // Without this check if a connection is stopped then started events will be bound multiple times.
             if (!connection._.configuredStopReconnectingTimeout) {
-                onReconnectTimeout = function (connection) {
+                onReconnectTimeout = function(connection) {
                     var message = signalR._.format(signalR.resources.reconnectTimeout, connection.disconnectTimeout);
                     connection.log(message);
                     $(connection).triggerHandler(events.onError, [signalR._.error(message, /* source */ "TimeoutException")]);
-                    connection.stop(/* async */ false, /* notifyServer */ false);
+                    connection.stop( /* async */ false, /* notifyServer */ false);
                 };
 
-                connection.reconnecting(function () {
+                connection.reconnecting(function() {
                     var connection = this;
 
                     // Guard against state changing in a previous user defined even handler
                     if (connection.state === signalR.connectionState.reconnecting) {
-                        stopReconnectingTimeout = window.setTimeout(function () { onReconnectTimeout(connection); }, connection.disconnectTimeout);
+                        stopReconnectingTimeout = window.setTimeout(function() { onReconnectTimeout(connection); }, connection.disconnectTimeout);
                     }
                 });
 
-                connection.stateChanged(function (data) {
+                connection.stateChanged(function(data) {
                     if (data.oldState === signalR.connectionState.reconnecting) {
                         // Clear the pending reconnect timeout check
                         window.clearTimeout(stopReconnectingTimeout);
@@ -133,7 +133,7 @@
             }
         };
 
-    signalR = function (url, qs, logging) {
+    signalR = function(url, qs, logging) {
         /// <summary>Creates a new SignalR connection for the given url</summary>
         /// <param name="url" type="String">The URL of the long polling endpoint</param>
         /// <param name="qs" type="Object">
@@ -152,7 +152,7 @@
     signalR._ = {
         defaultContentType: "application/x-www-form-urlencoded; charset=UTF-8",
 
-        ieVersion: (function () {
+        ieVersion: (function() {
             var version,
                 matches;
 
@@ -169,7 +169,7 @@
             return version;
         })(),
 
-        error: function (message, source, context) {
+        error: function(message, source, context) {
             var e = new Error(message);
             e.source = source;
 
@@ -180,13 +180,13 @@
             return e;
         },
 
-        transportError: function (message, transport, source, context) {
+        transportError: function(message, transport, source, context) {
             var e = this.error(message, source, context);
             e.transport = transport ? transport.name : undefined;
             return e;
         },
 
-        format: function () {
+        format: function() {
             /// <summary>Usage: format("Hi {0}, you are {1}!", "Foo", 100) </summary>
             var s = arguments[0];
             for (var i = 0; i < arguments.length - 1; i++) {
@@ -195,23 +195,23 @@
             return s;
         },
 
-        firefoxMajorVersion: function (userAgent) {
+        firefoxMajorVersion: function(userAgent) {
             // Firefox user agents: http://useragentstring.com/pages/Firefox/
             var matches = userAgent.match(/Firefox\/(\d+)/);
             if (!matches || !matches.length || matches.length < 2) {
                 return 0;
             }
-            return parseInt(matches[1], 10 /* radix */);
+            return parseInt(matches[1], 10 /* radix */ );
         },
 
-        configurePingInterval: function (connection) {
+        configurePingInterval: function(connection) {
             var config = connection._.config,
-                onFail = function (error) {
+                onFail = function(error) {
                     $(connection).triggerHandler(events.onError, [error]);
                 };
 
             if (config && !connection._.pingIntervalId && config.pingInterval) {
-                connection._.pingIntervalId = window.setInterval(function () {
+                connection._.pingIntervalId = window.setInterval(function() {
                     signalR.transports._logic.pingServer(connection).fail(onFail);
                 }, config.pingInterval);
             }
@@ -236,7 +236,7 @@
     };
 
     signalR.hub = {
-        start: function () {
+        start: function() {
             // This will get replaced with the real hub connection start method when hubs is referenced correctly
             throw new Error("SignalR: Error loading hubs. Ensure your hubs reference is correct, e.g. <script src='/signalr/js'></script>.");
         }
@@ -245,10 +245,9 @@
     // .on() was added in version 1.7.0, .load() was removed in version 3.0.0 so we fallback to .load() if .on() does
     // not exist to not break existing applications
     if (typeof _pageWindow.on == "function") {
-        _pageWindow.on("load", function () { _pageLoaded = true; });
-    }
-    else {
-        _pageWindow.load(function () { _pageLoaded = true; });
+        _pageWindow.on("load", function() { _pageLoaded = true; });
+    } else {
+        _pageWindow.load(function() { _pageLoaded = true; });
     }
 
     function validateTransport(requestedTransport, connection) {
@@ -306,7 +305,7 @@
         var that = this,
             buffer = [];
 
-        that.tryBuffer = function (message) {
+        that.tryBuffer = function(message) {
             if (connection.state === $.signalR.connectionState.connecting) {
                 buffer.push(message);
 
@@ -316,7 +315,7 @@
             return false;
         };
 
-        that.drain = function () {
+        that.drain = function() {
             // Ensure that the connection is connected when we drain (do not want to drain while a connection is not active)
             if (connection.state === $.signalR.connectionState.connected) {
                 while (buffer.length > 0) {
@@ -325,13 +324,13 @@
             }
         };
 
-        that.clear = function () {
+        that.clear = function() {
             buffer = [];
         };
     }
 
     signalR.fn = signalR.prototype = {
-        init: function (url, qs, logging) {
+        init: function(url, qs, logging) {
             var $connection = $(this);
 
             this.url = url;
@@ -339,7 +338,7 @@
             this.lastError = null;
             this._ = {
                 keepAliveData: {},
-                connectingMessageBuffer: new ConnectingMessageBuffer(this, function (message) {
+                connectingMessageBuffer: new ConnectingMessageBuffer(this, function(message) {
                     $connection.triggerHandler(events.onReceived, [message]);
                 }),
                 lastMessageAt: new Date().getTime(),
@@ -349,12 +348,12 @@
                 totalTransportConnectTimeout: 0, // This will be the sum of the TransportConnectTimeout sent in response to negotiate and connection.transportConnectTimeout
                 redirectQs: null
             };
-            if (typeof (logging) === "boolean") {
+            if (typeof(logging) === "boolean") {
                 this.logging = logging;
             }
         },
 
-        _parseResponse: function (response) {
+        _parseResponse: function(response) {
             var that = this;
 
             if (!response) {
@@ -370,7 +369,7 @@
 
         json: window.JSON,
 
-        isCrossDomain: function (url, against) {
+        isCrossDomain: function(url, against) {
             /// <summary>Checks if url is cross domain</summary>
             /// <param name="url" type="String">The base URL</param>
             /// <param name="against" type="Object">
@@ -424,7 +423,7 @@
 
         keepAliveWarnAt: 2 / 3, // Warn user of slow connection if we breach the X% mark of the keep alive timeout
 
-        start: function (options, callback) {
+        start: function(options, callback) {
             /// <summary>Starts the connection</summary>
             /// <param name="options" type="Object">Options map</param>
             /// <param name="callback" type="Function">A callback function to execute when the connection has started</param>
@@ -438,7 +437,7 @@
                 initialize,
                 deferred = connection._deferral || $.Deferred(), // Check to see if there is a pre-existing deferral that's being built on, if so we want to keep using it
                 parser = window.document.createElement("a"),
-                setConnectionUrl = function (connection, url) {
+                setConnectionUrl = function(connection, url) {
                     if (connection.url === url && connection.baseUrl) {
                         // when the url related properties are already set
                         return;
@@ -523,7 +522,7 @@
             // Check to see if start is being called prior to page load
             // If waitForPageLoad is true we then want to re-direct function call to the window load event
             if (!_pageLoaded && config.waitForPageLoad === true) {
-                connection._.deferredStartHandler = function () {
+                connection._.deferredStartHandler = function() {
                     connection.start(options, callback);
                 };
                 _pageWindow.bind("load", connection._.deferredStartHandler);
@@ -535,8 +534,8 @@
             if (connection.state === signalR.connectionState.connecting) {
                 return deferred.promise();
             } else if (changeState(connection,
-                signalR.connectionState.disconnected,
-                signalR.connectionState.connecting) === false) {
+                    signalR.connectionState.disconnected,
+                    signalR.connectionState.connecting) === false) {
                 // We're not connecting so try and transition into connecting.
                 // If we fail to transition then we're either in connected or reconnecting.
 
@@ -563,7 +562,7 @@
 
             setConnectionUrl(connection, connection.url);
 
-            $(connection).bind(events.onStart, function (e, data) {
+            $(connection).bind(events.onStart, function(e, data) {
                 if ($.type(callback) === "function") {
                     callback.call(connection);
                 }
@@ -572,7 +571,7 @@
 
             connection._.initHandler = signalR.transports._logic.initHandler(connection);
 
-            initialize = function (transports, index) {
+            initialize = function(transports, index) {
                 var noTransportError = signalR._.error(resources.noTransportOnInit);
 
                 index = index || 0;
@@ -600,14 +599,14 @@
 
                 var transportName = transports[index],
                     transport = signalR.transports[transportName],
-                    onFallback = function () {
+                    onFallback = function() {
                         initialize(transports, index + 1);
                     };
 
                 connection.transport = transport;
 
                 try {
-                    connection._.initHandler.start(transport, function () { // success
+                    connection._.initHandler.start(transport, function() { // success
                         // Firefox 11+ doesn't allow sync XHR withCredentials: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest#withCredentials
                         var isFirefox11OrGreater = signalR._.firefoxMajorVersion(window.navigator.userAgent) >= 11,
                             asyncAbort = true;
@@ -625,8 +624,8 @@
                         signalR._.configurePingInterval(connection);
 
                         if (!changeState(connection,
-                            signalR.connectionState.connecting,
-                            signalR.connectionState.connected)) {
+                                signalR.connectionState.connecting,
+                                signalR.connectionState.connected)) {
                             connection.log("WARNING! The connection was not in the connecting state.");
                         }
 
@@ -636,7 +635,7 @@
                         $(connection).triggerHandler(events.onStart);
 
                         // wire the stop handler for when the user leaves the page
-                        _pageWindow.bind("unload", function () {
+                        _pageWindow.bind("unload", function() {
                             connection.log("Window unloading, stopping the connection.");
 
                             connection.stop(asyncAbort);
@@ -645,24 +644,23 @@
                         if (isFirefox11OrGreater) {
                             // Firefox does not fire cross-domain XHRs in the normal unload handler on tab close.
                             // #2400
-                            _pageWindow.bind("beforeunload", function () {
+                            _pageWindow.bind("beforeunload", function() {
                                 // If connection.stop() runs runs in beforeunload and fails, it will also fail
                                 // in unload unless connection.stop() runs after a timeout.
-                                window.setTimeout(function () {
+                                window.setTimeout(function() {
                                     connection.stop(asyncAbort);
                                 }, 0);
                             });
                         }
                     }, onFallback);
-                }
-                catch (error) {
+                } catch (error) {
                     connection.log(transport.name + " transport threw '" + error.message + "' when attempting to start.");
                     onFallback();
                 }
             };
 
             var url = connection.url + "/negotiate",
-                onFailed = function (error, connection) {
+                onFailed = function(error, connection) {
                     var err = signalR._.error(resources.errorOnNegotiate, error, connection._.negotiateRequest);
 
                     $(connection).triggerHandler(events.onError, err);
@@ -678,7 +676,7 @@
             connection.log("Negotiating with '" + url + "'.");
 
             // Save the ajax negotiate request object so we can abort it if stop is called while the request is in flight.
-            connection._.negotiateRequest = function () {
+            connection._.negotiateRequest = function() {
                 var res,
                     redirects = 0,
                     MAX_REDIRECTS = 100,
@@ -686,18 +684,18 @@
                     protocolError,
                     transports = [],
                     supportedTransports = [],
-                    negotiate = function (connection, onSuccess) {
+                    negotiate = function(connection, onSuccess) {
                         var url = signalR.transports._logic.prepareQueryString(connection, connection.url + "/negotiate");
                         connection.log("Negotiating with '" + url + "'.");
                         var options = {
                             url: url,
-                            error: function (error, statusText) {
+                            error: function(error, statusText) {
                                 // We don't want to cause any errors if we're aborting our own negotiate request.
                                 if (statusText !== _negotiateAbortText) {
                                     onFailed(error, connection);
                                 } else {
                                     // This rejection will noop if the deferred has already been resolved or rejected.
-                                    deferred.reject(signalR._.error(resources.stoppedWhileNegotiating, null /* error */, connection._.negotiateRequest));
+                                    deferred.reject(signalR._.error(resources.stoppedWhileNegotiating, null /* error */ , connection._.negotiateRequest));
                                 }
                             },
                             success: onSuccess
@@ -709,7 +707,7 @@
 
                         return signalR.transports._logic.ajax(connection, options);
                     },
-                    callback = function (result) {
+                    callback = function(result) {
                         try {
                             res = connection._parseResponse(result);
                         } catch (error) {
@@ -742,8 +740,7 @@
                                 $(connection).triggerHandler(events.onError, [protocolError]);
                                 deferred.reject(protocolError);
                                 return;
-                            }
-                            else if (res.RedirectUrl) {
+                            } else if (res.RedirectUrl) {
                                 if (redirects === MAX_REDIRECTS) {
                                     onFailed(signalR._.error(resources.errorRedirectionExceedsLimit), connection);
                                     return;
@@ -809,7 +806,7 @@
 
                         connection.reconnectWindow = connection.disconnectTimeout + (keepAliveData.timeout || 0);
 
-                        $.each(signalR.transports, function (key) {
+                        $.each(signalR.transports, function(key) {
                             if ((key.indexOf("_") === 0) || (key === "webSockets" && !res.TryWebSockets)) {
                                 return true;
                             }
@@ -817,7 +814,7 @@
                         });
 
                         if ($.isArray(config.transport)) {
-                            $.each(config.transport, function (_, transport) {
+                            $.each(config.transport, function(_, transport) {
                                 if ($.inArray(transport, supportedTransports) >= 0) {
                                     transports.push(transport);
                                 }
@@ -837,18 +834,18 @@
             return deferred.promise();
         },
 
-        starting: function (callback) {
+        starting: function(callback) {
             /// <summary>Adds a callback that will be invoked before anything is sent over the connection</summary>
             /// <param name="callback" type="Function">A callback function to execute before the connection is fully instantiated.</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onStarting, function (e, data) {
+            $(connection).bind(events.onStarting, function(e, data) {
                 callback.call(connection);
             });
             return connection;
         },
 
-        send: function (data) {
+        send: function(data) {
             /// <summary>Sends data over the connection</summary>
             /// <param name="data" type="String">The data to send over the connection</param>
             /// <returns type="signalR" />
@@ -869,34 +866,34 @@
             return connection;
         },
 
-        received: function (callback) {
+        received: function(callback) {
             /// <summary>Adds a callback that will be invoked after anything is received over the connection</summary>
             /// <param name="callback" type="Function">A callback function to execute when any data is received on the connection</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onReceived, function (e, data) {
+            $(connection).bind(events.onReceived, function(e, data) {
                 callback.call(connection, data);
             });
             return connection;
         },
 
-        stateChanged: function (callback) {
+        stateChanged: function(callback) {
             /// <summary>Adds a callback that will be invoked when the connection state changes</summary>
             /// <param name="callback" type="Function">A callback function to execute when the connection state changes</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onStateChanged, function (e, data) {
+            $(connection).bind(events.onStateChanged, function(e, data) {
                 callback.call(connection, data);
             });
             return connection;
         },
 
-        error: function (callback) {
+        error: function(callback) {
             /// <summary>Adds a callback that will be invoked after an error occurs with the connection</summary>
             /// <param name="callback" type="Function">A callback function to execute when an error occurs on the connection</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onError, function (e, errorData, sendData) {
+            $(connection).bind(events.onError, function(e, errorData, sendData) {
                 connection.lastError = errorData;
                 // In practice 'errorData' is the SignalR built error object.
                 // In practice 'sendData' is undefined for all error events except those triggered by
@@ -906,52 +903,52 @@
             return connection;
         },
 
-        disconnected: function (callback) {
+        disconnected: function(callback) {
             /// <summary>Adds a callback that will be invoked when the client disconnects</summary>
             /// <param name="callback" type="Function">A callback function to execute when the connection is broken</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onDisconnect, function (e, data) {
+            $(connection).bind(events.onDisconnect, function(e, data) {
                 callback.call(connection);
             });
             return connection;
         },
 
-        connectionSlow: function (callback) {
+        connectionSlow: function(callback) {
             /// <summary>Adds a callback that will be invoked when the client detects a slow connection</summary>
             /// <param name="callback" type="Function">A callback function to execute when the connection is slow</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onConnectionSlow, function (e, data) {
+            $(connection).bind(events.onConnectionSlow, function(e, data) {
                 callback.call(connection);
             });
 
             return connection;
         },
 
-        reconnecting: function (callback) {
+        reconnecting: function(callback) {
             /// <summary>Adds a callback that will be invoked when the underlying transport begins reconnecting</summary>
             /// <param name="callback" type="Function">A callback function to execute when the connection enters a reconnecting state</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onReconnecting, function (e, data) {
+            $(connection).bind(events.onReconnecting, function(e, data) {
                 callback.call(connection);
             });
             return connection;
         },
 
-        reconnected: function (callback) {
+        reconnected: function(callback) {
             /// <summary>Adds a callback that will be invoked when the underlying transport reconnects</summary>
             /// <param name="callback" type="Function">A callback function to execute when the connection is restored</param>
             /// <returns type="signalR" />
             var connection = this;
-            $(connection).bind(events.onReconnect, function (e, data) {
+            $(connection).bind(events.onReconnect, function(e, data) {
                 callback.call(connection);
             });
             return connection;
         },
 
-        stop: function (async, notifyServer) {
+        stop: function(async, notifyServer) {
             /// <summary>Stops listening</summary>
             /// <param name="async" type="Boolean">Whether or not to asynchronously abort the connection</param>
             /// <param name="notifyServer" type="Boolean">Whether we want to notify the server that we are aborting the connection</param>
@@ -1050,14 +1047,14 @@
             return connection;
         },
 
-        log: function (msg) {
+        log: function(msg) {
             log(msg, this.logging);
         }
     };
 
     signalR.fn.init.prototype = signalR.fn;
 
-    signalR.noConflict = function () {
+    signalR.noConflict = function() {
         /// <summary>Reinstates the original value of $.connection and returns the signalR object for manual assignment</summary>
         /// <returns type="signalR" />
         if ($.connection === signalR) {
@@ -1077,7 +1074,7 @@
 /* jquery.signalR.transports.common.js */
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0.
-(function ($, window, document, undefined) {
+(function($, window, document, undefined) {
 
     var signalR = $.signalR,
         events = $.signalR.events,
@@ -1094,7 +1091,7 @@
 
         // Ensure that we successfully marked active before continuing the heartbeat.
         if (transportLogic.markActive(connection)) {
-            connection._.beatHandle = window.setTimeout(function () {
+            connection._.beatHandle = window.setTimeout(function() {
                 beat(connection);
             }, connection._.beatInterval);
         }
@@ -1146,7 +1143,7 @@
     }
 
     InitHandler.prototype = {
-        start: function (transport, onSuccess, onFallback) {
+        start: function(transport, onSuccess, onFallback) {
             var that = this,
                 connection = that.connection,
                 failCalled = false;
@@ -1158,11 +1155,11 @@
 
             connection.log(transport.name + " transport starting.");
 
-            transport.start(connection, function () {
+            transport.start(connection, function() {
                 if (!failCalled) {
                     that.initReceived(transport, onSuccess);
                 }
-            }, function (error) {
+            }, function(error) {
                 // Don't allow the same transport to cause onFallback to be called twice
                 if (!failCalled) {
                     failCalled = true;
@@ -1174,7 +1171,7 @@
                 return !that.startCompleted || that.connectionStopped;
             });
 
-            that.transportTimeoutHandle = window.setTimeout(function () {
+            that.transportTimeoutHandle = window.setTimeout(function() {
                 if (!failCalled) {
                     failCalled = true;
                     connection.log(transport.name + " transport timed out when trying to connect.");
@@ -1183,13 +1180,13 @@
             }, connection._.totalTransportConnectTimeout);
         },
 
-        stop: function () {
+        stop: function() {
             this.connectionStopped = true;
             window.clearTimeout(this.transportTimeoutHandle);
             signalR.transports._logic.tryAbortStartRequest(this.connection);
         },
 
-        initReceived: function (transport, onSuccess) {
+        initReceived: function(transport, onSuccess) {
             var that = this,
                 connection = that.connection;
 
@@ -1206,13 +1203,13 @@
             window.clearTimeout(that.transportTimeoutHandle);
 
             connection.log(transport.name + " transport connected. Initiating start request.");
-            signalR.transports._logic.ajaxStart(connection, function () {
+            signalR.transports._logic.ajaxStart(connection, function() {
                 that.startCompleted = true;
                 onSuccess();
             });
         },
 
-        transportFailed: function (transport, error, onFallback) {
+        transportFailed: function(transport, error, onFallback) {
             var connection = this.connection,
                 deferred = connection._deferral,
                 wrappedError;
@@ -1248,9 +1245,9 @@
     };
 
     transportLogic = signalR.transports._logic = {
-        ajax: function (connection, options) {
+        ajax: function(connection, options) {
             return $.ajax(
-                $.extend(/*deep copy*/ true, {}, $.signalR.ajaxDefaults, {
+                $.extend( /*deep copy*/ true, {}, $.signalR.ajaxDefaults, {
                     type: "GET",
                     data: {},
                     xhrFields: { withCredentials: connection.withCredentials },
@@ -1259,7 +1256,7 @@
                 }, options));
         },
 
-        pingServer: function (connection) {
+        pingServer: function(connection) {
             /// <summary>Pings the server</summary>
             /// <param name="connection" type="signalr">Connection associated with the server ping</param>
             /// <returns type="signalR" />
@@ -1275,13 +1272,12 @@
                 xhr = transportLogic.ajax(connection, {
                     url: url,
                     headers: connection.accessToken ? { "Authorization": "Bearer " + connection.accessToken } : {},
-                    success: function (result) {
+                    success: function(result) {
                         var data;
 
                         try {
                             data = connection._parseResponse(result);
-                        }
-                        catch (error) {
+                        } catch (error) {
                             deferral.reject(
                                 signalR._.transportError(
                                     signalR.resources.pingServerFailedParse,
@@ -1296,19 +1292,18 @@
 
                         if (data.Response === "pong") {
                             deferral.resolve();
-                        }
-                        else {
+                        } else {
                             deferral.reject(
                                 signalR._.transportError(
                                     signalR._.format(signalR.resources.pingServerFailedInvalidResponse, result),
                                     connection.transport,
-                                    null /* error */,
+                                    null /* error */ ,
                                     xhr
                                 )
                             );
                         }
                     },
-                    error: function (error) {
+                    error: function(error) {
                         if (error.status === 401 || error.status === 403) {
                             deferral.reject(
                                 signalR._.transportError(
@@ -1319,8 +1314,7 @@
                                 )
                             );
                             connection.stop();
-                        }
-                        else {
+                        } else {
                             deferral.reject(
                                 signalR._.transportError(
                                     signalR.resources.pingServerFailed,
@@ -1332,8 +1326,7 @@
                         }
                     }
                 });
-            }
-            else {
+            } else {
                 deferral.reject(
                     signalR._.transportError(
                         signalR.resources.noConnectionTransport,
@@ -1345,13 +1338,13 @@
             return deferral.promise();
         },
 
-        prepareQueryString: function (connection, url) {
+        prepareQueryString: function(connection, url) {
             var preparedUrl;
 
             // Use addQs to start since it handles the ?/& prefix for us
             preparedUrl = transportLogic.addQs(url, "clientProtocol=" + connection.clientProtocol);
 
-            if (typeof (connection._.redirectQs) === "string") {
+            if (typeof(connection._.redirectQs) === "string") {
                 // Add the redirect-specified query string params if any
                 preparedUrl = transportLogic.addQs(preparedUrl, connection._.redirectQs);
             } else {
@@ -1370,7 +1363,7 @@
             return preparedUrl;
         },
 
-        addQs: function (url, qs) {
+        addQs: function(url, qs) {
             var appender = url.indexOf("?") !== -1 ? "&" : "?",
                 firstChar;
 
@@ -1378,11 +1371,11 @@
                 return url;
             }
 
-            if (typeof (qs) === "object") {
+            if (typeof(qs) === "object") {
                 return url + appender + $.param(qs);
             }
 
-            if (typeof (qs) === "string") {
+            if (typeof(qs) === "string") {
                 firstChar = qs.charAt(0);
 
                 if (firstChar === "?" || firstChar === "&") {
@@ -1396,7 +1389,7 @@
         },
 
         // BUG #2953: The url needs to be same otherwise it will cause a memory leak
-        getUrl: function (connection, transport, reconnecting, poll, ajaxPost) {
+        getUrl: function(connection, transport, reconnecting, poll, ajaxPost) {
             /// <summary>Gets the url for making a GET based connect request</summary>
             var baseUrl = transport === "webSockets" ? "" : connection.baseUrl,
                 url = baseUrl + connection.appRelativeUrl,
@@ -1437,36 +1430,36 @@
             return url;
         },
 
-        maximizePersistentResponse: function (minPersistentResponse) {
+        maximizePersistentResponse: function(minPersistentResponse) {
             return {
                 MessageId: minPersistentResponse.C,
                 Messages: minPersistentResponse.M,
-                Initialized: typeof (minPersistentResponse.S) !== "undefined" ? true : false,
-                ShouldReconnect: typeof (minPersistentResponse.T) !== "undefined" ? true : false,
+                Initialized: typeof(minPersistentResponse.S) !== "undefined" ? true : false,
+                ShouldReconnect: typeof(minPersistentResponse.T) !== "undefined" ? true : false,
                 LongPollDelay: minPersistentResponse.L,
                 GroupsToken: minPersistentResponse.G,
                 Error: minPersistentResponse.E
             };
         },
 
-        updateGroups: function (connection, groupsToken) {
+        updateGroups: function(connection, groupsToken) {
             if (groupsToken) {
                 connection.groupsToken = groupsToken;
             }
         },
 
-        stringifySend: function (connection, message) {
-            if (typeof (message) === "string" || typeof (message) === "undefined" || message === null) {
+        stringifySend: function(connection, message) {
+            if (typeof(message) === "string" || typeof(message) === "undefined" || message === null) {
                 return message;
             }
             return connection.json.stringify(message);
         },
 
-        ajaxSend: function (connection, data) {
+        ajaxSend: function(connection, data) {
             var payload = transportLogic.stringifySend(connection, data),
                 url = getAjaxUrl(connection, "/send"),
                 xhr,
-                onFail = function (error, connection) {
+                onFail = function(error, connection) {
                     $(connection).triggerHandler(events.onError, [signalR._.transportError(signalR.resources.sendFailed, connection.transport, error, xhr), data]);
                 };
 
@@ -1479,14 +1472,13 @@
                 data: {
                     data: payload
                 },
-                success: function (result) {
+                success: function(result) {
                     var res;
 
                     if (result) {
                         try {
                             res = connection._parseResponse(result);
-                        }
-                        catch (error) {
+                        } catch (error) {
                             onFail(error, connection);
                             connection.stop();
                             return;
@@ -1495,7 +1487,7 @@
                         transportLogic.triggerReceived(connection, res);
                     }
                 },
-                error: function (error, textStatus) {
+                error: function(error, textStatus) {
                     if (textStatus === "abort" || textStatus === "parsererror") {
                         // The parsererror happens for sends that don't return any data, and hence
                         // don't write the jsonp callback to the response. This is harder to fix on the server
@@ -1510,13 +1502,13 @@
             return xhr;
         },
 
-        ajaxAbort: function (connection, async) {
-            if (typeof (connection.transport) === "undefined") {
+        ajaxAbort: function(connection, async) {
+            if (typeof(connection.transport) === "undefined") {
                 return;
             }
 
             // Async by default unless explicitly overidden
-            async = typeof async === "undefined" ? true : async;
+            async = typeof async === "undefined" ? true: async;
 
             var url = getAjaxUrl(connection, "/abort");
 
@@ -1532,14 +1524,14 @@
             connection.log("Fired ajax abort async = " + async + ".");
         },
 
-        ajaxStart: function (connection, onSuccess) {
-            var rejectDeferred = function (error) {
+        ajaxStart: function(connection, onSuccess) {
+            var rejectDeferred = function(error) {
                     var deferred = connection._deferral;
                     if (deferred) {
                         deferred.reject(error);
                     }
                 },
-                triggerStartError = function (error) {
+                triggerStartError = function(error) {
                     connection.log("The start request failed. Stopping the connection.");
                     $(connection).triggerHandler(events.onError, [error]);
                     rejectDeferred(error);
@@ -1549,7 +1541,7 @@
             connection._.startRequest = transportLogic.ajax(connection, {
                 url: getAjaxUrl(connection, "/start"),
                 headers: connection.accessToken ? { "Authorization": "Bearer " + connection.accessToken } : {},
-                success: function (result, statusText, xhr) {
+                success: function(result, statusText, xhr) {
                     var data;
 
                     try {
@@ -1566,10 +1558,10 @@
                     } else {
                         triggerStartError(signalR._.error(
                             signalR._.format(signalR.resources.invalidStartResponse, result),
-                            null /* error */, xhr));
+                            null /* error */ , xhr));
                     }
                 },
-                error: function (xhr, statusText, error) {
+                error: function(xhr, statusText, error) {
                     if (statusText !== startAbortText) {
                         triggerStartError(signalR._.error(
                             signalR.resources.errorDuringStartRequest,
@@ -1580,13 +1572,13 @@
                         connection.log("The start request aborted because connection.stop() was called.");
                         rejectDeferred(signalR._.error(
                             signalR.resources.stoppedDuringStartRequest,
-                            null /* error */, xhr));
+                            null /* error */ , xhr));
                     }
                 }
             });
         },
 
-        tryAbortStartRequest: function (connection) {
+        tryAbortStartRequest: function(connection) {
             if (connection._.startRequest) {
                 // If the start request has already completed this will noop.
                 connection._.startRequest.abort(startAbortText);
@@ -1594,7 +1586,7 @@
             }
         },
 
-        tryInitialize: function (connection, persistentResponse, onInitialized) {
+        tryInitialize: function(connection, persistentResponse, onInitialized) {
             if (persistentResponse.Initialized && onInitialized) {
                 onInitialized();
             } else if (persistentResponse.Initialized) {
@@ -1603,16 +1595,16 @@
 
         },
 
-        triggerReceived: function (connection, data) {
+        triggerReceived: function(connection, data) {
             if (!connection._.connectingMessageBuffer.tryBuffer(data)) {
                 $(connection).triggerHandler(events.onReceived, [data]);
             }
         },
 
-        processMessages: function (connection, minData, onInitialized) {
+        processMessages: function(connection, minData, onInitialized) {
             var data;
 
-            if(minData && (typeof minData.I !== "undefined")) {
+            if (minData && (typeof minData.I !== "undefined")) {
                 // This is a response to a message the client sent
                 transportLogic.triggerReceived(connection, minData);
                 return;
@@ -1629,7 +1621,7 @@
                     // This is a global error, stop the connection.
                     connection.log("Received an error message from the server: " + minData.E);
                     $(connection).triggerHandler(signalR.events.onError, [signalR._.error(minData.E, /* source */ "ServerError")]);
-                    connection.stop(/* async */ false, /* notifyServer */ false);
+                    connection.stop( /* async */ false, /* notifyServer */ false);
                     return;
                 }
 
@@ -1640,7 +1632,7 @@
                 }
 
                 if (data.Messages) {
-                    $.each(data.Messages, function (index, message) {
+                    $.each(data.Messages, function(index, message) {
                         transportLogic.triggerReceived(connection, message);
                     });
 
@@ -1649,7 +1641,7 @@
             }
         },
 
-        monitorKeepAlive: function (connection) {
+        monitorKeepAlive: function(connection) {
             var keepAliveData = connection._.keepAliveData;
 
             // If we haven't initiated the keep alive timeouts then we need to
@@ -1659,7 +1651,7 @@
                 transportLogic.markLastMessage(connection);
 
                 // Save the function so we can unbind it on stop
-                connection._.keepAliveData.reconnectKeepAliveUpdate = function () {
+                connection._.keepAliveData.reconnectKeepAliveUpdate = function() {
                     // Mark a new message so that keep alive doesn't time out connections
                     transportLogic.markLastMessage(connection);
                 };
@@ -1673,7 +1665,7 @@
             }
         },
 
-        stopMonitoringKeepAlive: function (connection) {
+        stopMonitoringKeepAlive: function(connection) {
             var keepAliveData = connection._.keepAliveData;
 
             // Only attempt to stop the keep alive monitoring if its being monitored
@@ -1690,16 +1682,16 @@
             }
         },
 
-        startHeartbeat: function (connection) {
+        startHeartbeat: function(connection) {
             connection._.lastActiveAt = new Date().getTime();
             beat(connection);
         },
 
-        markLastMessage: function (connection) {
+        markLastMessage: function(connection) {
             connection._.lastMessageAt = new Date().getTime();
         },
 
-        markActive: function (connection) {
+        markActive: function(connection) {
             if (transportLogic.verifyLastActive(connection)) {
                 connection._.lastActiveAt = new Date().getTime();
                 return true;
@@ -1708,40 +1700,40 @@
             return false;
         },
 
-        isConnectedOrReconnecting: function (connection) {
+        isConnectedOrReconnecting: function(connection) {
             return connection.state === signalR.connectionState.connected ||
-                   connection.state === signalR.connectionState.reconnecting;
+                connection.state === signalR.connectionState.reconnecting;
         },
 
-        ensureReconnectingState: function (connection) {
+        ensureReconnectingState: function(connection) {
             if (changeState(connection,
-                        signalR.connectionState.connected,
-                        signalR.connectionState.reconnecting) === true) {
+                    signalR.connectionState.connected,
+                    signalR.connectionState.reconnecting) === true) {
                 $(connection).triggerHandler(events.onReconnecting);
             }
             return connection.state === signalR.connectionState.reconnecting;
         },
 
-        clearReconnectTimeout: function (connection) {
+        clearReconnectTimeout: function(connection) {
             if (connection && connection._.reconnectTimeout) {
                 window.clearTimeout(connection._.reconnectTimeout);
                 delete connection._.reconnectTimeout;
             }
         },
 
-        verifyLastActive: function (connection) {
+        verifyLastActive: function(connection) {
             if (new Date().getTime() - connection._.lastActiveAt >= connection.reconnectWindow) {
                 var message = signalR._.format(signalR.resources.reconnectWindowTimeout, new Date(connection._.lastActiveAt), connection.reconnectWindow);
                 connection.log(message);
                 $(connection).triggerHandler(events.onError, [signalR._.error(message, /* source */ "TimeoutException")]);
-                connection.stop(/* async */ false, /* notifyServer */ false);
+                connection.stop( /* async */ false, /* notifyServer */ false);
                 return false;
             }
 
             return true;
         },
 
-        reconnect: function (connection, transportName) {
+        reconnect: function(connection, transportName) {
             var transport = signalR.transports[transportName];
 
             // We should only set a reconnectTimeout if we are currently connected
@@ -1752,7 +1744,7 @@
                     return;
                 }
 
-                connection._.reconnectTimeout = window.setTimeout(function () {
+                connection._.reconnectTimeout = window.setTimeout(function() {
                     if (!transportLogic.verifyLastActive(connection)) {
                         return;
                     }
@@ -1767,7 +1759,7 @@
             }
         },
 
-        handleParseFailure: function (connection, result, error, onFailed, context) {
+        handleParseFailure: function(connection, result, error, onFailed, context) {
             var wrappedError = signalR._.transportError(
                 signalR._.format(signalR.resources.parseFailed, result),
                 connection.transport,
@@ -1783,7 +1775,7 @@
             }
         },
 
-        initHandler: function (connection) {
+        initHandler: function(connection) {
             return new InitHandler(connection);
         },
 
@@ -1798,7 +1790,7 @@
 /* jquery.signalR.transports.webSockets.js */
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0.
-(function ($, window, document, undefined) {
+(function($, window, document, undefined) {
 
     var signalR = $.signalR,
         events = $.signalR.events,
@@ -1808,28 +1800,28 @@
     signalR.transports.webSockets = {
         name: "webSockets",
 
-        supportsKeepAlive: function () {
+        supportsKeepAlive: function() {
             return true;
         },
 
-        send: function (connection, data) {
+        send: function(connection, data) {
             var payload = transportLogic.stringifySend(connection, data);
 
             try {
                 connection.socket.send(payload);
             } catch (ex) {
-                $(connection).triggerHandler(events.onError,
-                    [signalR._.transportError(
+                $(connection).triggerHandler(events.onError, [signalR._.transportError(
                         signalR.resources.webSocketsInvalidState,
                         connection.transport,
                         ex,
                         connection.socket
                     ),
-                    data]);
+                    data
+                ]);
             }
         },
 
-        start: function (connection, onSuccess, onFailed) {
+        start: function(connection, onSuccess, onFailed) {
             var url,
                 opened = false,
                 that = this,
@@ -1853,20 +1845,20 @@
                 connection.log("Connecting to websocket endpoint '" + url + "'.");
                 connection.socket = new window.WebSocket(url);
 
-                connection.socket.onopen = function () {
+                connection.socket.onopen = function() {
                     opened = true;
                     connection.log("Websocket opened.");
 
                     transportLogic.clearReconnectTimeout(connection);
 
                     if (changeState(connection,
-                                    signalR.connectionState.reconnecting,
-                                    signalR.connectionState.connected) === true) {
+                            signalR.connectionState.reconnecting,
+                            signalR.connectionState.connected) === true) {
                         $connection.triggerHandler(events.onReconnect);
                     }
                 };
 
-                connection.socket.onclose = function (event) {
+                connection.socket.onclose = function(event) {
                     var error;
 
                     // Only handle a socket close if the close is from the current socket.
@@ -1897,13 +1889,12 @@
                     }
                 };
 
-                connection.socket.onmessage = function (event) {
+                connection.socket.onmessage = function(event) {
                     var data;
 
                     try {
                         data = connection._parseResponse(event.data);
-                    }
-                    catch (error) {
+                    } catch (error) {
                         transportLogic.handleParseFailure(connection, event.data, error, onFailed, event);
                         return;
                     }
@@ -1915,15 +1906,15 @@
             }
         },
 
-        reconnect: function (connection) {
+        reconnect: function(connection) {
             transportLogic.reconnect(connection, this.name);
         },
 
-        lostConnection: function (connection) {
+        lostConnection: function(connection) {
             this.reconnect(connection);
         },
 
-        stop: function (connection) {
+        stop: function(connection) {
             // Don't trigger a reconnect after stopping
             transportLogic.clearReconnectTimeout(connection);
 
@@ -1934,7 +1925,7 @@
             }
         },
 
-        abort: function (connection, async) {
+        abort: function(connection, async) {
             transportLogic.ajaxAbort(connection, async);
         }
     };
@@ -1944,13 +1935,13 @@
 /* jquery.signalR.transports.serverSentEvents.js */
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0.
-(function ($, window, document, undefined) {
+(function($, window, document, undefined) {
 
     var signalR = $.signalR,
         events = $.signalR.events,
         changeState = $.signalR.changeState,
         transportLogic = signalR.transports._logic,
-        clearReconnectAttemptTimeout = function (connection) {
+        clearReconnectAttemptTimeout = function(connection) {
             window.clearTimeout(connection._.reconnectAttemptTimeoutHandle);
             delete connection._.reconnectAttemptTimeoutHandle;
         };
@@ -1958,13 +1949,13 @@
     signalR.transports.serverSentEvents = {
         name: "serverSentEvents",
 
-        supportsKeepAlive: function () {
+        supportsKeepAlive: function() {
             return true;
         },
 
         timeOut: 3000,
 
-        start: function (connection, onSuccess, onFailed) {
+        start: function(connection, onSuccess, onFailed) {
             var that = this,
                 opened = false,
                 $connection = $(connection),
@@ -1989,8 +1980,7 @@
             try {
                 connection.log("Attempting to connect to SSE endpoint '" + url + "'.");
                 connection.eventSource = new window.EventSource(url, { withCredentials: connection.withCredentials });
-            }
-            catch (e) {
+            } catch (e) {
                 connection.log("EventSource failed trying to connect with error " + e.Message + ".");
                 if (onFailed) {
                     // The connection failed, call the failed callback
@@ -2006,20 +1996,20 @@
             }
 
             if (reconnecting) {
-                connection._.reconnectAttemptTimeoutHandle = window.setTimeout(function () {
-                    if (opened === false) {
-                        // If we're reconnecting and the event source is attempting to connect,
-                        // don't keep retrying. This causes duplicate connections to spawn.
-                        if (connection.eventSource.readyState !== window.EventSource.OPEN) {
-                            // If we were reconnecting, rather than doing initial connect, then try reconnect again
-                            that.reconnect(connection);
+                connection._.reconnectAttemptTimeoutHandle = window.setTimeout(function() {
+                        if (opened === false) {
+                            // If we're reconnecting and the event source is attempting to connect,
+                            // don't keep retrying. This causes duplicate connections to spawn.
+                            if (connection.eventSource.readyState !== window.EventSource.OPEN) {
+                                // If we were reconnecting, rather than doing initial connect, then try reconnect again
+                                that.reconnect(connection);
+                            }
                         }
-                    }
-                },
-                that.timeOut);
+                    },
+                    that.timeOut);
             }
 
-            connection.eventSource.addEventListener("open", function (e) {
+            connection.eventSource.addEventListener("open", function(e) {
                 connection.log("EventSource connected.");
 
                 clearReconnectAttemptTimeout(connection);
@@ -2029,14 +2019,14 @@
                     opened = true;
 
                     if (changeState(connection,
-                                         signalR.connectionState.reconnecting,
-                                         signalR.connectionState.connected) === true) {
+                            signalR.connectionState.reconnecting,
+                            signalR.connectionState.connected) === true) {
                         $connection.triggerHandler(events.onReconnect);
                     }
                 }
             }, false);
 
-            connection.eventSource.addEventListener("message", function (e) {
+            connection.eventSource.addEventListener("message", function(e) {
                 var res;
 
                 // process messages
@@ -2046,8 +2036,7 @@
 
                 try {
                     res = connection._parseResponse(e.data);
-                }
-                catch (error) {
+                } catch (error) {
                     transportLogic.handleParseFailure(connection, e.data, error, onFailed, e);
                     return;
                 }
@@ -2055,7 +2044,7 @@
                 transportLogic.processMessages(connection, res, onSuccess);
             }, false);
 
-            connection.eventSource.addEventListener("error", function (e) {
+            connection.eventSource.addEventListener("error", function(e) {
                 var error = signalR._.transportError(
                     signalR.resources.eventSourceError,
                     connection.transport,
@@ -2089,19 +2078,19 @@
             }, false);
         },
 
-        reconnect: function (connection) {
+        reconnect: function(connection) {
             transportLogic.reconnect(connection, this.name);
         },
 
-        lostConnection: function (connection) {
+        lostConnection: function(connection) {
             this.reconnect(connection);
         },
 
-        send: function (connection, data) {
+        send: function(connection, data) {
             transportLogic.ajaxSend(connection, data);
         },
 
-        stop: function (connection) {
+        stop: function(connection) {
             // Don't trigger a reconnect after stopping
             clearReconnectAttemptTimeout(connection);
             transportLogic.clearReconnectTimeout(connection);
@@ -2114,7 +2103,7 @@
             }
         },
 
-        abort: function (connection, async) {
+        abort: function(connection, async) {
             transportLogic.ajaxAbort(connection, async);
         }
     };
@@ -2124,13 +2113,13 @@
 /* jquery.signalR.transports.foreverFrame.js */
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0.
-(function ($, window, document, undefined) {
+(function($, window, document, undefined) {
 
     var signalR = $.signalR,
         events = $.signalR.events,
         changeState = $.signalR.changeState,
         transportLogic = signalR.transports._logic,
-        createFrame = function () {
+        createFrame = function() {
             var frame = window.document.createElement("iframe");
             frame.setAttribute("style", "position:absolute;top:0;left:0;width:0;height:0;visibility:hidden;");
             return frame;
@@ -2138,19 +2127,19 @@
         // Used to prevent infinite loading icon spins in older versions of ie
         // We build this object inside a closure so we don't pollute the rest of
         // the foreverFrame transport with unnecessary functions/utilities.
-        loadPreventer = (function () {
+        loadPreventer = (function() {
             var loadingFixIntervalId = null,
                 loadingFixInterval = 1000,
                 attachedTo = 0;
 
             return {
-                prevent: function () {
+                prevent: function() {
                     // Prevent additional iframe removal procedures from newer browsers
                     if (signalR._.ieVersion <= 8) {
                         // We only ever want to set the interval one time, so on the first attachedTo
                         if (attachedTo === 0) {
                             // Create and destroy iframe every 3 seconds to prevent loading icon, super hacky
-                            loadingFixIntervalId = window.setInterval(function () {
+                            loadingFixIntervalId = window.setInterval(function() {
                                 var tempFrame = createFrame();
 
                                 window.document.body.appendChild(tempFrame);
@@ -2163,7 +2152,7 @@
                         attachedTo++;
                     }
                 },
-                cancel: function () {
+                cancel: function() {
                     // Only clear the interval if there's only one more object that the loadPreventer is attachedTo
                     if (attachedTo === 1) {
                         window.clearInterval(loadingFixIntervalId);
@@ -2179,14 +2168,14 @@
     signalR.transports.foreverFrame = {
         name: "foreverFrame",
 
-        supportsKeepAlive: function () {
+        supportsKeepAlive: function() {
             return true;
         },
 
         // Added as a value here so we can create tests to verify functionality
         iframeClearThreshold: 50,
 
-        start: function (connection, onSuccess, onFailed) {
+        start: function(connection, onSuccess, onFailed) {
             if (connection.accessToken) {
                 if (onFailed) {
                     connection.log("Forever Frame does not support connections that require a Bearer token to connect, such as the Azure SignalR Service.");
@@ -2199,7 +2188,7 @@
                 frameId = (transportLogic.foreverFrame.count += 1),
                 url,
                 frame = createFrame(),
-                frameLoadHandler = function () {
+                frameLoadHandler = function() {
                     connection.log("Forever frame iframe finished loading and is no longer receiving messages.");
                     if (!onFailed || !onFailed()) {
                         that.reconnect(connection);
@@ -2243,19 +2232,19 @@
             connection.frameId = frameId;
 
             if (onSuccess) {
-                connection.onSuccess = function () {
+                connection.onSuccess = function() {
                     connection.log("Iframe transport started.");
                     onSuccess();
                 };
             }
         },
 
-        reconnect: function (connection) {
+        reconnect: function(connection) {
             var that = this;
 
             // Need to verify connection state and verify before the setTimeout occurs because an application sleep could occur during the setTimeout duration.
             if (transportLogic.isConnectedOrReconnecting(connection) && transportLogic.verifyLastActive(connection)) {
-                window.setTimeout(function () {
+                window.setTimeout(function() {
                     // Verify that we're ok to reconnect.
                     if (!transportLogic.verifyLastActive(connection)) {
                         return;
@@ -2271,15 +2260,15 @@
             }
         },
 
-        lostConnection: function (connection) {
+        lostConnection: function(connection) {
             this.reconnect(connection);
         },
 
-        send: function (connection, data) {
+        send: function(connection, data) {
             transportLogic.ajaxSend(connection, data);
         },
 
-        receive: function (connection, data) {
+        receive: function(connection, data) {
             var cw,
                 body,
                 response;
@@ -2316,7 +2305,7 @@
             }
         },
 
-        stop: function (connection) {
+        stop: function(connection) {
             var cw = null;
 
             // Stop attempting to prevent loading icon
@@ -2331,8 +2320,7 @@
                         if (cw.document && cw.document.execCommand) {
                             cw.document.execCommand("Stop");
                         }
-                    }
-                    catch (e) {
+                    } catch (e) {
                         connection.log("Error occurred when stopping foreverFrame transport. Message = " + e.message + ".");
                     }
                 }
@@ -2353,18 +2341,18 @@
             }
         },
 
-        abort: function (connection, async) {
+        abort: function(connection, async) {
             transportLogic.ajaxAbort(connection, async);
         },
 
-        getConnection: function (id) {
+        getConnection: function(id) {
             return transportLogic.foreverFrame.connections[id];
         },
 
-        started: function (connection) {
+        started: function(connection) {
             if (changeState(connection,
-                signalR.connectionState.reconnecting,
-                signalR.connectionState.connected) === true) {
+                    signalR.connectionState.reconnecting,
+                    signalR.connectionState.connected) === true) {
 
                 $(connection).triggerHandler(events.onReconnect);
             }
@@ -2376,7 +2364,7 @@
 /* jquery.signalR.transports.longPolling.js */
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0.
-(function ($, window, document, undefined) {
+(function($, window, document, undefined) {
 
     var signalR = $.signalR,
         events = $.signalR.events,
@@ -2387,17 +2375,17 @@
     signalR.transports.longPolling = {
         name: "longPolling",
 
-        supportsKeepAlive: function () {
+        supportsKeepAlive: function() {
             return false;
         },
 
         reconnectDelay: 3000,
 
-        start: function (connection, onSuccess, onFailed) {
+        start: function(connection, onSuccess, onFailed) {
             /// <summary>Starts the long polling connection</summary>
             /// <param name="connection" type="signalR">The SignalR connection to start</param>
             var that = this,
-                fireConnect = function () {
+                fireConnect = function() {
                     fireConnect = $.noop;
 
                     connection.log("LongPolling connected.");
@@ -2408,7 +2396,7 @@
                         connection.log("WARNING! The client received an init message after reconnecting.");
                     }
                 },
-                tryFailConnect = function (error) {
+                tryFailConnect = function(error) {
                     if (onFailed(error)) {
                         connection.log("LongPolling failed to connect.");
                         return true;
@@ -2418,13 +2406,13 @@
                 },
                 privateData = connection._,
                 reconnectErrors = 0,
-                fireReconnected = function (instance) {
+                fireReconnected = function(instance) {
                     window.clearTimeout(privateData.reconnectTimeoutId);
                     privateData.reconnectTimeoutId = null;
 
                     if (changeState(instance,
-                                    signalR.connectionState.reconnecting,
-                                    signalR.connectionState.connected) === true) {
+                            signalR.connectionState.reconnecting,
+                            signalR.connectionState.connected) === true) {
                         // Successfully reconnected!
                         instance.log("Raising the reconnect event");
                         $(instance).triggerHandler(events.onReconnect);
@@ -2442,13 +2430,13 @@
 
             privateData.reconnectTimeoutId = null;
 
-            privateData.pollTimeoutId = window.setTimeout(function () {
+            privateData.pollTimeoutId = window.setTimeout(function() {
                 (function poll(instance, raiseReconnect) {
                     var messageId = instance.messageId,
                         connect = (messageId === null),
                         reconnecting = !connect,
                         polling = !raiseReconnect,
-                        url = transportLogic.getUrl(instance, that.name, reconnecting, polling, true /* use Post for longPolling */),
+                        url = transportLogic.getUrl(instance, that.name, reconnecting, polling, true /* use Post for longPolling */ ),
                         postData = {};
 
                     if (instance.messageId) {
@@ -2467,7 +2455,7 @@
                     connection.log("Opening long polling request to '" + url + "'.");
                     instance.pollXhr = transportLogic.ajax(connection, {
                         xhrFields: {
-                            onprogress: function () {
+                            onprogress: function() {
                                 transportLogic.markLastMessage(connection);
                             }
                         },
@@ -2477,7 +2465,7 @@
                         data: postData,
                         timeout: connection._.pollTimeout,
                         headers: connection.accessToken ? { "Authorization": "Bearer " + connection.accessToken } : {},
-                        success: function (result) {
+                        success: function(result) {
                             var minData,
                                 delay = 0,
                                 data,
@@ -2492,8 +2480,7 @@
                             try {
                                 // Remove any keep-alives from the beginning of the result
                                 minData = connection._parseResponse(result);
-                            }
-                            catch (error) {
+                            } catch (error) {
                                 transportLogic.handleParseFailure(instance, result, error, tryFailConnect, instance.pollXhr);
                                 return;
                             }
@@ -2529,7 +2516,7 @@
 
                             // We never want to pass a raiseReconnect flag after a successful poll.  This is handled via the error function
                             if (delay > 0) {
-                                privateData.pollTimeoutId = window.setTimeout(function () {
+                                privateData.pollTimeoutId = window.setTimeout(function() {
                                     poll(instance, shouldReconnect);
                                 }, delay);
                             } else {
@@ -2537,7 +2524,7 @@
                             }
                         },
 
-                        error: function (data, textStatus) {
+                        error: function(data, textStatus) {
                             var error = signalR._.transportError(signalR.resources.longPollFailed, connection.transport, data, instance.pollXhr);
 
                             // Stop trying to trigger reconnect, connection is in an error state
@@ -2566,7 +2553,7 @@
                                 // If we're not in connected or reconnecting then the next ensureReconnectingState check will fail and will return.
                                 // Therefore we don't want to change that failure code path.
                                 if ((connection.state === signalR.connectionState.connected ||
-                                    connection.state === signalR.connectionState.reconnecting) &&
+                                        connection.state === signalR.connectionState.reconnecting) &&
                                     !transportLogic.verifyLastActive(connection)) {
                                     return;
                                 }
@@ -2578,7 +2565,7 @@
                                 }
 
                                 // Call poll with the raiseReconnect flag as true after the reconnect delay
-                                privateData.pollTimeoutId = window.setTimeout(function () {
+                                privateData.pollTimeoutId = window.setTimeout(function() {
                                     poll(instance, true);
                                 }, that.reconnectDelay);
                             }
@@ -2592,23 +2579,23 @@
                         // triggering reconnected.  This depends on the "error" handler of Poll to cancel this
                         // timeout if it triggers before the Reconnected event fires.
                         // The Math.min at the end is to ensure that the reconnect timeout does not overflow.
-                        privateData.reconnectTimeoutId = window.setTimeout(function () { fireReconnected(instance); }, Math.min(1000 * (Math.pow(2, reconnectErrors) - 1), maxFireReconnectedTimeout));
+                        privateData.reconnectTimeoutId = window.setTimeout(function() { fireReconnected(instance); }, Math.min(1000 * (Math.pow(2, reconnectErrors) - 1), maxFireReconnectedTimeout));
                     }
                 }(connection));
             }, 250); // Have to delay initial poll so Chrome doesn't show loader spinner in tab
         },
 
-        lostConnection: function (connection) {
+        lostConnection: function(connection) {
             if (connection.pollXhr) {
                 connection.pollXhr.abort("lostConnection");
             }
         },
 
-        send: function (connection, data) {
+        send: function(connection, data) {
             transportLogic.ajaxSend(connection, data);
         },
 
-        stop: function (connection) {
+        stop: function(connection) {
             /// <summary>Stops the long polling connection</summary>
             /// <param name="connection" type="signalR">The SignalR connection to stop</param>
 
@@ -2625,7 +2612,7 @@
             }
         },
 
-        abort: function (connection, async) {
+        abort: function(connection, async) {
             transportLogic.ajaxAbort(connection, async);
         }
     };
@@ -2635,7 +2622,7 @@
 /* jquery.signalR.hubs.js */
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0.
-(function ($, window, document, undefined) {
+(function($, window, document, undefined) {
 
     var nextGuid = 0;
     var eventNamespace = ".hubProxy",
@@ -2714,7 +2701,7 @@
     }
 
     hubProxy.fn = hubProxy.prototype = {
-        init: function (connection, hubName) {
+        init: function(connection, hubName) {
             this.state = {};
             this.connection = connection;
             this.hubName = hubName;
@@ -2725,11 +2712,11 @@
 
         constructor: hubProxy,
 
-        hasSubscriptions: function () {
+        hasSubscriptions: function() {
             return hasMembers(this._.callbackMap);
         },
 
-        on: function (eventName, callback, callbackIdentity) {
+        on: function(eventName, callback, callbackIdentity) {
             /// <summary>Wires up a callback to be invoked when a invocation request is received from the server hub.</summary>
             /// <param name="eventName" type="String">The name of the hub event to register the callback for.</param>
             /// <param name="callback" type="Function">The callback to be invoked.</param>
@@ -2743,7 +2730,7 @@
             callbackIdentity = callbackIdentity || callback;
 
             // Assign a global ID to the identity object. This tags the object so we can detect the same object when it comes back.
-            if(!callbackIdentity._signalRGuid) {
+            if (!callbackIdentity._signalRGuid) {
                 callbackIdentity._signalRGuid = nextGuid++;
             }
 
@@ -2775,7 +2762,7 @@
                 callbackMap[eventName].push(registration);
             }
 
-            var handler = function (e, data) {
+            var handler = function(e, data) {
                 callback.apply(that, data);
             };
             registration.eventHandlers.push(handler);
@@ -2785,7 +2772,7 @@
             return that;
         },
 
-        off: function (eventName, callback, callbackIdentity) {
+        off: function(eventName, callback, callbackIdentity) {
             /// <summary>Removes the callback invocation request from the server hub for the given event name.</summary>
             /// <param name="eventName" type="String">The name of the hub event to unregister the callback for.</param>
             /// <param name="callback" type="Function">The callback to be removed.</param>
@@ -2841,7 +2828,7 @@
             return that;
         },
 
-        invoke: function (methodName) {
+        invoke: function(methodName) {
             /// <summary>Invokes a server hub method with the given arguments.</summary>
             /// <param name="methodName" type="String">The name of the server hub method.</param>
 
@@ -2851,7 +2838,7 @@
                 argValues = map(args, getArgValue),
                 data = { H: that.hubName, M: methodName, A: argValues, I: connection._.invocationCallbackId },
                 d = $.Deferred(),
-                callback = function (minResult) {
+                callback = function(minResult) {
                     var result = that._maximizeHubResponse(minResult),
                         source,
                         error;
@@ -2900,7 +2887,7 @@
             return d.promise();
         },
 
-        _maximizeHubResponse: function (minHubResponse) {
+        _maximizeHubResponse: function(minHubResponse) {
             return {
                 State: minHubResponse.S,
                 Result: minHubResponse.R,
@@ -2940,12 +2927,12 @@
 
     hubConnection.fn = hubConnection.prototype = $.connection();
 
-    hubConnection.fn.init = function (url, options) {
+    hubConnection.fn.init = function(url, options) {
         var settings = {
-            qs: null,
-            logging: false,
-            useDefaultPath: true
-        },
+                qs: null,
+                logging: false,
+                useDefaultPath: true
+            },
             connection = this;
 
         $.extend(settings, options);
@@ -2960,7 +2947,7 @@
         connection._.invocationCallbacks = {};
 
         // Wire up the received handler
-        connection.received(function (minData) {
+        connection.received(function(minData) {
             var data, proxy, dataCallbackId, callback, hubName, eventName;
             if (!minData) {
                 return;
@@ -2970,13 +2957,13 @@
             // progress updates enter the return value branch and then no-op when they can't find
             // the callback in the map (because the minData.I value will not be a valid callback ID)
             // Process progress notification
-            if (typeof (minData.P) !== "undefined") {
+            if (typeof(minData.P) !== "undefined") {
                 dataCallbackId = minData.P.I.toString();
                 callback = connection._.invocationCallbacks[dataCallbackId];
                 if (callback) {
                     callback.method.call(callback.scope, minData);
                 }
-            } else if (typeof (minData.I) !== "undefined") {
+            } else if (typeof(minData.I) !== "undefined") {
                 // We received the return value from a server method invocation, look up callback by id and call it
                 dataCallbackId = minData.I.toString();
                 callback = connection._.invocationCallbacks[dataCallbackId];
@@ -3007,7 +2994,7 @@
             }
         });
 
-        connection.error(function (errData, origData) {
+        connection.error(function(errData, origData) {
             var callbackId, callback;
 
             if (!origData) {
@@ -3029,18 +3016,18 @@
             }
         });
 
-        connection.reconnecting(function () {
+        connection.reconnecting(function() {
             if (connection.transport && connection.transport.name === "webSockets") {
                 clearInvocationCallbacks(connection, "Connection started reconnecting before invocation result was received.");
             }
         });
 
-        connection.disconnected(function () {
+        connection.disconnected(function() {
             clearInvocationCallbacks(connection, "Connection was disconnected before invocation result was received.");
         });
     };
 
-    hubConnection.fn._maximizeClientHubInvocation = function (minClientHubInvocation) {
+    hubConnection.fn._maximizeClientHubInvocation = function(minClientHubInvocation) {
         return {
             Hub: minClientHubInvocation.H,
             Method: minClientHubInvocation.M,
@@ -3049,7 +3036,7 @@
         };
     };
 
-    hubConnection.fn._registerSubscribedHubs = function () {
+    hubConnection.fn._registerSubscribedHubs = function() {
         /// <summary>
         ///     Sets the starting event to loop through the known hubs and register any new hubs
         ///     that have been added to the proxy.
@@ -3058,12 +3045,12 @@
 
         if (!connection._subscribedToHubs) {
             connection._subscribedToHubs = true;
-            connection.starting(function () {
+            connection.starting(function() {
                 // Set the connection's data object with all the hub proxies with active subscriptions.
                 // These proxies will receive notifications from the server.
                 var subscribedHubs = [];
 
-                $.each(connection.proxies, function (key) {
+                $.each(connection.proxies, function(key) {
                     if (this.hasSubscriptions()) {
                         subscribedHubs.push({ name: key });
                         connection.log("Client subscribed to hub '" + key + "'.");
@@ -3079,7 +3066,7 @@
         }
     };
 
-    hubConnection.fn.createHubProxy = function (hubName) {
+    hubConnection.fn.createHubProxy = function(hubName) {
         /// <summary>
         ///     Creates a new proxy object for the given hub connection that can be used to invoke
         ///     methods on server hubs and handle client method invocation requests from the server.
@@ -3111,7 +3098,7 @@
 /* jquery.signalR.version.js */
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0.
-(function ($, window, document, undefined) {
+(function($, window, document, undefined) {
     // This will be modified by the build script
     $.signalR.version = "2.4.1";
 }(jQuery, window, document));
@@ -3119,18 +3106,18 @@
 /* v3/adapters/transvault/hubs */
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0.
-(function ($, window, document, undefined) {
+(function($, window, document, undefined) {
     /// <param name="$" type="jQuery" />
     "use strict";
 
-    if (typeof ($.signalR) !== "function") {
+    if (typeof($.signalR) !== "function") {
         throw new Error("SignalR: SignalR is not loaded. Please ensure jquery.signalR-x.js is referenced before ~/signalr/js.");
     }
 
     var signalR = $.signalR;
 
     function makeProxyCallback(hub, callback) {
-        return function () {
+        return function() {
             // Call the client hub method
             callback.apply(hub, $.makeArray(arguments));
         };
@@ -3174,30 +3161,30 @@
         }
     }
 
-    $.hubConnection.prototype.createHubProxies = function () {
+    $.hubConnection.prototype.createHubProxies = function() {
         var proxies = {};
-        this.starting(function () {
+        this.starting(function() {
             // Register the hub proxies as subscribed
             // (instance, shouldSubscribe)
             registerHubProxies(proxies, true);
 
             this._registerSubscribedHubs();
-        }).disconnected(function () {
+        }).disconnected(function() {
             // Unsubscribe all hub proxies when we "disconnect".  This is to ensure that we do not re-add functional call backs.
             // (instance, shouldSubscribe)
             registerHubProxies(proxies, false);
         });
 
-        proxies['transvaultHub'] = this.createHubProxy('transvaultHub'); 
-        proxies['transvaultHub'].client = { };
+        proxies['transvaultHub'] = this.createHubProxy('transvaultHub');
+        proxies['transvaultHub'].client = {};
         proxies['transvaultHub'].server = {
-            getMerchantCredentials: function (browserId, accessToken) {
+            getMerchantCredentials: function(browserId, accessToken) {
                 return proxies['transvaultHub'].invoke.apply(proxies['transvaultHub'], $.merge(["GetMerchantCredentials"], $.makeArray(arguments)));
-             },
+            },
 
-            sendMessage: function (data) {
+            sendMessage: function(data) {
                 return proxies['transvaultHub'].invoke.apply(proxies['transvaultHub'], $.merge(["SendMessage"], $.makeArray(arguments)));
-             }
+            }
         };
 
         return proxies;
@@ -3432,7 +3419,7 @@
         return result;
     };
 
-    var isFormValid = function () {
+    var isFormValid = function() {
 
         try {
 
@@ -3440,7 +3427,7 @@
             var isBankAccountForm = hp.Utils.plugins.BankAccount !== null && hp.Utils.plugins.BankAccount.$content !== null && hp.Utils.plugins.BankAccount.$content.is(":visible");
             var element = null;
             var errorMessage = [];
-            
+
             if (!isBankAccountForm && !isCreditCardForm) {
                 errorMessage.push("The form is neither a credit card or bank account form.");
             }
@@ -3448,7 +3435,7 @@
             if (isBankAccountForm) {
 
                 element = hp.Utils.plugins.BankAccount.$content;
-                
+
                 var textOnlyPattern = /^[A-Za-z][-a-zA-Z ]+$/;
 
                 var customerName = element.find(".hp-input-fullname > input").val();
@@ -3460,7 +3447,7 @@
                 if (bankName.length < 1 || bankName.length > 30 || !textOnlyPattern.test(bankName)) {
                     errorMessage.push("The 'bank name' field is either too short or too long.");
                 }
-    
+
                 var routingNumber = element.find(".hp-input-routing > input").val();
                 if (routingNumber.length !== 9) {
                     errorMessage.push("The 'routing number' field is either too short or too long.");
@@ -3470,7 +3457,7 @@
                 if (accountNumber.length <= 4 || accountNumber.length > 17) {
                     errorMessage.push("The 'account number' field is either too short or too long.");
                 }
-                
+
                 log("Triggering: hp.validate");
                 hp.Utils.plugins.BankAccount.$parent.trigger("hp.validate");
                 hp.Utils.plugins.BankAccount.handleNotify();
@@ -3490,7 +3477,7 @@
                 }
 
                 var cardType = $.payment.cardType(cardNumber);
-                var cvv = element.find(".hp-input-cvv > input").val();    
+                var cvv = element.find(".hp-input-cvv > input").val();
                 if (!$.payment.validateCardCVC(cvv, cardType)) {
                     errorMessage.push("CVV is not valid for this card type.");
                 }
@@ -3505,7 +3492,7 @@
                 var avsStreet = hp.Utils.plugins.CreditCard.$element.find(".hp-input-avs-street > input").val();
 
                 if (hp.Utils.defaults.promptForAvs && !hp.Utils.defaults.allowAvsSkip) {
-                    
+
                     if (avsZip === undefined || avsZip.length !== 5) {
                         errorMessage.push("Zipcode must be 5 characters long.");
                     }
@@ -3523,18 +3510,28 @@
 
             log("isValid: ", errorMessage.length === 0, errorMessage);
 
-            return { 
+            return {
                 isValid: errorMessage.length === 0,
                 errors: errorMessage
             };
 
         } catch (err) {
-            return { 
+            return {
                 isValid: false,
                 errors: [err.message]
             };
         }
     };
+
+    var setVendor = function(vendor) {
+        hp.Utils.defaults.vendor = vendor;
+        log("Vendor: " + vendor);
+        return vendor;
+    }
+
+    var getVendor = function() {
+        return hp.Utils.defaults.vendor;
+    }
 
     var setEntryType = function setEntryType(entryType) {
         var result = hp.EntryType.KEYED_CARD_NOT_PRESENT;
@@ -3650,24 +3647,24 @@
     var generateGUID = function generateGUID() {
 
         if (window.crypto && typeof window.crypto.getRandomValues === "function") {
-        
+
             // If we have a cryptographically secure PRNG, use that
             // https://stackoverflow.com/questions/6906916/collisions-when-generating-uuids-in-javascript
             var buf = new Uint16Array(8);
-            
+
             window.crypto.getRandomValues(buf);
-            
+
             var S4 = function(num) {
                 var ret = num.toString(16);
 
-                while(ret.length < 4) {
-                    ret = "0"+ret;
+                while (ret.length < 4) {
+                    ret = "0" + ret;
                 }
 
                 return ret;
             };
 
-            return (S4(buf[0])+S4(buf[1])+"-"+S4(buf[2])+"-"+S4(buf[3])+"-"+S4(buf[4])+"-"+S4(buf[5])+S4(buf[6])+S4(buf[7]));
+            return (S4(buf[0]) + S4(buf[1]) + "-" + S4(buf[2]) + "-" + S4(buf[3]) + "-" + S4(buf[4]) + "-" + S4(buf[5]) + S4(buf[6]) + S4(buf[7]));
         }
 
         var d = null;
@@ -3755,63 +3752,63 @@
         if (shouldReset) {
             hp.Utils.reset();
         }
-    }; 
-    
+    };
+
     var createInstance = function createInstance($element, callback) {
         // Create wrapping HTML
         var $wrapper = [
-            '<div class="hp hp-form">', 
-                '<div class="hp-loading-container">', 
-                    '<span class="hp-loading-text">Loading</span>', 
-                    '<div class="hp-loading"><span></span><span></span><span></span><span></span></div>', 
-                "</div>", 
-                '<div class="hp-error-container">', 
-                    '<span class="hp-error-text">{{error}} </span>', 
-                    '<div class="hp-error-message"></div>', 
-                    "<hr />", 
-                    '<div class="hp-error-disclaimer">If you feel that the above error was made by a mistake please contact our support at {{phone}}. <br /><br /><a href="javascript:;">&times; Dismiss error</a></div>', 
-                "</div>", 
-                '<div class="hp-row">', 
-                    '<div class="hp-col hp-col-left">', 
-                        '<ul class="hp-nav">', 
-                            "{{nav}}", 
-                        "</ul>", 
-                        '<div class="hp-secure">', 
-                            '<a href="https://emoney.com" target="_blank" title="Powered by EMoney">',
-                                '<img class="hp-emoney-logo" src="https://app.emoney.com/Public/Styles/Images/logo-blue.svg" alt="Hosted Payments" />',
-                            '</a>', 
-                            '<div class="hp-support">', 
-                                "<strong>Help &amp; support</strong>", 
-                                '<p>Call us at <a href="tel:{{phone}}">{{phone}}</a></p>', 
-                                "<br />", 
-                            "</div>", 
-                            '<div class="hp-cards">', 
-                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showAmex ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/amex.svg" alt="AMEX" />', 
-                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showDiners ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/diners.svg" alt="Diners" />', 
-                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showDiscover ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/discover.svg" alt="Discover" />', 
-                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showJcb ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/jcb.svg" alt="JCB" />', 
-                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showMasterCard ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/mastercard.svg" alt="Master Card" />', 
-                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showVisa ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/visa.svg" alt="VISA" />', 
-                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showEMoney ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/c2568c3f7343be79032ac7a717fa80de/raw/7923fdf2aacffbc6baf62454cc4213b46b943596/emoney-card-icon.svg" alt="EMoney" />', 
-                                '<img class="hp-cards-icons' + (hp.Utils.defaults.showGift ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/cd2abb29142a84bb16fbeb3d07a7aefa/raw/a17760bdd23cf1d90c22c8a2235f8d6e6753663e/gift-card-icon.svg" alt="Gift Cards" />', 
-                            "</div>", 
-                            '<div class="hp-secure-bottom">', 
-                                '<div class="hp-secure-bottom-left">', 
-                                    '<span class="' + (hp.Utils.getAmount() === 0 ? "hide " : "") + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "hp-version-refund" : "hp-version-charge") + '">',
-                                        (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "Refund" : "Charge") + ': <span class="hp-version-amount">' + hp.Utils.formatCurrency(hp.Utils.getAmount() + hp.Utils.defaults.surchargeFee + hp.Utils.defaults.convenienceFee),
-                                    "</span>", 
-                                "</div>", 
-                                '<div class="hp-secure-bottom-right">', 
-                                    hp.Utils.getVersion(), 
-                                "</div>", 
-                            "</div>", 
-                        "</div>", 
-                    "</div>", 
-                    '<div class="hp-col hp-col-right">', 
-                        "{{order}}", 
-                        '<div class="hp-content hp-content-success">{{success}}</div>', 
-                    "</div>", 
-                "</div>", 
+            '<div class="hp hp-form">',
+            '<div class="hp-loading-container">',
+            '<span class="hp-loading-text">Loading</span>',
+            '<div class="hp-loading"><span></span><span></span><span></span><span></span></div>',
+            "</div>",
+            '<div class="hp-error-container">',
+            '<span class="hp-error-text">{{error}} </span>',
+            '<div class="hp-error-message"></div>',
+            "<hr />",
+            '<div class="hp-error-disclaimer">If you feel that the above error was made by a mistake please contact our support at {{phone}}. <br /><br /><a href="javascript:;">&times; Dismiss error</a></div>',
+            "</div>",
+            '<div class="hp-row">',
+            '<div class="hp-col hp-col-left">',
+            '<ul class="hp-nav">',
+            "{{nav}}",
+            "</ul>",
+            '<div class="hp-secure">',
+            '<a href="https://emoney.com" target="_blank" title="Powered by EMoney">',
+            '<img class="hp-emoney-logo" src="https://app.emoney.com/Public/Styles/Images/logo-blue.svg" alt="Hosted Payments" />',
+            '</a>',
+            '<div class="hp-support">',
+            "<strong>Help &amp; support</strong>",
+            '<p>Call us at <a href="tel:{{phone}}">{{phone}}</a></p>',
+            "<br />",
+            "</div>",
+            '<div class="hp-cards">',
+            '<img class="hp-cards-icons' + (hp.Utils.defaults.showAmex ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/amex.svg" alt="AMEX" />',
+            '<img class="hp-cards-icons' + (hp.Utils.defaults.showDiners ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/diners.svg" alt="Diners" />',
+            '<img class="hp-cards-icons' + (hp.Utils.defaults.showDiscover ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/discover.svg" alt="Discover" />',
+            '<img class="hp-cards-icons' + (hp.Utils.defaults.showJcb ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/jcb.svg" alt="JCB" />',
+            '<img class="hp-cards-icons' + (hp.Utils.defaults.showMasterCard ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/mastercard.svg" alt="Master Card" />',
+            '<img class="hp-cards-icons' + (hp.Utils.defaults.showVisa ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/visa.svg" alt="VISA" />',
+            '<img class="hp-cards-icons' + (hp.Utils.defaults.showEMoney ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/c2568c3f7343be79032ac7a717fa80de/raw/7923fdf2aacffbc6baf62454cc4213b46b943596/emoney-card-icon.svg" alt="EMoney" />',
+            '<img class="hp-cards-icons' + (hp.Utils.defaults.showGift ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/cd2abb29142a84bb16fbeb3d07a7aefa/raw/a17760bdd23cf1d90c22c8a2235f8d6e6753663e/gift-card-icon.svg" alt="Gift Cards" />',
+            "</div>",
+            '<div class="hp-secure-bottom">',
+            '<div class="hp-secure-bottom-left">',
+            '<span class="' + (hp.Utils.getAmount() === 0 ? "hide " : "") + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "hp-version-refund" : "hp-version-charge") + '">',
+            (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "Refund" : "Charge") + ': <span class="hp-version-amount">' + hp.Utils.formatCurrency(hp.Utils.getAmount() + hp.Utils.defaults.surchargeFee + hp.Utils.defaults.convenienceFee),
+            "</span>",
+            "</div>",
+            '<div class="hp-secure-bottom-right">',
+            hp.Utils.getVersion(),
+            "</div>",
+            "</div>",
+            "</div>",
+            "</div>",
+            '<div class="hp-col hp-col-right">',
+            "{{order}}",
+            '<div class="hp-content hp-content-success">{{success}}</div>',
+            "</div>",
+            "</div>",
             "</div>"
         ].join("");
 
@@ -3823,16 +3820,16 @@
 
         $element.html(
             $wrapper
-                .replace(
-                    "{{success}}", 
-                    hp.Utils.plugins.Success.createTemplate()
-                        .replace("{{redirectLabel}}", hp.Utils.defaults.defaultRedirectLabel)
-                        .replace("{{successLabel}}", hp.Utils.defaults.defaultSuccessLabel)
-                )
-                .replace(/{{phone}}/gi, hp.Utils.defaults.defaultPhone)
-                .replace("{{error}}", hp.Utils.defaults.defaultErrorLabel)
-                .replace("{{order}}", hp.Utils.createOrder())
-                .replace("{{nav}}", hp.Utils.createNav())
+            .replace(
+                "{{success}}",
+                hp.Utils.plugins.Success.createTemplate()
+                .replace("{{redirectLabel}}", hp.Utils.defaults.defaultRedirectLabel)
+                .replace("{{successLabel}}", hp.Utils.defaults.defaultSuccessLabel)
+            )
+            .replace(/{{phone}}/gi, hp.Utils.defaults.defaultPhone)
+            .replace("{{error}}", hp.Utils.defaults.defaultErrorLabel)
+            .replace("{{order}}", hp.Utils.createOrder())
+            .replace("{{nav}}", hp.Utils.createNav())
         );
 
         var $parent = $element.find(".hp"),
@@ -3873,7 +3870,7 @@
                 }
             });
         }).eq(0).trigger("click");
-    }; 
+    };
 
     var showSuccessPage = function showSuccessPage(delay) {
         var deferred = jQuery.Deferred(),
@@ -3886,8 +3883,8 @@
             deferred.resolve();
         }, timeout);
         return deferred;
-    }; 
-    
+    };
+
     var escapeHTML = function escapeHTML(unsafeStr) {
         return unsafeStr
             .replace(/&/g, '')
@@ -3933,7 +3930,7 @@
 
         var $this = $(hp.Utils.__instance.element).find("> .hp").eq(0);
 
-        hp.Utils.log("Getting active instance: " , $this);
+        hp.Utils.log("Getting active instance: ", $this);
 
         if (!!$this.attr("class").match(/hp-form-cc/gi)) {
             return hp.Utils.plugins.CreditCard;
@@ -4068,7 +4065,7 @@
         if (ttl === null || ttl === undefined) {
             ttl = 1200; // 20min in ms
         }
-        
+
         ttl = ttl * 1000;
 
         hp.Utils.log("Setting session timeout to: " + ttl);
@@ -4077,7 +4074,7 @@
             window.clearTimeout(_timer);
         }
 
-        _timer = window.setTimeout(function(){
+        _timer = window.setTimeout(function() {
             hp.Utils.log("Session timed out!");
             handleError();
         }, ttl);
@@ -4556,7 +4553,7 @@
             hp.Utils.log("The 'promptForAvs' option was turned off. Skipping AVS prompt.");
             deferred.resolve();
             return deferred;
-        }        
+        }
 
         var instance = hp.Utils.getInstance();
 
@@ -4640,49 +4637,49 @@
 
             var $stateOptions = Object
                 .keys(states)
-                .map(function(item){
+                .map(function(item) {
                     return "<option value='" + item + "'>" + states[item] + "</option>"
                 })
                 .join("");
 
             var template = [
-                '<div class="hp-avs-prompt">', 
-                    '<div class="hp-avs-prompt-container">', 
-                        "<a class='hp-close' href='javascript:void(0);'>&larr; Go back?</a>",
-                        "<p>Billing Address</p>", 
-                        '<div class="hp-avs-prompt-left">', 
-                            '<label class="hp-label-avs" for="avsStreet">Address <span class="hp-avs-required">*</span></label>', 
-                            '<div class="hp-input hp-input-avs hp-input-avs-street">', 
-                                '<input maxlength="60" placeholder="Street address" value="' + hp.Utils.defaults.billingAddress.addressLine1 + '" name="avsStreet" id="avsStreet" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "address-line1") + '" type="text">', 
-                            "</div>", 
-                        "</div>", 
-                        '<div class="hp-avs-prompt-right">', 
-                            '<div class="hp-pull-left">', 
-                                '<label class="hp-label-avs" for="avsCity">City</label>', 
-                                '<div class="hp-input hp-input-avs hp-input-avs-city">', 
-                                    '<input maxlength="40" placeholder="City" id="avsCity" name="avsCity" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text">', 
-                                "</div>", 
-                            "</div>", 
-                            '<div class="hp-pull-left">', 
-                                '<label class="hp-label-avs" for="avsState">State</label>', 
-                                '<div class="hp-input hp-input-avs hp-input-avs-state">', 
-                                    '<select id="avsState" name="avsState" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '">', 
-                                        $stateOptions,
-                                    '</select>',
-                                "</div>", 
-                            "</div>", 
-                            '<div class="hp-pull-left hp-no-margins">', 
-                                '<label class="hp-label-avs" for="avsZip">Zip <span class="hp-avs-required">*</span></label>', 
-                                '<div class="hp-input hp-input-avs hp-input-avs-zip">', 
-                                    '<input maxlength="5" pattern="\\d*" placeholder="Zipcode" value="' + hp.Utils.defaults.billingAddress.postalCode + '" name="avsZip" id="avsZip" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "postal-code") + '" type="text">', 
-                                "</div>", 
-                            "</div>", 
-                        "</div>", 
-                        '<br class="hp-break" />', 
-                        "<hr>", 
-                        '<button class="hp-submit hp-avs-submit">' + hp.Utils.defaults.defaultButtonLabel + "</button>", 
-                        hp.Utils.defaults.allowAvsSkip ? '<a class="hp-avs-skip" href="javascript:;">Skip \'Address Verification\'</a>' : "", 
-                    "</div>", 
+                '<div class="hp-avs-prompt">',
+                '<div class="hp-avs-prompt-container">',
+                "<a class='hp-close' href='javascript:void(0);'>&larr; Go back?</a>",
+                "<p>Billing Address</p>",
+                '<div class="hp-avs-prompt-left">',
+                '<label class="hp-label-avs" for="avsStreet">Address <span class="hp-avs-required">*</span></label>',
+                '<div class="hp-input hp-input-avs hp-input-avs-street">',
+                '<input maxlength="60" placeholder="Street address" value="' + hp.Utils.defaults.billingAddress.addressLine1 + '" name="avsStreet" id="avsStreet" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "address-line1") + '" type="text">',
+                "</div>",
+                "</div>",
+                '<div class="hp-avs-prompt-right">',
+                '<div class="hp-pull-left">',
+                '<label class="hp-label-avs" for="avsCity">City</label>',
+                '<div class="hp-input hp-input-avs hp-input-avs-city">',
+                '<input maxlength="40" placeholder="City" id="avsCity" name="avsCity" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text">',
+                "</div>",
+                "</div>",
+                '<div class="hp-pull-left">',
+                '<label class="hp-label-avs" for="avsState">State</label>',
+                '<div class="hp-input hp-input-avs hp-input-avs-state">',
+                '<select id="avsState" name="avsState" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '">',
+                $stateOptions,
+                '</select>',
+                "</div>",
+                "</div>",
+                '<div class="hp-pull-left hp-no-margins">',
+                '<label class="hp-label-avs" for="avsZip">Zip <span class="hp-avs-required">*</span></label>',
+                '<div class="hp-input hp-input-avs hp-input-avs-zip">',
+                '<input maxlength="5" pattern="\\d*" placeholder="Zipcode" value="' + hp.Utils.defaults.billingAddress.postalCode + '" name="avsZip" id="avsZip" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "postal-code") + '" type="text">',
+                "</div>",
+                "</div>",
+                "</div>",
+                '<br class="hp-break" />',
+                "<hr>",
+                '<button class="hp-submit hp-avs-submit">' + hp.Utils.defaults.defaultButtonLabel + "</button>",
+                hp.Utils.defaults.allowAvsSkip ? '<a class="hp-avs-skip" href="javascript:;">Skip \'Address Verification\'</a>' : "",
+                "</div>",
                 "</div>"
             ].join("");
 
@@ -4708,8 +4705,7 @@
                 hp.Utils.defaults.eventCallback(e);
 
                 // prevents submit if enter button his pressed
-                if (e.type === "keyup" && e.originalEvent.code === "Enter")
-                {
+                if (e.type === "keyup" && e.originalEvent.code === "Enter") {
                     return;
                 }
 
@@ -4724,8 +4720,8 @@
                 }, 0);
             };
 
-            var onlyNumberKey = function onlyNumberKey(e) { 
-          
+            var onlyNumberKey = function onlyNumberKey(e) {
+
                 if (e.type !== "keyup") {
                     return true;
                 }
@@ -4733,10 +4729,10 @@
                 var code = (e.which) ? e.which : e.keyCode;
 
                 if (code > 31 && (code < 48 || code > 57)) {
-                    return false; 
+                    return false;
                 }
 
-                return true; 
+                return true;
             };
 
             $avsPrompt
@@ -4804,16 +4800,26 @@
         }, 0);
 
         $element.find(".hp-input-avs-street input").focus();
-        
+
         hp.Utils.defaults.eventCallback($element);
 
         return deferred;
-    }; 
+    };
 
     var makeRequest = function makeRequest(data, isSync) {
+
         var deferred = jQuery.Deferred();
+        var url = hp.Utils.defaults.baseUrl + encodeURI("?dt=" + new Date().getTime());
+        var vendor = hp.Utils.getVendor();
+
+        if (vendor != null && vendor != undefined) {
+            url = url + encodeURI("&vendor=" + vendor);
+        }
+
+        url = url + encodeURI("&version=" + hp.Utils.getVersion());
+
         var requestObject = {
-            url: hp.Utils.defaults.baseUrl + encodeURI("?dt=" + new Date().getTime()),
+            url: url,
             type: "POST",
             dataType: "json",
             contentType: "application/json",
@@ -4942,7 +4948,7 @@
 
     var handleCaptcha = function handleCaptcha() {
         var deferred = jQuery.Deferred();
-        setTimeout(function(){
+        setTimeout(function() {
             hp.Utils.log("Performing captcha check!", hp.Utils.defaults.captchaCallback);
             if (hp.Utils.defaults.captchaCallback === undefined || hp.Utils.defaults.captchaCallback === null || typeof(hp.Utils.defaults.captchaCallback) !== "function" || hp.Utils.defaults.captchaCallback.length < 1) {
                 hp.Utils.log("The provided captchaCallback was not defined or was not a function: Type = ", typeof(hp.Utils.defaults.captchaCallback));
@@ -4953,7 +4959,7 @@
             }
         }, 0);
         return deferred;
-    }; 
+    };
 
     var signIn = function signIn() {
         var deferred = jQuery.Deferred(),
@@ -4965,7 +4971,7 @@
          */
 
         if (hp.Utils.defaults.paymentService === hp.PaymentService.TEST) {
-            
+
             hp.Utils
                 .handleCaptcha()
                 .then(function() {
@@ -4973,14 +4979,14 @@
                     hp.Utils.setSession(apiKey);
                     deferred.resolve(apiKey);
                 }, function() {
-                    
+
                     var errorResponse = {
                         status: "Error",
                         message: "We're sorry. The provided captcha method was not successfull.",
                         created_on: createdOn,
                         token: sessionId
                     };
-    
+
                     if (!hp.Utils.shouldErrorPostBack()) {
                         hp.Utils.showError(errorResponse.message);
                         hp.Utils.defaults.errorCallback(errorResponse);
@@ -4989,7 +4995,7 @@
                             $form.attr("action", hp.Utils.defaults.errorCallback).submit();
                         });
                     }
-    
+
                     deferred.reject();
                 });
 
@@ -5073,7 +5079,7 @@
                 style: 'currency',
                 currency: currencyCode,
             });
-              
+
             return formatter.format(amount);
         }
 
@@ -5101,9 +5107,19 @@
     };
 
     var getBalance = function getBalance(sessionId, cardNumber) {
+
+        var url = hp.Utils.defaults.baseUrl + encodeURI("?dt=" + new Date().getTime());
+        var vendor = hp.Utils.getVendor();
+
+        if (vendor != null && vendor != undefined) {
+            url = url + encodeURI("&vendor=" + vendor);
+        }
+
+        url = url + encodeURI("&version=" + hp.Utils.getVersion());
+
         var balance = 0,
             settings = {
-                url: hp.Utils.defaults.baseUrl + encodeURI("?dt=" + new Date().getTime()),
+                url: url,
                 type: "POST",
                 dataType: "json",
                 contentType: "application/json",
@@ -5125,6 +5141,7 @@
         }).fail(function() {
             balance = 0;
         });
+
         return balance;
     };
 
@@ -5530,7 +5547,7 @@
         var deferred = jQuery.Deferred(); // Handle instance
 
         hp.Utils.createInstance($element, function(instance) {
-            
+
             // The same elements across many instances
             var $this = $element;
 
@@ -5603,7 +5620,7 @@
         });
         return deferred;
     };
-    
+
     /*
      * Build APP url
      *  Sample: "emmerchant://{{paymentType}}/{{merchantCredentials}}?transactionId={{transactionId}}&token={{token}}&browserId={{browserId}}&correlationId={{correlationId}}&amount={{amount}}&entryType={{entryType}}"
@@ -5625,7 +5642,7 @@
 
     var getAlternativeSubmitButton = function getAlternativeSubmitButton() {
         var $newButton = $(hp.Utils.defaults.alternativeSubmitButton);
-        
+
         if (!$newButton.data("previousText")) {
             $newButton.data("previousText", $newButton.text().toString());
         }
@@ -5642,7 +5659,7 @@
             hp.Utils.log("Using alternative submit button with selector '" + hp.Utils.defaults.alternativeSubmitButton + "'.");
             return true;
         }
-        
+
         hp.Utils.log("Could not find altnernative submit button selector '" + hp.Utils.defaults.alternativeSubmitButton + "'.");
 
         return false;
@@ -5657,6 +5674,8 @@
     hp.Utils.hasAlternativeSubmitButton = hasAlternativeSubmitButton;
     hp.Utils.handleLegacyCssClassApplication = handleLegacyCssClassApplication;
     hp.Utils.makeRequest = makeRequest;
+    hp.Utils.getVendor = getVendor;
+    hp.Utils.setVendor = setVendor;
     hp.Utils.validateCreditCardData = validateCreditCardData;
     hp.Utils.validateBankAccountData = validateBankAccountData;
     hp.Utils.validateEMoneyData = validateEMoneyData;
@@ -5742,7 +5761,7 @@
             $content = context.content;
 
         $parent.find(".icon.success").addClass("animate").show();
-        
+
         this.context = context;
         this.$parent = $parent;
         this.$content = $content;
@@ -5821,7 +5840,7 @@
         $visualname = null,
         $visualcard = null,
         $all = null;
-        
+
     var sessionId = "",
         createdOn = new Date().toISOString();
 
@@ -5928,41 +5947,41 @@
         };
 
         var $html = [
-            '<div class="hp-card-visual">', 
-                '<div class="hp-card-visual-number">' + defaultCardCharacters + "</div>", 
-                '<div class="hp-card-visual-name">' + defaultNameOnCardName + "</div>", 
-                '<div class="hp-card-visual-expiry">', 
-                    '<span class="hp-card-visual-expiry-label">Month/Year</span>', 
-                    '<span class="hp-card-visual-expiry-label-alt">Valid Thru</span>', 
-                    '<span class="hp-card-visual-expiry-value"><span class="hp-card-visual-expiry-month">' + defaultDateCharacters + '</span><span>/</span><span class="hp-card-visual-expiry-year">' + defaultDateCharacters + "</span></span>", 
-                "</div>", 
-            "</div>", 
-            '<div class="hp-input-wrapper">', 
-                '<div class="hp-input hp-input-cc">', 
-                    '<input placeholder="Enter Card Number" name="cardnumber" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-number") + '" type="text" pattern="\\d*">', 
-                "</div>", 
-                '<div class="hp-input hp-input-name">', 
-                    '<input maxlength="18" placeholder="Enter Full Name" name="ccname" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-name") + '" type="text">', 
-                "</div>", 
-                '<div class="hp-input-container hp-input-container-date">', 
-                    '<div class="hp-input hp-input-month">', 
-                        '<select autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-exp-month") + '" name="cc-exp">', 
-                            "{{monthList}}", 
-                        "</select>", 
-                    "</div>", 
-                    '<div class="hp-input hp-input-year">', 
-                        '<select autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-exp-year") + '" name="cc-exp">', 
-                            "{{yearList}}", 
-                        "</select>", 
-                    "</div>", 
-                "</div>", 
-                '<div class="hp-input hp-input-third hp-input-cvv">', 
-                    '<input placeholder="Enter CVV" name="cvc" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-csc") + '" type="text" pattern="\\d*">', 
-                        '<span class="hp-input-cvv-image"></span>', 
-                    "</div>", 
-                    '<button class="hp-submit">' + (hp.Utils.defaults.promptForAvs ? "Verify Billing Address &#10144;" : hp.Utils.defaults.defaultButtonLabel) + "</button>", 
-                "</div>"
-            ].join("");
+            '<div class="hp-card-visual">',
+            '<div class="hp-card-visual-number">' + defaultCardCharacters + "</div>",
+            '<div class="hp-card-visual-name">' + defaultNameOnCardName + "</div>",
+            '<div class="hp-card-visual-expiry">',
+            '<span class="hp-card-visual-expiry-label">Month/Year</span>',
+            '<span class="hp-card-visual-expiry-label-alt">Valid Thru</span>',
+            '<span class="hp-card-visual-expiry-value"><span class="hp-card-visual-expiry-month">' + defaultDateCharacters + '</span><span>/</span><span class="hp-card-visual-expiry-year">' + defaultDateCharacters + "</span></span>",
+            "</div>",
+            "</div>",
+            '<div class="hp-input-wrapper">',
+            '<div class="hp-input hp-input-cc">',
+            '<input placeholder="Enter Card Number" name="cardnumber" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-number") + '" type="text" pattern="\\d*">',
+            "</div>",
+            '<div class="hp-input hp-input-name">',
+            '<input maxlength="18" placeholder="Enter Full Name" name="ccname" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-name") + '" type="text">',
+            "</div>",
+            '<div class="hp-input-container hp-input-container-date">',
+            '<div class="hp-input hp-input-month">',
+            '<select autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-exp-month") + '" name="cc-exp">',
+            "{{monthList}}",
+            "</select>",
+            "</div>",
+            '<div class="hp-input hp-input-year">',
+            '<select autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-exp-year") + '" name="cc-exp">',
+            "{{yearList}}",
+            "</select>",
+            "</div>",
+            "</div>",
+            '<div class="hp-input hp-input-third hp-input-cvv">',
+            '<input placeholder="Enter CVV" name="cvc" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-csc") + '" type="text" pattern="\\d*">',
+            '<span class="hp-input-cvv-image"></span>',
+            "</div>",
+            '<button class="hp-submit">' + (hp.Utils.defaults.promptForAvs ? "Verify Billing Address &#10144;" : hp.Utils.defaults.defaultButtonLabel) + "</button>",
+            "</div>"
+        ].join("");
 
         return parseDatesTemplates($html);
     };
@@ -6044,7 +6063,7 @@
         }
 
         name = name.replace(/[0-9]/g, "");
-        
+
         this.formData.name = hp.Utils.escapeHTML(name);
 
         $visualname.text(this.formData.name);
@@ -6153,7 +6172,7 @@
     };
 
     CreditCard.prototype.handleCharge = function(res) {
-        
+
         var that = this;
         var requestModel = {};
 
@@ -6252,7 +6271,7 @@
     };
 
     CreditCard.prototype.handleSubmit = function() {
-        
+
         var that = this;
 
         this.handleNotify();
@@ -6307,7 +6326,7 @@
                 }
 
                 that.handleChargeWithoutInstrument(createInstrumentRequest);
-                
+
             })
             .then(function(res) {
 
@@ -6327,7 +6346,7 @@
 
                 that.instrumentId = res.instrumentId;
                 that.transactionId = typeof res.transactionId !== "undefined" ? res.transactionId : that.transactionId;
-                
+
                 that.$parent.trigger("hp.submit", {
                     type: 0,
                     res: res
@@ -6367,7 +6386,7 @@
     };
 
     CreditCard.prototype.attachEvents = function() {
-        
+
         this.detachEvents();
         var $this = this;
 
@@ -6568,7 +6587,7 @@
         $visualbankname = null,
         $all = null,
         $submit;
-        
+
     var sessionId = "",
         createdOn = new Date().toISOString();
 
@@ -6630,55 +6649,55 @@
 
         var $accountTypeOptions = [
             "<div class='hp-input hp-input-ach-type'>",
-                "<select autocomplete=", (hp.Utils.defaults.disableAutocomplete ? "off" : "ach-acct-type"), " name='ach-type'>",
-                    $accountType,
-                "</select>",
+            "<select autocomplete=", (hp.Utils.defaults.disableAutocomplete ? "off" : "ach-acct-type"), " name='ach-type'>",
+            $accountType,
+            "</select>",
             "</div>"
         ].join("");
 
         var $html = [
-            '<div class="hp-bank-visual">', 
-                '<div class="hp-bank-visual-image"></div>', 
-                '<div class="hp-bank-visual-logo"></div>', 
-                '<div class="hp-bank-visual-bank">' + defaultBank + "</div>", 
-                '<div class="hp-bank-visual-name">' + defaultName + "</div>", 
-                '<div class="hp-bank-visual-right">' + defaultAccountNumberCharacters + "</div>", 
-                '<div class="hp-bank-visual-left">' + defaultRoutingNumberCharacters + "</div>", 
-            "</div>", 
-            '<div class="hp-input-wrapper">', 
-                '<div class="hp-input hp-input-fullname">', 
-                    '<input maxlength="23" placeholder="Enter Full Name" name="name" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "name") + '" type="text">', 
-                "</div>",  
-                "<div class='hp-input-container hp-input-container-ach'>",
-                    '<div class="hp-input hp-input-bank">', 
-                        '<input maxlength="30" placeholder="Enter Bank Name" name="bankName" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "bankName") + '" type="text">', 
-                    "</div>", 
-                    $accountTypeOptions,
-                "</div>",
-                '<div class="hp-break" >', 
-                    "{{inputHtml}}", 
-                "</div>", 
-                '<button class="hp-submit">' + hp.Utils.defaults.defaultButtonLabel + "</button>", 
-                '<p class="info">* Please note that bank account (ACH) transactions may take up to 3 days to process. This time period varies depending on the your issuing bank. For more information please visit us at <a href="https://www.elavonpayments.com/" target="_blank">https://elavonpayments.com</a>.</p>', 
+            '<div class="hp-bank-visual">',
+            '<div class="hp-bank-visual-image"></div>',
+            '<div class="hp-bank-visual-logo"></div>',
+            '<div class="hp-bank-visual-bank">' + defaultBank + "</div>",
+            '<div class="hp-bank-visual-name">' + defaultName + "</div>",
+            '<div class="hp-bank-visual-right">' + defaultAccountNumberCharacters + "</div>",
+            '<div class="hp-bank-visual-left">' + defaultRoutingNumberCharacters + "</div>",
+            "</div>",
+            '<div class="hp-input-wrapper">',
+            '<div class="hp-input hp-input-fullname">',
+            '<input maxlength="23" placeholder="Enter Full Name" name="name" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "name") + '" type="text">',
+            "</div>",
+            "<div class='hp-input-container hp-input-container-ach'>",
+            '<div class="hp-input hp-input-bank">',
+            '<input maxlength="30" placeholder="Enter Bank Name" name="bankName" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "bankName") + '" type="text">',
+            "</div>",
+            $accountTypeOptions,
+            "</div>",
+            '<div class="hp-break" >',
+            "{{inputHtml}}",
+            "</div>",
+            '<button class="hp-submit">' + hp.Utils.defaults.defaultButtonLabel + "</button>",
+            '<p class="info">* Please note that bank account (ACH) transactions may take up to 3 days to process. This time period varies depending on the your issuing bank. For more information please visit us at <a href="https://www.elavonpayments.com/" target="_blank">https://elavonpayments.com</a>.</p>',
             "</div>"
         ].join("");
 
         var $inputHtml = [
-            '<div class="hp-input hp-input-account hp-input-left">', 
-                '<input maxlength="17" placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', 
-            "</div>", 
-            '<div class="hp-input hp-input-routing hp-input-right">', 
-                '<input maxlength="9" placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', 
+            '<div class="hp-input hp-input-account hp-input-left">',
+            '<input maxlength="17" placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">',
+            "</div>",
+            '<div class="hp-input hp-input-routing hp-input-right">',
+            '<input maxlength="9" placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">',
             "</div>"
         ].join("");
 
         if (hp.Utils.defaults.swapAchInputs) {
             $inputHtml = [
-                '<div class="hp-input hp-input-routing hp-input-left">', 
-                    '<input maxlength="9" placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', 
-                "</div>", 
-                '<div class="hp-input hp-input-account hp-input-right">', 
-                    '<input maxlength="17" placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', 
+                '<div class="hp-input hp-input-routing hp-input-left">',
+                '<input maxlength="9" placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">',
+                "</div>",
+                '<div class="hp-input hp-input-account hp-input-right">',
+                '<input maxlength="17" placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">',
                 "</div>"
             ].join("");
         }
@@ -6696,11 +6715,11 @@
         this.$content.find(".hp-input-ach-type select").off();
 
         $submit.off();
-        
+
         if (hp.Utils.hasAlternativeSubmitButton()) {
-           hp.Utils.getAlternativeSubmitButton().off();
+            hp.Utils.getAlternativeSubmitButton().off();
         }
-        
+
         this.$parent.trigger("hp.notify");
         this.handleNotify();
     };
@@ -6718,7 +6737,7 @@
         if (bankName === "") {
             return $visualbankname.html(hp.Utils.defaults.defaultBank);
         }
-        
+
         bankName = bankName.replace(/[0-9]/g, "");
         this.formData.bankName = hp.Utils.escapeHTML($.trim(bankName));
         $visualbankname.text(this.formData.bankName);
@@ -6786,7 +6805,7 @@
                 $this.$parent.trigger("hp.notify");
                 $this.handleNotify();
             });
-        
+
         $this.$content
             .find(".hp-input-ach-type select")
             .on("change", function() {
@@ -6810,7 +6829,7 @@
                 $this.$parent.trigger("hp.notify");
                 $this.handleNotify();
             });
-            
+
 
         if (hp.Utils.defaults.customerName !== "") {
             setTimeout(function() {
@@ -7453,7 +7472,7 @@
 
         cardProperties.customerToken = hp.Utils.getCustomerToken();
         cardProperties.instrumentId = hp.Utils.getInstrumentId();
-        
+
         hp.Utils.promptAvs().then(function() {
             var createInstrumentRequest = {
                 createPaymentInstrument: {
@@ -7573,7 +7592,7 @@
      * Export "hp"
      */
     window.hp = hp || {};
-    
+
     /*
      * The default message shown when transactions are in progress...
      */
@@ -7839,17 +7858,17 @@
         }
 
         var $html = [
-            '<div class="hp-transvault-visual">', 
-                '<a class="hp-submit-refresh" href="javascript:;" title="Refresh Transvault">', 
-                    '<img class="hp-submit-refresh-img" src="https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/icon-refresh.png" alt="Refresh Transvault Button" />', 
-                "</a>", 
-                '<div class="hp-transvault-visual-image {{isAlt}}">', 
-                    '<img class="event event-default" src="https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/terminal-loading.svg" alt="Status" />', 
-                "</div>", 
-                '<p class="hp-input-transvault-message {{isAlt}}">', 
-                    "Disconnected <span></span>", 
-                "</p>", 
-                '<button class="hp-submit hp-submit-danger">Cancel Request</button>', 
+            '<div class="hp-transvault-visual">',
+            '<a class="hp-submit-refresh" href="javascript:;" title="Refresh Transvault">',
+            '<img class="hp-submit-refresh-img" src="https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/icon-refresh.png" alt="Refresh Transvault Button" />',
+            "</a>",
+            '<div class="hp-transvault-visual-image {{isAlt}}">',
+            '<img class="event event-default" src="https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/terminal-loading.svg" alt="Status" />',
+            "</div>",
+            '<p class="hp-input-transvault-message {{isAlt}}">',
+            "Disconnected <span></span>",
+            "</p>",
+            '<button class="hp-submit hp-submit-danger">Cancel Request</button>',
             "</div>"
         ].join("");
 
@@ -9414,15 +9433,15 @@
     };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v4.4.21 */
+/* jQuery.HostedPayments - v4.4.22 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function($, window, document, undefined) {
-    
+
     var pluginName = "hp";
     var defaults = {};
 
-    defaults.version = "v4.4.21";
+    defaults.version = "v4.4.22";
     defaults.amount = 0;
     defaults.currencyLocale = "en-US";
     defaults.currencyCode = "USD";
@@ -9485,6 +9504,7 @@
     defaults.surchargeFee = 0;
     defaults.disableAutocomplete = false;
     defaults.alternativeSubmitButton = null;
+    defaults.vendor = null;
 
     function Plugin(element, options) {
         this._name = pluginName;
@@ -9496,6 +9516,10 @@
 
         if (typeof options.entryType !== "undefined") {
             options.entryType = hp.Utils.setEntryType(options.entryType);
+        }
+
+        if (typeof options.vendor !== "undefined") {
+            options.vendor = hp.Utils.setVendor(options.vendor);
         }
 
         if (typeof options.paymentType !== "undefined") {
@@ -9691,6 +9715,10 @@
             hp.Utils.defaults.entryType = hp.Utils.setEntryType($element.data("entryType"));
         }
 
+        if (typeof $element.data("vendor") !== "undefined") {
+            hp.Utils.defaults.vendor = hp.Utils.setVendor($element.data("vendor"));
+        }
+
         if (typeof $element.data("paymentType") !== "undefined") {
             hp.Utils.defaults.paymentType = hp.Utils.setPaymentType($element.data("paymentType"));
         }
@@ -9844,5 +9872,5 @@
         });
         return this;
     };
-    
+
 })(jQuery, window, document);

@@ -10,11 +10,9 @@
 </head>
 
 <body>
-    <div id="ets"  data-default-button-label="test"></div>
+    <div id="ets" data-default-button-label="test"></div>
 
     <script>
-
-
         var transactionId = hp.Utils.generateGUID();
 
         var callback = function(result) {
@@ -32,8 +30,10 @@
             apiKey: "2B3783A2-459B-4158-8A6D-FEAD9F0FB485",
             amount: 1.5,
             successCallback: callback,
-            errorCallback: callback,   
-            eventCallback: function() { console.log(arguments) }, 
+            errorCallback: callback,
+            eventCallback: function() {
+                console.log(arguments)
+            },
             paymentService: hp.PaymentService.TOKEN,
             debug: true,
             transactionId: transactionId,
@@ -42,13 +42,13 @@
             disableAutocomplete: false,
             checkHttpsConnection: false,
             allowAvsSkip: false,
-            promptForAvs: true,
+            promptForAvs: false,
             swapAchInputs: true,
-            paymentTypeOrder: [0,1],
+            paymentTypeOrder: [0, 1],
             customerName: "Erik Zettersten",
-            baseUrl: "https://stage-htv.emoney.com/v3/adapters"
+            baseUrl: "https://stage-htv.emoney.com/v3/adapters",
+            vendor: "Erik's Software.com"
         });
-
     </script>
 </body>
 
