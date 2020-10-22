@@ -1,55 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="jquery.hosted-payments.css">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="jquery.hosted-payments.css" />
     <script src="https://cdn.jsdelivr.net/gh/jquery/jquery@3.2/dist/jquery.min.js"></script>
     <script src="jquery.hosted-payments.js"></script>
-</head>
+  </head>
 
-<body>
+  <body>
+
     <div id="ets" data-default-button-label="test"></div>
-
+    <button id="reset">Click Here To Reset</button>
+    <button id="session">Click Here To Display Session Details</button>
     <script>
-        var transactionId = hp.Utils.generateGUID();
+      var transactionId = hp.Utils.generateGUID();
 
-        var callback = function(result) {
-
-            if (result.transaction_approval_code) {
-                alert(result.status + " - " + result.transaction_approval_code);
-            }
-
-            if (result.message) {
-                alert(result.status + " - " + result.message);
-            }
+      var callback = function (result) {
+        if (result.transaction_approval_code) {
+          alert(result.status + " - " + result.transaction_approval_code);
         }
+        if (result.message) {
+          alert(result.status + " - " + result.message);
+        }
+        console.log(result);
+      };
 
-        $("#ets").hp({
-            apiKey: "2B3783A2-459B-4158-8A6D-FEAD9F0FB485",
-            amount: 1.5,
-            successCallback: callback,
-            errorCallback: callback,
-            eventCallback: function() {
-                console.log(arguments)
-            },
-            paymentService: hp.PaymentService.TOKEN,
-            debug: true,
-            transactionId: transactionId,
-            surchargeFee: 2,
-            convenienceFee: 1,
-            disableAutocomplete: false,
-            checkHttpsConnection: false,
-            allowAvsSkip: false,
-            promptForAvs: false,
-            swapAchInputs: true,
-            paymentTypeOrder: [0, 1],
-            customerName: "Erik Zettersten",
-            baseUrl: "https://stage-htv.emoney.com/v3/adapters",
-            vendor: "Erik's Software.com"
-        });
+      var options = {
+        apiKey: window.prompt("API Key"),
+        amount: window.prompt("Amount"),
+        successCallback: callback,
+        errorCallback: callback,
+        debug: true,
+        transactionId: transactionId,
+        disableAutocomplete: false,
+        checkHttpsConnection: false,
+        allowAvsSkip: false,
+        promptForAvs: true,
+        swapAchInputs: true,
+        paymentTypeOrder: [0, 1],
+      };
+
+      $("#ets").hp(options);
+
+      $("#reset").on("click", function (e) {
+        e.preventDefault();
+        hp.Utils.reset(options);
+        console.log("reset", options);
+      });
+
+      $("#session").on("click", function (e) {
+        e.preventDefault();
+        console.log("session", hp.Utils.getSession());
+        $("#code").remove();
+        $("<pre />", {
+            id: "code",
+            html: "<code>" + JSON.stringify(hp.Utils.getSession()) + "</code>"
+        }).appendTo($("body"))
+      });
     </script>
-</body>
-
+  </body>
 </html>

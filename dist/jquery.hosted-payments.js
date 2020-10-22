@@ -3410,6 +3410,10 @@
                 result = hp.PaymentService.TEST;
                 break;
 
+            case "token":
+                result = hp.PaymentService.TOKEN;
+                break;
+
             default:
                 result = hp.PaymentService.EFT;
         }
@@ -3529,8 +3533,26 @@
         return vendor;
     }
 
+    var getCurrentHost = function() {
+        var anchor = $("<a href='#' />").eq(0)[0];
+        
+        if (anchor.hostname == "") {
+            return null;
+        }
+
+        return anchor.hostname;
+    }
+
     var getVendor = function() {
-        return hp.Utils.defaults.vendor;
+
+        var vendor = hp.Utils.defaults.vendor;
+
+        if (vendor == "" || vendor == undefined || vendor == null) {
+            vendor = getCurrentHost();
+            setVendor(vendor);
+        }
+
+        return vendor;
     }
 
     var setEntryType = function setEntryType(entryType) {
@@ -4109,6 +4131,10 @@
             amount: getAmount(),
             message: "Transaction processed",
             token: getSession().sessionToken,
+            client_id: "",
+            issuer_id: "",
+            issuer_name: "",
+            issuer_logo: "",
             transaction_id: "",
             transaction_sequence_number: "",
             transaction_approval_code: "",
@@ -4123,7 +4149,7 @@
             transaction_cashback: 0,
             transaction_total: getAmount(),
             correlation_id: getCorrelationId(),
-            customer_token: getCustomerToken(),
+            customer_token: getCustomerToken() || "",
             instrument_id: "",
             instrument_type: "",
             instrument_method: "Other",
@@ -4135,8 +4161,10 @@
             instrument_entry_type_description: "KEY_ENTRY",
             instrument_verification_results: "",
             created_on: new Date().toISOString(),
-            customer_name: "",
             customer_signature: "https://images.emoney.com/00000000",
+            customer_name: "",
+            customer_phone: "",
+            customer_email: "",
             anti_forgery_token: hp.Utils.defaults.antiForgeryToken,
             application_identifier: "Hosted Payments",
             application_response_code: "",
@@ -4309,6 +4337,12 @@
                 successResponse.instrument_expiration_date = expirationDate;
                 successResponse.instrument_entry_type_description = isTrack ? "MAGNETIC_SWIPE" : "KEY_ENTRY";
                 successResponse.customer_name = name;
+                successResponse.customer_phone = hp.Utils.getCustomerInfo().customerPhone;
+                successResponse.customer_email = hp.Utils.getCustomerInfo().customerEmail;
+                successResponse.client_id = res.clientId;
+                successResponse.issuer_id = res.issuerId;
+                successResponse.issuer_name = res.issuerName;
+                successResponse.issuer_logo = res.issuerLogo;
 
                 if (!hp.Utils.defaults.saveCustomer && typeof res.payment !== "undefined") {
                     successResponse.instrument_id = res.payment.instrumentId;
@@ -4687,6 +4721,11 @@
 
             hp.Utils.defaults.eventCallback($element);
 
+
+            if (typeof instance.clearAvsInputs === "function") {
+                instance.clearAvsInputs();
+            }
+
             var $avsPrompt = $element.find(".hp-avs-prompt"),
                 avsZipValue = "",
                 avsStreetValue = "";
@@ -4721,6 +4760,10 @@
             };
 
             var onlyNumberKey = function onlyNumberKey(e) {
+
+                if (e === undefined) {
+                    return true;
+                }
 
                 if (e.type !== "keyup") {
                     return true;
@@ -4970,7 +5013,7 @@
          * Skip sign in
          */
 
-        if (hp.Utils.defaults.paymentService === hp.PaymentService.TEST) {
+        if (hp.Utils.defaults.paymentService === hp.PaymentService.TEST || hp.Utils.defaults.paymentService === hp.PaymentService.TOKEN) {
 
             hp.Utils
                 .handleCaptcha()
@@ -5004,6 +5047,9 @@
 
         hp.Utils.handleCaptcha()
             .then(function() {
+
+                hp.Utils.log('%cYou\'re attempting to perform a sign-in via the browser. This behavior is strictly forbidden in production/live environments. Please review the Hosted Payments documentation for details on how to create sessions securely (https://elavonpayments.com/docs/hp/docs/plugin/02._additional_features).', 'background: #f9f2f4; color: #c7254e; display: block; padding: 5px; margin: 15px 0; border: 1px solid #c92c2c; border-radius: 3px;');
+
                 hp.Utils.makeRequest({
                     signIn: {
                         signInRequest: {
@@ -5676,6 +5722,7 @@
     hp.Utils.makeRequest = makeRequest;
     hp.Utils.getVendor = getVendor;
     hp.Utils.setVendor = setVendor;
+    hp.Utils.getCurrentHost = getCurrentHost;
     hp.Utils.validateCreditCardData = validateCreditCardData;
     hp.Utils.validateBankAccountData = validateBankAccountData;
     hp.Utils.validateEMoneyData = validateEMoneyData;
@@ -5891,6 +5938,19 @@
         $submit.html((hp.Utils.defaults.promptForAvs ? "Verify Billing Address &#10144;" : hp.Utils.defaults.defaultButtonLabel));
     };
 
+    CreditCard.prototype.clearAvsInputs = function() {
+        if (hp.Utils.defaults.promptForAvs) {
+            var $el = this.$element;
+            setTimeout(function(){
+                $el.find("#avsStreet").removeAttr("disabled").val("").trigger("keyup");
+                $el.find("#avsCity").removeAttr("disabled").val("").trigger("keyup");
+                $el.find("#avsZip").removeAttr("disabled").val("").trigger("keyup");
+                $el.find("#avsStreet").removeAttr("disabled").val("").trigger("keyup");
+                $el.find(".hp-avs-submit").attr("disabled", "disabled");
+            }, 0);
+        }
+    };
+
     CreditCard.prototype.createTemplate = function(defaultCardCharacters, defaultNameOnCardName, defaultDateCharacters) {
         if (hp.Utils.defaults.paymentTypeOrder.indexOf(0) < 0) {
             return "";
@@ -6057,16 +6117,21 @@
     };
 
     CreditCard.prototype.handleNameInput = function(name) {
-        if (name === "") {
+        
+        var isEmpty = false;
+
+        if (name === "" || name === " ") {
             $visualname.text(hp.Utils.defaults.defaultNameOnCardName);
-            return;
+            isEmpty = true;
         }
 
-        name = name.replace(/[0-9]/g, "");
-
-        this.formData.name = hp.Utils.escapeHTML(name);
-
-        $visualname.text(this.formData.name);
+        if (!isEmpty) {
+            name = name.replace(/[0-9]/g, "");
+            this.formData.name = hp.Utils.escapeHTML($.trim(name));
+            $visualname.text(this.formData.name);
+        } else {
+            this.formData.name = "";
+        }
     };
 
     CreditCard.prototype.handleCVVInput = function(cvv) {
@@ -6276,7 +6341,9 @@
 
         this.handleNotify();
 
-        if (!that.formData._isValid) {
+        var isValid = that.formData._isValid;
+
+        if (!isValid) {
             $visualcard.addClass("hp-card-invalid");
             setTimeout(function() {
                 $visualcard.removeClass("hp-card-invalid");
@@ -6392,7 +6459,7 @@
 
         hp.Utils.setContainerClass($this.$element);
 
-        $cc.payment("formatCardNumber").on("keyup", function() {
+        $cc.payment("formatCardNumber").on("keyup blur", function() {
             var cardNumber = $(this).val();
             var cardType = $.payment.cardType(cardNumber);
             $this.$parent.removeClass("hp-back");
@@ -6411,7 +6478,7 @@
             $this.$parent.addClass("hp-back");
             $this.$parent.trigger("hp.notify");
             $this.handleNotify();
-        }).on("keyup", function(e) {
+        }).on("keyup blur", function(e) {
             var cvv = $(this).val();
             $this.handleCVVInput(cvv);
             $this.$parent.trigger("hp.cvv", cvv);
@@ -6423,7 +6490,7 @@
             $this.$parent.trigger("hp.notify");
             $this.handleNotify();
             $this.$parent.removeClass("hp-back");
-        }).on("keyup", function(e) {
+        }).on("keyup blur", function(e) {
             var name = $(this).val();
             $this.handleNameInput(name);
             $this.$parent.trigger("hp.name", name);
@@ -6485,12 +6552,10 @@
         var $this = this;
 
         hp.Utils.validateCreditCardData(this.formData, function(error, data) {
+            
             $all.removeClass("hp-error");
 
-            if (!error) {
-                $this.formData._isValid = true;
-                return;
-            }
+            $this.formData._isValid = (error === undefined || error === null);
 
             for (var err in error) {
                 if (error[err].type === "cc") {
@@ -6513,7 +6578,7 @@
                 }
 
                 if (error[err].type === "name") {
-                    if ($name.val() !== "") {
+                    if ($name.val() !== "" && $name.val() !== " ") {
                         $name.parent().addClass("hp-error");
                     }
                 }
@@ -6757,13 +6822,21 @@
     };
 
     BankAccount.prototype.handleNameInput = function(name) {
-        if (name === "") {
-            return $visualfullname.html(hp.Utils.defaults.defaultName);
+
+        var isEmpty = false;
+
+        if (name === "" || name === " ") {
+            $visualfullname.html(hp.Utils.defaults.defaultName);
+            isEmpty = true;
         }
 
-        name = name.replace(/[0-9]/g, "");
-        this.formData.name = hp.Utils.escapeHTML($.trim(name));
-        $visualfullname.text(this.formData.name);
+        if (!isEmpty) {
+            name = name.replace(/[0-9]/g, "");
+            this.formData.name = hp.Utils.escapeHTML($.trim(name));
+            $visualfullname.text(this.formData.name);
+        } else {
+            this.formData.name = "";
+        }
     };
 
     BankAccount.prototype.attachEvents = function() {
@@ -6878,11 +6951,8 @@
         hp.Utils.validateBankAccountData(this.formData, function(error, data) {
 
             $all.removeClass("hp-error");
-
-            if (!error) {
-                $this.formData._isValid = true;
-                return;
-            }
+            
+            $this.formData._isValid = (error === undefined || error === null);
 
             for (var err in error) {
                 if (error[err].type === "accountNumber") {
@@ -8187,10 +8257,16 @@
             customer_name: props.CHN,
             customer_signature: props.SD,
             correlation_id: $this.correlationId,
-            customer_token: hp.Utils.getCustomerToken(),
+            customer_token: hp.Utils.getCustomerToken() || "",
             application_identifier: props.AID,
             application_response_code: props.ARC,
-            application_issuer_data: props.IAD
+            application_issuer_data: props.IAD,
+            customer_phone: hp.Utils.getCustomerInfo().customerPhone,
+            customer_email: hp.Utils.getCustomerInfo().customerEmail,
+            client_id: "",
+            issuer_id: "",
+            issuer_name: "",
+            issuer_logo: ""
         };
         $this.$parent.trigger("hp.transvaultSuccess", successResponse);
         $this.removeAppRedirectLinkForm();
@@ -9433,7 +9509,7 @@
     };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v4.4.22 */
+/* jQuery.HostedPayments - v4.4.24 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function($, window, document, undefined) {
@@ -9441,7 +9517,7 @@
     var pluginName = "hp";
     var defaults = {};
 
-    defaults.version = "v4.4.22";
+    defaults.version = "v4.4.24";
     defaults.amount = 0;
     defaults.currencyLocale = "en-US";
     defaults.currencyCode = "USD";
