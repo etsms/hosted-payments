@@ -3265,7 +3265,7 @@
     hp.PaymentService.EFT = "EFT";
     hp.PaymentService.EMONEY = "EMONEY";
     hp.PaymentService.TEST = "TEST";
-    hp.PaymentService.TOKEN = "TEST";
+    hp.PaymentService.TOKEN = "TOKEN";
 
     hp.EntryType = {};
     hp.EntryType.DEVICE_CAPTURED = "DEVICE_CAPTURED";
