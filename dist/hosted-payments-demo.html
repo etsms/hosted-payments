@@ -33,12 +33,13 @@
         errorCallback: callback,
         debug: true,
         transactionId: transactionId,
+        paymentService: "TEST",
         disableAutocomplete: false,
         checkHttpsConnection: false,
         allowAvsSkip: false,
         promptForAvs: true,
         swapAchInputs: true,
-        paymentTypeOrder: [0, 1],
+        paymentTypeOrder: [0, 1]
       };
 
       $("#ets").hp(options);
