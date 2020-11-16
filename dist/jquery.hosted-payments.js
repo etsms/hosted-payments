@@ -3533,6 +3533,33 @@
         return vendor;
     }
 
+    var setContextId = function(contextId) {
+
+        contextId = truncateString(contextId);
+
+        hp.Utils.defaults.contextId = contextId;
+        log("Context ID: " + contextId);
+        return contextId;
+    }
+
+    var getContextId = function() {
+        var contextId = hp.Utils.defaults.contextId;
+
+        if (contextId == "" || contextId == undefined || contextId == null) {
+            return null;
+        }
+
+        return contextId
+    }
+
+    var truncateString = function(str) {
+        if (str.length > 32) {
+            return str.slice(0, 32);
+        } else {
+            return str;
+        }
+    }
+
     var getCurrentHost = function() {
         var anchor = $("<a href='#' />").eq(0)[0];
         
@@ -5722,6 +5749,9 @@
     hp.Utils.makeRequest = makeRequest;
     hp.Utils.getVendor = getVendor;
     hp.Utils.setVendor = setVendor;
+    hp.Utils.getContextId = getContextId;
+    hp.Utils.setContextId = setContextId;
+    hp.Utils.truncateString = truncateString;
     hp.Utils.getCurrentHost = getCurrentHost;
     hp.Utils.validateCreditCardData = validateCreditCardData;
     hp.Utils.validateBankAccountData = validateBankAccountData;
@@ -9509,7 +9539,7 @@
     };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v4.4.27 */
+/* jQuery.HostedPayments - v5.0.0 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function($, window, document, undefined) {
@@ -9517,7 +9547,7 @@
     var pluginName = "hp";
     var defaults = {};
 
-    defaults.version = "v4.4.27";
+    defaults.version = "v5.0.0";
     defaults.amount = 0;
     defaults.currencyLocale = "en-US";
     defaults.currencyCode = "USD";
@@ -9581,6 +9611,7 @@
     defaults.disableAutocomplete = false;
     defaults.alternativeSubmitButton = null;
     defaults.vendor = null;
+    defaults.contextId = null;
 
     function Plugin(element, options) {
         this._name = pluginName;
@@ -9596,6 +9627,10 @@
 
         if (typeof options.vendor !== "undefined") {
             options.vendor = hp.Utils.setVendor(options.vendor);
+        }
+
+        if (typeof options.contextId !== "undefined") {
+            options.vendor = hp.Utils.setContextId(options.contextId);
         }
 
         if (typeof options.paymentType !== "undefined") {
@@ -9793,6 +9828,10 @@
 
         if (typeof $element.data("vendor") !== "undefined") {
             hp.Utils.defaults.vendor = hp.Utils.setVendor($element.data("vendor"));
+        }
+
+        if (typeof $element.data("contextId") !== "undefined") {
+            hp.Utils.defaults.vendor = hp.Utils.setContextId($element.data("contextId"));
         }
 
         if (typeof $element.data("paymentType") !== "undefined") {
