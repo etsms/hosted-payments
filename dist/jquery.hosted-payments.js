@@ -3356,6 +3356,7 @@
                             token: accessToken,
                             customerToken: customerToken,
                             instrumentId: instrumentId,
+                            contextId: hp.Utils.getContextId(),
                             planId: planId
                         }
                     }
@@ -4195,7 +4196,8 @@
             anti_forgery_token: hp.Utils.defaults.antiForgeryToken,
             application_identifier: "Hosted Payments",
             application_response_code: "",
-            application_issuer_data: ""
+            application_issuer_data: "",
+            context_id: hp.Utils.getContextId()
         };
     };
 
@@ -4415,7 +4417,8 @@
                                 phone: hp.Utils.getCustomerInfo().customerPhone,
                                 email: hp.Utils.getCustomerInfo().customerEmail,
                                 sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
-                                sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications
+                                sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
+                                contextId: hp.Utils.getContextId()
                             }
                         }
                     };
@@ -4461,7 +4464,8 @@
                     email: hp.Utils.getCustomerInfo().customerEmail,
                     sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
                     sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
-                    transactionId: transactionId
+                    transactionId: transactionId,
+                    contextId: hp.Utils.getContextId()
                 }
             }
         };
@@ -5080,7 +5084,8 @@
                 hp.Utils.makeRequest({
                     signIn: {
                         signInRequest: {
-                            apiKey: apiKey
+                            apiKey: apiKey,
+                            contextId: hp.Utils.getContextId()
                         }
                     }
                 }).then(function(res) {
@@ -5201,7 +5206,8 @@
                     balance: {
                         balanceRequest: {
                             token: sessionId,
-                            cardNumber: cardNumber
+                            cardNumber: cardNumber,
+                            contextId: hp.Utils.getContextId()
                         }
                     }
                 }),
@@ -6187,6 +6193,7 @@
                         sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
                         sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
                         correlationId: hp.Utils.getCorrelationId(),
+                        contextId: hp.Utils.getContextId(),
                         __request: createInstrumentRequest
                     }
                 }
@@ -6211,6 +6218,7 @@
                         entryType: hp.Utils.defaults.entryType,
                         properties: cardProperties,
                         correlationId: hp.Utils.getCorrelationId(),
+                        contextId: hp.Utils.getContextId(),
                         __request: createInstrumentRequest
                     }
                 }
@@ -6238,6 +6246,7 @@
                         email: hp.Utils.getCustomerInfo().customerEmail,
                         sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
                         sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
+                        contextId: hp.Utils.getContextId(),
                         __request: createInstrumentRequest
                     }
                 }
@@ -6285,6 +6294,7 @@
                         email: hp.Utils.getCustomerInfo().customerEmail,
                         sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
                         sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
+                        contextId: hp.Utils.getContextId(),
                         __request: res.request
                     }
                 }
@@ -6309,6 +6319,7 @@
                         entryType: hp.Utils.defaults.entryType,
                         instrumentId: that.instrumentId,
                         correlationId: hp.Utils.getCorrelationId(),
+                        contextId: hp.Utils.getContextId(),
                         __request: res.request
                     }
                 }
@@ -6336,6 +6347,7 @@
                         email: hp.Utils.getCustomerInfo().customerEmail,
                         sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
                         sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
+                        contextId: hp.Utils.getContextId(),
                         __request: res.request
                     }
                 }
@@ -6402,6 +6414,7 @@
                             email: hp.Utils.getCustomerInfo().customerEmail,
                             sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
                             sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
+                            contextId: hp.Utils.getContextId(),
                             properties: {
                                 cardNumber: that.formData.cardNumber,
                                 expirationDate: that.formData._expiryMonth + "/" + that.formData._expiryYear,
@@ -7034,6 +7047,7 @@
                         email: hp.Utils.getCustomerInfo().customerEmail,
                         sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
                         sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
+                        contextId: hp.Utils.getContextId(),
                         __request: createPaymentInstrumentRequest
                     }
                 }
@@ -7052,6 +7066,7 @@
                         email: hp.Utils.getCustomerInfo().customerEmail,
                         sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
                         sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
+                        contextId: hp.Utils.getContextId(),
                         __request: createPaymentInstrumentRequest
                     }
                 }
@@ -7092,6 +7107,7 @@
                         email: hp.Utils.getCustomerInfo().customerEmail,
                         sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
                         sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
+                        contextId: hp.Utils.getContextId(),
                         __request: res.request
                     }
                 }
@@ -7111,6 +7127,7 @@
                         email: hp.Utils.getCustomerInfo().customerEmail,
                         sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
                         sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
+                        contextId: hp.Utils.getContextId(),
                         __request: res.request
                     }
                 }
@@ -7174,6 +7191,7 @@
                     email: hp.Utils.getCustomerInfo().customerEmail,
                     sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
                     sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
+                    contextId: hp.Utils.getContextId(),
                     properties: {
                         accountNumber: $this.formData.accountNumber,
                         routingNumber: $this.formData.routingNumber,
@@ -7399,6 +7417,7 @@
                         email: hp.Utils.getCustomerInfo().customerEmail,
                         sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
                         sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
+                        contextId: hp.Utils.getContextId(),
                         __request: createInstrumentRequest
                     }
                 }
@@ -7448,6 +7467,7 @@
                         email: hp.Utils.getCustomerInfo().customerEmail,
                         sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
                         sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
+                        contextId: hp.Utils.getContextId(),
                         __request: res.request
                     }
                 }
@@ -7467,6 +7487,7 @@
                         email: hp.Utils.getCustomerInfo().customerEmail,
                         sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
                         sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
+                        contextId: hp.Utils.getContextId(),
                         __request: res.request
                     }
                 }
@@ -7587,6 +7608,7 @@
                         email: hp.Utils.getCustomerInfo().customerEmail,
                         sendEmailNotifications: hp.Utils.getCustomerInfo().sendEmailNotifications,
                         sendSmsNotifications: hp.Utils.getCustomerInfo().sendSmsNotifications,
+                        contextId: hp.Utils.getContextId(),
                         properties: cardProperties,
                         billingAddress: {
                             addressLine1: hp.Utils.defaults.billingAddress.addressLine1,
@@ -8296,7 +8318,8 @@
             client_id: "",
             issuer_id: "",
             issuer_name: "",
-            issuer_logo: ""
+            issuer_logo: "",
+            context_id: hp.Utils.getContextId()
         };
         $this.$parent.trigger("hp.transvaultSuccess", successResponse);
         $this.removeAppRedirectLinkForm();
@@ -8330,7 +8353,8 @@
                     action: "CANCEL",
                     browserId: this.browserId,
                     shouldVoid: hp.Utils.defaults.shouldVoidOnCancel,
-                    documentIndex: hp.Utils.defaults.documentIndex
+                    documentIndex: hp.Utils.defaults.documentIndex,
+                    contextId: hp.Utils.getContextId()
                 }
             }
         });
@@ -8363,7 +8387,8 @@
                     action: "CANCEL",
                     browserId: $this.browserId,
                     shouldVoid: hp.Utils.defaults.shouldVoidOnCancel,
-                    documentIndex: hp.Utils.defaults.documentIndex
+                    documentIndex: hp.Utils.defaults.documentIndex,
+                    contextId: hp.Utils.getContextId()
                 }
             }
         });
@@ -8424,6 +8449,7 @@
                         voidRequest: {
                             token: hp.Utils.getSession().sessionToken,
                             transactionId: $this.transactionId,
+                            contextId: hp.Utils.getContextId(),
                             amount: hp.Utils.getAmount()
                         }
                     }
@@ -8490,7 +8516,8 @@
                         terminalId: $this.terminalId,
                         action: hp.Utils.defaults.paymentType,
                         browserId: $this.browserId,
-                        documentIndex: hp.Utils.defaults.documentIndex
+                        documentIndex: hp.Utils.defaults.documentIndex,
+                        contextId: hp.Utils.getContextId()
                     }
                 }
             });
