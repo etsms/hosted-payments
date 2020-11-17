@@ -142,6 +142,35 @@ $spriteUrl: $cdnRootUrl + "/dist/images/sprite.png"
         margin: 0 0 0 -1px
         padding: 0
 
+    .hp-captcha-container
+
+        +box-shadow(inset 1px 1px 0 $white, inset -1px -1px 0 $white)
+        +box-sizing(border-box)
+        +border-radius(3px)
+
+        position: absolute
+        z-index: 11
+
+        display: none
+        width: 100%
+        height: 100%
+        background: rgba($pureWhite, 0.93)
+        border: 1px solid $gray
+
+        &.hp-captcha-container-active
+            display: block
+
+        #hp-captcha-selector
+            height: 100%
+            display: flex
+            justify-content: center
+            align-items: center 
+
+        [data-hcaptcha-widget-id], 
+        > div > div
+            margin: 0 auto
+            display: block
+
     .hp-loading-container,
     .hp-error-container,
     .hp-app-link-container

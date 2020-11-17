@@ -3267,6 +3267,10 @@
     hp.PaymentService.TEST = "TEST";
     hp.PaymentService.TOKEN = "TOKEN";
 
+    hp.CaptchaType = {};
+    hp.CaptchaType.HCAPTCHA = "hcaptcha";
+    hp.CaptchaType.GOOGLE = "google";
+
     hp.EntryType = {};
     hp.EntryType.DEVICE_CAPTURED = "DEVICE_CAPTURED";
     hp.EntryType.KEYED_CARD_PRESENT = "KEYED_CARD_PRESENT";
@@ -3425,7 +3429,7 @@
         return result;
     };
 
-    var isFormValid = function() {
+    var isFormValid = function isFormValid() {
 
         try {
 
@@ -3529,30 +3533,30 @@
         }
     };
 
-    var setVendor = function(vendor) {
+    var setVendor = function setVendor(vendor) {
         hp.Utils.defaults.vendor = vendor;
         log("Vendor: " + vendor);
         return vendor;
     }
 
-    var setContextId = function(contextId) {
+    var setContextId = function setContextId(contextId) {
         contextId = truncateString(contextId);
         hp.Utils.defaults.contextId = contextId;
         log("Context ID: " + contextId);
         return contextId;
     }
 
-    var getContextId = function() {
+    var getContextId = function getContextId() {
         var contextId = hp.Utils.defaults.contextId;
 
         if (contextId == "" || contextId == undefined || contextId == null) {
             return null;
         }
 
-        return contextId
+        return window.encodeURIComponent(window.btoa(contextId));
     }
 
-    var getCaptchaVerificationToken = function() {
+    var getCaptchaVerificationToken = function getCaptchaVerificationToken() {
         var captchaVerificationToken = hp.Utils.defaults.captchaVerificationToken;
 
         if (captchaVerificationToken == "" || captchaVerificationToken == undefined || captchaVerificationToken == null) {
@@ -3562,13 +3566,13 @@
         return captchaVerificationToken
     }
 
-    var setCaptchaVerificationToken = function(captchaVerificationToken) {
+    var setCaptchaVerificationToken = function setCaptchaVerificationToken(captchaVerificationToken) {
         hp.Utils.defaults.captchaVerificationToken = captchaVerificationToken;
         log("Captcha Verification Token: " + captchaVerificationToken);
         return captchaVerificationToken;
     }
 
-    var truncateString = function(str) {
+    var truncateString = function truncateString(str) {
         if (str.length > 32) {
             return str.slice(0, 32);
         } else {
@@ -3576,7 +3580,7 @@
         }
     }
 
-    var getCurrentHost = function() {
+    var getCurrentHost = function getCurrentHost() {
         var anchor = $("<a href='#' />").eq(0)[0];
         
         if (anchor.hostname == "") {
@@ -3586,7 +3590,7 @@
         return anchor.hostname;
     }
 
-    var getVendor = function() {
+    var getVendor = function getVendor() {
 
         var vendor = hp.Utils.defaults.vendor;
 
@@ -3659,7 +3663,7 @@
         return result;
     };
 
-    var log = function(undefined) {
+    var log = function log(undefined) {
         var Log = Error; // does this do anything?  proper inheritance...?
 
         Log.prototype.write = function(args) {
@@ -3824,9 +3828,12 @@
         var $wrapper = [
             '<div class="hp hp-form">',
             '<div class="hp-loading-container">',
-            '<span class="hp-loading-text">Loading</span>',
-            '<div class="hp-loading"><span></span><span></span><span></span><span></span></div>',
+                '<span class="hp-loading-text">Loading</span>',
+                '<div class="hp-loading"><span></span><span></span><span></span><span></span></div>',
             "</div>",
+            '<div class="hp-captcha-container">',
+                '<div id="hp-captcha-selector"></div>',
+            '</div>',
             '<div class="hp-error-container">',
             '<span class="hp-error-text">{{error}} </span>',
             '<div class="hp-error-message"></div>',
@@ -4897,14 +4904,23 @@
         return deferred;
     };
 
-    var makeRequest = function makeRequest(data, isSync) {
+    var isCaptchaRequiredException = function isCaptchaRequiredException(errorResponse) {
+        return errorResponse.responseJSON != undefined && errorResponse.responseJSON.error != undefined && errorResponse.responseJSON.error.reasonCode === "captcha_required.exception";
+    }
 
-        var deferred = jQuery.Deferred();
+    var makeRequest = function makeRequest(data, isSync, existingDeferred) {
+
+        var deferred = existingDeferred ?? jQuery.Deferred();
         var url = hp.Utils.defaults.baseUrl + encodeURI("?dt=" + new Date().getTime());
         var vendor = hp.Utils.getVendor();
+        var contextId = hp.Utils.getContextId();
 
         if (vendor != null && vendor != undefined) {
             url = url + encodeURI("&vendor=" + vendor);
+        }
+
+        if (contextId != null && contextId != undefined) {
+            url = url + encodeURI("&contextId=" + contextId);
         }
 
         url = url + encodeURI("&version=" + hp.Utils.getVersion());
@@ -4933,8 +4949,47 @@
 
             var result = getObjectResponseFromData(res);
             result.request = requestData;
+            
             deferred.resolve(result);
-        }).fail(deferred.reject)["catch"](deferred.reject);
+        }).fail(function(errorResponse) {
+
+            if (isCaptchaRequiredException(errorResponse)) {
+
+                log("Got an exception from the server: ", errorResponse.responseJSON.error);
+
+                setCaptchaKey(errorResponse.responseJSON.error.captchaSiteKey);
+                setCaptchaVendor(errorResponse.responseJSON.error.captchaVendor);
+
+                log("Attempting to inject captcha...");
+
+                injectCaptchaScript()
+                    .then(function(tokenResponse) {
+                        setCaptchaVerificationToken(tokenResponse);
+                        log("Reruning previous request...");
+                        
+                        getObjectResponseFromData(data)
+                            .captchaVerificationToken = getCaptchaVerificationToken();
+
+                        makeRequest(data, isSync, deferred);
+                    }, function() {
+                        log("Injection failed...", arguments);
+                        deferred.reject.apply(null, arguments);
+                    });
+
+                return;
+            }
+
+            deferred.reject.apply(null, arguments);
+
+        })["catch"](function(errorResponse){
+
+            if (isCaptchaRequiredException(errorResponse)) {
+                return;
+            }
+
+            deferred.reject.apply(null, arguments);
+        });
+
         return deferred;
     };
 
@@ -5109,6 +5164,13 @@
                 }).then(function(res) {
                     hp.Utils.setSession(res.token);
                     hp.Utils.setTimer(res.ttl);
+                    
+                    if (res.captchaEnabled) {
+                        hp.Utils.log("Sign In: Captcha enabled.");
+                        hp.Utils.setCaptchaKey(res.captchaSiteKey);
+                        hp.Utils.setCaptchaVendor(res.captchaVendor);
+                    }
+
                     deferred.resolve(res);
                     hp.Utils.log("Sign In: Retrieved from server.");
                     hp.Utils.log("Sign In: Time remaining is (seconds) -> ", res.ttl);
@@ -5232,6 +5294,7 @@
                 }),
                 async: false
             };
+
         $.ajax(settings).done(function(res) {
             if (res.balanceResponse) {
                 balance = res.balanceResponse.balance;
@@ -5283,6 +5346,182 @@
         }
 
         return callback(null, formData);
+    };
+
+    var hasCaptchaSet = function hasCaptchaSet() {
+        return (getCaptchaVendor() != null && getCaptchaKey() != null);
+    }
+
+    var getCaptchaVendor = function getCaptchaVendor() {
+
+        var captchaVendor = hp.Utils.defaults.captchaVendor;
+
+        if (captchaVendor == "" || captchaVendor == undefined || captchaVendor == null) {
+            return null;
+        }
+
+        return captchaVendor;
+    };
+
+    var setCaptchaVendor = function setCaptchaVendor(vendor) {
+
+        if (vendor == "" || vendor == undefined || vendor == null) {
+            return;
+        }
+
+        if (vendor.toLowerCase() != hp.CaptchaType.GOOGLE) {
+            vendor = hp.CaptchaType.HCAPTCHA;
+        }
+
+        hp.Utils.defaults.captchaVendor = vendor;
+
+        log("Captcha Vendor: " + vendor);
+
+        return vendor;
+    };
+
+    var getCaptchaKey = function getCaptchaKey() {
+
+        var captchaKey = hp.Utils.defaults.captchaKey;
+
+        if (captchaKey == "" || captchaKey == undefined || captchaKey == null) {
+            return null;
+        }
+
+        return captchaKey;
+    };
+
+    var setCaptchaKey = function setCaptchaKey(captchaKey) {
+        
+        if (captchaKey == "" || captchaKey == undefined || captchaKey == null) {
+            return;
+        }
+
+        hp.Utils.defaults.captchaKey = captchaKey;
+
+        log("Captcha Key: " + captchaKey);
+
+        return captchaKey;
+    };
+
+    var renderCaptcha = function renderCaptcha(deferred, alreadyRendered) {
+
+        var captchaType = getCaptchaVendor();
+        var captchaKey = getCaptchaKey();
+
+        var $captchaContainer = getInstance()
+            .$element
+            .find(".hp-captcha-container");
+
+        var args = [
+            'hp-captcha-selector', 
+            {
+                'sitekey' : captchaKey,
+                'callback' : function(response) {
+                    log("Captcha response from: " + captchaType + " - " + response);
+                    deferred.resolve(response);
+                    $captchaContainer.removeClass("hp-captcha-container-active");
+                },
+                'expired-callback': function(err) {
+                    log("Captcha expired: ", err);
+                    deferred.reject(err);
+                },
+                'error-callback': function(err) {
+                    log("Captcha error: ", err);
+                    deferred.reject(err);
+                }
+            }
+        ];
+
+        if(captchaType === hp.CaptchaType.GOOGLE) {
+            waitForCaptchaScriptToLoad(function() {
+                return typeof window.grecaptcha !== "undefined";
+            }).then(function(){
+                $captchaContainer.addClass("hp-captcha-container-active");
+                if (!alreadyRendered) {
+                    grecaptcha.render.apply(null, args);
+                } else {
+                    grecaptcha.reset();
+                }
+            });
+        } else {
+            waitForCaptchaScriptToLoad(function() {
+                return typeof window.hcaptcha !== "undefined";
+            }).then(function(){
+                $captchaContainer.addClass("hp-captcha-container-active");
+                if (!alreadyRendered) {
+                    hcaptcha.render.apply(null, args);
+                } else {
+                    hcaptcha.reset();
+                }
+            });
+        }
+
+    };
+
+    var injectCaptchaScript = function injectCaptchaScript() {
+
+        var deferred = jQuery.Deferred();
+        var captchaType = getCaptchaVendor();
+        var scriptUrl = "https://www.google.com/recaptcha/api.js";
+
+        if (captchaType !== hp.CaptchaType.GOOGLE) {
+            scriptUrl = "https://hcaptcha.com/1/api.js";
+        }
+
+        log("Injecting captcha code for", captchaType, "at", scriptUrl);
+
+        if (!hasCaptchaSet()) {
+            log("Captcha was not set correctly.");
+            deferred.reject();
+            return deferred;
+        }
+
+        showLoader();
+
+        if (typeof window.grecaptcha !== "undefined" || typeof window.hcaptcha !== "undefined") {
+            log("Re-rendering captcha instance");
+            renderCaptcha(deferred, true);
+            return deferred;
+        }
+
+        $.getScript(scriptUrl).then(function(){
+            log("<script> was injected for type", captchaType, "with src=", scriptUrl);
+            renderCaptcha(deferred, false);
+        }, deferred.reject)["catch"](deferred.reject);
+
+        return deferred;
+    };
+
+    var waitForCaptchaScriptToLoad = function(conditionCallBack) {
+        var deferred = jQuery.Deferred();
+        var interval = window.setInterval(function() {
+            
+            log("Waiting for captcha provider to appear on the DOM...");
+
+            if (typeof(conditionCallBack) !== "function") {
+
+                log("No condition specified. Not waiting any longer...");
+
+                window.clearInterval(interval);
+                deferred.resolve();
+                return;
+            }
+
+            if (conditionCallBack()) {
+
+                log("Condition completed. Captcha service loaded on DOM.");
+
+                window.clearInterval(interval);
+                deferred.resolve();
+                return;
+            }
+
+            
+            log("Condition incomplete. Captcha service has not loaded on DOM yet. Trying again in 1 second.");
+
+        }, 1000)
+        return deferred;
     };
 
     var validateBankAccountData = function validateBankAccountData(formData, callback) {
@@ -5772,6 +6011,13 @@
     hp.Utils.hasAlternativeSubmitButton = hasAlternativeSubmitButton;
     hp.Utils.handleLegacyCssClassApplication = handleLegacyCssClassApplication;
     hp.Utils.makeRequest = makeRequest;
+    hp.Utils.hasCaptchaSet = hasCaptchaSet;
+    hp.Utils.injectCaptchaScript = injectCaptchaScript;
+    hp.Utils.waitForCaptchaScriptToLoad = waitForCaptchaScriptToLoad;
+    hp.Utils.getCaptchaVendor = getCaptchaVendor;
+    hp.Utils.setCaptchaVendor = setCaptchaVendor;
+    hp.Utils.setCaptchaKey = setCaptchaKey;
+    hp.Utils.getCaptchaKey = getCaptchaKey;
     hp.Utils.getVendor = getVendor;
     hp.Utils.setVendor = setVendor;
     hp.Utils.getCaptchaVerificationToken = getCaptchaVerificationToken;
@@ -9681,6 +9927,8 @@
     defaults.vendor = null;
     defaults.contextId = null;
     defaults.captchaVerificationToken = null;
+    defaults.captchaKey = null;
+    defaults.captchaVendor = null;
 
     function Plugin(element, options) {
         this._name = pluginName;
@@ -9696,6 +9944,14 @@
 
         if (typeof options.vendor !== "undefined") {
             options.vendor = hp.Utils.setVendor(options.vendor);
+        }
+
+        if (typeof options.captchaKey !== "undefined") {
+            options.captchaKey = hp.Utils.setCaptchaKey(options.captchaKey);
+        }
+
+        if (typeof options.captchaVendor !== "undefined") {
+            options.captchaVendor = hp.Utils.setCaptchaVendor(options.captchaVendor);
         }
 
         if (typeof options.contextId !== "undefined") {
@@ -9901,6 +10157,14 @@
 
         if (typeof $element.data("vendor") !== "undefined") {
             hp.Utils.defaults.vendor = hp.Utils.setVendor($element.data("vendor"));
+        }
+
+        if (typeof $element.data("captchaKey") !== "undefined") {
+            hp.Utils.defaults.captchaKey = hp.Utils.setCaptchaKey($element.data("captchaKey"));
+        }
+
+        if (typeof $element.data("captchaVendor") !== "undefined") {
+            hp.Utils.defaults.captchaVendor = hp.Utils.setCaptchaVendor($element.data("captchaVendor"));
         }
 
         if (typeof $element.data("contextId") !== "undefined") {
