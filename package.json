@@ -1,6 +1,6 @@
 {
     "name": "hosted-payments",
-    "version": "3.8.3",
+    "version": "5.0.1",
     "description": "A library for building checkout solutions with EMoney",
     "homepage": "https://www.etsms.com/docs/hosted-payments",
     "author": "Erik Zettersten <erik.zettersten@etsms.com> (https://github.com/zettersten)",
@@ -45,7 +45,8 @@
         "gulp-watch": "^5.0.1",
         "lodash.template": ">=4.5.0",
         "minimist": ">=1.2.3",
-        "kind-of": ">=6.0.3"
+        "kind-of": ">=6.0.3",
+        "yargs-parser": ">=5.0.0-security.0"
     },
     "repository": {
         "type": "git",
