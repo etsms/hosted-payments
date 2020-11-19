@@ -5269,7 +5269,7 @@
       return null;
     }
 
-    return captchaVendor;
+    return $.trim(captchaVendor.toLowerCase());
   };
 
   var setCaptchaVendor = function setCaptchaVendor(vendor) {
@@ -5277,7 +5277,9 @@
       return;
     }
 
-    if (vendor.toLowerCase() != hp.CaptchaType.GOOGLE) {
+    vendor = $.trim(vendor.toLowerCase());
+
+    if (vendor != hp.CaptchaType.GOOGLE) {
       vendor = hp.CaptchaType.HCAPTCHA;
     }
 
@@ -9774,14 +9776,14 @@
   };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v5.0.1 */
+/* jQuery.HostedPayments - v5.0.2 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function ($, window, document, undefined) {
   var pluginName = "hp";
   var defaults = {};
 
-  defaults.version = "v5.0.1";
+  defaults.version = "v5.0.2";
   defaults.amount = 0;
   defaults.currencyLocale = "en-US";
   defaults.currencyCode = "USD";
