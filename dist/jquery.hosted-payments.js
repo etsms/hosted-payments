@@ -3465,7 +3465,6 @@
   };
 
   var setContextId = function setContextId(contextId) {
-    contextId = truncateString(contextId);
     hp.Utils.defaults.contextId = contextId;
     log("Context ID: " + contextId);
     return contextId;
@@ -3478,7 +3477,7 @@
       return null;
     }
 
-    return window.encodeURIComponent(window.btoa(contextId));
+    return contextId;
   };
 
   var getCaptchaVerificationToken = function getCaptchaVerificationToken() {
@@ -3495,14 +3494,6 @@
     hp.Utils.defaults.captchaVerificationToken = captchaVerificationToken;
     log("Captcha Verification Token: " + captchaVerificationToken);
     return captchaVerificationToken;
-  };
-
-  var truncateString = function truncateString(str) {
-    if (str.length > 32) {
-      return str.slice(0, 32);
-    } else {
-      return str;
-    }
   };
 
   var getCurrentHost = function getCurrentHost() {
@@ -4811,14 +4802,9 @@
     var deferred = existingDeferred ?? jQuery.Deferred();
     var url = hp.Utils.defaults.baseUrl + encodeURI("?dt=" + new Date().getTime());
     var vendor = hp.Utils.getVendor();
-    var contextId = hp.Utils.getContextId();
 
     if (vendor != null && vendor != undefined) {
       url = url + encodeURI("&vendor=" + vendor);
-    }
-
-    if (contextId != null && contextId != undefined) {
-      url = url + encodeURI("&contextId=" + contextId);
     }
 
     url = url + encodeURI("&version=" + hp.Utils.getVersion());
@@ -5957,7 +5943,6 @@
   hp.Utils.setCaptchaVerificationToken = setCaptchaVerificationToken;
   hp.Utils.getContextId = getContextId;
   hp.Utils.setContextId = setContextId;
-  hp.Utils.truncateString = truncateString;
   hp.Utils.getCurrentHost = getCurrentHost;
   hp.Utils.validateCreditCardData = validateCreditCardData;
   hp.Utils.validateBankAccountData = validateBankAccountData;
@@ -9776,14 +9761,14 @@
   };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v5.0.2 */
+/* jQuery.HostedPayments - v5.0.3 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function ($, window, document, undefined) {
   var pluginName = "hp";
   var defaults = {};
 
-  defaults.version = "v5.0.2";
+  defaults.version = "v5.0.3";
   defaults.amount = 0;
   defaults.currencyLocale = "en-US";
   defaults.currencyCode = "USD";
