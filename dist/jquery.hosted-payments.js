@@ -8910,7 +8910,7 @@
       patterns: [60, 64, 65, 622],
       format: defaultFormat,
       length: [16],
-      cvcLength: [3],
+      cvcLength: [3, 4],
       luhn: true,
     },
     {
@@ -9773,18 +9773,18 @@
   };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v5.0.5 */
+/* jQuery.HostedPayments - v5.0.6 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function ($, window, document, undefined) {
   var pluginName = "hp";
   var defaults = {};
 
-  defaults.version = "v5.0.5";
+  defaults.version = "v5.0.6";
   defaults.amount = 0;
   defaults.currencyLocale = "en-US";
   defaults.currencyCode = "USD";
-  defaults.baseUrl = "https://htv.emoney.com/v3/adapters";
+  defaults.baseUrl = "https://htv.emoney.com/v3/adapters";  
   defaults.defaultCardCharacters = "&middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot; &middot;&middot;&middot;&middot;";
   defaults.defaultDateCharacters = "&middot;&middot;";
   defaults.defaultNameOnCardName = "Name On Card";
