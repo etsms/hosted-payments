@@ -4945,6 +4945,8 @@
       options.transactionId = hp.Utils.defaults.transactionId;
     }
 
+    hp.Utils.setCaptchaVerificationToken(null);
+
     if (typeof options.apiKey !== "undefined") {
       hp.Utils.setSession(options.apiKey, true);
     }
@@ -5012,7 +5014,7 @@
         function () {
           var errorResponse = {
             status: "Error",
-            message: "We're sorry. The provided captcha method was not successfull.",
+            message: "We're sorry. The provided captcha method was not successful.",
             created_on: createdOn,
             token: sessionId,
           };
@@ -5089,7 +5091,7 @@
       function () {
         var errorResponse = {
           status: "Error",
-          message: "We're sorry. The provided captcha method was not successfull.",
+          message: "We're sorry. The provided captcha method was not successful.",
           created_on: createdOn,
           token: sessionId,
         };
@@ -5721,6 +5723,7 @@
   };
 
   var handleError = function handleError(res) {
+    
     var errorResponse = {
       status: "Error",
       message: "Your session has expired.",
@@ -5737,6 +5740,8 @@
           $form.attr("action", hp.Utils.defaults.errorCallback).submit();
         });
       }
+
+      hp.Utils.setCaptchaVerificationToken(null);
 
       return;
     }
@@ -5763,6 +5768,9 @@
       hp.Utils.showError(errorResponse.message);
       hp.Utils.defaults.errorCallback(errorResponse);
     }
+
+    hp.Utils.setCaptchaVerificationToken(null);
+
   };
 
   var handleSuccess = function handleSuccess(res) {
@@ -5783,6 +5791,8 @@
         });
       }
 
+      hp.Utils.setCaptchaVerificationToken(null);
+
       return;
     }
 
@@ -5795,6 +5805,8 @@
     } else {
       hp.Utils.defaults.successCallback(response);
     }
+
+    hp.Utils.setCaptchaVerificationToken(null);
   };
 
   var setupPluginInstances = function setupPluginInstances($element) {
