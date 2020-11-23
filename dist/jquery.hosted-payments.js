@@ -5391,15 +5391,13 @@
 
     showLoader();
 
-    if (typeof window.grecaptcha !== "undefined" || typeof window.hcaptcha !== "undefined") {
+    if ((captchaType === hp.CaptchaType.GOOGLE && typeof window.grecaptcha !== "undefined") || (captchaType !== hp.CaptchaType.GOOGLE && typeof window.hcaptcha !== "undefined")) {
       log("Re-rendering captcha instance");
-
       if (isCaptchaRendered()) {
         renderCaptcha(deferred, true);
       } else {
         renderCaptcha(deferred, false);
       }
-
       return deferred;
     }
 
@@ -5413,29 +5411,36 @@
     return deferred;
   };
 
+  var captchaLoadInterval = null;
+
   var waitForCaptchaScriptToLoad = function (conditionCallBack) {
     var deferred = jQuery.Deferred();
-    var interval = window.setInterval(function () {
+
+    if (captchaLoadInterval !== null) {
+      log("There was a previous injection interval started. Clearing interval...");
+      window.clearInterval(captchaLoadInterval);
+    }
+
+    captchaLoadInterval = window.setInterval(function () {
       log("Waiting for captcha provider to appear on the DOM...");
 
       if (typeof conditionCallBack !== "function") {
         log("No condition specified. Not waiting any longer...");
-
-        window.clearInterval(interval);
+        window.clearInterval(captchaLoadInterval);
         deferred.resolve();
         return;
       }
 
       if (conditionCallBack()) {
         log("Condition completed. Captcha service loaded on DOM.");
-
-        window.clearInterval(interval);
+        window.clearInterval(captchaLoadInterval);
         deferred.resolve();
         return;
       }
 
       log("Condition incomplete. Captcha service has not loaded on DOM yet. Trying again in 1 second.");
-    }, 1000);
+    }, 1500);
+
     return deferred;
   };
 
@@ -9775,14 +9780,14 @@
   };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v5.0.7 */
+/* jQuery.HostedPayments - v5.0.8 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function ($, window, document, undefined) {
   var pluginName = "hp";
   var defaults = {};
 
-  defaults.version = "v5.0.7";
+  defaults.version = "v5.0.8";
   defaults.amount = 0;
   defaults.currencyLocale = "en-US";
   defaults.currencyCode = "USD";
