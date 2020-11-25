@@ -27,8 +27,8 @@
       };
 
       var options = {
-        apiKey: "2B3783A2-459B-4158-8A6D-FEAD9F0FB485",
-        amount: 2,
+        apiKey: window.prompt("API Key"),
+        amount: window.prompt("Amount"),
         successCallback: callback,
         errorCallback: callback,
         debug: true,
@@ -40,9 +40,6 @@
         swapAchInputs: true,
         allowHttpsSkip: true,
         paymentTypeOrder: [0, 1],
-        saveCustomer: false,
-        instrumentId: "a10898a2-060a-c1d3-9d98-417a226a5f7a",
-        baseUrl: "https://stage-htv.emoney.com/v3/adapters"
       };
 
       $("#ets").hp(options);
