@@ -4296,7 +4296,7 @@
         successResponse.issuer_name = res.issuerName;
         successResponse.issuer_logo = res.issuerLogo;
 
-        hp.Utils.log("Result from server: ", res);
+        hp.Utils.log("CustomerToken result (1): ", res.customerToken, typeof res.customerToken);
 
         if ((res !== undefined || res !== null) && (res.customerToken !== undefined || res.customerToken !== null)) {
           successResponse.customer_token = res.customerToken;
@@ -4330,6 +4330,8 @@
           var month = date.substring(2);
 
           successResponse.instrument_expiration_date = month + "/" + new Date().getFullYear().toString().substring(0, 2) + year;
+
+          hp.Utils.log("CustomerToken result (2): ", res.payment.customerToken, typeof res.payment.customerToken);
 
           if (res.payment.customerToken !== undefined || res.payment.customerToken !== null) {
             successResponse.customer_token = res.customerToken;
@@ -6125,6 +6127,7 @@
     };
     this.instrumentId = "";
     this.transactionId = "";
+    this.customerToken = "";
   }
 
   var $cc = null,
@@ -6669,6 +6672,7 @@
 
         that.instrumentId = res.instrumentId;
         that.transactionId = typeof res.transactionId !== "undefined" ? res.transactionId : that.transactionId;
+        that.customerToken = typeof res.customerToken !== "undefined" ? res.customerToken : that.customerToken;
 
         that.$parent.trigger("hp.submit", {
           type: 0,
@@ -6904,6 +6908,7 @@
       _isValid: false,
     };
     this.transactionId = "";
+    this.customerToken = "";
   }
 
   var $fullname = null,
@@ -7431,6 +7436,8 @@
 
         $this.instrumentId = res.instrumentId;
         $this.transactionId = typeof res.transactionId !== "undefined" ? res.transactionId : $this.transactionId;
+        $this.customerToken = typeof res.customerToken !== "undefined" ? res.customerToken : $this.customerToken;
+
         $this.$parent.trigger("hp.submit", {
           type: 0,
           res: res,
@@ -7498,6 +7505,7 @@
 
     this.instrumentId = "";
     this.transactionId = "";
+    this.customerToken = "";
     this.formData = {
       _isValid: false,
     };
@@ -7875,6 +7883,8 @@
 
         $this.instrumentId = res.instrumentId;
         $this.transactionId = typeof res.transactionId !== "undefined" ? res.transactionId : $this.transactionId;
+        $this.customerToken = typeof res.customerToken !== "undefined" ? res.customerToken : $this.customerToken;
+        
         hp.Utils.showLoader();
         $this.$parent.trigger("hp.submit", {
           type: 0,
@@ -9798,14 +9808,14 @@
   };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v5.0.10 */
+/* jQuery.HostedPayments - v5.0.11 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function ($, window, document, undefined) {
   var pluginName = "hp";
   var defaults = {};
 
-  defaults.version = "v5.0.10";
+  defaults.version = "v5.0.11";
   defaults.amount = 0;
   defaults.currencyLocale = "en-US";
   defaults.currencyCode = "USD";
