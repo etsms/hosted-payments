@@ -4296,6 +4296,12 @@
         successResponse.issuer_name = res.issuerName;
         successResponse.issuer_logo = res.issuerLogo;
 
+        if ((res !== undefined || res !== null) && (res.customerToken !== undefined || res.customerToken !== null)) {
+          successResponse.customer_token = res.customerToken;
+        }
+
+        successResponse.customer_token = res.customerToken ?? hp.Utils.getCustomerToken();
+
         if (!hp.Utils.defaults.saveCustomer && typeof res.payment !== "undefined") {
           successResponse.instrument_id = res.payment.instrumentId;
           successResponse.instrument_type = res.payment.cardType;
@@ -9780,14 +9786,14 @@
   };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v5.0.8 */
+/* jQuery.HostedPayments - v5.0.9 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function ($, window, document, undefined) {
   var pluginName = "hp";
   var defaults = {};
 
-  defaults.version = "v5.0.8";
+  defaults.version = "v5.0.9";
   defaults.amount = 0;
   defaults.currencyLocale = "en-US";
   defaults.currencyCode = "USD";
