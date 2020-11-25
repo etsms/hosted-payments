@@ -4102,7 +4102,7 @@
       transaction_cashback: 0,
       transaction_total: getAmount(),
       correlation_id: getCorrelationId(),
-      customer_token: getCustomerToken() || "",
+      customer_token: getCustomerToken(),
       instrument_id: "",
       instrument_type: "",
       instrument_method: "Other",
@@ -4296,11 +4296,13 @@
         successResponse.issuer_name = res.issuerName;
         successResponse.issuer_logo = res.issuerLogo;
 
+        hp.Utils.log("Result from server: ", res);
+
         if ((res !== undefined || res !== null) && (res.customerToken !== undefined || res.customerToken !== null)) {
           successResponse.customer_token = res.customerToken;
+        } else {
+          successResponse.customer_token =  hp.Utils.getCustomerToken();
         }
-
-        successResponse.customer_token = res.customerToken ?? hp.Utils.getCustomerToken();
 
         if (!hp.Utils.defaults.saveCustomer && typeof res.payment !== "undefined") {
           successResponse.instrument_id = res.payment.instrumentId;
@@ -4323,11 +4325,21 @@
             successResponse.customer_name = res.payment.nameOnAccount;
           }
 
-          var date = res.payment.expirationDate,
-            year = date.substring(0, 2),
-            month = date.substring(2);
+          var date = res.payment.expirationDate;
+          var year = date.substring(0, 2);
+          var month = date.substring(2);
+
           successResponse.instrument_expiration_date = month + "/" + new Date().getFullYear().toString().substring(0, 2) + year;
+
+          if (res.payment.customerToken !== undefined || res.payment.customerToken !== null) {
+            successResponse.customer_token = res.customerToken;
+          } else {
+            successResponse.customer_token = hp.Utils.getCustomerToken();
+          }
+
         }
+        
+        hp.Utils.log("Result from server: ", successResponse, res);
 
         responses.push(successResponse);
       }
@@ -5693,7 +5705,7 @@
   };
 
   var getCustomerToken = function getCustomerToken() {
-    if (hp.Utils.defaults.customerToken == null || typeof hp.Utils.defaults.customerToken === "undefined") {
+    if (hp.Utils.defaults.customerToken == null || typeof hp.Utils.defaults.customerToken === "undefined" || hp.Utils.defaults.customerToken === "") {
       return null;
     }
 
@@ -5701,7 +5713,7 @@
   };
 
   var getInstrumentId = function getInstrumentId() {
-    if (hp.Utils.defaults.instrumentId == null || typeof hp.Utils.defaults.instrumentId === "undefined") {
+    if (hp.Utils.defaults.instrumentId == null || typeof hp.Utils.defaults.instrumentId === "undefined" || hp.Utils.defaults.instrumentId === "") {
       return null;
     }
 
@@ -8517,7 +8529,7 @@
       customer_name: props.CHN,
       customer_signature: props.SD,
       correlation_id: $this.correlationId,
-      customer_token: hp.Utils.getCustomerToken() || "",
+      customer_token: hp.Utils.getCustomerToken(),
       application_identifier: props.AID,
       application_response_code: props.ARC,
       application_issuer_data: props.IAD,
