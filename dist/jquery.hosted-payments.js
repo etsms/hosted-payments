@@ -4127,6 +4127,7 @@
   };
 
   var buildResultObjectByType = function buildResultObjectByType(response) {
+
     var deferred = jQuery.Deferred();
 
     var isBankAccount = function isBankAccount(req) {
@@ -4192,6 +4193,7 @@
         isCreateOnly = hp.Utils.getAmount() === 0;
 
       for (var i = 0; i < response.length; i++) {
+
         var res = response[i],
           createdOn = new Date().toISOString(),
           payment = res.request,
@@ -4205,6 +4207,7 @@
           isError = res.isException ? true : false,
           status = "Success",
           payload = payment.__request,
+          customerToken = null,
           swipe = payload ? payload.__swipe : undefined,
           isAch = isBankAccount(payload),
           isEm = isEMoney(payload),
@@ -4274,6 +4277,10 @@
           message = "Payment instrumented created.";
         } else if (hp.Utils.defaults.PaymentType === hp.PaymentType.REFUND) {
           message = "Transaction refunded.";
+        }
+
+        if (typeof payload.__customerToken != "undefined") {
+          res.customerToken = payload.__customerToken;
         }
 
         var successResponse = buildSuccessResultObject();
@@ -6127,7 +6134,6 @@
     };
     this.instrumentId = "";
     this.transactionId = "";
-    this.customerToken = "";
   }
 
   var $cc = null,
@@ -6501,6 +6507,12 @@
     var that = this;
     var requestModel = {};
 
+    hp.Utils.log("Credit card: HandleCharge", res);
+
+    if (typeof res.customerToken != "undefined" && typeof res.request != "undefined") {
+      res.request.__customerToken = res.customerToken;
+    }
+
     if (hp.Utils.defaults.paymentType == hp.PaymentType.CHARGE) {
       requestModel = {
         charge: {
@@ -6651,12 +6663,17 @@
         };
 
         if (hp.Utils.defaults.saveCustomer) {
+
+          hp.Utils.log("Save customer enabled. Beging request with: (createInstrumentRequest) ", createInstrumentRequest);
+
           return hp.Utils.makeRequest(createInstrumentRequest);
         }
 
         that.handleChargeWithoutInstrument(createInstrumentRequest);
       })
       .then(function (res) {
+
+
         if (!hp.Utils.defaults.saveCustomer) {
           return;
         }
@@ -6670,9 +6687,10 @@
           return;
         }
 
+        hp.Utils.log("Save customer enabled. Responded with: (createInstrumentRequest) ", res);
+
         that.instrumentId = res.instrumentId;
         that.transactionId = typeof res.transactionId !== "undefined" ? res.transactionId : that.transactionId;
-        that.customerToken = typeof res.customerToken !== "undefined" ? res.customerToken : that.customerToken;
 
         that.$parent.trigger("hp.submit", {
           type: 0,
@@ -6908,7 +6926,6 @@
       _isValid: false,
     };
     this.transactionId = "";
-    this.customerToken = "";
   }
 
   var $fullname = null,
@@ -7298,6 +7315,12 @@
   BankAccount.prototype.handleCharge = function (res) {
     var $this = this;
     var requestModel = {};
+    
+    hp.Utils.log("Bank account: HandleCharge", res);
+
+    if (typeof res.customerToken != "undefined" && typeof res.request != "undefined") {
+      res.request.__customerToken = res.customerToken;
+    }
 
     if (hp.Utils.defaults.paymentType == hp.PaymentType.CHARGE) {
       requestModel = {
@@ -7436,7 +7459,6 @@
 
         $this.instrumentId = res.instrumentId;
         $this.transactionId = typeof res.transactionId !== "undefined" ? res.transactionId : $this.transactionId;
-        $this.customerToken = typeof res.customerToken !== "undefined" ? res.customerToken : $this.customerToken;
 
         $this.$parent.trigger("hp.submit", {
           type: 0,
@@ -7505,7 +7527,7 @@
 
     this.instrumentId = "";
     this.transactionId = "";
-    this.customerToken = "";
+
     this.formData = {
       _isValid: false,
     };
@@ -7675,16 +7697,26 @@
   };
 
   Code.prototype.handleCharge = function (res) {
+
     var hasBalance = true,
       $this = this,
       cardBalance = 0;
+
     var errorResponse = {
       status: "Error",
       message: "The payment instrument provided had no remaining funds and will not be applied to the split payment.",
       created_on: createdOn,
       token: sessionId,
     };
+
     var requestModel = {};
+
+    
+    hp.Utils.log("Code: HandleCharge", res);
+
+    if (typeof res.customerToken != "undefined" && typeof res.request != "undefined") {
+      res.request.__customerToken = res.customerToken;
+    }
 
     if (hp.Utils.defaults.paymentType == hp.PaymentType.CHARGE) {
       requestModel = {
@@ -7883,7 +7915,6 @@
 
         $this.instrumentId = res.instrumentId;
         $this.transactionId = typeof res.transactionId !== "undefined" ? res.transactionId : $this.transactionId;
-        $this.customerToken = typeof res.customerToken !== "undefined" ? res.customerToken : $this.customerToken;
         
         hp.Utils.showLoader();
         $this.$parent.trigger("hp.submit", {
@@ -9808,14 +9839,14 @@
   };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v5.0.11 */
+/* jQuery.HostedPayments - v5.0.12 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function ($, window, document, undefined) {
   var pluginName = "hp";
   var defaults = {};
 
-  defaults.version = "v5.0.11";
+  defaults.version = "v5.0.12";
   defaults.amount = 0;
   defaults.currencyLocale = "en-US";
   defaults.currencyCode = "USD";
