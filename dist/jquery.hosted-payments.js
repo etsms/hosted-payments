@@ -8952,7 +8952,7 @@
       patterns: [51, 52, 53, 54, 55, 22, 23, 24, 25, 26, 27],
       format: defaultFormat,
       length: [16],
-      cvcLength: [3],
+      cvcLength: [3, 4],
       luhn: true,
     },
     {
@@ -9839,14 +9839,14 @@
   };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v5.0.12 */
+/* jQuery.HostedPayments - v5.0.13 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function ($, window, document, undefined) {
   var pluginName = "hp";
   var defaults = {};
 
-  defaults.version = "v5.0.12";
+  defaults.version = "v5.0.13";
   defaults.amount = 0;
   defaults.currencyLocale = "en-US";
   defaults.currencyCode = "USD";
