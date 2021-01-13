@@ -3370,7 +3370,7 @@
       var errorMessage = [];
 
       if (!isBankAccountForm && !isCreditCardForm) {
-        errorMessage.push("The form is neither a credit card or bank account form.");
+        errorMessage.push("The form is neither a credit card, debit card, or bank account form.");
       }
 
       if (isBankAccountForm) {
@@ -3758,33 +3758,36 @@
       "{{nav}}",
       "</ul>",
       '<div class="hp-secure">',
-      '<a href="https://emoney.com" target="_blank" title="Powered by EMoney">',
-      '<img class="hp-emoney-logo" src="https://app.emoney.com/Public/Styles/Images/logo-blue.svg" alt="Hosted Payments" />',
-      "</a>",
-      '<div class="hp-support">',
-      "<strong>Help &amp; support</strong>",
-      '<p>Call us at <a href="tel:{{phone}}">{{phone}}</a></p>',
-      "<br />",
-      "</div>",
-      '<div class="hp-cards">',
-      '<img class="hp-cards-icons' + (hp.Utils.defaults.showAmex ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/amex.svg" alt="AMEX" />',
-      '<img class="hp-cards-icons' + (hp.Utils.defaults.showDiners ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/diners.svg" alt="Diners" />',
-      '<img class="hp-cards-icons' + (hp.Utils.defaults.showDiscover ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/discover.svg" alt="Discover" />',
-      '<img class="hp-cards-icons' + (hp.Utils.defaults.showJcb ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/jcb.svg" alt="JCB" />',
-      '<img class="hp-cards-icons' + (hp.Utils.defaults.showMasterCard ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/mastercard.svg" alt="Master Card" />',
-      '<img class="hp-cards-icons' + (hp.Utils.defaults.showVisa ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/payment-icons/master/svg/flat/visa.svg" alt="VISA" />',
-      '<img class="hp-cards-icons' + (hp.Utils.defaults.showEMoney ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/c2568c3f7343be79032ac7a717fa80de/raw/7923fdf2aacffbc6baf62454cc4213b46b943596/emoney-card-icon.svg" alt="EMoney" />',
-      '<img class="hp-cards-icons' + (hp.Utils.defaults.showGift ? "" : " hide") + '" src="https://cdn.rawgit.com/etsms/cd2abb29142a84bb16fbeb3d07a7aefa/raw/a17760bdd23cf1d90c22c8a2235f8d6e6753663e/gift-card-icon.svg" alt="Gift Cards" />',
-      "</div>",
-      '<div class="hp-secure-bottom">',
-      '<div class="hp-secure-bottom-left">',
-      '<span class="' + (hp.Utils.getAmount() === 0 ? "hide " : "") + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "hp-version-refund" : "hp-version-charge") + '">',
-      (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "Refund" : "Charge") + ': <span class="hp-version-amount">' + hp.Utils.formatCurrency(hp.Utils.getAmount() + hp.Utils.defaults.surchargeFee + hp.Utils.defaults.convenienceFee),
-      "</span>",
-      "</div>",
-      '<div class="hp-secure-bottom-right">',
-      hp.Utils.getVersion(),
-      "</div>",
+      '<div class="hp-secure-wrapper">',
+        '<a href="https://emoney.com" target="_blank" title="Powered by EMoney">',
+        '<img class="hp-emoney-logo" src="https://app.emoney.com/Public/Styles/Images/logo-blue.svg" alt="Hosted Payments" />',
+        "</a>",
+        '<div class="hp-support">',
+          "<strong>Help &amp; support</strong>",
+          '<p>Call us at <a href="tel:{{phone}}">{{phone}}</a></p>',
+          "<br />",
+        "</div>",
+        '<div class="hp-cards">',
+          '<div class="hp-cards-icons sprite-card-amex' + (hp.Utils.defaults.showAmex ? "" : " hide") + '"></div>',
+          '<div class="hp-cards-icons sprite-card-diners' + (hp.Utils.defaults.showDiners ? "" : " hide") + '"></div>',
+          '<div class="hp-cards-icons sprite-card-discover' + (hp.Utils.defaults.showDiscover ? "" : " hide") + '"></div>',
+          '<div class="hp-cards-icons sprite-card-jcb' + (hp.Utils.defaults.showJcb ? "" : " hide") + '"></div>',
+          '<div class="hp-cards-icons sprite-card-mastercard' + (hp.Utils.defaults.showMasterCard ? "" : " hide") + '"></div>',
+          '<div class="hp-cards-icons sprite-card-visa' + (hp.Utils.defaults.showVisa ? "" : " hide") + '"></div>',
+          '<div class="hp-cards-icons sprite-card-emoney' + (hp.Utils.defaults.showEMoney ? "" : " hide") + '"></div>',
+          '<div class="hp-cards-icons sprite-card-gift' + (hp.Utils.defaults.showGift ? "" : " hide") + '"></div>',
+          '<div class="hp-cards-icons sprite-card-ach' + (hp.Utils.defaults.showAch ? "" : " hide") + '"></div>',
+        "</div>",
+        '<div class="hp-secure-bottom">',
+          '<div class="hp-secure-bottom-left">',
+            '<span class="' + (hp.Utils.getAmount() === 0 ? "hide " : "") + (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "hp-version-refund" : "hp-version-charge") + '">',
+            (hp.Utils.defaults.paymentType === hp.PaymentType.REFUND ? "Refund" : "Charge") + ': <span class="hp-version-amount">' + hp.Utils.formatCurrency(hp.Utils.getAmount() + hp.Utils.defaults.surchargeFee + hp.Utils.defaults.convenienceFee),
+            "</span>",
+          "</div>",
+          '<div class="hp-secure-bottom-right">',
+          hp.Utils.getVersion(),
+          "</div>",
+        "</div>",
       "</div>",
       "</div>",
       "</div>",
@@ -3944,6 +3947,79 @@
     };
   };
 
+  var createTooltip = function() {
+    setTimeout(function(){
+      
+      var $btn = getInstance()
+        .$content
+        .find(".hp-submit");
+
+      getInstance().$content
+        .find(".hp-tooltip")
+        .remove();
+
+      var hasPayment = getAmount() > 0;
+
+      if (!hasPayment) {
+        hp.Utils.log("No payment amount, not showing tooltip.");
+        return;
+      }
+
+      if (hp.Utils.hasAlternativeSubmitButton()) {
+        $btn = hp.Utils.getAlternativeSubmitButton();
+      }
+
+      var offset = $btn.offset();
+      var width = ($btn.outerWidth() / 2);
+      var height = ($btn.outerHeight() + 10);
+
+      var title = "Credit or Debit Card";
+      var message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a payment of " + formatCurrency(getAmount()) + " on the card entered above. If you cancel the payment you will still remain liable for the amount due.";
+
+      if (hp.Utils.defaults.promptForAvs) {
+        message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + " after you've clicked Verify Billing Address above, you are authorizing a payment of " + formatCurrency(getAmount()) + " on the card entered above. If you cancel the payment you will still remain liable for the amount due.";
+      }
+
+      if (hp.Utils.getInstance().isBankAccount()) {
+        title = "Electronic Payment Form Bank Account (ACH)";
+        message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a payment of  " + formatCurrency(getAmount()) + " from the bank account above. If you cancel the payment you will still remain liable for the amount due."
+      }
+
+      var style = "display: none; position: fixed; left: " + (offset.left + width) + "px; top: " + (offset.top + height) + "px;"
+
+      var disclaimer = $([
+      '<div class="hp-tooltip" style="' + style + '">',
+          '<div class="hp-tooltip-wrapper">',
+              '<span class="hp-tooltip-close">&times;</span>',
+              '<span class="hp-tooltip-title">',
+                title,
+              '</span>',
+              '<span class="hp-tooltip-content">',
+                message,
+              '</span>',
+          '</div>',
+      '</div>'
+      ].join(""));
+
+      $btn.parent().append(disclaimer);
+
+      disclaimer.find(".hp-tooltip-close").click(function(){
+        disclaimer.fadeOut(function(){
+          disclaimer.remove();
+        });
+      });
+
+      disclaimer.fadeIn(function(){
+        setTimeout(function(){
+          disclaimer.fadeOut(function(){
+            disclaimer.remove();
+          });
+        }, 10000);
+      });
+
+    }, 1500);
+  };
+
   var createNav = function createNav() {
     var defaultAreas = hp.Utils.defaults.paymentTypeOrder,
       html = "",
@@ -3953,19 +4029,19 @@
       transvault = "";
 
     if (defaultAreas.indexOf(0) >= 0) {
-      creditCard = '<li class="hp-type hp-cc"><a href="javascript:void(0);"><img src="https://cdn.rawgit.com/etsms/9e2e4c55564ca8eba12f9fa3e7064299/raw/93965040e6e421e1851bfe7a15af92bdc722fa43/credt-card-icon.svg" alt="Credit Card" /> <span>Credit Card</span></a></li>';
+      creditCard = '<li class="hp-type hp-cc"><a title="Credit or Debit Card" href="javascript:void(0);"><img src="https://cdn.rawgit.com/etsms/9e2e4c55564ca8eba12f9fa3e7064299/raw/93965040e6e421e1851bfe7a15af92bdc722fa43/credt-card-icon.svg" alt="Credit Card" /> <span>' + hp.Utils.defaults.defaultCreditCardFormLabel + '</span></a></li>';
     }
 
     if (defaultAreas.indexOf(1) >= 0) {
-      bankAccount = '<li class="hp-type hp-bank"><a href="javascript:void(0);"><img src="https://cdn.rawgit.com/etsms/af49afe3c1c1cb41cb3204a45492bd47/raw/78e935c7e5290923dba15e8b595aef7c95b2292e/ach-icon.svg" alt="ACH and Bank Account" /> <span>Bank (ACH)</span></a></li>';
+      bankAccount = '<li class="hp-type hp-bank"><a title="Electronic Payment Form Bank Account (ACH)" href="javascript:void(0);"><img src="https://cdn.rawgit.com/etsms/af49afe3c1c1cb41cb3204a45492bd47/raw/78e935c7e5290923dba15e8b595aef7c95b2292e/ach-icon.svg" alt="ACH and Bank Account" /> <span>' + hp.Utils.defaults.defaultBankAccountFormLabel + '</span></a></li>';
     }
 
     if (defaultAreas.indexOf(2) >= 0) {
-      code = '<li class="hp-type hp-code"><a href="javascript:void(0);"><img src="https://cdn.rawgit.com/etsms/c70317acba59d3d5b60e5999d5feeab8/raw/764478d2660f97d002eb3bd3177b725a410f694d/swipe-icon.svg" alt="Swipe or Scan" /> <span>Swipe\\Scan</span></a></li>';
+      code = '<li class="hp-type hp-code"><a title="Credit or Debit Card Swipe/Scan" href="javascript:void(0);"><img src="https://cdn.rawgit.com/etsms/c70317acba59d3d5b60e5999d5feeab8/raw/764478d2660f97d002eb3bd3177b725a410f694d/swipe-icon.svg" alt="Swipe or Scan" /> <span>' + hp.Utils.defaults.defaultSwipeScanFormLabel + '</span></a></li>';
     }
 
     if (defaultAreas.indexOf(3) >= 0) {
-      transvault = '<li class="hp-type hp-transvault"><a href="javascript:void(0);"><img src="https://cdn.rawgit.com/etsms/5363122967f20bd31d6630529cb17c3f/raw/0a0ae6a30247ced8ed5c0c85f2b42072b59b8fba/transvault-icon.svg" alt="Hosted Transvault" /> <span>Transvault</span></a></li>';
+      transvault = '<li class="hp-type hp-transvault"><a title="Terminal Device" href="javascript:void(0);"><img src="https://cdn.rawgit.com/etsms/5363122967f20bd31d6630529cb17c3f/raw/0a0ae6a30247ced8ed5c0c85f2b42072b59b8fba/transvault-icon.svg" alt="Hosted Transvault" /> <span>' + hp.Utils.defaults.defaultTransvaultFormLabel + '</span></a></li>';
     }
 
     for (var i = 0; i < defaultAreas.length; i++) {
@@ -5900,6 +5976,8 @@
           hp.Utils.plugins.Transvault.cancelTransactionWithoutError();
         }
 
+        hp.Utils.createTooltip();
+
         $this
           .off()
           .on("hp.notify", hp.Utils.defaults.eventCallback)
@@ -6000,6 +6078,7 @@
   hp.Utils.escapeHTML = escapeHTML;
   hp.Utils.setCustomerInfo = setCustomerInfo;
   hp.Utils.getCustomerInfo = getCustomerInfo;
+  hp.Utils.createTooltip = createTooltip;
   hp.Utils.getInstance = getInstance;
   hp.Utils.getSession = getSession;
   hp.Utils.setSession = setSession;
@@ -7022,6 +7101,7 @@
       "{{inputHtml}}",
       "</div>",
       '<button class="hp-submit">' + hp.Utils.defaults.defaultButtonLabel + "</button>",
+      // '<p class="info">By clicking ' + hp.Utils.defaults.defaultButtonLabel + ', you are requesting and authorizing a recurring electronic fund transfer of $' + hp.Utils.getAmount() + ' from the bank account above on thde dates listed in your payment schedule</p>',
       '<p class="info">* Please note that bank account (ACH) transactions may take up to 3 days to process. This time period varies depending on the your issuing bank. For more information please visit us at <a href="https://www.elavonpayments.com/" target="_blank">https://elavonpayments.com</a>.</p>',
       "</div>",
     ].join("");
@@ -7059,6 +7139,7 @@
       return $visualrouting.html(hp.Utils.defaults.defaultRoutingNumberCharacters);
     }
 
+    routingNumber = routingNumber.replace(/[^0-9]/gi, "");
     this.formData.routingNumber = $.trim(routingNumber);
     $visualrouting.text(this.formData.routingNumber);
   };
@@ -7068,7 +7149,7 @@
       return $visualbankname.html(hp.Utils.defaults.defaultBank);
     }
 
-    bankName = bankName.replace(/[0-9]/g, "");
+    bankName = bankName.replace(/[^a-z\s]/gi, "");
     this.formData.bankName = hp.Utils.escapeHTML($.trim(bankName));
     $visualbankname.text(this.formData.bankName);
   };
@@ -7082,6 +7163,7 @@
       return $visualaccount.html(hp.Utils.defaults.defaultAccountNumberCharacters);
     }
 
+    accountNumber = accountNumber.replace(/[^0-9]/gi, "");
     this.formData.accountNumber = $.trim(accountNumber);
     $visualaccount.text(this.formData.accountNumber);
   };
@@ -7095,7 +7177,7 @@
     }
 
     if (!isEmpty) {
-      name = name.replace(/[0-9]/g, "");
+      name = name.replace(/[^a-z\s]/gi, "");
       this.formData.name = hp.Utils.escapeHTML($.trim(name));
       $visualfullname.text(this.formData.name);
     } else {
@@ -9839,14 +9921,14 @@
   };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v5.0.14 */
+/* jQuery.HostedPayments - v5.0.15 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function ($, window, document, undefined) {
   var pluginName = "hp";
   var defaults = {};
 
-  defaults.version = "v5.0.14";
+  defaults.version = "v5.0.15";
   defaults.amount = 0;
   defaults.currencyLocale = "en-US";
   defaults.currencyCode = "USD";
@@ -9861,6 +9943,10 @@
   defaults.defaultRedirectLabel = "";
   defaults.defaultSuccessLabel = "Transaction Complete!";
   defaults.defaultButtonLabel = "Submit Payment";
+  defaults.defaultCreditCardFormLabel = "Credit or Debit Card";
+  defaults.defaultBankAccountFormLabel = "Bank Account (ACH)";
+  defaults.defaultSwipeScanFormLabel = "Swipe/Scan";
+  defaults.defaultTransvaultFormLabel = "Transvault";
   defaults.paymentTypeOrder = [0, 1];
   defaults.paymentService = hp.PaymentService.EFT; // EFT, EMONEY, TEST
   defaults.defaultAccountNumberCharacters = "&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;";
@@ -9900,6 +9986,7 @@
   defaults.showGift = true;
   defaults.showEMoney = true;
   defaults.showMasterCard = true;
+  defaults.showAch = true;
   defaults.emoneyMobileAppUrl = "emmerchant://{{paymentType}}/{{merchantCredentials}}?transactionId={{transactionId}}&token={{token}}&browserId={{browserId}}&correlationId={{correlationId}}&amount={{amount}}&url={{url}}&entryType={{entryType}}";
   defaults.shouldVoidOnCancel = false;
   defaults.saveCustomer = false;
@@ -10110,6 +10197,14 @@
       }
     }
 
+    if (typeof $element.data("showAch") !== "undefined") {
+      if ($element.data("showAch").toString() === "false") {
+        hp.Utils.defaults.showAch = false;
+      } else if ($element.data("showAch").toString() === "true") {
+        hp.Utils.defaults.showAch = true;
+      }
+    }
+
     if (typeof $element.data("swapAchInputs") !== "undefined") {
       if ($element.data("swapAchInputs").toString() === "false") {
         hp.Utils.defaults.swapAchInputs = false;
@@ -10242,6 +10337,26 @@
       hp.Utils.defaults.defaultButtonLabel = $element.data("defaultButtonLabel").toString();
     }
 
+    /**
+     * Default navbar labels
+     * - CC, Bank, Transvault, Code
+     */
+    if (typeof $element.data("defaultCreditCardFormLabel") !== "undefined") {
+      hp.Utils.defaults.defaultCreditCardFormLabel = $element.data("defaultCreditCardFormLabel").toString();
+    }
+
+    if (typeof $element.data("defaultBankAccountFormLabel") !== "undefined") {
+      hp.Utils.defaults.defaultBankAccountFormLabel = $element.data("defaultBankAccountFormLabel").toString();
+    }
+
+    if (typeof $element.data("defaultSwipeScanFormLabel") !== "undefined") {
+      hp.Utils.defaults.defaultSwipeScanFormLabel = $element.data("defaultSwipeScanFormLabel").toString();
+    }
+
+    if (typeof $element.data("defaultTransvaultFormLabel") !== "undefined") {
+      hp.Utils.defaults.defaultTransvaultFormLabel = $element.data("defaultTransvaultFormLabel").toString();
+    }
+
     if (typeof $element.data("errorLabel") !== "undefined") {
       hp.Utils.defaults.defaultErrorLabel = $element.data("errorLabel").toString();
     }
@@ -10293,6 +10408,7 @@
     }
 
     $element.attr("data-ets-key", hp.Utils.generateGUID());
+    $element.attr("data-selector-key", hp.Utils.generateGUID());
     hp.Utils.setPaymentInstrument();
     hp.Utils.signIn().then(function () {
       hp.Utils.setupPluginInstances($element);

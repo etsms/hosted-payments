@@ -13,6 +13,7 @@
     <div id="ets" data-default-button-label="test"></div>
     <button id="reset">Click Here To Reset</button>
     <button id="session">Click Here To Display Session Details</button>
+    <button id="alt">Click me to submit</button>
     <script>
       var transactionId = hp.Utils.generateGUID();
 
@@ -26,9 +27,13 @@
         console.log(result);
       };
 
+      var getRandomAmount = function() {
+        return Math.round(Math.random(1, 9) * 10);
+      }
+
       var options = {
-        apiKey: window.prompt("API Key"),
-        amount: window.prompt("Amount"),
+        apiKey: "2B3783A2-459B-4158-8A6D-FEAD9F0FB485",
+        amount: getRandomAmount(),
         successCallback: callback,
         errorCallback: callback,
         debug: true,
@@ -36,10 +41,12 @@
         disableAutocomplete: false,
         checkHttpsConnection: false,
         allowAvsSkip: false,
-        promptForAvs: false,
+        promptForAvs: true,
         swapAchInputs: true,
         allowHttpsSkip: true,
         paymentTypeOrder: [0, 1],
+        baseUrl: "https://stage-htv.emoney.com/v3/adapters",
+        // alternativeSubmitButton: "#alt"
       };
 
       $("#ets").hp(options);

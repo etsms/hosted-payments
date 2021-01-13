@@ -15,7 +15,7 @@ $darkBlue: darken($blue, 10%)
 $gray: #9e9e9e
 $darkGray: darken($gray, 20%)
 $lightGray: lighten($gray, 50%)
-$sidebarWidth: 185px
+$sidebarWidth: 200px
 $sidebarWidthMobile: 64px
 $maxWidth: "max-width"
 $mobile: "screen" 420px
@@ -101,6 +101,19 @@ $spriteUrl: $cdnRootUrl + "/dist/images/sprite.png"
 .shake, .hp-card-invalid, .hp-bank-invalid, .hp-em-invalid
     +animation-name(shake)
     +animation-iteration-count(infinite)
+
+div[data-selector-key]
+    position: relative
+    +box-sizing(border-box)
+    +user-select(none)
+    +border-radius(3px)
+    display: table
+
+    &:active,
+    &:focus,
+    &:focus-within,
+    &:hover
+        +box-shadow(0px 0px 0px 2px rgba(33, 150, 243, .3))  
 
 .hp
     all: unset
@@ -664,6 +677,7 @@ $spriteUrl: $cdnRootUrl + "/dist/images/sprite.png"
                     border-bottom: 1px solid $gray
                     text-indent: $size
                     background: $pureWhite
+                    font-size: 14px
 
                     +breakpoint($mobilePortrait)
                         overflow: hidden !important
@@ -713,11 +727,14 @@ $spriteUrl: $cdnRootUrl + "/dist/images/sprite.png"
                     margin-top: -12px
 
         .hp-secure
-            width: 160px
+            width: $sidebarWidth
             position: absolute
             bottom: 22px
-            left: 12px
+            left: 0
             font-size: 11px
+            
+            .hp-secure-wrapper
+                padding: 0 10px
 
             +breakpoint($mobilePortrait)
                 display: none
@@ -745,8 +762,8 @@ $spriteUrl: $cdnRootUrl + "/dist/images/sprite.png"
                 width: $sidebarWidth
 
             .hp-cards-icons
-                width: 37px
-                height: 24px
+                background-image: url($spriteUrl)
+                background-repeat: no-repeat
                 display: inline-block
                 margin-right: 4px
                 margin-bottom: 3px
@@ -1286,6 +1303,62 @@ $spriteUrl: $cdnRootUrl + "/dist/images/sprite.png"
         .hp-content-transvault,
         .hp-col-left
             min-height: 280px !important
+
+.hp-tooltip
+
+    span, p, div
+        font-size: 12px
+        font-family: $fontFamily
+        padding-top: 0
+        padding-bottom: 0
+        margin-top: 0
+        margin-bottom: 0
+
+    $tooltipColor: $darkBlue
+    $tooltipWidth: 312px
+
+    width: $tooltipWidth
+    background: $tooltipColor
+    border-radius: 6px
+    text-align: center
+    +box-shadow(0 15px 10px -10px rgba(0, 0, 0, .2))
+    margin-left: -($tooltipWidth / 2)!important
+
+    .hp-tooltip-wrapper
+        padding: 10px
+
+        &:before
+            content: " "
+            display: block
+            position: absolute
+            width: 0
+            height: 0 
+            left: 50%
+            top: -5px
+            border-left: 5px solid transparent
+            border-right: 5px solid transparent
+            border-bottom: 5px solid $tooltipColor
+
+    .hp-tooltip-title,
+    .hp-tooltip-content
+        display: block
+        color: white
+
+    .hp-tooltip-title
+        font-weight: bold
+
+    .hp-tooltip-close
+        position: absolute
+        top: 0
+        right: 5px
+        color: white
+        cursor: pointer
+        +opacity(.8)
+
+        &:hover
+            +opacity(1)
+            cursor: pointer
+            
 
 .hp-sprite
     background-image: url($spriteUrl)
