@@ -1478,8 +1478,9 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   text-align: center;
   color: #2196f3;
   margin-top: -14px;
+  min-width: 400px;
 }
-/* line 1027, ../src/jquery.hosted-payments.sass */
+/* line 1028, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -1490,7 +1491,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   margin: 0 auto;
 }
 @media screen and (max-width: 656px) {
-  /* line 1027, ../src/jquery.hosted-payments.sass */
+  /* line 1028, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-bank-visual {
     -moz-transform:  scale(0.49, 0.49) rotateZ(0) translate(50%, 0) skew(0, 0);
     -ms-transform:  scale(0.49, 0.49) rotateZ(0) translate(50%, 0) skew(0, 0);
@@ -1504,7 +1505,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   }
 }
 @media screen and (max-width: 420px) {
-  /* line 1027, ../src/jquery.hosted-payments.sass */
+  /* line 1028, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-bank-visual {
     -moz-transform:  scale(0.49, 0.49) rotateZ(0) translate(0, 0) skew(0, 0);
     -ms-transform:  scale(0.49, 0.49) rotateZ(0) translate(0, 0) skew(0, 0);
@@ -1516,39 +1517,39 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
     transform-origin: left bottom;
   }
 }
-/* line 1045, ../src/jquery.hosted-payments.sass */
+/* line 1046, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual > div {
   font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace !important;
   position: absolute;
   font-size: 20px;
   color: #f3f3f3;
 }
-/* line 1051, ../src/jquery.hosted-payments.sass */
+/* line 1052, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual .hp-bank-visual-image {
   background: url("https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/sprite.png");
   height: 173px;
   width: 400px;
   background-color: #9e9e9e;
 }
-/* line 1057, ../src/jquery.hosted-payments.sass */
+/* line 1058, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual .hp-bank-visual-name {
   top: 37px;
   left: 23px;
   text-transform: uppercase;
 }
-/* line 1062, ../src/jquery.hosted-payments.sass */
+/* line 1063, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual .hp-bank-visual-left {
   bottom: 31px;
   left: 26px;
   font-size: 16px;
 }
-/* line 1067, ../src/jquery.hosted-payments.sass */
+/* line 1068, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual .hp-bank-visual-right {
   bottom: 31px;
   left: 186px;
   font-size: 16px;
 }
-/* line 1072, ../src/jquery.hosted-payments.sass */
+/* line 1073, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-bank-visual .hp-bank-visual-bank {
   top: 19px;
   left: 20px;
@@ -1558,11 +1559,11 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   color: #476d6d;
   text-shadow: 0 1px 1px #74c4bb;
 }
-/* line 1082, ../src/jquery.hosted-payments.sass */
+/* line 1083, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank .slider-container {
   padding-top: 30px;
 }
-/* line 1090, ../src/jquery.hosted-payments.sass */
+/* line 1091, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank p,
 .hp .hp-col-right .hp-content-cc p,
 .hp .hp-col-right .hp-content-emoney p,
@@ -1573,7 +1574,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   text-align: center;
   margin: 24px 0 0;
 }
-/* line 1096, ../src/jquery.hosted-payments.sass */
+/* line 1097, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank h4,
 .hp .hp-col-right .hp-content-cc h4,
 .hp .hp-col-right .hp-content-emoney h4,
@@ -1583,7 +1584,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   color: #919191;
   text-align: center;
 }
-/* line 1101, ../src/jquery.hosted-payments.sass */
+/* line 1102, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank .callout,
 .hp .hp-col-right .hp-content-cc .callout,
 .hp .hp-col-right .hp-content-emoney .callout,
@@ -1594,7 +1595,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   margin: 14px 0;
 }
 @media screen and (max-width: 656px) {
-  /* line 1101, ../src/jquery.hosted-payments.sass */
+  /* line 1102, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-content-bank .callout,
   .hp .hp-col-right .hp-content-cc .callout,
   .hp .hp-col-right .hp-content-emoney .callout,
@@ -1603,7 +1604,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
     display: none;
   }
 }
-/* line 1110, ../src/jquery.hosted-payments.sass */
+/* line 1111, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank .callout p,
 .hp .hp-col-right .hp-content-cc .callout p,
 .hp .hp-col-right .hp-content-emoney .callout p,
@@ -1612,7 +1613,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   margin: 0 0 17px;
   padding: 0;
 }
-/* line 1114, ../src/jquery.hosted-payments.sass */
+/* line 1115, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank .hp-code-title,
 .hp .hp-col-right .hp-content-cc .hp-code-title,
 .hp .hp-col-right .hp-content-emoney .hp-code-title,
@@ -1625,7 +1626,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   margin: 20px 0;
 }
 @media screen and (max-width: 656px) {
-  /* line 1114, ../src/jquery.hosted-payments.sass */
+  /* line 1115, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-content-bank .hp-code-title,
   .hp .hp-col-right .hp-content-cc .hp-code-title,
   .hp .hp-col-right .hp-content-emoney .hp-code-title,
@@ -1634,7 +1635,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
     margin: 5px 0 15px;
   }
 }
-/* line 1124, ../src/jquery.hosted-payments.sass */
+/* line 1125, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank .hp-input-cvv-image,
 .hp .hp-col-right .hp-content-cc .hp-input-cvv-image,
 .hp .hp-col-right .hp-content-emoney .hp-input-cvv-image,
@@ -1647,7 +1648,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   top: 7px;
   right: 7px;
 }
-/* line 1133, ../src/jquery.hosted-payments.sass */
+/* line 1134, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-content-bank.hp-content-card-amex .hp-input-cvv-image,
 .hp .hp-col-right .hp-content-cc.hp-content-card-amex .hp-input-cvv-image,
 .hp .hp-col-right .hp-content-emoney.hp-content-card-amex .hp-input-cvv-image,
@@ -1655,7 +1656,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
 .hp .hp-col-right .hp-content-code.hp-content-card-amex .hp-input-cvv-image {
   background: url("https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/icon-cvv.png");
 }
-/* line 1136, ../src/jquery.hosted-payments.sass */
+/* line 1137, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt {
   -moz-transition: all 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
   -o-transition: all 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -1679,160 +1680,160 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   border: 1px solid #9e9e9e;
   opacity: 0;
 }
-/* line 1150, ../src/jquery.hosted-payments.sass */
+/* line 1151, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt.active {
   opacity: 1;
 }
-/* line 1153, ../src/jquery.hosted-payments.sass */
+/* line 1154, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt-container {
-  padding: 30px;
+  padding: 15px;
   position: relative;
 }
-/* line 1157, ../src/jquery.hosted-payments.sass */
+/* line 1158, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt-container .hp-close {
   position: absolute;
   top: 0;
   right: 15px;
   color: #2196f3;
 }
-/* line 1163, ../src/jquery.hosted-payments.sass */
+/* line 1164, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt-container > p {
-  font-size: 2.7em;
+  font-size: 1.6em;
   color: #2196f3;
   display: block;
   margin-bottom: 15px;
 }
-/* line 1169, ../src/jquery.hosted-payments.sass */
+/* line 1170, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt-container hr {
-  margin: 0 0 30px 0;
+  margin: 0 0 15px 0;
   padding: 0;
   border: 0 none;
   height: 1px;
   background: #dedede;
 }
-/* line 1176, ../src/jquery.hosted-payments.sass */
+/* line 1177, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt-container a {
   text-align: center;
   display: block;
   margin: 15px auto;
 }
 @media screen and (max-width: 656px) {
-  /* line 1182, ../src/jquery.hosted-payments.sass */
+  /* line 1183, ../src/jquery.hosted-payments.sass */
   .hp .hp-avs-prompt-container > p {
     font-size: 18px;
     margin-bottom: 7px;
   }
-  /* line 1186, ../src/jquery.hosted-payments.sass */
+  /* line 1187, ../src/jquery.hosted-payments.sass */
   .hp .hp-avs-prompt-container hr {
     margin: 3px 0 12px;
   }
-  /* line 1189, ../src/jquery.hosted-payments.sass */
+  /* line 1190, ../src/jquery.hosted-payments.sass */
   .hp .hp-avs-prompt-container a {
     margin: 7px auto;
     font-size: 12px;
   }
 }
-/* line 1193, ../src/jquery.hosted-payments.sass */
+/* line 1194, ../src/jquery.hosted-payments.sass */
 .hp .hp-label-avs {
   display: block;
-  font-size: 1.3em;
+  font-size: 1.1em;
   color: #1f1f1f;
 }
 @media screen and (max-width: 656px) {
-  /* line 1193, ../src/jquery.hosted-payments.sass */
+  /* line 1194, ../src/jquery.hosted-payments.sass */
   .hp .hp-label-avs {
     font-size: 14px;
   }
 }
-/* line 1201, ../src/jquery.hosted-payments.sass */
+/* line 1202, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt-right,
 .hp .hp-avs-prompt-left {
   display: block;
   margin-bottom: 15px;
 }
 @media screen and (max-width: 656px) {
-  /* line 1201, ../src/jquery.hosted-payments.sass */
+  /* line 1202, ../src/jquery.hosted-payments.sass */
   .hp .hp-avs-prompt-right,
   .hp .hp-avs-prompt-left {
     margin-bottom: 4px;
   }
 }
-/* line 1209, ../src/jquery.hosted-payments.sass */
+/* line 1210, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-prompt-right {
   margin-bottom: 0;
 }
-/* line 1212, ../src/jquery.hosted-payments.sass */
+/* line 1213, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-street {
   width: 100%;
 }
-/* line 1215, ../src/jquery.hosted-payments.sass */
+/* line 1216, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-street > input {
   width: 100%;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
 }
-/* line 1220, ../src/jquery.hosted-payments.sass */
+/* line 1221, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-state {
   width: 142px;
 }
-/* line 1223, ../src/jquery.hosted-payments.sass */
+/* line 1224, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-state > select {
   width: 100%;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
 }
-/* line 1228, ../src/jquery.hosted-payments.sass */
+/* line 1229, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-zip {
   width: 144px;
 }
-/* line 1231, ../src/jquery.hosted-payments.sass */
+/* line 1232, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-zip > input {
   width: 100%;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
 }
-/* line 1236, ../src/jquery.hosted-payments.sass */
+/* line 1237, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-city {
   width: 234px;
 }
-/* line 1239, ../src/jquery.hosted-payments.sass */
+/* line 1240, ../src/jquery.hosted-payments.sass */
 .hp .hp-input-avs-city > input {
   width: 100%;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
 }
-/* line 1244, ../src/jquery.hosted-payments.sass */
+/* line 1245, ../src/jquery.hosted-payments.sass */
 .hp .hp-pull-left {
   float: left;
   margin-right: 30px;
   margin-bottom: 30px;
 }
 @media screen and (max-width: 656px) {
-  /* line 1244, ../src/jquery.hosted-payments.sass */
+  /* line 1245, ../src/jquery.hosted-payments.sass */
   .hp .hp-pull-left {
     margin-bottom: 4px;
   }
 }
-/* line 1252, ../src/jquery.hosted-payments.sass */
+/* line 1253, ../src/jquery.hosted-payments.sass */
 .hp .hp-pull-left.hp-no-margins {
   margin: 0;
 }
-/* line 1255, ../src/jquery.hosted-payments.sass */
+/* line 1256, ../src/jquery.hosted-payments.sass */
 .hp .hp-avs-required {
   color: #f44336;
 }
 
-/* line 1258, ../src/jquery.hosted-payments.sass */
+/* line 1259, ../src/jquery.hosted-payments.sass */
 .hp-form-emoney,
 .hp-form-code {
   position: relative;
 }
 
-/* line 1263, ../src/jquery.hosted-payments.sass */
+/* line 1264, ../src/jquery.hosted-payments.sass */
 .hp-form-success .hp-success-visual {
   background: url("https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/icon-success.png");
   font: 0/0 serif;
@@ -1843,25 +1844,25 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   margin: 85px auto 30px;
 }
 @media screen and (max-width: 656px) {
-  /* line 1273, ../src/jquery.hosted-payments.sass */
+  /* line 1274, ../src/jquery.hosted-payments.sass */
   .hp-form-success .hp-success-visual {
     margin-top: 15px;
   }
-  /* line 1276, ../src/jquery.hosted-payments.sass */
+  /* line 1277, ../src/jquery.hosted-payments.sass */
   .hp-form-success .text-muted {
     display: none;
   }
 }
 
-/* line 1279, ../src/jquery.hosted-payments.sass */
+/* line 1280, ../src/jquery.hosted-payments.sass */
 .hp-form-transvault-app-link {
   height: 84px;
 }
-/* line 1282, ../src/jquery.hosted-payments.sass */
+/* line 1283, ../src/jquery.hosted-payments.sass */
 .hp-form-transvault-app-link .hp-row {
   display: none;
 }
-/* line 1285, ../src/jquery.hosted-payments.sass */
+/* line 1286, ../src/jquery.hosted-payments.sass */
 .hp-form-transvault-app-link .hp-submit-redirect {
   padding: 16px 0;
   display: block;
@@ -1871,7 +1872,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
 }
 
 @media screen and (max-width: 656px) {
-  /* line 1293, ../src/jquery.hosted-payments.sass */
+  /* line 1294, ../src/jquery.hosted-payments.sass */
   .hp.hp-form .hp-submit.hp-submit-danger {
     bottom: 4vh;
     left: 0;
@@ -1879,18 +1880,19 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
     width: 80%;
   }
 
-  /* line 1299, ../src/jquery.hosted-payments.sass */
+  /* line 1300, ../src/jquery.hosted-payments.sass */
   .hp .hp-col-right .hp-content-transvault p.hp-input-transvault-message {
     font-size: 1rem;
+    min-width: 300px;
   }
 
-  /* line 1303, ../src/jquery.hosted-payments.sass */
+  /* line 1305, ../src/jquery.hosted-payments.sass */
   .hp-form-transvault .hp-content-transvault,
   .hp-form-transvault .hp-col-left {
     min-height: 280px !important;
   }
 }
-/* line 1307, ../src/jquery.hosted-payments.sass */
+/* line 1309, ../src/jquery.hosted-payments.sass */
 .hp-tooltip {
   width: 312px;
   background: #0c7cd5;
@@ -1901,7 +1903,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.2);
   margin-left: -156px !important;
 }
-/* line 1309, ../src/jquery.hosted-payments.sass */
+/* line 1311, ../src/jquery.hosted-payments.sass */
 .hp-tooltip span, .hp-tooltip p, .hp-tooltip div {
   font-size: 12px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -1910,11 +1912,11 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   margin-top: 0;
   margin-bottom: 0;
 }
-/* line 1327, ../src/jquery.hosted-payments.sass */
+/* line 1329, ../src/jquery.hosted-payments.sass */
 .hp-tooltip .hp-tooltip-wrapper {
   padding: 10px;
 }
-/* line 1330, ../src/jquery.hosted-payments.sass */
+/* line 1332, ../src/jquery.hosted-payments.sass */
 .hp-tooltip .hp-tooltip-wrapper:before {
   content: " ";
   display: block;
@@ -1927,17 +1929,17 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   border-right: 5px solid transparent;
   border-bottom: 5px solid #0c7cd5;
 }
-/* line 1342, ../src/jquery.hosted-payments.sass */
+/* line 1344, ../src/jquery.hosted-payments.sass */
 .hp-tooltip .hp-tooltip-title,
 .hp-tooltip .hp-tooltip-content {
   display: block;
   color: white;
 }
-/* line 1347, ../src/jquery.hosted-payments.sass */
+/* line 1349, ../src/jquery.hosted-payments.sass */
 .hp-tooltip .hp-tooltip-title {
   font-weight: bold;
 }
-/* line 1350, ../src/jquery.hosted-payments.sass */
+/* line 1352, ../src/jquery.hosted-payments.sass */
 .hp-tooltip .hp-tooltip-close {
   position: absolute;
   top: 0;
@@ -1947,217 +1949,217 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
   opacity: 0.8;
 }
-/* line 1358, ../src/jquery.hosted-payments.sass */
+/* line 1360, ../src/jquery.hosted-payments.sass */
 .hp-tooltip .hp-tooltip-close:hover {
   filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
   opacity: 1;
   cursor: pointer;
 }
 
-/* line 1363, ../src/jquery.hosted-payments.sass */
+/* line 1365, ../src/jquery.hosted-payments.sass */
 .hp-sprite {
   background-image: url("https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/sprite.png");
   background-repeat: no-repeat;
   display: block;
 }
 
-/* line 1368, ../src/jquery.hosted-payments.sass */
+/* line 1370, ../src/jquery.hosted-payments.sass */
 .sprite-background-ach {
   width: 400px;
   height: 173px;
   background-position: -1px -1px;
 }
 
-/* line 1373, ../src/jquery.hosted-payments.sass */
+/* line 1375, ../src/jquery.hosted-payments.sass */
 .sprite-background-amex {
   width: 398px;
   height: 236px;
   background-position: -1px -176px;
 }
 
-/* line 1378, ../src/jquery.hosted-payments.sass */
+/* line 1380, ../src/jquery.hosted-payments.sass */
 .sprite-background-diners {
   width: 398px;
   height: 236px;
   background-position: -5px -418px;
 }
 
-/* line 1383, ../src/jquery.hosted-payments.sass */
+/* line 1385, ../src/jquery.hosted-payments.sass */
 .sprite-background-discover {
   width: 398px;
   height: 236px;
   background-position: -1px -660px;
 }
 
-/* line 1388, ../src/jquery.hosted-payments.sass */
+/* line 1390, ../src/jquery.hosted-payments.sass */
 .sprite-background-emoney {
   width: 398px;
   height: 236px;
   background-position: -1px -898px;
 }
 
-/* line 1393, ../src/jquery.hosted-payments.sass */
+/* line 1395, ../src/jquery.hosted-payments.sass */
 .sprite-background-jcb {
   width: 398px;
   height: 236px;
   background-position: -1px -1136px;
 }
 
-/* line 1398, ../src/jquery.hosted-payments.sass */
+/* line 1400, ../src/jquery.hosted-payments.sass */
 .sprite-background-mastercard {
   width: 398px;
   height: 236px;
   background-position: -1px -1374px;
 }
 
-/* line 1403, ../src/jquery.hosted-payments.sass */
+/* line 1405, ../src/jquery.hosted-payments.sass */
 .sprite-background-visa {
   width: 398px;
   height: 236px;
   background-position: -1px -1612px;
 }
 
-/* line 1408, ../src/jquery.hosted-payments.sass */
+/* line 1410, ../src/jquery.hosted-payments.sass */
 .sprite-card-ach {
   width: 42px;
   height: 26px;
   background-position: -1px -1850px;
 }
 
-/* line 1413, ../src/jquery.hosted-payments.sass */
+/* line 1415, ../src/jquery.hosted-payments.sass */
 .sprite-card-amex {
   width: 42px;
   height: 26px;
   background-position: -1px -1878px;
 }
 
-/* line 1418, ../src/jquery.hosted-payments.sass */
+/* line 1420, ../src/jquery.hosted-payments.sass */
 .sprite-card-diners {
   width: 42px;
   height: 26px;
   background-position: -1px -1906px;
 }
 
-/* line 1423, ../src/jquery.hosted-payments.sass */
+/* line 1425, ../src/jquery.hosted-payments.sass */
 .sprite-card-discover {
   width: 42px;
   height: 26px;
   background-position: -1px -1934px;
 }
 
-/* line 1428, ../src/jquery.hosted-payments.sass */
+/* line 1430, ../src/jquery.hosted-payments.sass */
 .sprite-card-emoney {
   width: 42px;
   height: 26px;
   background-position: -1px -1962px;
 }
 
-/* line 1433, ../src/jquery.hosted-payments.sass */
+/* line 1435, ../src/jquery.hosted-payments.sass */
 .sprite-card-gift {
   width: 42px;
   height: 26px;
   background-position: -1px -1990px;
 }
 
-/* line 1438, ../src/jquery.hosted-payments.sass */
+/* line 1440, ../src/jquery.hosted-payments.sass */
 .sprite-card-jcb {
   width: 42px;
   height: 26px;
   background-position: -1px -2018px;
 }
 
-/* line 1443, ../src/jquery.hosted-payments.sass */
+/* line 1445, ../src/jquery.hosted-payments.sass */
 .sprite-card-mastercard {
   width: 42px;
   height: 26px;
   background-position: -1px -2046px;
 }
 
-/* line 1448, ../src/jquery.hosted-payments.sass */
+/* line 1450, ../src/jquery.hosted-payments.sass */
 .sprite-card-visa {
   width: 42px;
   height: 26px;
   background-position: -1px -2074px;
 }
 
-/* line 1453, ../src/jquery.hosted-payments.sass */
+/* line 1455, ../src/jquery.hosted-payments.sass */
 .sprite-icon-cvv {
   width: 50px;
   height: 33px;
   background-position: -1px -2102px;
 }
 
-/* line 1458, ../src/jquery.hosted-payments.sass */
+/* line 1460, ../src/jquery.hosted-payments.sass */
 .sprite-icon-cvvalt {
   width: 50px;
   height: 33px;
   background-position: -1px -2137px;
 }
 
-/* line 1463, ../src/jquery.hosted-payments.sass */
+/* line 1465, ../src/jquery.hosted-payments.sass */
 .sprite-icon-refresh {
   width: 24px;
   height: 24px;
   background-position: -1px -2172px;
 }
 
-/* line 1468, ../src/jquery.hosted-payments.sass */
+/* line 1470, ../src/jquery.hosted-payments.sass */
 .sprite-icon-shield {
   width: 58px;
   height: 64px;
   background-position: -1px -2198px;
 }
 
-/* line 1473, ../src/jquery.hosted-payments.sass */
+/* line 1475, ../src/jquery.hosted-payments.sass */
 .sprite-icon-success {
   width: 128px;
   height: 128px;
   background-position: -1px -2264px;
 }
 
-/* line 1478, ../src/jquery.hosted-payments.sass */
+/* line 1480, ../src/jquery.hosted-payments.sass */
 .sprite-logo {
   width: 80px;
   height: 8px;
   background-position: -1px -2394px;
 }
 
-/* line 1483, ../src/jquery.hosted-payments.sass */
+/* line 1485, ../src/jquery.hosted-payments.sass */
 .sprite-nav-ach {
   width: 39px;
   height: 39px;
   background-position: -1px -2404px;
 }
 
-/* line 1488, ../src/jquery.hosted-payments.sass */
+/* line 1490, ../src/jquery.hosted-payments.sass */
 .sprite-nav-creditcard {
   width: 39px;
   height: 39px;
   background-position: -1px -2445px;
 }
 
-/* line 1493, ../src/jquery.hosted-payments.sass */
+/* line 1495, ../src/jquery.hosted-payments.sass */
 .sprite-nav-gift {
   width: 39px;
   height: 39px;
   background-position: -1px -2486px;
 }
 
-/* line 1498, ../src/jquery.hosted-payments.sass */
+/* line 1500, ../src/jquery.hosted-payments.sass */
 .sprite-nav-sign {
   width: 39px;
   height: 39px;
   background-position: -1px -2527px;
 }
 
-/* line 1503, ../src/jquery.hosted-payments.sass */
+/* line 1505, ../src/jquery.hosted-payments.sass */
 .sprite-nav-swipe {
   width: 39px;
   height: 39px;
   background-position: -1px -2568px;
 }
 
-/* line 1508, ../src/jquery.hosted-payments.sass */
+/* line 1510, ../src/jquery.hosted-payments.sass */
 .sprite-nav-transvault {
   width: 39px;
   height: 39px;
