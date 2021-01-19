@@ -5451,24 +5451,30 @@
     ];
 
     if (captchaType === hp.CaptchaType.GOOGLE) {
+      log("Waiting for google to load...");
       waitForCaptchaScriptToLoad(function () {
-        return typeof window.grecaptcha !== "undefined";
+        return typeof window.grecaptcha !== "undefined" && typeof(window.grecaptcha.setData) === "undefined";
       }).then(function () {
         $captchaContainer.addClass("hp-captcha-container-active");
         if (!alreadyRendered) {
+          log("Waiting for google to render...");
           grecaptcha.render.apply(null, args);
         } else {
+          log("Reseting existing google render...");
           grecaptcha.reset();
         }
       });
     } else {
+      log("Waiting for hcaptcha to load...");
       waitForCaptchaScriptToLoad(function () {
-        return typeof window.hcaptcha !== "undefined";
+        return typeof window.hcaptcha !== "undefined" && typeof(window.hcaptcha.setData) !== "undefined";
       }).then(function () {
         $captchaContainer.addClass("hp-captcha-container-active");
         if (!alreadyRendered) {
+          log("Waiting for hcaptcha to render...");
           hcaptcha.render.apply(null, args);
         } else {
+          log("Reseting existing hcaptcha render...");
           hcaptcha.reset();
         }
       });
@@ -5494,19 +5500,26 @@
 
     showLoader();
 
-    if ((captchaType === hp.CaptchaType.GOOGLE && typeof window.grecaptcha !== "undefined") || (captchaType !== hp.CaptchaType.GOOGLE && typeof window.hcaptcha !== "undefined")) {
+    if (typeof window.hcaptcha !== "undefined" && captchaType === hp.CaptchaType.GOOGLE) {
+      // this means hcaptcha was loaded before. need to delete things
+      delete window.hcaptcha;
+      delete window.grecaptcha;
+
+      log("HCaptcha was previously loaded, cannot re-render");
+    }
+
+    if ((captchaType === hp.CaptchaType.GOOGLE && typeof window.grecaptcha !== "undefined" && typeof(window.grecaptcha.setData) === "undefined") || (captchaType !== hp.CaptchaType.GOOGLE && typeof window.hcaptcha !== "undefined")) {
       log("Re-rendering captcha instance");
-      if (isCaptchaRendered()) {
-        renderCaptcha(deferred, true);
-      } else {
-        renderCaptcha(deferred, false);
-      }
+      setTimeout(function(){
+        renderCaptcha(deferred, isCaptchaRendered());
+      }, 0);
       return deferred;
     }
 
     $.getScript(scriptUrl)
       .then(function () {
         log("<script> was injected for type", captchaType, "with src=", scriptUrl);
+        log("Instances loaded: ", window.grecaptcha, window.hcaptcha);
         renderCaptcha(deferred, false);
       }, deferred.reject)
       ["catch"](deferred.reject);
@@ -9921,14 +9934,14 @@
   };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v5.0.16 */
+/* jQuery.HostedPayments - v5.0.17 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function ($, window, document, undefined) {
   var pluginName = "hp";
   var defaults = {};
 
-  defaults.version = "v5.0.16";
+  defaults.version = "v5.0.17";
   defaults.amount = 0;
   defaults.currencyLocale = "en-US";
   defaults.currencyCode = "USD";
