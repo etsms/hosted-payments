@@ -3760,7 +3760,7 @@
       '<div class="hp-secure">',
       '<div class="hp-secure-wrapper">',
         '<a href="https://emoney.com" target="_blank" title="Powered by EMoney">',
-        '<img class="hp-emoney-logo" src="https://app.emoney.com/Public/Styles/Images/logo-blue.svg" alt="Hosted Payments" />',
+          '<i class="hp-sprite sprite-logo hp-emoney-logo" alt="Hosted Payments"></i>',
         "</a>",
         '<div class="hp-support">',
           "<strong>Help &amp; support</strong>",
@@ -4029,19 +4029,19 @@
       transvault = "";
 
     if (defaultAreas.indexOf(0) >= 0) {
-      creditCard = '<li class="hp-type hp-cc"><a title="Credit or Debit Card" href="javascript:void(0);"><img src="https://cdn.rawgit.com/etsms/9e2e4c55564ca8eba12f9fa3e7064299/raw/93965040e6e421e1851bfe7a15af92bdc722fa43/credt-card-icon.svg" alt="Credit Card" /> <span>' + hp.Utils.defaults.defaultCreditCardFormLabel + '</span></a></li>';
+      creditCard = '<li class="hp-type hp-cc"><a title="Credit or Debit Card" href="javascript:void(0);"><i class="hp-sprite sprite-nav-ach" title="Credit Card"></i><span>' + hp.Utils.defaults.defaultCreditCardFormLabel + '</span></a></li>';
     }
 
     if (defaultAreas.indexOf(1) >= 0) {
-      bankAccount = '<li class="hp-type hp-bank"><a title="Electronic Payment Form Bank Account (ACH)" href="javascript:void(0);"><img src="https://cdn.rawgit.com/etsms/af49afe3c1c1cb41cb3204a45492bd47/raw/78e935c7e5290923dba15e8b595aef7c95b2292e/ach-icon.svg" alt="ACH and Bank Account" /> <span>' + hp.Utils.defaults.defaultBankAccountFormLabel + '</span></a></li>';
+      bankAccount = '<li class="hp-type hp-bank"><a title="Electronic Payment Form Bank Account (ACH)" href="javascript:void(0);"><i class="hp-sprite sprite-nav-creditcard" title="Electronic Payment Form Bank Account (ACH)"></i><span>' + hp.Utils.defaults.defaultBankAccountFormLabel + '</span></a></li>';
     }
 
     if (defaultAreas.indexOf(2) >= 0) {
-      code = '<li class="hp-type hp-code"><a title="Credit or Debit Card Swipe/Scan" href="javascript:void(0);"><img src="https://cdn.rawgit.com/etsms/c70317acba59d3d5b60e5999d5feeab8/raw/764478d2660f97d002eb3bd3177b725a410f694d/swipe-icon.svg" alt="Swipe or Scan" /> <span>' + hp.Utils.defaults.defaultSwipeScanFormLabel + '</span></a></li>';
+      code = '<li class="hp-type hp-code"><a title="Credit or Debit Card Swipe/Scan" href="javascript:void(0);"><i class="hp-sprite sprite-nav-swipe" title="Swipe or Scan"></i><span>' + hp.Utils.defaults.defaultSwipeScanFormLabel + '</span></a></li>';
     }
 
     if (defaultAreas.indexOf(3) >= 0) {
-      transvault = '<li class="hp-type hp-transvault"><a title="Terminal Device" href="javascript:void(0);"><img src="https://cdn.rawgit.com/etsms/5363122967f20bd31d6630529cb17c3f/raw/0a0ae6a30247ced8ed5c0c85f2b42072b59b8fba/transvault-icon.svg" alt="Hosted Transvault" /> <span>' + hp.Utils.defaults.defaultTransvaultFormLabel + '</span></a></li>';
+      transvault = '<li class="hp-type hp-transvault"><a title="Terminal Device" href="javascript:void(0);"><i class="hp-sprite sprite-nav-transvault" title="Hosted Transvault"></i><span>' + hp.Utils.defaults.defaultTransvaultFormLabel + '</span></a></li>';
     }
 
     for (var i = 0; i < defaultAreas.length; i++) {
@@ -8338,10 +8338,45 @@
     var $html = [
       '<div class="hp-transvault-visual">',
       '<a class="hp-submit-refresh" href="javascript:;" title="Refresh Transvault">',
-      '<img class="hp-submit-refresh-img" src="https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/icon-refresh.png" alt="Refresh Transvault Button" />',
+        '<i class="hp-sprite hp-submit-refresh-img sprite-icon-refresh" title="Refresh Transvault Icon"></i>',
       "</a>",
       '<div class="hp-transvault-visual-image {{isAlt}}">',
-      '<img class="event event-default" src="https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/terminal-loading.svg" alt="Status" />',
+      '<svg width="76" height="76" viewBox="0 0 76 76" xmlns="http://www.w3.org/2000/svg" stroke="#007aff">',
+          '<g fill="none" fill-rule="evenodd" stroke-width="2">',
+          '    <circle cx="38" cy="38" r="1">',
+          '        <animate attributeName="r"',
+          '            begin="0s" dur="1.8s"',
+          '            values="1; 20"',
+          '            calcMode="spline"',
+          '            keyTimes="0; 1"',
+          '            keySplines="0.165, 0.84, 0.44, 1"',
+          '            repeatCount="indefinite" />',
+          '        <animate attributeName="stroke-opacity"',
+          '            begin="0s" dur="1.8s"',
+          '            values="1; 0"',
+          '            calcMode="spline"',
+          '            keyTimes="0; 1"',
+          '            keySplines="0.3, 0.61, 0.355, 1"',
+          '            repeatCount="indefinite" />',
+          '    </circle>',
+          '    <circle cx="38" cy="38" r="1">',
+          '        <animate attributeName="r"',
+          '            begin="-0.9s" dur="1.8s"',
+          '            values="1; 20"',
+          '            calcMode="spline"',
+          '            keyTimes="0; 1"',
+          '            keySplines="0.165, 0.84, 0.44, 1"',
+          '            repeatCount="indefinite" />',
+          '        <animate attributeName="stroke-opacity"',
+          '            begin="-0.9s" dur="1.8s"',
+          '            values="1; 0"',
+          '            calcMode="spline"',
+          '            keyTimes="0; 1"',
+          '            keySplines="0.3, 0.61, 0.355, 1"',
+          '            repeatCount="indefinite" />',
+          '    </circle>',
+          '</g>',
+      '</svg>',
       "</div>",
       '<p class="hp-input-transvault-message {{isAlt}}">',
       "Disconnected <span></span>",
@@ -9934,14 +9969,14 @@
   };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v5.0.17 */
+/* jQuery.HostedPayments - v5.0.18 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function ($, window, document, undefined) {
   var pluginName = "hp";
   var defaults = {};
 
-  defaults.version = "v5.0.17";
+  defaults.version = "v5.0.18";
   defaults.amount = 0;
   defaults.currencyLocale = "en-US";
   defaults.currencyCode = "USD";

@@ -151,9 +151,7 @@ div[data-selector-key]
         display: block !important
 
     .hp-emoney-logo
-        width: 80px
-        margin: 0 0 0 -1px
-        padding: 0
+        margin: 4px 1px
 
     .hp-captcha-container
 
@@ -666,7 +664,7 @@ div[data-selector-key]
                     +border-radius(3px 0 0 0)
 
                 a
-                    $size: 46px
+                    $size: 50px
 
                     position: relative
                     display: block
@@ -679,11 +677,6 @@ div[data-selector-key]
                     background: $pureWhite
                     font-size: 14px
 
-                    +breakpoint($mobilePortrait)
-                        overflow: hidden !important
-                        height: auto !important
-
-
                     span
                         display: block
 
@@ -693,38 +686,13 @@ div[data-selector-key]
                         height: $size
                         line-height: $size
                         text-indent: $size
+                        overflow: hidden !important
 
-                        img
-                            margin: 0 !important
-
-
-                    +breakpoint($mobilePortrait)
                         span
                             display: none
 
-
-                    img
-                        width: 32px
-                        position: absolute
-                        left: 7px
-                        top: 50%
-
-                &.hp-transvault img
-                    width: auto
-                    height: 28px
-                    margin-top: -14px
-                    margin-left: 4px
-
-                &.hp-cc img
-                    width: 30px
-                    margin-top: -11px
-
-                &.hp-bank img
-                    margin-top: -9px
-
-                &.hp-code img
-                    width: 33px
-                    margin-top: -12px
+                        i.hp-sprite
+                            left: 10px
 
         .hp-secure
             width: $sidebarWidth
@@ -738,7 +706,6 @@ div[data-selector-key]
 
             +breakpoint($mobilePortrait)
                 display: none
-
 
             .hp-secure-bottom
                 +clearfix
@@ -984,9 +951,6 @@ div[data-selector-key]
             .hp-transvault-visual-image
                 text-align: center
                 margin-top: 24px
-
-                img.event
-                    width: 106px
 
             .hp-submit-refresh
                 +opacity(0.8)
@@ -1511,3 +1475,13 @@ div[data-selector-key]
     width: 39px
     height: 39px
     background-position: (-1px) -2609px
+
+.sprite-nav-ach,
+.sprite-nav-creditcard,
+.sprite-nav-gift,
+.sprite-nav-sign,
+.sprite-nav-swipe,
+.sprite-nav-transvault
+    position: absolute
+    left: 5px
+    top: 5px
