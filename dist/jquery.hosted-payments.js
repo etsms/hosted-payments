@@ -3394,7 +3394,7 @@
         }
 
         var accountNumber = element.find(".hp-input-account > input").val();
-        if (accountNumber.length <= 4 || accountNumber.length > 17) {
+        if (accountNumber.length <= 4 || accountNumber.length > 21) {
           errorMessage.push("The 'account number' field is either too short or too long.");
         }
 
@@ -4902,7 +4902,13 @@
   };
 
   var makeRequest = function makeRequest(data, isSync, existingDeferred) {
-    var deferred = existingDeferred ?? jQuery.Deferred();
+
+      var deferred = existingDeferred; 
+
+      if (typeof deferred === "undefined" || deferred == null) {
+        deferred = jQuery.Deferred();
+      }
+
     var url = hp.Utils.defaults.baseUrl + encodeURI("?dt=" + new Date().getTime());
     var vendor = hp.Utils.getVendor();
 
@@ -7210,8 +7216,8 @@
         var that = $(this),
           count = that.val().length;
 
-        if (count > 16) {
-          var value = that.val().substr(0, 16);
+        if (count > 21) {
+          var value = that.val().substr(0, 21);
           that.val(value);
         }
 
@@ -9969,14 +9975,14 @@
   };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v5.0.18 */
+/* jQuery.HostedPayments - v5.0.19 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function ($, window, document, undefined) {
   var pluginName = "hp";
   var defaults = {};
 
-  defaults.version = "v5.0.18";
+  defaults.version = "v5.0.19";
   defaults.amount = 0;
   defaults.currencyLocale = "en-US";
   defaults.currencyCode = "USD";
