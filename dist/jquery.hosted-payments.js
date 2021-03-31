@@ -4207,13 +4207,11 @@
     var deferred = jQuery.Deferred();
 
     var isBankAccount = function isBankAccount(req) {
-      var isBank = false;
-
       if (typeof req.properties !== "undefined" && typeof req.properties.accountNumber !== "undefined") {
-        isBank = true;
+        return true;
       }
 
-      return isBank;
+      return false;
     };
 
     var isEMoney = function isEMoney(req) {
@@ -4290,6 +4288,8 @@
           isCC = isCreditCard(payload),
           isTrack = isTrackAccount(payload),
           isScan = typeof swipe !== "undefined"; // For BANK ACCOUNT objects
+
+        hp.Utils.log("isAch, isEm, isCC, isTrack, isScan", isAch, isEm, isCC, isTrack, isScan);
 
         if (isAch) {
           message = "Transaction pending.";
@@ -7125,10 +7125,10 @@
       "</div>",
     ].join("");
 
-    var $inputHtml = ['<div class="hp-input hp-input-account hp-input-left">', '<input maxlength="17" placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>", '<div class="hp-input hp-input-routing hp-input-right">', '<input maxlength="9" placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>"].join("");
+    var $inputHtml = ['<div class="hp-input hp-input-account hp-input-left">', '<input maxlength="22" placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>", '<div class="hp-input hp-input-routing hp-input-right">', '<input maxlength="9" placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>"].join("");
 
     if (hp.Utils.defaults.swapAchInputs) {
-      $inputHtml = ['<div class="hp-input hp-input-routing hp-input-left">', '<input maxlength="9" placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>", '<div class="hp-input hp-input-account hp-input-right">', '<input maxlength="17" placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>"].join("");
+      $inputHtml = ['<div class="hp-input hp-input-routing hp-input-left">', '<input maxlength="9" placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>", '<div class="hp-input hp-input-account hp-input-right">', '<input maxlength="22" placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>"].join("");
     }
 
     $html = $html.replace("{{inputHtml}}", $inputHtml);
