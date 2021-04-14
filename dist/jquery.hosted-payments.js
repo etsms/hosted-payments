@@ -3970,6 +3970,12 @@
       }
 
       var offset = $btn.offset();
+
+      if (offset === undefined) {
+        hp.Utils.log("No button to append tooltop.");
+        return;
+      }
+
       var width = ($btn.outerWidth() / 2);
       var height = ($btn.outerHeight() + 10);
 
@@ -7120,8 +7126,7 @@
       "{{inputHtml}}",
       "</div>",
       '<button class="hp-submit">' + hp.Utils.defaults.defaultButtonLabel + "</button>",
-      // '<p class="info">By clicking ' + hp.Utils.defaults.defaultButtonLabel + ', you are requesting and authorizing a recurring electronic fund transfer of $' + hp.Utils.getAmount() + ' from the bank account above on thde dates listed in your payment schedule</p>',
-      '<p class="info">* Please note that bank account (ACH) transactions may take up to 3 days to process. This time period varies depending on the your issuing bank. For more information please visit us at <a href="https://www.elavonpayments.com/" target="_blank">https://elavonpayments.com</a>.</p>',
+      '<p class="info">* Please note that bank account (ACH) transactions may take up to 3 business days to process. This time period varies depending on the your issuing bank. For more information please visit us at <a href="https://www.elavonpayments.com/" target="_blank">https://elavonpayments.com</a>.</p>',
       "</div>",
     ].join("");
 
@@ -7714,10 +7719,12 @@
     var $this = this;
     $(document).pos();
     $(document).on("hp.global_swipped_start", function (event, data) {
+      hp.Utils.log("hp.global_swipped_start", data);
       hp.Utils.showLoader();
       hp.Utils.defaults.eventCallback(data);
     });
     $(document).on("hp.global_swipped_end", function (event, data) {
+      hp.Utils.log("hp.global_swipped_end", data);
       hp.Utils.defaults.eventCallback(data);
       $this.handleSubmit(data);
     }); // Kills spacebar page-down event
@@ -9856,133 +9863,160 @@
     }; //extend options
 
     $this.options = $.extend(true, {}, defaults, options);
+
     $this.off("keypress").on("keypress", function (event) {
-      if ($this.options.swipe) {
-        if (event.which != 13) {
-          data.swipe += String.fromCharCode(event.which);
 
-          if (data.swipe.length == 2 && data.swipe == "%B") {
-            $this.trigger($this.options.onEventName);
-          }
+      if (!$this.options.swipe) {
+        return;
+      }
+      
+      // Step 1: Collect all non-end sentinal string characters. The 'data.swipe' is the character concatinated string.
+      if (event.which != 13) {
+        
+        data.swipe += String.fromCharCode(event.which);
 
-          return;
+        // Step 1a: Trigger the onSwipeStart event to notify the plugin to show the loading UI
+        if (data.swipe.length == 2 && data.swipe == "%B" || data.swipe.length == 1 && data.swipe == ";") {
+          $this.trigger($this.options.onEventName);
         }
 
-        var result = {
-          track_one: "",
-          track_two: "",
-          track_three: "",
-          ksn: "",
-          card_number: "",
-          name_on_card: "",
-          card_exp_date_month: "",
-          card_exp_date_year: "",
-          is_valid: true,
-          is_emoney: false,
-          current_year: new Date().getFullYear().toString().substring(0, 2),
-        };
-        var parsedCardNumberResult = cardNumberRegex.exec(data.swipe),
-          parsedNameOnCardResult = nameOnCardRegex.exec(data.swipe),
-          parsedExpirationDateResult = expirationDateRegex.exec(data.swipe),
-          parsedTrackResult = data.swipe.match(trackRegex),
-          parsedUnencryptedResult = unencryptedTrackRegex.exec(data.swipe); // Assign card number result:
+        return;
 
-        if (parsedCardNumberResult != null && parsedCardNumberResult.length) {
-          result.card_number = parsedCardNumberResult[1];
-        } // Assign name on card result:
+      }
 
-        if (parsedNameOnCardResult != null && parsedNameOnCardResult.length) {
-          var name = parsedNameOnCardResult[1];
+      // Step 2: Create an empty results object/placeholder
+      var result = {
+        track_one: "",
+        track_two: "",
+        track_three: "",
+        ksn: "",
+        card_number: "",
+        name_on_card: "",
+        card_exp_date_month: "",
+        card_exp_date_year: "",
+        is_valid: true,
+        is_emoney: false,
+        current_year: new Date().getFullYear().toString().substring(0, 2),
+      };
 
-          if (name.indexOf(",") === -1) {
-            name = name.replace(/\/+|\d+/gi, " ");
-          } else {
-            name = $.trim(name.replace(/\//gi, " ").replace(/\W+/gi, " "));
-          }
+      // Step 3: Run regex on swipe data to parse for cardNumber, nameOnCard, expiration, and track data
+      var parsedCardNumberResult = cardNumberRegex.exec(data.swipe);
+      var parsedNameOnCardResult = nameOnCardRegex.exec(data.swipe);
+      var parsedExpirationDateResult = expirationDateRegex.exec(data.swipe);
+      var parsedTrackResult = data.swipe.match(trackRegex);
 
-          if (name.split(" ").length > 2) {
-            name = name.split(" ")[1] + " " + name.split(" ")[2] + " " + name.split(" ")[0];
-          } else {
-            name = name.split(" ")[1] + " " + name.split(" ")[0];
-          }
+      // Step 3a: Assign card number result:
+      var parsedUnencryptedResult = unencryptedTrackRegex.exec(data.swipe); 
 
-          result.name_on_card = name;
-        } // Assign expiration date result:
+      if (parsedCardNumberResult != null && parsedCardNumberResult.length) {
+        result.card_number = parsedCardNumberResult[1];
+      } 
 
-        if (parsedExpirationDateResult != null && parsedExpirationDateResult.length) {
-          var date = parsedExpirationDateResult[1],
-            year = date.substring(0, 2),
-            month = date.substring(2); // current century : new Date().getFullYear().toString().substring(0, 2)
+      // Step 3b: Assign name on card result:
+      if (parsedNameOnCardResult != null && parsedNameOnCardResult.length) {
 
-          result.card_exp_date_year = year;
-          result.card_exp_date_month = month;
-        } // Clean matches
+        var name = parsedNameOnCardResult[1];
 
-        if (parsedTrackResult != null && parsedTrackResult.length) {
-          parsedTrackResult = parsedTrackResult.map(function (match) {
-            return match.replace("|", "");
-          }); // Assign track one result:
-
-          if (hasValue(parsedTrackResult, 1)) {
-            result.track_one = parsedTrackResult[1];
-          } // Assign track two result:
-
-          if (hasValue(parsedTrackResult, 2)) {
-            result.track_two = parsedTrackResult[2];
-          } // Assign track three result:
-
-          if (parsedTrackResult.length >= 10 && hasValue(parsedTrackResult, 3)) {
-            result.track_three = parsedTrackResult[3];
-          } // Assign ksn result:
-
-          if (parsedTrackResult.length >= 10 && hasValue(parsedTrackResult, 8)) {
-            result.ksn = parsedTrackResult[8];
-          } else if (parsedTrackResult.length === 9) {
-            result.ksn = parsedTrackResult[7];
-          }
-        } else if (parsedUnencryptedResult != null && parsedUnencryptedResult.length >= 3) {
-          result.track_one = parsedUnencryptedResult[1];
-          result.track_two = parsedUnencryptedResult[2];
+        if (name.indexOf(",") === -1) {
+          name = name.replace(/\/+|\d+/gi, " ");
         } else {
+          name = $.trim(name.replace(/\//gi, " ").replace(/\W+/gi, " "));
+        }
+
+        if (name.split(" ").length > 2) {
+          name = name.split(" ")[1] + " " + name.split(" ")[2] + " " + name.split(" ")[0];
+        } else {
+          name = name.split(" ")[1] + " " + name.split(" ")[0];
+        }
+
+        result.name_on_card = name;
+      } 
+      
+      //Step 3c: Assign expiration date result:
+      if (parsedExpirationDateResult != null && parsedExpirationDateResult.length) {
+        var date = parsedExpirationDateResult[1];
+        var year = date.substring(0, 2);
+        var month = date.substring(2); 
+
+        result.card_exp_date_year = year;
+        result.card_exp_date_month = month;
+      } 
+      
+      // Clean matches
+      if (parsedTrackResult != null && parsedTrackResult.length) {
+        parsedTrackResult = parsedTrackResult.map(function (match) {
+          return match.replace("|", "");
+        }); 
+        
+        // Assign track one result:
+        if (hasValue(parsedTrackResult, 1)) {
+          result.track_one = parsedTrackResult[1];
+        } 
+        
+        // Assign track two result:
+        if (hasValue(parsedTrackResult, 2)) {
+          result.track_two = parsedTrackResult[2];
+        } 
+        
+        // Assign track three result:
+        if ((parsedTrackResult.length >= 10 || parsedTrackResult.length == 8) && hasValue(parsedTrackResult, 3)) {
+          result.track_three = parsedTrackResult[3];
+        } 
+        
+        // Assign ksn result:
+        if (parsedTrackResult.length >= 10 && hasValue(parsedTrackResult, 8)) {
+          result.ksn = parsedTrackResult[8];
+        } else if (parsedTrackResult.length === 9 && hasValue(parsedTrackResult, 7)) {
+          result.ksn = parsedTrackResult[7];
+        } else if (parsedTrackResult.length === 8 && hasValue(parsedTrackResult, 6)) {
+          result.ksn = parsedTrackResult[6];
+        }
+
+      } else if (parsedUnencryptedResult != null && parsedUnencryptedResult.length >= 3) {
+        result.track_one = parsedUnencryptedResult[1];
+        result.track_two = parsedUnencryptedResult[2];
+      } else {
+        result.is_valid = false;
+      }
+
+      // Step 4: Handle end sentinal (usually a keyboard emulated 'enter' key)
+      if (event.which == 13) {
+
+        // Handles Gift Card Scan
+        if (!result.is_valid && result.card_number.indexOf("627571") !== -1) {
+          result.is_valid = true;
+          result.is_emoney = true;
+          result.name_on_card = "EMoney Card";
+          result.card_exp_date_year = (+new Date().getFullYear().toString().substring(2) + 9).toString();
+          result.card_exp_date_month = "12";
+        }
+
+        if (data.swipe.indexOf("%E?") !== -1 || data.swipe.indexOf("+E?") !== -1 || data.swipe.indexOf(";E?") !== -1) {
           result.is_valid = false;
         }
 
-        if (event.which == 13) {
-          // Handles Gift Card Scan
-          if (!result.is_valid && result.card_number.indexOf("627571") !== -1) {
-            result.is_valid = true;
-            result.is_emoney = true;
-            result.name_on_card = "EMoney Card";
-            result.card_exp_date_year = (+new Date().getFullYear().toString().substring(2) + 9).toString();
-            result.card_exp_date_month = "12";
-          }
-
-          if (data.swipe.indexOf("%E?") !== -1 || data.swipe.indexOf("+E?") !== -1 || data.swipe.indexOf(";E?") !== -1) {
-            result.is_valid = false;
-          }
-
-          if (result.name_on_card === "") {
-            result.name_on_card = "Unknown Card";
-          }
-
-          result.name_on_card = $.trim(result.name_on_card.replace("undefined", ""));
-          $this.trigger($this.options.offEventName, result);
-          $this.options.onScanSwipe(result);
-          data.swipe = "";
+        if (result.name_on_card === "") {
+          result.name_on_card = "Unknown Card";
         }
+
+        result.name_on_card = $.trim(result.name_on_card.replace("undefined", ""));
+        $this.trigger($this.options.offEventName, result);
+        $this.options.onScanSwipe(result);
+        data.swipe = "";
       }
+
     });
   };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v5.0.19 */
+/* jQuery.HostedPayments - v5.0.20 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function ($, window, document, undefined) {
   var pluginName = "hp";
   var defaults = {};
 
-  defaults.version = "v5.0.19";
+  defaults.version = "v5.0.20";
   defaults.amount = 0;
   defaults.currencyLocale = "en-US";
   defaults.currencyCode = "USD";

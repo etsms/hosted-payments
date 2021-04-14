@@ -4,7 +4,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="jquery.hosted-payments.css" />
-    <script src="https://cdn.jsdelivr.net/gh/jquery/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="jquery.min.js"></script>
     <script src="jquery.hosted-payments.js"></script>
   </head>
 
@@ -41,10 +41,10 @@
         disableAutocomplete: false,
         checkHttpsConnection: false,
         allowAvsSkip: false,
-        promptForAvs: true,
+        promptForAvs: false,
         swapAchInputs: true,
         allowHttpsSkip: true,
-        paymentTypeOrder: [0, 1, 2, 3],
+        paymentTypeOrder: [2],
         baseUrl: "https://stage-htv.emoney.com/v3/adapters",
         // alternativeSubmitButton: "#alt"
       };
