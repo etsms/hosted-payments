@@ -7130,10 +7130,10 @@
       "</div>",
     ].join("");
 
-    var $inputHtml = ['<div class="hp-input hp-input-account hp-input-left">', '<input maxlength="22" placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>", '<div class="hp-input hp-input-routing hp-input-right">', '<input maxlength="9" placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>"].join("");
+    var $inputHtml = ['<div class="hp-input hp-input-account hp-input-left">', '<input maxlength="17" placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>", '<div class="hp-input hp-input-routing hp-input-right">', '<input maxlength="9" placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>"].join("");
 
     if (hp.Utils.defaults.swapAchInputs) {
-      $inputHtml = ['<div class="hp-input hp-input-routing hp-input-left">', '<input maxlength="9" placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>", '<div class="hp-input hp-input-account hp-input-right">', '<input maxlength="22" placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>"].join("");
+      $inputHtml = ['<div class="hp-input hp-input-routing hp-input-left">', '<input maxlength="9" placeholder="Routing Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>", '<div class="hp-input hp-input-account hp-input-right">', '<input maxlength="17" placeholder="Account Number" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "on") + '" type="text" pattern="\\d*">', "</div>"].join("");
     }
 
     $html = $html.replace("{{inputHtml}}", $inputHtml);
@@ -10009,14 +10009,14 @@
   };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v5.0.20 */
+/* jQuery.HostedPayments - v5.0.21 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function ($, window, document, undefined) {
   var pluginName = "hp";
   var defaults = {};
 
-  defaults.version = "v5.0.20";
+  defaults.version = "v5.0.21";
   defaults.amount = 0;
   defaults.currencyLocale = "en-US";
   defaults.currencyCode = "USD";
