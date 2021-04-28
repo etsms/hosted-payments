@@ -3394,7 +3394,7 @@
         }
 
         var accountNumber = element.find(".hp-input-account > input").val();
-        if (accountNumber.length <= 4 || accountNumber.length > 22) {
+        if (accountNumber.length <= 4 || accountNumber.length > 17) {
           errorMessage.push("The 'account number' field is either too short or too long.");
         }
 
