@@ -5,6 +5,9 @@ npm-debug.log*
 .DS_Store
 .sass-cache/
 
+.vs/
+.vscode/
+
 # Runtime data
 pids
 *.pid
