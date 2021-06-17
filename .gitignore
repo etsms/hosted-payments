@@ -5,6 +5,7 @@ npm-debug.log*
 .DS_Store
 .sass-cache/
 
+# ignore .vs file
 .vs/
 .vscode/
 
