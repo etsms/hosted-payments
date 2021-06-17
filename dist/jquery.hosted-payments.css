@@ -574,7 +574,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
 }
 /* line 321, ../src/jquery.hosted-payments.sass */
 .hp .hp-submit.hp-submit-danger {
-  background: #f55145;
+  background: #d2190b;
   border: 1px solid #ea1c0d;
   text-shadow: 0 1px 1px #ea1c0d;
 }

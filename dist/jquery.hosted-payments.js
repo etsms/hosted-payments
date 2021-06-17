@@ -7211,7 +7211,7 @@
       return "<option value=" + value + ">" + value + "</option>";
     });
 
-    var $accountTypeOptions = ["<div class='hp-input hp-input-ach-type'>", "<select autocomplete=", hp.Utils.defaults.disableAutocomplete ? "off" : "ach-acct-type", " name='ach-type'>", $accountType, "</select>", "</div>"].join("");
+    var $accountTypeOptions = ["<div class='hp-input hp-input-ach-type'>", "<select autocomplete=", hp.Utils.defaults.disableAutocomplete ? "off" : "ach-acct-type", " name='ach-type' aria-label='ach-type'>", $accountType, "</select>", "</div>"].join("");
 
     var $html = [
       '<div class="hp-bank-visual">',
@@ -10119,14 +10119,14 @@
   };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v5.1.0 */
+/* jQuery.HostedPayments - v5.1.1 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function ($, window, document, undefined) {
   var pluginName = "hp";
   var defaults = {};
 
-  defaults.version = "v5.1.0";
+  defaults.version = "v5.1.1";
   defaults.amount = 0;
   defaults.currencyLocale = "en-US";
   defaults.currencyCode = "USD";
