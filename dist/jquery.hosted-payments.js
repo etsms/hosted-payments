@@ -5189,7 +5189,7 @@
         var socketOptions = {
           withCredentials: false,
           jsonp: false,
-          transport: ["webSockets"],
+          transport: ["webSockets", "serverSentEvents", "longPolling"],
           waitForPageLoad: true,
         };
         hp.Utils.plugins.Transvault.transvaultHub.connection.stop(socketOptions);
@@ -9061,7 +9061,7 @@
       var socketOptions = {
         withCredentials: false,
         jsonp: false,
-        transport: ["webSockets"],
+        transport: ["webSockets", "serverSentEvents", "longPolling"],
         waitForPageLoad: true,
       };
       $this.transvaultHub.connection.start(socketOptions).done(startHandler).fail(errorHandler);
