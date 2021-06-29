@@ -1,0 +1,444 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/jquery.hosted-payments.min.css" />
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/jquery.hosted-payments.min.js"></script>
+    <style>
+      pre {
+        outline: 1px solid #ccc;
+        padding: 5px;
+        margin: 0;
+        border-top: 4px solid #ccc;
+        background: #efefef;
+        position: relative;
+        max-height: 300px;
+        overflow-y: scroll;
+      }
+
+      .key-off {
+        display: none;
+      }
+      .key-on {
+        display: block;
+      }
+
+      .string {
+        color: green;
+      }
+
+      .number {
+        color: darkorange;
+      }
+
+      .boolean {
+        color: blue;
+      }
+
+      .null {
+        color: magenta;
+      }
+
+      .key {
+        color: red;
+      }
+
+      .copyBtn {
+        position: absolute;
+        top: 0;
+        right: 0;
+        border: none;
+        background: #0275d8 !important;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      .copyBtn:hover {
+        background: #00529b !important;
+      }
+
+      #ETSResponse > .waiting {
+        display: block;
+        line-height: 0;
+        margin: 0;
+        padding: 25px 0;
+        text-align: center;
+        font-weight: bold;
+        color: #333;
+        text-shadow: 1px 0px #fff;
+      }
+
+      .loaderImg {
+        width: 512px;
+        display: block;
+        margin: 120px auto 0;
+      }
+
+      small {
+        background: #efefef;
+        padding: 6px 17px;
+        display: block;
+        border-radius: 0 0 4px 4px;
+      }
+
+      .checkboxes {
+        background: #efefef;
+        padding: 15px;
+        margin: 8px 0px 0 0;
+        border-radius: 7px;
+      }
+
+      .form-check-input {
+        margin: 9px 0 0;
+        position: relative;
+      }
+
+      .form-check-label {
+        margin: 0;
+        padding: 0;
+      }
+
+      .form-check {
+        margin-bottom: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <pre><code id="ETSResponse"><span class="waiting">Waiting on plugin...</span></code><button class="copyBtn">Copy Code</button></pre>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-5 offset-md-1">
+          <br />
+
+          <h3 class="text-primary">Hosted Payments - Elavon QA</h3>
+
+          <p>Enter an Amount, and API Key to reset the plugin with those options.</p>
+
+          <br />
+
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label for="amount">Amount: </label>
+                <input type="number" class="form-control input-lg" name="amount" id="amount" value="1.00" />
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label for="apiKey">Correlation ID: </label>
+                <input type="text" class="form-control input-lg" value="Invoice1234" name="correlationId" id="correlationId" />
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label for="terminalId">Terminal ID: </label>
+                <input type="text" class="form-control input-lg" name="terminalId" id="terminalId" value="1224" />
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label for="contextId">Context ID: </label>
+                <input type="text" class="form-control input-lg" name="contextId" id="contextId" value="Hello World" />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group key-toggle key-on key-toggle-api">
+            <label for="apiKey">API Key: </label>
+            <input type="text" class="form-control input-lg" value="2B3783A2-459B-4158-8A6D-FEAD9F0FB485" name="apiKey" id="apiKey" />
+          </div>
+
+          <div class="form-group key-toggle key-off key-toggle-token">
+            <label for="sessionToken">Session Token: </label>
+            <input type="text" class="form-control input-lg" readonly name="sessionToken" id="sessionToken" placeholder="Loading..." />
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label for="paymentType">Payment Type</label>
+                <select class="form-control" name="paymentType" id="paymentType">
+                  <option>CHARGE</option>
+                  <option>REFUND</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="paymentType">Service Type</label>
+                <select class="form-control" name="paymentService" id="paymentService">
+                  <option>EFT</option>
+                  <option value="TEST">TOKEN</option>
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <div class="checkboxes">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" checked id="promptForAvs" />
+                  <label class="form-check-label" for="promptForAvs"> Prompt for AVS </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" checked id="allowAvsSkip" />
+                  <label class="form-check-label" for="allowAvsSkip"> Skip AVS Verification </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="saveCustomer" />
+                  <label class="form-check-label" for="saveCustomer"> Save Customer </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" checked id="autoReset" />
+                  <label class="form-check-label" for="autoReset"> Auto Reset </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" checked id="showDebug" />
+                  <label class="form-check-label" for="showDebug"> Show Debug </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="apiKey">Payment Type Order: </label>
+            <input type="text" class="form-control input-lg" value="0,1,2,3" name="paymentTypeOrder" id="paymentTypeOrder" />
+            <small class="text-muted bg-dark">Credit Card: <code>0</code>, Bank (ACH): <code>1</code>, Swipe\Scan: <code>2</code>, Transvault: <code>3</code></small>
+          </div>
+
+          <div class="form-group">
+            <label for="apiKey">Base Url: </label>
+
+            <select class="form-control input-lg" name="baseUrl" id="baseUrl">
+              <option value="https://qa-htv.emoney.com/v3/adapters">https://qa-htv.emoney.com/v3/adapters</option>
+              <option value="https://uat-htv.emoney.com/v3/adapters">https://uat-htv.emoney.com/v3/adapters</option>
+              <option value="https://crt-htv.emoney.com/v3/adapters">https://crt-htv.emoney.com/v3/adapters</option>
+              <option value="https://dev-htv.emoney.com/v3/adapters">https://dev-htv.emoney.com/v3/adapters</option>
+              <option value="https://htv2a.emoney.com/v3/adapters">https://htv2a.emoney.com/v3/adapters</option>
+              <option value="https://htv.emoney.com/v3/adapters">https://htv.emoney.com/v3/adapters</option>
+              <option value="https://aw-hp.emoney.com/v3/adapters">https://aw-hp.emoney.com/v3/adapters</option>
+              <option value="https://htv.emoney.servers.global.prv/v3/adapters">https://htv.emoney.servers.global.prv/v3/adapters</option>
+              <option value="https://localhost:44300/v3/adapters">https://localhost:44300/v3/adapters</option>
+            </select>
+          </div>
+
+          <br />
+
+          <button class="btn btn-secondary btn-lg" id="updatedBtn">Update</button>
+         
+        </div>
+        <div class="col-md-5">
+          <br />
+          <div id="test">
+            <img class="loaderImg" src="https://wpamelia.com/wp-content/uploads/2018/11/ezgif-2-6d0b072c3d3f.gif" alt="" />
+            <h6 class="text-center">Click update to show plugin</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>      
+      var isSessionToken = false;
+
+      $("#paymentService").on("change", function () {
+        var val = $(this).val();
+
+        $(".key-toggle").removeClass("key-off key-on");
+
+        if (val === "TEST") {
+          $(".key-toggle-token").removeClass("key-off").addClass("key-on");
+          $(".key-toggle-api").removeClass("key-on").addClass("key-off");
+
+          isSessionToken = true;
+
+          $.post($("#baseUrl").val(), {
+            signIn: {
+              signInRequest: {
+                apiKey: $("#apiKey").val(),
+                contextId: $("#contextId").val()
+              },
+            },
+          }).done(function (res) {
+            $("#sessionToken").val(res.signInResponse.token);
+          });
+        } else {
+          $(".key-toggle-api").addClass("key-on").removeClass("key-off");
+          $(".key-toggle-token").addClass("key-off").removeClass("key-on");
+          isSessionToken = false;
+        }
+      });
+
+      $("#updatedBtn").click(function (e) {
+        e.preventDefault();
+
+        var amount = +$("#amount").val();
+        var terminalId = $("#terminalId").val();
+        var apiKey = $("#apiKey").val();
+        var correlationId = $("#correlationId").val();
+        var contextId = $("#contextId").val();
+        var paymentTypeOrder = getPaymentTypeOrder();
+        var paymentType = $("#paymentType").val();
+        var paymentService = $("#paymentService").val();
+        var baseUrl = $("#baseUrl").val();
+        var promptForAvs = $("#promptForAvs").is(":checked");
+        var allowAvsSkip = $("#allowAvsSkip").is(":checked");
+        var saveCustomer = $("#saveCustomer").is(":checked");
+        var autoReset = $("#autoReset").is(":checked");
+        var showDebug = $("#showDebug").is(":checked");
+
+        if (isSessionToken) {
+          apiKey = $("#sessionToken").val();
+        }
+
+        if (!$(".hp-active").length) {
+          $("#test").hp({
+            promptForAvs: promptForAvs,
+            allowAvsSkip: allowAvsSkip,
+            contextId: contextId,
+            amount: amount,
+            apiKey: apiKey,
+            paymentType: paymentType,
+            terminalId: terminalId,
+            baseUrl: baseUrl,
+            saveCustomer: saveCustomer,
+            paymentService: paymentService,
+            successCallback: function (response) {
+              console.info(response);
+              $("#ETSResponse").html(toJson(response)).data("raw", JSON.stringify(response));
+
+              if (autoReset) {
+                if (isTransvault()) {
+                  var random = new Date().getTime().toString();
+                  var newAmount = amount + 0.01;
+
+                  if (newAmount > 10) {
+                    newAmount = amount;
+                  }
+
+                  var newCorrelationId = "Invoice" + random.substring(random.length, random.length - 4);
+
+                  hp.Utils.reset({
+                    amount: newAmount,
+                    correlationId: newCorrelationId,
+                    transactionId: hp.Utils.generateGUID(),
+                  });
+
+                  return;
+                }
+
+                hp.Utils.reset({
+                  transactionId: hp.Utils.generateGUID(),
+                });
+              }
+            },
+            errorCallback: function (response) {
+              console.error(response);
+              $("#ETSResponse").html(toJson(response)).data("raw", JSON.stringify(response));
+            },
+            paymentTypeOrder: paymentTypeOrder,
+            correlationId: correlationId,
+            transactionId: hp.Utils.generateGUID(),
+            debug: showDebug
+          });
+        } else {
+          hp.Utils.reset({
+            promptForAvs: promptForAvs,
+            allowAvsSkip: allowAvsSkip,
+            amount: amount,
+            contextId: contextId,
+            terminalId: terminalId,
+            apiKey: apiKey,
+            paymentTypeOrder: paymentTypeOrder,
+            correlationId: correlationId,
+            paymentType: paymentType,
+            paymentService: paymentService,
+            baseUrl: baseUrl,
+            saveCustomer: saveCustomer,
+            transactionId: hp.Utils.generateGUID(),
+            debug: showDebug
+          });
+        }
+
+        setFocusOnHpElement();
+      });
+
+      function getPaymentTypeOrder() {
+        return $("#paymentTypeOrder")
+          .val()
+          .split(",")
+          .map(function (i) {
+            return +i;
+          });
+      }
+
+      function isTransvault() {
+        $(".hp-transvault.hp-active").length > 0;
+      }
+
+      function hideAddress() {
+        $(".hp-avs-submit").css("visibility", "hidden");
+        $(".hp-avs-skip").css("visibility", "hidden");
+      }
+
+      function toJson(obj) {
+        return syntaxHighlight(JSON.stringify(obj, undefined, 4));
+      }
+
+      function syntaxHighlight(json) {
+        if (typeof json != "string") {
+          json = JSON.stringify(json, undefined, 2);
+        }
+
+        json = json.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+          var cls = "number";
+          if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+              cls = "key";
+            } else {
+              cls = "string";
+            }
+          } else if (/true|false/.test(match)) {
+            cls = "boolean";
+          } else if (/null/.test(match)) {
+            cls = "null";
+          }
+          return '<span class="' + cls + '">' + match + "</span>";
+        });
+      }
+
+      function copyToClipboard() {
+        var el = document.createElement("textarea");
+        el.value = $("#ETSResponse").data("raw");
+        el.setAttribute("readonly", "");
+        el.style.position = "absolute";
+        el.style.left = "-9999px";
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand("copy");
+        console.log(el.value);
+        document.body.removeChild(el);
+      }
+
+      $(".copyBtn").click(function (e) {
+        e.preventDefault();
+        copyToClipboard();
+      });
+
+      function setFocusOnHpElement() {
+        setTimeout(function(){
+          var $element = $("#test");
+          $element.removeAttr("tabindex");
+          $element.removeClass("focused-on-element");
+          setTimeout(function(){
+            $element.attr("tabindex", -1);
+            $element.addClass("focused-on-element");
+            $("#test").focus();
+          }, 15);
+        }, 25)
+      };
+    </script>
+  </body>
+</html>
