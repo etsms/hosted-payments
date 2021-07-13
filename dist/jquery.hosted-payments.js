@@ -4058,8 +4058,6 @@
   };
 
   var createTooltip = function() {
-    setTimeout(function(){
-      
       var $btn = getInstance()
         .$content
         .find(".hp-submit");
@@ -4085,56 +4083,23 @@
         hp.Utils.log("No button to append tooltop.");
         return;
       }
+    };
 
-      var width = ($btn.outerWidth() / 2);
-      var height = ($btn.outerHeight() + 10);
-
-      var title = "Credit or Debit Card";
-      var message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a payment of " + formatCurrency(getAmount()) + " on the card entered above. If you cancel the payment you will still remain liable for the amount due.";
-
-      if (hp.Utils.defaults.promptForAvs) {
-        message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + " after you've clicked Verify Billing Address above, you are authorizing a payment of " + formatCurrency(getAmount()) + " on the card entered above. If you cancel the payment you will still remain liable for the amount due.";
+  var createCreditCardDisclosure = function() {
+    if (!hp.Utils.defaults.promptForAvs) {
+      if (hp.Utils.defaults.ccDisclosure == "") {
+        hp.Utils.defaults.ccDisclosure = "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a payment of " + formatCurrency(getAmount()) + " to your card. If you cancel the payment you will still remain liable for the amount due.";
+          disclaimerText.prepend(hp.Utils.defaults.ccDisclosure);
       }
+    }
+  }
 
-      if (hp.Utils.getInstance().isBankAccount()) {
-        title = "Electronic Payment Form Bank Account (ACH)";
-        message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a payment of  " + formatCurrency(getAmount()) + " from the bank account above. If you cancel the payment you will still remain liable for the amount due."
+  var createAchDisclosure = function() {
+      if (hp.Utils.defaults.achDisclosure == "") {
+        hp.Utils.defaults.achDisclosure = "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a payment of " + formatCurrency(getAmount()) + " to your bank account. If you cancel the payment you will still remain liable for the amount due.";
+        disclaimerAchText.prepend(hp.Utils.defaults.achDisclosure);
       }
-
-      var style = "display: none; position: fixed; left: " + (offset.left + width) + "px; top: " + (offset.top + height) + "px;"
-
-      var disclaimer = $([
-      '<div class="hp-tooltip" style="' + style + '">',
-          '<div class="hp-tooltip-wrapper">',
-              '<span class="hp-tooltip-close">&times;</span>',
-              '<span class="hp-tooltip-title">',
-                title,
-              '</span>',
-              '<span class="hp-tooltip-content">',
-                message,
-              '</span>',
-          '</div>',
-      '</div>'
-      ].join(""));
-
-      $btn.parent().append(disclaimer);
-
-      disclaimer.find(".hp-tooltip-close").click(function(){
-        disclaimer.fadeOut(function(){
-          disclaimer.remove();
-        });
-      });
-
-      disclaimer.fadeIn(function(){
-        setTimeout(function(){
-          disclaimer.fadeOut(function(){
-            disclaimer.remove();
-          });
-        }, 10000);
-      });
-
-    }, 1500);
-  };
+  }
 
   var createNav = function createNav() {
     var defaultAreas = hp.Utils.defaults.paymentTypeOrder,
@@ -4883,7 +4848,8 @@
         "</div>",
         "</div>",
         '<br class="hp-break" />',
-        "<hr>",
+          "<hr>",
+        '<div id="disclaimerTextAvs" class="disclaimer"></div>',
         '<button class="hp-submit hp-avs-submit">' + hp.Utils.defaults.defaultButtonLabel + "</button>",
         hp.Utils.defaults.allowAvsSkip ? '<a class="hp-avs-skip" href="javascript:;">Skip \'Address Verification\'</a>' : "",
         "</div>",
@@ -4891,6 +4857,14 @@
       ].join("");
 
       $element.prepend(template);
+
+      if (hp.Utils.defaults.allowAvsSkip) {
+        message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + " or Skip 'Address Verification', you are authorizing a payment of " + formatCurrency(getAmount()) + " to your card. If you cancel the payment you will still remain liable for the amount due.";
+        disclaimerTextAvs.prepend(message);
+      } else {
+          message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a payment of " + formatCurrency(getAmount()) + " to your card. If you cancel the payment you will still remain liable for the amount due.";
+          disclaimerTextAvs.prepend(message);
+      }
 
       hp.Utils.defaults.eventCallback($element);
 
@@ -6112,7 +6086,9 @@
         }
 
         hp.Utils.createTooltip();
-
+        hp.Utils.createCreditCardDisclosure();
+        hp.Utils.createAchDisclosure();
+        
         $this
           .off()
           .on("hp.notify", hp.Utils.defaults.eventCallback)
@@ -6214,6 +6190,8 @@
   hp.Utils.setCustomerInfo = setCustomerInfo;
   hp.Utils.getCustomerInfo = getCustomerInfo;
   hp.Utils.createTooltip = createTooltip;
+  hp.Utils.createCreditCardDisclosure = createCreditCardDisclosure;
+  hp.Utils.createAchDisclosure = createAchDisclosure;
   hp.Utils.getInstance = getInstance;
   hp.Utils.getSession = getSession;
   hp.Utils.setSession = setSession;
@@ -6514,12 +6492,15 @@
       '<input placeholder="Enter CVV" name="cvc" aria-label="CVV" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-csc") + '" type="text" pattern="\\d*">',
       '<span class="hp-input-cvv-image"></span>',
       "</div>",
+      '<div id="disclaimerText" class="disclaimer">',
+      "</div>",
       '<button class="hp-submit">' + (hp.Utils.defaults.promptForAvs ? "Verify Billing Address &#10144;" : hp.Utils.defaults.defaultButtonLabel) + "</button>",
       "</div>",
     ].join("");
-
+    
     return parseDatesTemplates($html);
   };
+  
 
   CreditCard.prototype.showSuccess = function (delay) {
     return hp.Utils.showSuccessPage(delay);
@@ -7235,6 +7216,7 @@
       '<div class="hp-break" >',
       "{{inputHtml}}",
       "</div>",
+      '<div id="disclaimerAchText" class="disclaimer"></div>',
       '<button class="hp-submit">' + hp.Utils.defaults.defaultButtonLabel + "</button>",
       '<p class="info">* Please note that bank account (ACH) transactions may take up to 3 business days to process. This time period varies depending on the your issuing bank. For more information please visit us at <a href="https://www.elavonpayments.com/" target="_blank">https://elavonpayments.com</a>.</p>',
       "</div>",
@@ -10201,6 +10183,8 @@
   defaults.captchaVerificationToken = null;
   defaults.captchaKey = null;
   defaults.captchaVendor = null;
+  defaults.ccDisclosure = "";
+  defaults.achDisclosure = "";
 
   function Plugin(element, options) {
     this._name = pluginName;

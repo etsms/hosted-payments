@@ -267,7 +267,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   position: relative;
   border: 1px solid #f3f3f3;
 }
-/* line 40, ../../../../../../../tools/ruby26/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 40, ../../../../../../../Ruby30-x64/lib/ruby/gems/3.0.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 .hp div, .hp span, .hp applet, .hp object, .hp iframe,
 .hp h1, .hp h2, .hp h3, .hp h4, .hp h5, .hp h6, .hp p, .hp blockquote, .hp pre,
 .hp a, .hp abbr, .hp acronym, .hp address, .hp big, .hp cite, .hp code,
@@ -288,27 +288,27 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   font-size: 100%;
   vertical-align: baseline;
 }
-/* line 55, ../../../../../../../tools/ruby26/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 55, ../../../../../../../Ruby30-x64/lib/ruby/gems/3.0.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 .hp table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-/* line 57, ../../../../../../../tools/ruby26/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 57, ../../../../../../../Ruby30-x64/lib/ruby/gems/3.0.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 .hp caption, .hp th, .hp td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
-/* line 59, ../../../../../../../tools/ruby26/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 59, ../../../../../../../Ruby30-x64/lib/ruby/gems/3.0.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 .hp q, .hp blockquote {
   quotes: none;
 }
-/* line 103, ../../../../../../../tools/ruby26/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 103, ../../../../../../../Ruby30-x64/lib/ruby/gems/3.0.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 .hp q:before, .hp q:after, .hp blockquote:before, .hp blockquote:after {
   content: "";
   content: none;
 }
-/* line 61, ../../../../../../../tools/ruby26/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 61, ../../../../../../../Ruby30-x64/lib/ruby/gems/3.0.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 .hp a img {
   border: none;
 }
@@ -636,7 +636,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   padding-top: 6px;
   border-top: 1px solid #9e9e9e;
 }
-/* line 38, ../../../../../../../tools/ruby26/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../../../../Ruby30-x64/lib/ruby/gems/3.0.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .hp .hp-input-container.hp-input-container-ach:after {
   content: "";
   display: table;
@@ -648,7 +648,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   overflow: visible;
   width: 50%;
 }
-/* line 38, ../../../../../../../tools/ruby26/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../../../../Ruby30-x64/lib/ruby/gems/3.0.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .hp .hp-input-container.hp-input-container-date:after {
   content: "";
   display: table;
@@ -667,7 +667,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   overflow: visible;
   *zoom: 1;
 }
-/* line 38, ../../../../../../../tools/ruby26/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../../../../Ruby30-x64/lib/ruby/gems/3.0.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .hp .hp-input-container.hp-input-container-date .hp-input-month:after,
 .hp .hp-input-container.hp-input-container-date .hp-input-year:after {
   content: "";
@@ -934,7 +934,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   background: transparent;
   border: 1px solid #9e9e9e;
 }
-/* line 38, ../../../../../../../tools/ruby26/lib/ruby/gems/2.6.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../../../../Ruby30-x64/lib/ruby/gems/3.0.0/gems/compass-core-1.0.3/stylesheets/compass/utilities/general/_clearfix.scss */
 .hp .hp-row:after {
   content: "";
   display: table;
@@ -1914,217 +1914,224 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
   cursor: pointer;
 }
 
-/* line 1329, ../src/jquery.hosted-payments.sass */
+/* line 1328, ../src/jquery.hosted-payments.sass */
+.disclaimer {
+  color: #0C70C0;
+  font-size: 11px !important;
+  margin-top: 10px !important;
+}
+
+/* line 1334, ../src/jquery.hosted-payments.sass */
 .hp-sprite {
   background-image: url("https://cdn.jsdelivr.net/gh/etsms/hosted-payments@latest/dist/images/sprite.png");
   background-repeat: no-repeat;
   display: block;
 }
 
-/* line 1334, ../src/jquery.hosted-payments.sass */
+/* line 1339, ../src/jquery.hosted-payments.sass */
 .sprite-background-ach {
   width: 400px;
   height: 173px;
   background-position: -1px -1px;
 }
 
-/* line 1339, ../src/jquery.hosted-payments.sass */
+/* line 1344, ../src/jquery.hosted-payments.sass */
 .sprite-background-amex {
   width: 398px;
   height: 236px;
   background-position: -1px -176px;
 }
 
-/* line 1344, ../src/jquery.hosted-payments.sass */
+/* line 1349, ../src/jquery.hosted-payments.sass */
 .sprite-background-diners {
   width: 398px;
   height: 236px;
   background-position: -5px -418px;
 }
 
-/* line 1349, ../src/jquery.hosted-payments.sass */
+/* line 1354, ../src/jquery.hosted-payments.sass */
 .sprite-background-discover {
   width: 398px;
   height: 236px;
   background-position: -1px -660px;
 }
 
-/* line 1354, ../src/jquery.hosted-payments.sass */
+/* line 1359, ../src/jquery.hosted-payments.sass */
 .sprite-background-emoney {
   width: 398px;
   height: 236px;
   background-position: -1px -898px;
 }
 
-/* line 1359, ../src/jquery.hosted-payments.sass */
+/* line 1364, ../src/jquery.hosted-payments.sass */
 .sprite-background-jcb {
   width: 398px;
   height: 236px;
   background-position: -1px -1136px;
 }
 
-/* line 1364, ../src/jquery.hosted-payments.sass */
+/* line 1369, ../src/jquery.hosted-payments.sass */
 .sprite-background-mastercard {
   width: 398px;
   height: 236px;
   background-position: -1px -1374px;
 }
 
-/* line 1369, ../src/jquery.hosted-payments.sass */
+/* line 1374, ../src/jquery.hosted-payments.sass */
 .sprite-background-visa {
   width: 398px;
   height: 236px;
   background-position: -1px -1612px;
 }
 
-/* line 1374, ../src/jquery.hosted-payments.sass */
+/* line 1379, ../src/jquery.hosted-payments.sass */
 .sprite-card-ach {
   width: 42px;
   height: 26px;
   background-position: -1px -1850px;
 }
 
-/* line 1379, ../src/jquery.hosted-payments.sass */
+/* line 1384, ../src/jquery.hosted-payments.sass */
 .sprite-card-amex {
   width: 42px;
   height: 26px;
   background-position: -1px -1878px;
 }
 
-/* line 1384, ../src/jquery.hosted-payments.sass */
+/* line 1389, ../src/jquery.hosted-payments.sass */
 .sprite-card-diners {
   width: 42px;
   height: 26px;
   background-position: -1px -1906px;
 }
 
-/* line 1389, ../src/jquery.hosted-payments.sass */
+/* line 1394, ../src/jquery.hosted-payments.sass */
 .sprite-card-discover {
   width: 42px;
   height: 26px;
   background-position: -1px -1934px;
 }
 
-/* line 1394, ../src/jquery.hosted-payments.sass */
+/* line 1399, ../src/jquery.hosted-payments.sass */
 .sprite-card-emoney {
   width: 42px;
   height: 26px;
   background-position: -1px -1962px;
 }
 
-/* line 1399, ../src/jquery.hosted-payments.sass */
+/* line 1404, ../src/jquery.hosted-payments.sass */
 .sprite-card-gift {
   width: 42px;
   height: 26px;
   background-position: -1px -1990px;
 }
 
-/* line 1404, ../src/jquery.hosted-payments.sass */
+/* line 1409, ../src/jquery.hosted-payments.sass */
 .sprite-card-jcb {
   width: 42px;
   height: 26px;
   background-position: -1px -2018px;
 }
 
-/* line 1409, ../src/jquery.hosted-payments.sass */
+/* line 1414, ../src/jquery.hosted-payments.sass */
 .sprite-card-mastercard {
   width: 42px;
   height: 26px;
   background-position: -1px -2046px;
 }
 
-/* line 1414, ../src/jquery.hosted-payments.sass */
+/* line 1419, ../src/jquery.hosted-payments.sass */
 .sprite-card-visa {
   width: 42px;
   height: 26px;
   background-position: -1px -2074px;
 }
 
-/* line 1419, ../src/jquery.hosted-payments.sass */
+/* line 1424, ../src/jquery.hosted-payments.sass */
 .sprite-icon-cvv {
   width: 50px;
   height: 33px;
   background-position: -1px -2102px;
 }
 
-/* line 1424, ../src/jquery.hosted-payments.sass */
+/* line 1429, ../src/jquery.hosted-payments.sass */
 .sprite-icon-cvvalt {
   width: 50px;
   height: 33px;
   background-position: -1px -2137px;
 }
 
-/* line 1429, ../src/jquery.hosted-payments.sass */
+/* line 1434, ../src/jquery.hosted-payments.sass */
 .sprite-icon-refresh {
   width: 24px;
   height: 24px;
   background-position: -1px -2172px;
 }
 
-/* line 1434, ../src/jquery.hosted-payments.sass */
+/* line 1439, ../src/jquery.hosted-payments.sass */
 .sprite-icon-shield {
   width: 58px;
   height: 64px;
   background-position: -1px -2198px;
 }
 
-/* line 1439, ../src/jquery.hosted-payments.sass */
+/* line 1444, ../src/jquery.hosted-payments.sass */
 .sprite-icon-success {
   width: 128px;
   height: 128px;
   background-position: -1px -2264px;
 }
 
-/* line 1444, ../src/jquery.hosted-payments.sass */
+/* line 1449, ../src/jquery.hosted-payments.sass */
 .sprite-logo {
   width: 80px;
   height: 8px;
   background-position: -1px -2394px;
 }
 
-/* line 1449, ../src/jquery.hosted-payments.sass */
+/* line 1454, ../src/jquery.hosted-payments.sass */
 .sprite-nav-ach {
   width: 39px;
   height: 39px;
   background-position: -1px -2404px;
 }
 
-/* line 1454, ../src/jquery.hosted-payments.sass */
+/* line 1459, ../src/jquery.hosted-payments.sass */
 .sprite-nav-creditcard {
   width: 39px;
   height: 39px;
   background-position: -1px -2445px;
 }
 
-/* line 1459, ../src/jquery.hosted-payments.sass */
+/* line 1464, ../src/jquery.hosted-payments.sass */
 .sprite-nav-gift {
   width: 39px;
   height: 39px;
   background-position: -1px -2486px;
 }
 
-/* line 1464, ../src/jquery.hosted-payments.sass */
+/* line 1469, ../src/jquery.hosted-payments.sass */
 .sprite-nav-sign {
   width: 39px;
   height: 39px;
   background-position: -1px -2527px;
 }
 
-/* line 1469, ../src/jquery.hosted-payments.sass */
+/* line 1474, ../src/jquery.hosted-payments.sass */
 .sprite-nav-swipe {
   width: 39px;
   height: 39px;
   background-position: -1px -2568px;
 }
 
-/* line 1474, ../src/jquery.hosted-payments.sass */
+/* line 1479, ../src/jquery.hosted-payments.sass */
 .sprite-nav-transvault {
   width: 39px;
   height: 39px;
   background-position: -1px -2609px;
 }
 
-/* line 1479, ../src/jquery.hosted-payments.sass */
+/* line 1484, ../src/jquery.hosted-payments.sass */
 .sprite-nav-ach,
 .sprite-nav-creditcard,
 .sprite-nav-gift,
