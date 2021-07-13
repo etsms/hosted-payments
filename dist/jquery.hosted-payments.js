@@ -4057,34 +4057,6 @@
     };
   };
 
-  var createTooltip = function() {
-      var $btn = getInstance()
-        .$content
-        .find(".hp-submit");
-
-      getInstance().$content
-        .find(".hp-tooltip")
-        .remove();
-
-      var hasPayment = getAmount() > 0;
-
-      if (!hasPayment) {
-        hp.Utils.log("No payment amount, not showing tooltip.");
-        return;
-      }
-
-      if (hp.Utils.hasAlternativeSubmitButton()) {
-        $btn = hp.Utils.getAlternativeSubmitButton();
-      }
-
-      var offset = $btn.offset();
-
-      if (offset === undefined) {
-        hp.Utils.log("No button to append tooltop.");
-        return;
-      }
-    };
-
   var createCreditCardDisclosure = function() {
     if (!hp.Utils.defaults.promptForAvs) {
       if (hp.Utils.defaults.ccDisclosure == "") {
@@ -4096,7 +4068,7 @@
 
   var createAchDisclosure = function() {
       if (hp.Utils.defaults.achDisclosure == "") {
-        hp.Utils.defaults.achDisclosure = "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a payment of " + formatCurrency(getAmount()) + " to your bank account. If you cancel the payment you will still remain liable for the amount due.";
+        hp.Utils.defaults.achDisclosure = "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are requesting and authorizing an electronic transfer from your bank account as a form of payment of " + formatCurrency(getAmount()) + " from the bank account above. Payments made by ACH can take up to 3 business days to process and post to the account. If you cancel the payment you will still remain liable for the amount due.";
         disclaimerAchText.prepend(hp.Utils.defaults.achDisclosure);
       }
   }
@@ -6085,7 +6057,6 @@
           hp.Utils.plugins.Transvault.cancelTransactionWithoutError();
         }
 
-        hp.Utils.createTooltip();
         hp.Utils.createCreditCardDisclosure();
         hp.Utils.createAchDisclosure();
         
@@ -6189,7 +6160,6 @@
   hp.Utils.escapeHTML = escapeHTML;
   hp.Utils.setCustomerInfo = setCustomerInfo;
   hp.Utils.getCustomerInfo = getCustomerInfo;
-  hp.Utils.createTooltip = createTooltip;
   hp.Utils.createCreditCardDisclosure = createCreditCardDisclosure;
   hp.Utils.createAchDisclosure = createAchDisclosure;
   hp.Utils.getInstance = getInstance;
@@ -7218,7 +7188,6 @@
       "</div>",
       '<div id="disclaimerAchText" class="disclaimer"></div>',
       '<button class="hp-submit">' + hp.Utils.defaults.defaultButtonLabel + "</button>",
-      '<p class="info">* Please note that bank account (ACH) transactions may take up to 3 business days to process. This time period varies depending on the your issuing bank. For more information please visit us at <a href="https://www.elavonpayments.com/" target="_blank">https://elavonpayments.com</a>.</p>',
       "</div>",
     ].join("");
 
