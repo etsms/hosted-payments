@@ -4059,18 +4059,14 @@
 
   var createCreditCardDisclosure = function() {
     if (!hp.Utils.defaults.promptForAvs) {
-      if (hp.Utils.defaults.ccDisclosure == "") {
-        hp.Utils.defaults.ccDisclosure = "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a payment of " + formatCurrency(getAmount()) + " to your card. If you cancel the payment you will still remain liable for the amount due.";
-          disclaimerText.prepend(hp.Utils.defaults.ccDisclosure);
-      }
+        return "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a payment of " + formatCurrency(getAmount()) + " to your card. If you cancel the payment you will still remain liable for the amount due.";
+    } else {
+      return "";
     }
   }
 
   var createAchDisclosure = function() {
-      if (hp.Utils.defaults.achDisclosure == "") {
-        hp.Utils.defaults.achDisclosure = "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are requesting and authorizing an electronic transfer from your bank account as a form of payment of " + formatCurrency(getAmount()) + " from the bank account above. Payments made by ACH can take up to 3 business days to process and post to the account. If you cancel the payment you will still remain liable for the amount due.";
-        disclaimerAchText.prepend(hp.Utils.defaults.achDisclosure);
-      }
+       return "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are requesting and authorizing an electronic transfer from your bank account as a form of payment of " + formatCurrency(getAmount()) + " from the bank account above. Payments made by ACH can take up to 3 business days to process and post to the account. If you cancel the payment you will still remain liable for the amount due.";
   }
 
   var createNav = function createNav() {
@@ -6056,9 +6052,6 @@
           hp.Utils.log("Cancelling transvault instance.");
           hp.Utils.plugins.Transvault.cancelTransactionWithoutError();
         }
-
-        hp.Utils.createCreditCardDisclosure();
-        hp.Utils.createAchDisclosure();
         
         $this
           .off()
@@ -6383,6 +6376,8 @@
       throw new Error("hosted-payments.credit-card.js : Cannot create template. Arguments are null or undefined.");
     }
 
+    hp.Utils.defaults.ccDisclosure = hp.Utils.createCreditCardDisclosure();
+
     var generateYearList = function generateYearList(input) {
       var min = new Date().getFullYear(),
         max = new Date().getFullYear() + 10,
@@ -6462,8 +6457,7 @@
       '<input placeholder="Enter CVV" name="cvc" aria-label="CVV" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-csc") + '" type="text" pattern="\\d*">',
       '<span class="hp-input-cvv-image"></span>',
       "</div>",
-      '<div id="disclaimerText" class="disclaimer">',
-      "</div>",
+      '<div class="disclaimer">' + hp.Utils.defaults.ccDisclosure + "</div>",
       '<button class="hp-submit">' + (hp.Utils.defaults.promptForAvs ? "Verify Billing Address &#10144;" : hp.Utils.defaults.defaultButtonLabel) + "</button>",
       "</div>",
     ].join("");
@@ -7104,6 +7098,7 @@
     $visualfullname = null,
     $visualbankname = null,
     $all = null,
+    $disclaimer = null,
     $submit;
 
   var sessionId = "",
@@ -7162,6 +7157,8 @@
       return "<option value=" + value + ">" + value + "</option>";
     });
 
+    hp.Utils.defaults.achDisclosure = hp.Utils.createAchDisclosure();
+
     var $accountTypeOptions = ["<div class='hp-input hp-input-ach-type'>", "<select autocomplete=", hp.Utils.defaults.disableAutocomplete ? "off" : "ach-acct-type", " name='ach-type' aria-label='ach-type'>", $accountType, "</select>", "</div>"].join("");
 
     var $html = [
@@ -7186,7 +7183,7 @@
       '<div class="hp-break" >',
       "{{inputHtml}}",
       "</div>",
-      '<div id="disclaimerAchText" class="disclaimer"></div>',
+      '<div class="disclaimer">' + hp.Utils.defaults.achDisclosure + "</div>",
       '<button class="hp-submit">' + hp.Utils.defaults.defaultButtonLabel + "</button>",
       "</div>",
     ].join("");
@@ -10152,8 +10149,8 @@
   defaults.captchaVerificationToken = null;
   defaults.captchaKey = null;
   defaults.captchaVendor = null;
-  defaults.ccDisclosure = "";
-  defaults.achDisclosure = "";
+  defaults.ccDisclosure = null;
+  defaults.achDisclosure = null;
 
   function Plugin(element, options) {
     this._name = pluginName;
