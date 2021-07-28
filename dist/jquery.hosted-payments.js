@@ -3489,7 +3489,7 @@
         var textOnlyPattern = /^[A-Za-z][-a-zA-Z ]+$/;
 
         var customerName = element.find(".hp-input-fullname > input").val();
-        if (customerName.length < 1 || customerName.length > 23 || !textOnlyPattern.test(customerName)) {
+        if (customerName.length < 1 || customerName.length > 25 || !textOnlyPattern.test(customerName)) {
           errorMessage.push("The 'full name' field is either too short or too long.");
         }
 
@@ -6439,7 +6439,7 @@
       '<input placeholder="Enter Card Number" name="cardnumber" aria-labelledby="cardnumber" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-number") + '" type="text" pattern="\\d*">',
       "</div>",
       '<div class="hp-input hp-input-name">',
-      '<input maxlength="18" placeholder="Enter Full Name" name="ccname" aria-labelledby="fullname" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-name") + '" type="text">',
+      '<input maxlength="25" placeholder="Enter Full Name" name="ccname" aria-labelledby="fullname" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-name") + '" type="text">',
       "</div>",
       '<div class="hp-input-container hp-input-container-date">',
       '<div class="hp-input hp-input-month">',
@@ -7098,7 +7098,6 @@
     $visualfullname = null,
     $visualbankname = null,
     $all = null,
-    $disclaimer = null,
     $submit;
 
   var sessionId = "",
@@ -7172,7 +7171,7 @@
       "</div>",
       '<div class="hp-input-wrapper">',
       '<div class="hp-input hp-input-fullname">',
-      '<input maxlength="23" placeholder="Enter Full Name" name="name" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "name") + '" type="text">',
+      '<input maxlength="25" placeholder="Enter Full Name" name="name" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "name") + '" type="text">',
       "</div>",
       "<div class='hp-input-container hp-input-container-ach'>",
       '<div class="hp-input hp-input-bank">',

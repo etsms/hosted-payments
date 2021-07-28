@@ -1328,7 +1328,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
 }
 /* line 896, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-right .hp-card-visual .hp-card-visual-name {
-  font-size: 23px;
+  font-size: 17px;
   bottom: 50px;
   left: 35px;
   font-weight: 400;
