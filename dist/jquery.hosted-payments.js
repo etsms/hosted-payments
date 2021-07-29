@@ -5284,6 +5284,7 @@
       var currencyCode = hp.Utils.defaults.currencyCode;
       var currencyLocale = hp.Utils.defaults.currencyLocale;
 
+
       hp.Utils.log("formatCurrency: Using Intl object for currency formatting.");
       hp.Utils.log("formatCurrency: Using '" + currencyLocale + "' locale.");
       hp.Utils.log("formatCurrency: Using '" + currencyCode + "' currency code.");
