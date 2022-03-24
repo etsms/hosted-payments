@@ -44,7 +44,7 @@
         "gulp-watch": "^5.0.1",
         "kind-of": ">=6.0.3",
         "lodash.template": ">=4.5.0",
-        "minimist": ">=1.2.3",
+        "minimist": ">=1.2.6",
         "yargs-parser": "^20.2.4"
     },
     "repository": {
