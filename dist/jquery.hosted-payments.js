@@ -3870,13 +3870,8 @@
       '<div class="hp-secure">',
       '<div class="hp-secure-wrapper">',
         '<a href="https://emoney.com" target="_blank" title="Powered by EMoney">',
-          '<i class="hp-sprite sprite-logo hp-emoney-logo" alt="Hosted Payments"></i>',
+          '<i class="hp-sprite sprite-logo hp-emoney-logo mb-2" alt="EMoney"></i>',
         "</a>",
-        '<div class="hp-support">',
-          "<strong>Help &amp; support</strong>",
-          '<p>Call us at <a href="tel:{{phone}}">{{phone}}</a></p>',
-          "<br />",
-        "</div>",
         '<div class="hp-cards">',
           '<div class="hp-cards-icons sprite-card-amex' + (hp.Utils.defaults.showAmex ? "" : " hide") + '"></div>',
           '<div class="hp-cards-icons sprite-card-diners' + (hp.Utils.defaults.showDiners ? "" : " hide") + '"></div>',
@@ -4057,17 +4052,24 @@
     };
   };
 
-  var createCreditCardDisclosure = function() {
-    if (!hp.Utils.defaults.promptForAvs) {
-        return "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a payment of " + formatCurrency(getAmount()) + " to your card. If you cancel the payment you will still remain liable for the amount due.";
-    } else {
-      return "";
+    var createCreditCardDisclosure = function () {
+        if (!hp.Utils.defaults.promptForAvs) {
+            if (hp.Utils.defaults.paymentType.toLowerCase() === 'refund') {
+                return "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a refund of " + formatCurrency(getAmount()) + " to your card.";
+            }
+            return "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a payment of " + formatCurrency(getAmount()) + " to your card. If you cancel the payment you will still remain liable for the amount due.";
+        } else {
+            return "";
+        }
     }
-  }
 
-  var createAchDisclosure = function() {
-       return "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are requesting and authorizing an electronic transfer from your bank account as a form of payment of " + formatCurrency(getAmount()) + " from the bank account above. Payments made by ACH can take up to 3 business days to process and post to the account. If you cancel the payment you will still remain liable for the amount due.";
-  }
+    var createAchDisclosure = function () {
+        if (hp.Utils.defaults.paymentType.toLowerCase() === 'refund') {
+            return "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are requesting and authorizing an electronic transfer of " + formatCurrency(getAmount()) + " to the bank account above. Refunds made by ACH can take up to 3 business days to process and post to the account.";
+        } else {
+            return "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are requesting and authorizing an electronic transfer from your bank account as a form of payment of " + formatCurrency(getAmount()) + " from the bank account above. Payments made by ACH can take up to 3 business days to process and post to the account. If you cancel the payment you will still remain liable for the amount due.";
+        }
+    }
 
   var createNav = function createNav() {
     var defaultAreas = hp.Utils.defaults.paymentTypeOrder,
@@ -4826,13 +4828,13 @@
 
       $element.prepend(template);
 
-      if (hp.Utils.defaults.allowAvsSkip) {
-        message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + " or Skip 'Address Verification', you are authorizing a payment of " + formatCurrency(getAmount()) + " to your card. If you cancel the payment you will still remain liable for the amount due.";
+        if (hp.Utils.defaults.paymentType.toLowerCase() === 'refund') {
+            message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + (hp.Utils.defaults.allowAvsSkip ? " or Skip 'Address Verification" : " ") + ", you are authorizing a refund of " + formatCurrency(getAmount()) + " to your card.";
+        } else {
+            message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + (hp.Utils.defaults.allowAvsSkip ? " or Skip 'Address Verification" : " ") + ", you are authorizing a payment of " + formatCurrency(getAmount()) + " to your card. If you cancel the payment you will still remain liable for the amount due.";
+        }
+
         disclaimerTextAvs.prepend(message);
-      } else {
-          message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a payment of " + formatCurrency(getAmount()) + " to your card. If you cancel the payment you will still remain liable for the amount due.";
-          disclaimerTextAvs.prepend(message);
-      }
 
       hp.Utils.defaults.eventCallback($element);
 
@@ -6443,12 +6445,12 @@
       "</div>",
       '<div class="hp-input-container hp-input-container-date">',
       '<div class="hp-input hp-input-month">',
-      '<select autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-exp-month") + '" name="cc-exp" aria-label="cc-exp">',
+      '<select name="cc-exp" aria-label="cc-exp">',
       "{{monthList}}",
       "</select>",
       "</div>",
       '<div class="hp-input hp-input-year">',
-      '<select autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-exp-year") + '" name="cc-exp" aria-label="cc-exp">',
+      '<select name="cc-exp" aria-label="cc-exp">',
       "{{yearList}}",
       "</select>",
       "</div>",
@@ -7433,6 +7435,14 @@
           },
         },
       };
+    }
+
+    if (hp.Utils.defaults.surchargeFee > 0) {
+        requestModel.charge.chargeRequest.surchargeFee = hp.Utils.defaults.surchargeFee;
+    }
+
+    if (hp.Utils.defaults.convenienceFee > 0) {
+        requestModel.charge.chargeRequest.convenienceFee = hp.Utils.defaults.convenienceFee;
     }
 
     if (hp.Utils.defaults.paymentType == hp.PaymentType.REFUND) {

@@ -912,7 +912,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
 .hp a:link,
 .hp a:focus,
 .hp a:visited {
-  color: #2196f3;
+  color: #0C70C0;
   text-decoration: none;
 }
 /* line 584, ../src/jquery.hosted-payments.sass */
@@ -1124,7 +1124,7 @@ div[data-selector-key]:active, div[data-selector-key]:focus, div[data-selector-k
 }
 /* line 740, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-version-charge {
-  color: #2196f3;
+  color: #0C70C0;
 }
 /* line 743, ../src/jquery.hosted-payments.sass */
 .hp .hp-col-left .hp-secure .hp-version-refund {
