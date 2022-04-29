@@ -3862,6 +3862,7 @@
       "<hr />",
       '<div class="hp-error-disclaimer">If you feel that the above error was made by a mistake please contact our support at {{phone}}. <br /><br /><a href="javascript:;">&times; Dismiss error</a></div>',
       "</div>",
+      '<main>',
       '<div class="hp-row">',
       '<div class="hp-col hp-col-left">',
       '<ul class="hp-nav">',
@@ -3901,6 +3902,7 @@
       '<div class="hp-content hp-content-success">{{success}}</div>',
       "</div>",
       "</div>",
+      "</main>",
       "</div>",
     ].join("");
 
@@ -3988,6 +3990,10 @@
 
   var getAmount = function getAmount() {
     return hp.Utils.defaults.amount;
+    };
+
+  var getFullAmount = function getFullAmount() {
+    return (hp.Utils.defaults.amount + hp.Utils.defaults.surchargeFee);
   };
 
   var setCustomerInfo = function setCustomerInfo(name, phone, email, shouldEmailNotify, shouldSmsNotify) {
@@ -4057,7 +4063,7 @@
             if (hp.Utils.defaults.paymentType.toLowerCase() === 'refund') {
                 return "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a refund of " + formatCurrency(getAmount()) + " to your card.";
             }
-            return "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a payment of " + formatCurrency(getAmount()) + " to your card. If you cancel the payment you will still remain liable for the amount due.";
+            return "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a payment of " + formatCurrency(getFullAmount()) + " to your card. If you cancel the payment you will still remain liable for the amount due.";
         } else {
             return "";
         }
@@ -4067,7 +4073,7 @@
         if (hp.Utils.defaults.paymentType.toLowerCase() === 'refund') {
             return "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are requesting and authorizing an electronic transfer of " + formatCurrency(getAmount()) + " to the bank account above. Refunds made by ACH can take up to 3 business days to process and post to the account.";
         } else {
-            return "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are requesting and authorizing an electronic transfer from your bank account as a form of payment of " + formatCurrency(getAmount()) + " from the bank account above. Payments made by ACH can take up to 3 business days to process and post to the account. If you cancel the payment you will still remain liable for the amount due.";
+            return "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are requesting and authorizing an electronic transfer from your bank account as a form of payment of " + formatCurrency(getFullAmount()) + " from the bank account above. Payments made by ACH can take up to 3 business days to process and post to the account. If you cancel the payment you will still remain liable for the amount due.";
         }
     }
 
@@ -4829,9 +4835,9 @@
       $element.prepend(template);
 
         if (hp.Utils.defaults.paymentType.toLowerCase() === 'refund') {
-            message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + (hp.Utils.defaults.allowAvsSkip ? " or Skip 'Address Verification" : " ") + ", you are authorizing a refund of " + formatCurrency(getAmount()) + " to your card.";
+            message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + (hp.Utils.defaults.allowAvsSkip ? " or Skip 'Address Verification'" : " ") + ", you are authorizing a refund of " + formatCurrency(getAmount()) + " to your card.";
         } else {
-            message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + (hp.Utils.defaults.allowAvsSkip ? " or Skip 'Address Verification" : " ") + ", you are authorizing a payment of " + formatCurrency(getAmount()) + " to your card. If you cancel the payment you will still remain liable for the amount due.";
+            message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + (hp.Utils.defaults.allowAvsSkip ? " or Skip 'Address Verification'" : " ") + ", you are authorizing a payment of " + formatCurrency(getFullAmount()) + " to your card. If you cancel the payment you will still remain liable for the amount due.";
         }
 
         disclaimerTextAvs.prepend(message);
@@ -5284,7 +5290,9 @@
   var formatCurrency = function formatCurrency(amount) {
     if (typeof window.Intl !== "undefined") {
       var currencyCode = hp.Utils.defaults.currencyCode;
-      var currencyLocale = hp.Utils.defaults.currencyLocale;
+        var currencyLocale = hp.Utils.defaults.currencyLocale;
+
+      // console.log('CURRENCY CODE ====>', currencyCode)
 
       hp.Utils.log("formatCurrency: Using Intl object for currency formatting.");
       hp.Utils.log("formatCurrency: Using '" + currencyLocale + "' locale.");
