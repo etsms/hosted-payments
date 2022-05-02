@@ -6596,13 +6596,13 @@
         },
       };
 
-      if (hp.Utils.defaults.surchargeFee > 0) {
-        requestModel.charge.chargeRequest.surchargeFee = hp.Utils.defaults.surchargeFee;
-      }
+      //if (hp.Utils.defaults.surchargeFee > 0) {
+      //  requestModel.charge.chargeRequest.surchargeFee = hp.Utils.defaults.surchargeFee;
+      //}
 
-      if (hp.Utils.defaults.convenienceFee > 0) {
-        requestModel.charge.chargeRequest.convenienceFee = hp.Utils.defaults.convenienceFee;
-      }
+      //if (hp.Utils.defaults.convenienceFee > 0) {
+      //  requestModel.charge.chargeRequest.convenienceFee = hp.Utils.defaults.convenienceFee;
+      //}
     }
 
     if (hp.Utils.defaults.paymentType == hp.PaymentType.PREAUTH) {
