@@ -4819,7 +4819,7 @@
         '<div class="hp-pull-left hp-no-margins">',
         '<label class="hp-label-avs" for="avsZip">Zip <span class="hp-avs-required">*</span></label>',
         '<div class="hp-input hp-input-avs hp-input-avs-zip">',
-        '<input maxlength="5" pattern="^[^0-9a-zA-Z]+$" placeholder="Zipcode" value="' + hp.Utils.defaults.billingAddress.postalCode + '" name="avsZip" id="avsZip" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "postal-code") + '" type="text">',
+        '<input maxlength="5" pattern="\\d*" placeholder="Zipcode" value="' + hp.Utils.defaults.billingAddress.postalCode + '" name="avsZip" id="avsZip" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "postal-code") + '" type="text">',
         "</div>",
         "</div>",
         "</div>",
