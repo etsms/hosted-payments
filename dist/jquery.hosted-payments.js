@@ -3544,10 +3544,6 @@
             errorMessage.push("Zipcode must be 5 characters long.");
           }
 
-          // if (!/^[^*|\":<>[\]{}`\\()'%#;@&$]+$/.test(avsZip)) {
-          //   errorMessage.push("Enter a valid zipcode.");
-          // }
-
           if (!/^\d+$/.test(digit)) {
             return;
           }
@@ -4895,26 +4891,18 @@
           return true;
         }
 
-        if (!/[a-zA-Z0-9]{5,9}/.test(e) || ) {
+        var code = e.which ? e.which : e.keyCode;
+
+        // if (code > 31 && (code < 48 || code > 57)) {
+        //   return false;
+        // }
+ 
+        if ((code < 48 || code > 57) && (code < 65 || code > 90)) {
           return false;
         }
 
         return true;
       };
-
-      var noSpecialChars = function noSpecialChars(e) {
-        var code, i, len;
-
-        for (i = 0, len = e.length; i < len; i++) {
-          code = e.charCodeAt(i);
-          if (!(code > 47 && code < 58) && // numeric (0-9)
-              !(code > 64 && code < 91) && // upper alpha (A-Z)
-              !(code > 96 && code < 123)) { // lower alpha (a-z)
-            return false;
-          }
-        }
-        return true;
-      }
 
       $avsPrompt.find(".hp-input-avs input").on("focus blur keyup", function (e) {
         e.preventDefault();
@@ -4927,13 +4915,14 @@
         }
 
         if ($this.attr("name") === "avsZip") {
-          if (!onlyNumberKey(e.originalEvent) && noSpecialChars(e.originalEvent)) {
+          if (!onlyNumberKey(e.originalEvent)) {
             var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]{5,9}$/);
 
             if (lastDigit == null) {
               val = val.substring(0, val.length - 1);
             }
 
+            val = val.replace(/[a-zA-Z0-9]/gi, "")
             $this.val(val);
           }
 
