@@ -3544,7 +3544,7 @@
             errorMessage.push("Zipcode must be 5 characters long.");
           }
 
-          if (/^[^*|\":<>[\]{}`\\()'%#;@&$]+$/.test(avsZip)) {
+          if (!/^[^*|\":<>[\]{}`\\()'%#;@&$]+$/.test(avsZip)) {
             errorMessage.push("Enter a valid zipcode.");
           }
 
@@ -4894,14 +4894,6 @@
         var code = e.which ? e.which : e.keyCode;
 
         if (code > 31 && (code < 48 || code > 57)) {
-
-          var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-          
-          if(format.test(e.key))
-          {
-            return true;
-          }
-
           return false;
         }
 
