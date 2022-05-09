@@ -3536,7 +3536,7 @@
           errorMessage.push("Expiration date is invalid.");
         }
 
-        var avsZip = hp.Utils.plugins.CreditCard.$element.find(".hp-input-avs-zip > input").val();
+        var avsZip = hp.Utils.plugins.CreditCard.$element.find(".hp-input-avs-zip > input").val().replace(/^[^*|\":<>[\]{}`\\()'%#;@&$]+$/gi, "");
         var avsStreet = hp.Utils.plugins.CreditCard.$element.find(".hp-input-avs-street > input").val();
 
         if (hp.Utils.defaults.promptForAvs && !hp.Utils.defaults.allowAvsSkip) {
@@ -3544,8 +3544,12 @@
             errorMessage.push("Zipcode must be 5 characters long.");
           }
 
-          if (!/^[^*|\":<>[\]{}`\\()'%#;@&$]+$/.test(avsZip)) {
-            errorMessage.push("Enter a valid zipcode.");
+          // if (!/^[^*|\":<>[\]{}`\\()'%#;@&$]+$/.test(avsZip)) {
+          //   errorMessage.push("Enter a valid zipcode.");
+          // }
+
+          if (!/^\d+$/.test(digit)) {
+            return;
           }
 
           if (avsStreet === undefined || avsStreet.length < 3 || avsStreet.length > 60) {
@@ -4823,7 +4827,7 @@
         '<div class="hp-pull-left hp-no-margins">',
         '<label class="hp-label-avs" for="avsZip">Zip <span class="hp-avs-required">*</span></label>',
         '<div class="hp-input hp-input-avs hp-input-avs-zip">',
-        '<input maxlength="5" pattern="\\d*" placeholder="Zipcode" value="' + hp.Utils.defaults.billingAddress.postalCode + '" name="avsZip" id="avsZip" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "postal-code") + '" type="text">',
+        '<input maxlength="5" pattern="\\[a-zA-Z0-9-]{5}$" placeholder="Zipcode" value="' + hp.Utils.defaults.billingAddress.postalCode + '" name="avsZip" id="avsZip" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "postal-code") + '" type="text">',
         "</div>",
         "</div>",
         "</div>",
@@ -6450,7 +6454,7 @@
       "</div>",
       '<div class="hp-input-wrapper">',
       '<div class="hp-input hp-input-cc">',
-      '<input placeholder="DHRUVIN TEST" name="cardnumber" aria-labelledby="cardnumber" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-number") + '" type="text" pattern="\\d*">',
+      '<input placeholder="Enter Card Number" name="cardnumber" aria-labelledby="cardnumber" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-number") + '" type="text" pattern="\\d*">',
       "</div>",
       '<div class="hp-input hp-input-name">',
       '<input maxlength="25" placeholder="Enter Full Name" name="ccname" aria-labelledby="fullname" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-name") + '" type="text">',
