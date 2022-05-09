@@ -4886,7 +4886,7 @@
         }, 0);
       };
 
-      var onlyAlphaNumbericKey = function onlyAlphaNumbericKey(e) {
+      var onlyNumberKey = function onlyNumberKey(e) {
         if (e === undefined) {
           return true;
         }
@@ -4895,6 +4895,14 @@
           return true;
         }
 
+        if (!/[a-zA-Z0-9]{5,9}/.test(e) || ) {
+          return false;
+        }
+
+        return true;
+      };
+
+      var noSpecialChars = function noSpecialChars(e) {
         var code, i, len;
 
         for (i = 0, len = e.length; i < len; i++) {
@@ -4902,12 +4910,11 @@
           if (!(code > 47 && code < 58) && // numeric (0-9)
               !(code > 64 && code < 91) && // upper alpha (A-Z)
               !(code > 96 && code < 123)) { // lower alpha (a-z)
-            return true;
+            return false;
           }
         }
-
         return true;
-      };
+      }
 
       $avsPrompt.find(".hp-input-avs input").on("focus blur keyup", function (e) {
         e.preventDefault();
@@ -4920,7 +4927,7 @@
         }
 
         if ($this.attr("name") === "avsZip") {
-          if (!onlyAlphaNumbericKey(e.originalEvent)) {
+          if (!onlyNumberKey(e.originalEvent) && noSpecialChars(e.originalEvent)) {
             var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]{5,9}$/);
 
             if (lastDigit == null) {
