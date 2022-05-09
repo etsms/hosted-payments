@@ -4886,7 +4886,7 @@
         }, 0);
       };
 
-      var onlyNumberKey = function onlyNumberKey(e) {
+      var onlyAlphaNumbericKey = function onlyAlphaNumbericKey(e) {
         if (e === undefined) {
           return true;
         }
@@ -4895,14 +4895,15 @@
           return true;
         }
 
-        var code = e.which ? e.which : e.keyCode;
+        var code, i, len;
 
-        // if (code > 31 && (code < 48 || code > 57)) {
-        //   return false;
-        // }
-
-        if (!/[a-zA-Z0-9]{5,9}/.test(e)) {
-          return false;
+        for (i = 0, len = e.length; i < len; i++) {
+          code = e.charCodeAt(i);
+          if (!(code > 47 && code < 58) && // numeric (0-9)
+              !(code > 64 && code < 91) && // upper alpha (A-Z)
+              !(code > 96 && code < 123)) { // lower alpha (a-z)
+            return true;
+          }
         }
 
         return true;
@@ -4919,7 +4920,7 @@
         }
 
         if ($this.attr("name") === "avsZip") {
-          if (!onlyNumberKey(e.originalEvent)) {
+          if (!onlyAlphaNumbericKey(e.originalEvent)) {
             var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]{5,9}$/);
 
             if (lastDigit == null) {
