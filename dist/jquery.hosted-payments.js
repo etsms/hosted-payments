@@ -3544,6 +3544,10 @@
             errorMessage.push("Zipcode must be 5 characters long.");
           }
 
+          if (/^[^*|\":<>[\]{}`\\()'%#;@&$]+$/.test(avsZip)) {
+            errorMessage.push("Enter a valid zipcode.");
+          }
+
           if (avsStreet === undefined || avsStreet.length < 3 || avsStreet.length > 60) {
             errorMessage.push("Enter a valid street address.");
           }
@@ -4913,8 +4917,6 @@
             if (lastDigit == null) {
               val = val.substring(0, val.length - 1);
             }
-
-            val = val.replace(/^[^*|\":<>[\]{}`\\()'%#;@&$]+$/gi, "");
 
             $this.val(val);
           }
