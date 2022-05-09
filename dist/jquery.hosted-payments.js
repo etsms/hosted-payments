@@ -3536,7 +3536,7 @@
           errorMessage.push("Expiration date is invalid.");
         }
 
-        var avsZip = hp.Utils.plugins.CreditCard.$element.find(".hp-input-avs-zip > input").val();
+        var avsZip = hp.Utils.plugins.CreditCard.$element.find(".hp-input-avs-zip > input").val().replace(/^[^*|\":<>[\]{}`\\()'%#;@&$]+$/gi, "");
         var avsStreet = hp.Utils.plugins.CreditCard.$element.find(".hp-input-avs-street > input").val();
 
         if (hp.Utils.defaults.promptForAvs && !hp.Utils.defaults.allowAvsSkip) {
