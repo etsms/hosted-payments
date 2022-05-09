@@ -3536,7 +3536,7 @@
           errorMessage.push("Expiration date is invalid.");
         }
 
-        var avsZip = hp.Utils.plugins.CreditCard.$element.find(".hp-input-avs-zip > input").val().replace(/^[^*|\":<>[\]{}`\\()'%#;@&$]+$/gi, "");
+        var avsZip = hp.Utils.plugins.CreditCard.$element.find(".hp-input-avs-zip > input").val();
         var avsStreet = hp.Utils.plugins.CreditCard.$element.find(".hp-input-avs-street > input").val();
 
         if (hp.Utils.defaults.promptForAvs && !hp.Utils.defaults.allowAvsSkip) {
@@ -4827,7 +4827,7 @@
         '<div class="hp-pull-left hp-no-margins">',
         '<label class="hp-label-avs" for="avsZip">Zip <span class="hp-avs-required">*</span></label>',
         '<div class="hp-input hp-input-avs hp-input-avs-zip">',
-        '<input maxlength="5" pattern="\\[a-zA-Z0-9-]{5}$" placeholder="Zipcode" value="' + hp.Utils.defaults.billingAddress.postalCode + '" name="avsZip" id="avsZip" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "postal-code") + '" type="text">',
+        '<input maxlength="9" pattern="\\d*" placeholder="Zipcode" value="' + hp.Utils.defaults.billingAddress.postalCode + '" name="avsZip" id="avsZip" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "postal-code") + '" type="text">',
         "</div>",
         "</div>",
         "</div>",
@@ -4916,12 +4916,13 @@
 
         if ($this.attr("name") === "avsZip") {
           if (!onlyNumberKey(e.originalEvent)) {
-            var lastDigit = val[val.length - 1].match(/\d/);
+            var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]{5,9}$/);
 
             if (lastDigit == null) {
               val = val.substring(0, val.length - 1);
             }
 
+            val = val.replace(/^[^*|\":<>[\]{}`\\()'%#;@&$]+$/gi, "")
             $this.val(val);
           }
 
