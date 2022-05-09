@@ -4894,11 +4894,14 @@
         var code = e.which ? e.which : e.keyCode;
 
         if (code > 31 && (code < 48 || code > 57)) {
-          if(e.key.match(/^(!|@|#|$|%|^|&|*|(|)|)$/))
+
+          var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+          
+          if(format.test(e.key))
           {
             return true;
           }
-          
+
           return false;
         }
 
