@@ -6450,7 +6450,7 @@
       "</div>",
       '<div class="hp-input-wrapper">',
       '<div class="hp-input hp-input-cc">',
-      '<input placeholder="Enter Card Number" name="cardnumber" aria-labelledby="cardnumber" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-number") + '" type="text" pattern="\\d*">',
+      '<input placeholder="DHRUVIN TEST" name="cardnumber" aria-labelledby="cardnumber" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-number") + '" type="text" pattern="\\d*">',
       "</div>",
       '<div class="hp-input hp-input-name">',
       '<input maxlength="25" placeholder="Enter Full Name" name="ccname" aria-labelledby="fullname" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-name") + '" type="text">',
