@@ -4900,7 +4900,11 @@
         // }
  
         if ((code < 48 || code > 57) && (code < 65 || code > 90)) {
-          return false;
+          const regex = /[a-zA-Z0-9]/g;
+          console.log("onlyNumberKey 2", e.key);
+          if (!e.key.match(regex)) {
+            return false;
+          }
         }
 
         return true;
