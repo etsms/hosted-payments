@@ -4901,9 +4901,11 @@
       };
 
       isAlphaNumeric = function isAlphaNumeric(e) {
-        console.log("e.key: ", e.key)
         if (e === undefined) {
-          console.log("e === undefined");
+          return false;
+        }
+
+        if (e.key === undefined) {
           return false;
         }
 
@@ -4934,6 +4936,13 @@
               val = val.substring(0, val.length - 1);
             }
             val = val.replace(/[a-zA-Z0-9]/gi, "");
+            
+            $this.val(val);
+          }
+          
+          const regex = /^[0-9a-zA-Z]+$/g;
+          if (val.match(regex)) {
+            val = val.replace(/[a-zA-Z0-9]/gi, "");   
             $this.val(val);
           }
 
