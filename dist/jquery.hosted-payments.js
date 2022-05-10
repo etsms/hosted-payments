@@ -4883,6 +4883,11 @@
       };
 
       var onlyNumberKey = function onlyNumberKey(e) {
+        console.log("type: ", e.type);
+        console.log("key: ", e.key);
+        console.log("keyCode: ", e.keyCode);
+        console.log("which: ", e.which);
+
         if (e === undefined) {
           return true;
         }
@@ -4898,6 +4903,7 @@
         // }
  
         if ((code < 48 || code > 57) && (code < 65 || code > 90)) {
+          console.log("passed code test");
           return false;
         }
 
@@ -4924,6 +4930,7 @@
 
             val = val.replace(/[a-zA-Z0-9]/gi, "")
             $this.val(val);
+            console.log("avsZip 2", lastDigit);
           }
 
           avsZipValue = val;
