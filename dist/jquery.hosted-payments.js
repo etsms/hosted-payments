@@ -4921,8 +4921,9 @@
         }
 
         if ($this.attr("name") === "avsZip") {
+          console.log("val: ", val);
           if (!onlyNumberKey(e.originalEvent)) {
-            var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]+/);
+            var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]$/);
 
             if (lastDigit == null) {
               val = val.substring(0, val.length - 1);
@@ -4930,7 +4931,7 @@
 
             val = val.replace(/[a-zA-Z0-9]/gi, "")
             $this.val(val);
-            console.log("avsZip 2", lastDigit);
+            console.log("lastDigit: ", lastDigit);
           }
 
           avsZipValue = val;
