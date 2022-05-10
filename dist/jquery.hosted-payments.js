@@ -3540,6 +3540,10 @@
         var avsStreet = hp.Utils.plugins.CreditCard.$element.find(".hp-input-avs-street > input").val();
 
         if (hp.Utils.defaults.promptForAvs && !hp.Utils.defaults.allowAvsSkip) {
+          const regex = /^[0-9a-zA-Z]+$/g;
+          if (!e.key.match(regex)) {
+            errorMessage.push("Must provide a valid zipcode.");
+          }
           if (avsZip === undefined || avsZip.length !== 5) {
             errorMessage.push("Zipcode must be 5 characters long.");
           }
@@ -4937,12 +4941,6 @@
             }
             val = val.replace(/[a-zA-Z0-9]/gi, "");
             
-            $this.val(val);
-          }
-          
-          const regex = /^[0-9a-zA-Z]+$/g;
-          if (!val.match(regex)) {
-            val = val.replace(/[a-zA-Z0-9]/gi, "");   
             $this.val(val);
           }
 
