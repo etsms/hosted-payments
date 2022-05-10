@@ -4925,7 +4925,7 @@
 
         if ($this.attr("name") === "avsZip") {
 
-          if (!isAlphaNumeric(e.originalEvent) && val !== null) {
+          if (!isAlphaNumeric(e.originalEvent) && val !== "") {
             var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]+/);
 
             if (lastDigit == null) {
