@@ -4883,33 +4883,20 @@
       };
 
       var onlyNumberKey = function onlyNumberKey(e) {
-        console.log("e.key: ", e.key);
-        console.log("e.code: ", e.code);
-        console.log("e.type: ", e.type);
-        console.log("e.which: ", e.which);
-
         if (e === undefined) {
-          console.log("e === undefined");
           return true;
         }
 
         if (e.type !== "keyup") {
-          console.log("e.type !== keyup");
           return true;
         }
 
         var code = e.which ? e.which : e.keyCode;
 
-        // if (code > 31 && (code < 48 || code > 57)) {
-        //   return false;
-        // }
-
-        if ((code < 48 || code > 57) && (code < 65 || code > 90)) {
-          console.log("passed code test");
+        if (code > 31 && (code < 48 || code > 57)) {
           return false;
         }
 
-        console.log("end of method, returning true");
         return true;
       };
 
@@ -4939,35 +4926,18 @@
         }
 
         if ($this.attr("name") === "avsZip") {
-          console.log("$this.attr(name) === avsZip: ", val);
-          // if (!onlyNumberKey(e.originalEvent)) {
-          //   var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]+/);
-          //   console.log("lastDigit: ", lastDigit);
-
-          //   if (lastDigit == null) {
-          //     val = val.substring(0, val.length - 1);
-          //   }
-          //   val = val.replace(/[a-zA-Z0-9]/gi, "")
-          //   console.log("$this.val(val): ", val);
-          //   $this.val(val);
-          // }
 
           if (!isAlphaNumeric(e.originalEvent)) {
             var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]+/);
-            console.log("lastDigit: ", lastDigit);
-            console.log("val 1: ", val);
 
             if (lastDigit == null) {
               val = val.substring(0, val.length - 1);
-              console.log("val 2: ", val);
             }
-            val = val.replace(/[a-zA-Z0-9]/gi, "")
-            console.log("val 3: ", val);
+            val = val.replace(/[a-zA-Z0-9]/gi, "");
             $this.val(val);
           }
 
           avsZipValue = val;
-          console.log("avsZipValue: ", avsZipValue);
         }
 
         $submitAvs.attr("disabled", "disabled");
