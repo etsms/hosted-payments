@@ -4941,7 +4941,7 @@
           }
           
           const regex = /^[0-9a-zA-Z]+$/g;
-          if (val.match(regex)) {
+          if (!val.match(regex)) {
             val = val.replace(/[a-zA-Z0-9]/gi, "");   
             $this.val(val);
           }
