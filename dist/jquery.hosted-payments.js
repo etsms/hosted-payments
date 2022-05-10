@@ -4883,6 +4883,8 @@
       };
 
       var onlyNumberKey = function onlyNumberKey(e) {
+        console.log("onlyNumberKey", e);
+
         if (e === undefined) {
           return true;
         }
@@ -4915,6 +4917,7 @@
         }
 
         if ($this.attr("name") === "avsZip") {
+          console.log("avsZip 1", e.originalEvent);
           if (!onlyNumberKey(e.originalEvent)) {
             var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]$/);
 
@@ -4924,6 +4927,7 @@
 
             val = val.replace(/[a-zA-Z0-9]/gi, "")
             $this.val(val);
+            console.log("avsZip 2", lastDigit);
           }
 
           avsZipValue = val;
