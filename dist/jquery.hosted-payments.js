@@ -4883,8 +4883,6 @@
       };
 
       var onlyNumberKey = function onlyNumberKey(e) {
-        console.log("onlyNumberKey", e);
-
         if (e === undefined) {
           return true;
         }
@@ -4900,11 +4898,7 @@
         // }
  
         if ((code < 48 || code > 57) && (code < 65 || code > 90)) {
-          const regex = /[a-zA-Z0-9]/g;
-          console.log("onlyNumberKey 2", e.key);
-          if (!e.key.match(regex)) {
-            return false;
-          }
+          return false;
         }
 
         return true;
@@ -4921,9 +4915,8 @@
         }
 
         if ($this.attr("name") === "avsZip") {
-          console.log("avsZip 1", e.originalEvent);
           if (!onlyNumberKey(e.originalEvent)) {
-            var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]$/);
+            var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]+/);
 
             if (lastDigit == null) {
               val = val.substring(0, val.length - 1);
@@ -4931,7 +4924,6 @@
 
             val = val.replace(/[a-zA-Z0-9]/gi, "")
             $this.val(val);
-            console.log("avsZip 2", lastDigit);
           }
 
           avsZipValue = val;
