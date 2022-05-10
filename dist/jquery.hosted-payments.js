@@ -4886,6 +4886,7 @@
         console.log("e.key: ", e.key);
         console.log("e.code: ", e.code);
         console.log("e.type: ", e.type);
+        console.log("e.which: ", e.which);
 
         if (e === undefined) {
           console.log("e === undefined");
@@ -4912,6 +4913,21 @@
         return true;
       };
 
+      isAlphaNumeric = function isAlphaNumeric(e) {
+        console.log("e.key: ", e.key)
+        if (e === undefined) {
+          console.log("e === undefined");
+          return false;
+        }
+
+        const regex = /^[0-9a-zA-Z]+$/g;
+        if (e.key.match(regex)) {
+          return true;
+        }
+
+        return false;
+      }
+
       $avsPrompt.find(".hp-input-avs input").on("focus blur keyup", function (e) {
         e.preventDefault();
 
@@ -4924,15 +4940,29 @@
 
         if ($this.attr("name") === "avsZip") {
           console.log("$this.attr(name) === avsZip: ", val);
-          if (!onlyNumberKey(e.originalEvent)) {
+          // if (!onlyNumberKey(e.originalEvent)) {
+          //   var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]+/);
+          //   console.log("lastDigit: ", lastDigit);
+
+          //   if (lastDigit == null) {
+          //     val = val.substring(0, val.length - 1);
+          //   }
+          //   val = val.replace(/[a-zA-Z0-9]/gi, "")
+          //   console.log("$this.val(val): ", val);
+          //   $this.val(val);
+          // }
+
+          if (!isAlphaNumeric(e.originalEvent)) {
             var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]+/);
             console.log("lastDigit: ", lastDigit);
+            console.log("val 1: ", val);
 
             if (lastDigit == null) {
               val = val.substring(0, val.length - 1);
+              console.log("val 2: ", val);
             }
             val = val.replace(/[a-zA-Z0-9]/gi, "")
-            console.log("$this.val(val): ", val);
+            console.log("val 3: ", val);
             $this.val(val);
           }
 
