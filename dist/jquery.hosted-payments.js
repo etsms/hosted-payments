@@ -4883,16 +4883,17 @@
       };
 
       var onlyNumberKey = function onlyNumberKey(e) {
-        console.log("type: ", e.type);
-        console.log("key: ", e.key);
-        console.log("keyCode: ", e.keyCode);
-        console.log("which: ", e.which);
+        console.log("e.key: ", e.key);
+        console.log("e.code: ", e.code);
+        console.log("e.type: ", e.type);
 
         if (e === undefined) {
+          console.log("e === undefined");
           return true;
         }
 
         if (e.type !== "keyup") {
+          console.log("e.type !== keyup");
           return true;
         }
 
@@ -4901,12 +4902,13 @@
         // if (code > 31 && (code < 48 || code > 57)) {
         //   return false;
         // }
- 
+
         if ((code < 48 || code > 57) && (code < 65 || code > 90)) {
           console.log("passed code test");
           return false;
         }
 
+        console.log("end of method, returning true");
         return true;
       };
 
@@ -4921,20 +4923,21 @@
         }
 
         if ($this.attr("name") === "avsZip") {
-          console.log("val: ", val);
+          console.log("$this.attr(name) === avsZip: ", val);
           if (!onlyNumberKey(e.originalEvent)) {
-            var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]$/);
+            var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]+/);
+            console.log("lastDigit: ", lastDigit);
 
             if (lastDigit == null) {
               val = val.substring(0, val.length - 1);
             }
-
             val = val.replace(/[a-zA-Z0-9]/gi, "")
+            console.log("$this.val(val): ", val);
             $this.val(val);
-            console.log("lastDigit: ", lastDigit);
           }
 
           avsZipValue = val;
+          console.log("avsZipValue: ", avsZipValue);
         }
 
         $submitAvs.attr("disabled", "disabled");
