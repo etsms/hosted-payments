@@ -4945,10 +4945,7 @@
         }
 
         $submitAvs.attr("disabled", "disabled");
-
-        const regex = /[a-zA-Z0-9]/;
-        if (avsZipValue.length && avsZipValue.length >= 5 && avsZipValue.match(regex) && avsStreetValue.length && avsStreetValue.length >= 3) {
-
+        if (avsZipValue.length && avsZipValue.length >= 5 && avsStreetValue.length && avsStreetValue.length >= 3) {
           $submitAvs.removeAttr("disabled");
         }
 
