@@ -3785,9 +3785,11 @@
       avsZip = "";
     }
 
-    const regex = /^[0-9a-zA-Z]+$/g;
+    const regex = /[a-zA-Z0-9]/;
+    console.log(avsZip);
     if (!avsZip.match(regex)) {
       avsZip = "";
+      console.log(avsZip);
     }
 
     if (typeof avsStreet === "undefined") {
