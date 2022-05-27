@@ -4900,7 +4900,7 @@
         return true;
       };
 
-      isAlphaNumeric = function isAlphaNumeric(e) {
+      var isAlphaNumeric = function isAlphaNumeric(e) {
         if (e === undefined) {
           return false;
         }
@@ -4926,7 +4926,7 @@
         if ($this.attr("name") === "avsZip") {
 
           if (!isAlphaNumeric(e.originalEvent)) {
-            var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]+/);
+            var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]/);
 
             if (lastDigit == null) {
               val = val.substring(0, val.length - 1);
@@ -4940,7 +4940,7 @@
         }
 
         $submitAvs.attr("disabled", "disabled");
-
+        // add isAlphaNumeric(avsZipValue) &&
         if (avsZipValue.length && avsZipValue.length >= 5 && avsStreetValue.length && avsStreetValue.length >= 3) {
           $submitAvs.removeAttr("disabled");
         }
