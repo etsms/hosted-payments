@@ -3786,10 +3786,8 @@
     }
 
     const regex = /[a-zA-Z0-9]/;
-    console.log(avsZip);
     if (!avsZip.match(regex)) {
       avsZip = "";
-      console.log(avsZip);
     }
 
     if (typeof avsStreet === "undefined") {
@@ -4947,7 +4945,10 @@
         }
 
         $submitAvs.attr("disabled", "disabled");
-        if (avsZipValue.length && avsZipValue.length >= 5 && avsStreetValue.length && avsStreetValue.length >= 3) {
+
+        const regex = /[a-zA-Z0-9]/;
+        if (avsZipValue.length && avsZipValue.length >= 5 && avsZipValue.match(regex) && avsStreetValue.length && avsStreetValue.length >= 3) {
+
           $submitAvs.removeAttr("disabled");
         }
 
