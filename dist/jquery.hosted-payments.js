@@ -4940,8 +4940,7 @@
         }
 
         $submitAvs.attr("disabled", "disabled");
-        // add isAlphaNumeric(avsZipValue) &&
-        if (avsZipValue.length && avsZipValue.length >= 5 && avsStreetValue.length && avsStreetValue.length >= 3) {
+        if (!isAlphaNumeric(avsZipValue) && avsZipValue.length && avsZipValue.length >= 5 && avsStreetValue.length && avsStreetValue.length >= 3) {
           $submitAvs.removeAttr("disabled");
         }
 
