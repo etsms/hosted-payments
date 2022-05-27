@@ -3781,7 +3781,7 @@
   };
 
   var updateAvsInfo = function updateAvsInfo(avsStreet, avsZip) {
-    if (typeof avsZip === "undefined") {
+    if (typeof avsZip === "undefined" && isAlphaNumeric(avsZip)) {
       avsZip = "";
     }
 
@@ -4940,7 +4940,7 @@
         }
 
         $submitAvs.attr("disabled", "disabled");
-        if (isAlphaNumeric(avsZipValue) && avsZipValue.length && avsZipValue.length >= 5 && avsStreetValue.length && avsStreetValue.length >= 3) {
+        if (avsZipValue.length && avsZipValue.length >= 5 && avsStreetValue.length && avsStreetValue.length >= 3) {
           $submitAvs.removeAttr("disabled");
         }
 
