@@ -3781,7 +3781,12 @@
   };
 
   var updateAvsInfo = function updateAvsInfo(avsStreet, avsZip) {
-    if (typeof avsZip === "undefined" && isAlphaNumeric(avsZip)) {
+    if (typeof avsZip === "undefined") {
+      avsZip = "";
+    }
+
+    const regex = /^[0-9a-zA-Z]+$/g;
+    if (!avsZip.match(regex)) {
       avsZip = "";
     }
 
