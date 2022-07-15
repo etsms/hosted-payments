@@ -3489,7 +3489,7 @@
         var textOnlyPattern = /^[A-Za-z][-a-zA-Z ]+$/;
 
         var customerName = element.find(".hp-input-fullname > input").val();
-        if (customerName.length < 1 || customerName.length > 23 || !textOnlyPattern.test(customerName)) {
+        if (customerName.length < 1 || customerName.length > 25 || !textOnlyPattern.test(customerName)) {
           errorMessage.push("The 'full name' field is either too short or too long.");
         }
 
@@ -3542,6 +3542,10 @@
         if (hp.Utils.defaults.promptForAvs && !hp.Utils.defaults.allowAvsSkip) {
           if (avsZip === undefined || avsZip.length !== 5) {
             errorMessage.push("Zipcode must be 5 characters long.");
+          }
+
+          if (!/^\d+$/.test(digit)) {
+            return;
           }
 
           if (avsStreet === undefined || avsStreet.length < 3 || avsStreet.length > 60) {
@@ -3781,6 +3785,13 @@
       avsZip = "";
     }
 
+    const regex = /^[0-9a-zA-Z]+$/g;
+    console.log(avsZip);
+    if (!avsZip.match(regex)) {
+      avsZip = "";
+      console.log(avsZip);
+    }
+
     if (typeof avsStreet === "undefined") {
       avsStreet = "";
     }
@@ -3862,6 +3873,7 @@
       "<hr />",
       '<div class="hp-error-disclaimer">If you feel that the above error was made by a mistake please contact our support at {{phone}}. <br /><br /><a href="javascript:;">&times; Dismiss error</a></div>',
       "</div>",
+      '<main>',
       '<div class="hp-row">',
       '<div class="hp-col hp-col-left">',
       '<ul class="hp-nav">',
@@ -3870,13 +3882,8 @@
       '<div class="hp-secure">',
       '<div class="hp-secure-wrapper">',
         '<a href="https://emoney.com" target="_blank" title="Powered by EMoney">',
-          '<i class="hp-sprite sprite-logo hp-emoney-logo" alt="Hosted Payments"></i>',
+          '<i class="hp-sprite sprite-logo hp-emoney-logo mb-2" alt="EMoney"></i>',
         "</a>",
-        '<div class="hp-support">',
-          "<strong>Help &amp; support</strong>",
-          '<p>Call us at <a href="tel:{{phone}}">{{phone}}</a></p>',
-          "<br />",
-        "</div>",
         '<div class="hp-cards">',
           '<div class="hp-cards-icons sprite-card-amex' + (hp.Utils.defaults.showAmex ? "" : " hide") + '"></div>',
           '<div class="hp-cards-icons sprite-card-diners' + (hp.Utils.defaults.showDiners ? "" : " hide") + '"></div>',
@@ -3906,6 +3913,7 @@
       '<div class="hp-content hp-content-success">{{success}}</div>',
       "</div>",
       "</div>",
+      "</main>",
       "</div>",
     ].join("");
 
@@ -3993,6 +4001,10 @@
 
   var getAmount = function getAmount() {
     return hp.Utils.defaults.amount;
+    };
+
+  var getFullAmount = function getFullAmount() {
+    return (hp.Utils.defaults.amount + hp.Utils.defaults.surchargeFee);
   };
 
   var setCustomerInfo = function setCustomerInfo(name, phone, email, shouldEmailNotify, shouldSmsNotify) {
@@ -4020,7 +4032,7 @@
   var getInstance = function getInstance() {
     var $this = $(hp.Utils.__instance.element).find("> .hp").eq(0);
 
-    hp.Utils.log("Getting active instance: ", $this);
+    //hp.Utils.log("Getting active instance: ", $this);
 
     if (!!$this.attr("class").match(/hp-form-cc/gi)) {
       return hp.Utils.plugins.CreditCard;
@@ -4057,84 +4069,24 @@
     };
   };
 
-  var createTooltip = function() {
-    setTimeout(function(){
-      
-      var $btn = getInstance()
-        .$content
-        .find(".hp-submit");
+    var createCreditCardDisclosure = function () {
+        if (!hp.Utils.defaults.promptForAvs) {
+            if (hp.Utils.defaults.paymentType.toLowerCase() === 'refund') {
+                return "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a refund of " + formatCurrency(getAmount()) + " to your card.";
+            }
+            return "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a payment of " + formatCurrency(getFullAmount()) + " to your card. If you cancel the payment you will still remain liable for the amount due.";
+        } else {
+            return "";
+        }
+    }
 
-      getInstance().$content
-        .find(".hp-tooltip")
-        .remove();
-
-      var hasPayment = getAmount() > 0;
-
-      if (!hasPayment) {
-        hp.Utils.log("No payment amount, not showing tooltip.");
-        return;
-      }
-
-      if (hp.Utils.hasAlternativeSubmitButton()) {
-        $btn = hp.Utils.getAlternativeSubmitButton();
-      }
-
-      var offset = $btn.offset();
-
-      if (offset === undefined) {
-        hp.Utils.log("No button to append tooltop.");
-        return;
-      }
-
-      var width = ($btn.outerWidth() / 2);
-      var height = ($btn.outerHeight() + 10);
-
-      var title = "Credit or Debit Card";
-      var message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a payment of " + formatCurrency(getAmount()) + " on the card entered above. If you cancel the payment you will still remain liable for the amount due.";
-
-      if (hp.Utils.defaults.promptForAvs) {
-        message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + " after you've clicked Verify Billing Address above, you are authorizing a payment of " + formatCurrency(getAmount()) + " on the card entered above. If you cancel the payment you will still remain liable for the amount due.";
-      }
-
-      if (hp.Utils.getInstance().isBankAccount()) {
-        title = "Electronic Payment Form Bank Account (ACH)";
-        message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are authorizing a payment of  " + formatCurrency(getAmount()) + " from the bank account above. If you cancel the payment you will still remain liable for the amount due."
-      }
-
-      var style = "display: none; position: fixed; left: " + (offset.left + width) + "px; top: " + (offset.top + height) + "px;"
-
-      var disclaimer = $([
-      '<div class="hp-tooltip" style="' + style + '">',
-          '<div class="hp-tooltip-wrapper">',
-              '<span class="hp-tooltip-close">&times;</span>',
-              '<span class="hp-tooltip-title">',
-                title,
-              '</span>',
-              '<span class="hp-tooltip-content">',
-                message,
-              '</span>',
-          '</div>',
-      '</div>'
-      ].join(""));
-
-      $btn.parent().append(disclaimer);
-
-      disclaimer.find(".hp-tooltip-close").click(function(){
-        disclaimer.fadeOut(function(){
-          disclaimer.remove();
-        });
-      });
-
-      disclaimer.fadeIn(function(){
-        setTimeout(function(){
-          disclaimer.fadeOut(function(){
-            disclaimer.remove();
-          });
-        }, 10000);
-      });
-
-    }, 1500);
-  };
+    var createAchDisclosure = function () {
+        if (hp.Utils.defaults.paymentType.toLowerCase() === 'refund') {
+            return "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are requesting and authorizing an electronic transfer of " + formatCurrency(getAmount()) + " to the bank account above. Refunds made by ACH can take up to 3 business days to process and post to the account.";
+        } else {
+            return "By clicking " + hp.Utils.defaults.defaultButtonLabel + ", you are requesting and authorizing an electronic transfer from your bank account as a form of payment of " + formatCurrency(getFullAmount()) + " from the bank account above. Payments made by ACH can take up to 3 business days to process and post to the account. If you cancel the payment you will still remain liable for the amount due.";
+        }
+    }
 
   var createNav = function createNav() {
     var defaultAreas = hp.Utils.defaults.paymentTypeOrder,
@@ -4235,14 +4187,14 @@
 
     ttl = ttl * 1000;
 
-    hp.Utils.log("Setting session timeout to: " + ttl);
+    //hp.Utils.log("Setting session timeout to: " + ttl);
 
     if (_timer !== null) {
       window.clearTimeout(_timer);
     }
 
     _timer = window.setTimeout(function () {
-      hp.Utils.log("Session timed out!");
+      //hp.Utils.log("Session timed out!");
       handleError();
     }, ttl);
   };
@@ -4405,7 +4357,7 @@
           isTrack = isTrackAccount(payload),
           isScan = typeof swipe !== "undefined"; // For BANK ACCOUNT objects
 
-        hp.Utils.log("isAch, isEm, isCC, isTrack, isScan", isAch, isEm, isCC, isTrack, isScan);
+        //hp.Utils.log("isAch, isEm, isCC, isTrack, isScan", isAch, isEm, isCC, isTrack, isScan);
 
         if (isAch) {
           message = "Transaction pending.";
@@ -4441,7 +4393,7 @@
             type = $.payment.cardType(payload.properties.cardNumber).toUpperCase();
           } catch (e) {
             type = "Unknown";
-            hp.Utils.log("Coudn't determine cardType. ", e);
+            //hp.Utils.log("Coudn't determine cardType. ", e);
           }
 
           expirationDate = payload.properties.expirationDate;
@@ -4459,7 +4411,7 @@
             type = $.payment.cardType(swipe.cardNumber).toUpperCase();
           } catch (e) {
             type = "Unknown";
-            hp.Utils.log("Coudn't determine cardType. ", e);
+            //hp.Utils.log("Coudn't determine cardType. ", e);
           }
 
           expirationDate = swipe.expMonth + "/" + swipe.expYear;
@@ -4495,7 +4447,7 @@
         successResponse.issuer_name = res.issuerName;
         successResponse.issuer_logo = res.issuerLogo;
 
-        hp.Utils.log("CustomerToken result (1): ", res.customerToken, typeof res.customerToken);
+        //hp.Utils.log("CustomerToken result (1): ", res.customerToken, typeof res.customerToken);
 
         if ((res !== undefined || res !== null) && (res.customerToken !== undefined || res.customerToken !== null)) {
           successResponse.customer_token = res.customerToken;
@@ -4530,7 +4482,7 @@
 
           successResponse.instrument_expiration_date = month + "/" + new Date().getFullYear().toString().substring(0, 2) + year;
 
-          hp.Utils.log("CustomerToken result (2): ", res.payment.customerToken, typeof res.payment.customerToken);
+          //hp.Utils.log("CustomerToken result (2): ", res.payment.customerToken, typeof res.payment.customerToken);
 
           if (res.payment.customerToken !== undefined || res.payment.customerToken !== null) {
             successResponse.customer_token = res.customerToken;
@@ -4540,7 +4492,7 @@
 
         }
         
-        hp.Utils.log("Result from server: ", successResponse, res);
+        //hp.Utils.log("Result from server: ", successResponse, res);
 
         responses.push(successResponse);
       }
@@ -4759,7 +4711,7 @@
     hp.Utils.defaults.eventCallback($element);
 
     if (!hp.Utils.defaults.promptForAvs) {
-      hp.Utils.log("The 'promptForAvs' option was turned off. Skipping AVS prompt.");
+      //hp.Utils.log("The 'promptForAvs' option was turned off. Skipping AVS prompt.");
       deferred.resolve();
       return deferred;
     }
@@ -4767,7 +4719,7 @@
     var instance = hp.Utils.getInstance();
 
     if (instance !== null && instance.isCode()) {
-      hp.Utils.log("The instance is a 'Code' instance. No AVS check required.");
+      //hp.Utils.log("The instance is a 'Code' instance. No AVS check required.");
       deferred.resolve();
       return deferred;
     }
@@ -4878,12 +4830,13 @@
         '<div class="hp-pull-left hp-no-margins">',
         '<label class="hp-label-avs" for="avsZip">Zip <span class="hp-avs-required">*</span></label>',
         '<div class="hp-input hp-input-avs hp-input-avs-zip">',
-        '<input maxlength="5" pattern="\\d*" placeholder="Zipcode" value="' + hp.Utils.defaults.billingAddress.postalCode + '" name="avsZip" id="avsZip" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "postal-code") + '" type="text">',
+        '<input maxlength="9" pattern="\\d*" placeholder="Zipcode" value="' + hp.Utils.defaults.billingAddress.postalCode + '" name="avsZip" id="avsZip" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "postal-code") + '" type="text">',
         "</div>",
         "</div>",
         "</div>",
         '<br class="hp-break" />',
-        "<hr>",
+          "<hr>",
+        '<div id="disclaimerTextAvs" class="disclaimer"></div>',
         '<button class="hp-submit hp-avs-submit">' + hp.Utils.defaults.defaultButtonLabel + "</button>",
         hp.Utils.defaults.allowAvsSkip ? '<a class="hp-avs-skip" href="javascript:;">Skip \'Address Verification\'</a>' : "",
         "</div>",
@@ -4891,6 +4844,14 @@
       ].join("");
 
       $element.prepend(template);
+
+        if (hp.Utils.defaults.paymentType.toLowerCase() === 'refund') {
+            message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + (hp.Utils.defaults.allowAvsSkip ? " or Skip 'Address Verification'" : " ") + ", you are authorizing a refund of " + formatCurrency(getAmount()) + " to your card.";
+        } else {
+            message = "By clicking " + hp.Utils.defaults.defaultButtonLabel + (hp.Utils.defaults.allowAvsSkip ? " or Skip 'Address Verification'" : " ") + ", you are authorizing a payment of " + formatCurrency(getFullAmount()) + " to your card. If you cancel the payment you will still remain liable for the amount due.";
+        }
+
+        disclaimerTextAvs.prepend(message);
 
       hp.Utils.defaults.eventCallback($element);
 
@@ -4946,6 +4907,19 @@
         return true;
       };
 
+      var isAlphaNumeric = function isAlphaNumeric(e) {
+        if (e === undefined) {
+          return false;
+        }
+
+        const regex = /^[0-9a-zA-Z]+$/g;
+        if (e.key.match(regex)) {
+          return true;
+        }
+
+        return false;
+      }
+
       $avsPrompt.find(".hp-input-avs input").on("focus blur keyup", function (e) {
         e.preventDefault();
 
@@ -4957,13 +4931,15 @@
         }
 
         if ($this.attr("name") === "avsZip") {
-          if (!onlyNumberKey(e.originalEvent)) {
-            var lastDigit = val[val.length - 1].match(/\d/);
+
+          if (!isAlphaNumeric(e.originalEvent)) {
+            var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]/);
 
             if (lastDigit == null) {
               val = val.substring(0, val.length - 1);
             }
-
+            val = val.replace(/[a-zA-Z0-9]/gi, "");
+            
             $this.val(val);
           }
 
@@ -4971,7 +4947,6 @@
         }
 
         $submitAvs.attr("disabled", "disabled");
-
         if (avsZipValue.length && avsZipValue.length >= 5 && avsStreetValue.length && avsStreetValue.length >= 3) {
           $submitAvs.removeAttr("disabled");
         }
@@ -5105,7 +5080,7 @@
   };
 
   var reset = function reset(options) {
-    hp.Utils.log("Checking options to reset with...", options);
+    //hp.Utils.log("Checking options to reset with...", options);
 
     if (typeof options === "undefined") {
       options = {};
@@ -5115,12 +5090,12 @@
       options = {};
     }
 
-    hp.Utils.log("Getting instance element...", hp.Utils.__instance.element);
+    //hp.Utils.log("Getting instance element...", hp.Utils.__instance.element);
     var element = $(hp.Utils.__instance.element);
-    hp.Utils.log("Emptying the container element...");
+    //hp.Utils.log("Emptying the container element...");
     element.empty();
     hp.Utils.__instance.element = element.get();
-    hp.Utils.log("Handle special option types...");
+    //hp.Utils.log("Handle special option types...");
 
     if (typeof options.entryType !== "undefined") {
       options.entryType = hp.Utils.setEntryType(options.entryType);
@@ -5180,7 +5155,7 @@
       hp.Utils.setAlternativeSubmitButton(options.alternativeSubmitButton);
     }
 
-    hp.Utils.log("Merging plugin defaults with newly provided options...");
+    //hp.Utils.log("Merging plugin defaults with newly provided options...");
     hp.Utils.defaults = jQuery.extend({}, hp.Utils.defaults, options);
     element.data(options);
 
@@ -5195,11 +5170,11 @@
         hp.Utils.plugins.Transvault.transvaultHub.connection.stop(socketOptions);
       }
     } catch (e) {
-      hp.Utils.log(e);
+      //hp.Utils.log(e);
     }
 
     setTimeout(function () {
-      hp.Utils.log("Reinitialized plugin with new options!");
+      //hp.Utils.log("Reinitialized plugin with new options!");
       hp.Utils.__instance.init();
       hp.Utils.__instance = hp.Utils.__instance;
     });
@@ -5208,10 +5183,10 @@
   var handleCaptcha = function handleCaptcha() {
     var deferred = jQuery.Deferred();
     setTimeout(function () {
-      hp.Utils.log("Performing captcha check!", hp.Utils.defaults.captchaCallback);
+      //hp.Utils.log("Performing captcha check!", hp.Utils.defaults.captchaCallback);
       if (hp.Utils.defaults.captchaCallback === undefined || hp.Utils.defaults.captchaCallback === null || typeof hp.Utils.defaults.captchaCallback !== "function" || hp.Utils.defaults.captchaCallback.length < 1) {
-        hp.Utils.log("The provided captchaCallback was not defined or was not a function: Type = ", typeof hp.Utils.defaults.captchaCallback);
-        hp.Utils.log("--> Please make sure the callback includes 1 parameter. The parameter is a jQuery deferred object and shoud be resovled or rejected.");
+        //hp.Utils.log("The provided captchaCallback was not defined or was not a function: Type = ", typeof hp.Utils.defaults.captchaCallback);
+        //hp.Utils.log("--> Please make sure the callback includes 1 parameter. The parameter is a jQuery deferred object and shoud be resovled or rejected.");
         deferred.reject();
       } else {
         hp.Utils.defaults.captchaCallback(deferred);
@@ -5232,7 +5207,7 @@
     if (hp.Utils.defaults.paymentService === hp.PaymentService.TEST || hp.Utils.defaults.paymentService === hp.PaymentService.TOKEN) {
       hp.Utils.handleCaptcha().then(
         function () {
-          hp.Utils.log("Sign In: Bypassed.");
+          //hp.Utils.log("Sign In: Bypassed.");
           hp.Utils.setSession(apiKey);
           deferred.resolve(apiKey);
         },
@@ -5262,7 +5237,7 @@
 
     hp.Utils.handleCaptcha().then(
       function () {
-        hp.Utils.log("%cYou're attempting to perform a sign-in via the browser. This behavior is strictly forbidden in production/live environments. Please review the Hosted Payments documentation for details on how to create sessions securely (https://elavonpayments.com/docs/hp/docs/plugin/02._additional_features).", "background: #f9f2f4; color: #c7254e; display: block; padding: 5px; margin: 15px 0; border: 1px solid #c92c2c; border-radius: 3px;");
+        //hp.Utils.log("%cYou're attempting to perform a sign-in via the browser. This behavior is strictly forbidden in production/live environments. Please review the Hosted Payments documentation for details on how to create sessions securely (https://elavonpayments.com/docs/hp/docs/plugin/02._additional_features).", "background: #f9f2f4; color: #c7254e; display: block; padding: 5px; margin: 15px 0; border: 1px solid #c92c2c; border-radius: 3px;");
 
         hp.Utils.makeRequest({
           signIn: {
@@ -5278,14 +5253,14 @@
             hp.Utils.setTimer(res.ttl);
 
             if (res.captchaEnabled) {
-              hp.Utils.log("Sign In: Captcha enabled.");
+              //hp.Utils.log("Sign In: Captcha enabled.");
               hp.Utils.setCaptchaKey(res.captchaSiteKey);
               hp.Utils.setCaptchaVendor(res.captchaVendor);
             }
 
             deferred.resolve(res);
-            hp.Utils.log("Sign In: Retrieved from server.");
-            hp.Utils.log("Sign In: Time remaining is (seconds) -> ", res.ttl);
+            //hp.Utils.log("Sign In: Retrieved from server.");
+            //hp.Utils.log("Sign In: Time remaining is (seconds) -> ", res.ttl);
           },
           function (res) {
             if (typeof res === "undefined" || res === null || res === "") {
@@ -5340,11 +5315,13 @@
   var formatCurrency = function formatCurrency(amount) {
     if (typeof window.Intl !== "undefined") {
       var currencyCode = hp.Utils.defaults.currencyCode;
-      var currencyLocale = hp.Utils.defaults.currencyLocale;
+        var currencyLocale = hp.Utils.defaults.currencyLocale;
 
-      hp.Utils.log("formatCurrency: Using Intl object for currency formatting.");
-      hp.Utils.log("formatCurrency: Using '" + currencyLocale + "' locale.");
-      hp.Utils.log("formatCurrency: Using '" + currencyCode + "' currency code.");
+      // console.log('CURRENCY CODE ====>', currencyCode)
+
+      //hp.Utils.log("formatCurrency: Using Intl object for currency formatting.");
+      //hp.Utils.log("formatCurrency: Using '" + currencyLocale + "' locale.");
+      //hp.Utils.log("formatCurrency: Using '" + currencyCode + "' currency code.");
 
       var formatter = new Intl.NumberFormat(currencyLocale, {
         style: "currency",
@@ -6110,9 +6087,7 @@
           hp.Utils.log("Cancelling transvault instance.");
           hp.Utils.plugins.Transvault.cancelTransactionWithoutError();
         }
-
-        hp.Utils.createTooltip();
-
+        
         $this
           .off()
           .on("hp.notify", hp.Utils.defaults.eventCallback)
@@ -6169,11 +6144,11 @@
     }
 
     if (getAlternativeSubmitButton().length > 0) {
-      hp.Utils.log("Using alternative submit button with selector '" + hp.Utils.defaults.alternativeSubmitButton + "'.");
+      //hp.Utils.log("Using alternative submit button with selector '" + hp.Utils.defaults.alternativeSubmitButton + "'.");
       return true;
     }
 
-    hp.Utils.log("Could not find altnernative submit button selector '" + hp.Utils.defaults.alternativeSubmitButton + "'.");
+    //hp.Utils.log("Could not find altnernative submit button selector '" + hp.Utils.defaults.alternativeSubmitButton + "'.");
 
     return false;
   };
@@ -6213,7 +6188,8 @@
   hp.Utils.escapeHTML = escapeHTML;
   hp.Utils.setCustomerInfo = setCustomerInfo;
   hp.Utils.getCustomerInfo = getCustomerInfo;
-  hp.Utils.createTooltip = createTooltip;
+  hp.Utils.createCreditCardDisclosure = createCreditCardDisclosure;
+  hp.Utils.createAchDisclosure = createAchDisclosure;
   hp.Utils.getInstance = getInstance;
   hp.Utils.getSession = getSession;
   hp.Utils.setSession = setSession;
@@ -6435,6 +6411,8 @@
       throw new Error("hosted-payments.credit-card.js : Cannot create template. Arguments are null or undefined.");
     }
 
+    hp.Utils.defaults.ccDisclosure = hp.Utils.createCreditCardDisclosure();
+
     var generateYearList = function generateYearList(input) {
       var min = new Date().getFullYear(),
         max = new Date().getFullYear() + 10,
@@ -6496,16 +6474,16 @@
       '<input placeholder="Enter Card Number" name="cardnumber" aria-labelledby="cardnumber" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-number") + '" type="text" pattern="\\d*">',
       "</div>",
       '<div class="hp-input hp-input-name">',
-      '<input maxlength="18" placeholder="Enter Full Name" name="ccname" aria-labelledby="fullname" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-name") + '" type="text">',
+      '<input maxlength="25" placeholder="Enter Full Name" name="ccname" aria-labelledby="fullname" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-name") + '" type="text">',
       "</div>",
       '<div class="hp-input-container hp-input-container-date">',
       '<div class="hp-input hp-input-month">',
-      '<select autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-exp-month") + '" name="cc-exp" aria-label="cc-exp">',
+      '<select name="cc-exp" aria-label="cc-exp">',
       "{{monthList}}",
       "</select>",
       "</div>",
       '<div class="hp-input hp-input-year">',
-      '<select autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-exp-year") + '" name="cc-exp" aria-label="cc-exp">',
+      '<select name="cc-exp" aria-label="cc-exp">',
       "{{yearList}}",
       "</select>",
       "</div>",
@@ -6514,12 +6492,14 @@
       '<input placeholder="Enter CVV" name="cvc" aria-label="CVV" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "cc-csc") + '" type="text" pattern="\\d*">',
       '<span class="hp-input-cvv-image"></span>',
       "</div>",
+      '<div class="disclaimer">' + hp.Utils.defaults.ccDisclosure + "</div>",
       '<button class="hp-submit">' + (hp.Utils.defaults.promptForAvs ? "Verify Billing Address &#10144;" : hp.Utils.defaults.defaultButtonLabel) + "</button>",
       "</div>",
     ].join("");
-
+    
     return parseDatesTemplates($html);
   };
+  
 
   CreditCard.prototype.showSuccess = function (delay) {
     return hp.Utils.showSuccessPage(delay);
@@ -6721,7 +6701,7 @@
     var that = this;
     var requestModel = {};
 
-    hp.Utils.log("Credit card: HandleCharge", res);
+    //hp.Utils.log("Credit card: HandleCharge", res);
 
     if (typeof res.customerToken != "undefined" && typeof res.request != "undefined") {
       res.request.__customerToken = res.customerToken;
@@ -6878,7 +6858,7 @@
 
         if (hp.Utils.defaults.saveCustomer) {
 
-          hp.Utils.log("Save customer enabled. Beging request with: (createInstrumentRequest) ", createInstrumentRequest);
+          //hp.Utils.log("Save customer enabled. Beging request with: (createInstrumentRequest) ", createInstrumentRequest);
 
           return hp.Utils.makeRequest(createInstrumentRequest);
         }
@@ -6901,7 +6881,7 @@
           return;
         }
 
-        hp.Utils.log("Save customer enabled. Responded with: (createInstrumentRequest) ", res);
+        //hp.Utils.log("Save customer enabled. Responded with: (createInstrumentRequest) ", res);
 
         that.instrumentId = res.instrumentId;
         that.transactionId = typeof res.transactionId !== "undefined" ? res.transactionId : that.transactionId;
@@ -7211,6 +7191,8 @@
       return "<option value=" + value + ">" + value + "</option>";
     });
 
+    hp.Utils.defaults.achDisclosure = hp.Utils.createAchDisclosure();
+
     var $accountTypeOptions = ["<div class='hp-input hp-input-ach-type'>", "<select autocomplete=", hp.Utils.defaults.disableAutocomplete ? "off" : "ach-acct-type", " name='ach-type' aria-label='ach-type'>", $accountType, "</select>", "</div>"].join("");
 
     var $html = [
@@ -7224,7 +7206,7 @@
       "</div>",
       '<div class="hp-input-wrapper">',
       '<div class="hp-input hp-input-fullname">',
-      '<input maxlength="23" placeholder="Enter Full Name" name="name" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "name") + '" type="text">',
+      '<input maxlength="25" placeholder="Enter Full Name" name="name" value="' + hp.Utils.defaults.customerName + '" autocomplete="' + (hp.Utils.defaults.disableAutocomplete ? "off" : "name") + '" type="text">',
       "</div>",
       "<div class='hp-input-container hp-input-container-ach'>",
       '<div class="hp-input hp-input-bank">',
@@ -7235,8 +7217,8 @@
       '<div class="hp-break" >',
       "{{inputHtml}}",
       "</div>",
+      '<div class="disclaimer">' + hp.Utils.defaults.achDisclosure + "</div>",
       '<button class="hp-submit">' + hp.Utils.defaults.defaultButtonLabel + "</button>",
-      '<p class="info">* Please note that bank account (ACH) transactions may take up to 3 business days to process. This time period varies depending on the your issuing bank. For more information please visit us at <a href="https://www.elavonpayments.com/" target="_blank">https://elavonpayments.com</a>.</p>',
       "</div>",
     ].join("");
 
@@ -7488,6 +7470,14 @@
       };
     }
 
+    if (hp.Utils.defaults.surchargeFee > 0) {
+        requestModel.charge.chargeRequest.surchargeFee = hp.Utils.defaults.surchargeFee;
+    }
+
+    if (hp.Utils.defaults.convenienceFee > 0) {
+        requestModel.charge.chargeRequest.convenienceFee = hp.Utils.defaults.convenienceFee;
+    }
+
     if (hp.Utils.defaults.paymentType == hp.PaymentType.REFUND) {
       requestModel = {
         refund: {
@@ -7532,7 +7522,7 @@
     var $this = this;
     var requestModel = {};
     
-    hp.Utils.log("Bank account: HandleCharge", res);
+    //hp.Utils.log("Bank account: HandleCharge", res);
 
     if (typeof res.customerToken != "undefined" && typeof res.request != "undefined") {
       res.request.__customerToken = res.customerToken;
@@ -7621,7 +7611,7 @@
       return;
     }
 
-    hp.Utils.log("formData", $this.formData);
+    //hp.Utils.log("formData", $this.formData);
 
     $submit.attr("disabled", "disabled").text("Submitting...");
     hp.Utils.showLoader();
@@ -7829,12 +7819,12 @@
     var $this = this;
     $(document).pos();
     $(document).on("hp.global_swipped_start", function (event, data) {
-      hp.Utils.log("hp.global_swipped_start", data);
+      //hp.Utils.log("hp.global_swipped_start", data);
       hp.Utils.showLoader();
       hp.Utils.defaults.eventCallback(data);
     });
     $(document).on("hp.global_swipped_end", function (event, data) {
-      hp.Utils.log("hp.global_swipped_end", data);
+      //hp.Utils.log("hp.global_swipped_end", data);
       hp.Utils.defaults.eventCallback(data);
       $this.handleSubmit(data);
     }); // Kills spacebar page-down event
@@ -7930,7 +7920,7 @@
     var requestModel = {};
 
     
-    hp.Utils.log("Code: HandleCharge", res);
+    //hp.Utils.log("Code: HandleCharge", res);
 
     if (typeof res.customerToken != "undefined" && typeof res.request != "undefined") {
       res.request.__customerToken = res.customerToken;
@@ -8027,14 +8017,14 @@
         $this.formData.cardNumber = $.payment.formatCardNumber(data.card_number);
       } catch (e) {
         $this.formData.cardNumber = data.card_number;
-        hp.Utils.log("Coudn't format cardNumber. ", e);
+        //hp.Utils.log("Coudn't format cardNumber. ", e);
       }
 
       try {
         $this.formData.cardType = $.payment.cardType(data.card_number).toUpperCase();
       } catch (e) {
         $this.formData.cardType = "Unknown";
-        hp.Utils.log("Coudn't determine cardType. ", e);
+        //hp.Utils.log("Coudn't determine cardType. ", e);
       }
     }
 
@@ -8341,8 +8331,8 @@
       }
     }
 
-    hp.Utils.log("Raw message: ", event);
-    hp.Utils.log("Parsed message: ", messageObject);
+    //hp.Utils.log("Raw message: ", event);
+    //hp.Utils.log("Parsed message: ", messageObject);
 
     return messageObject;
   };
@@ -9016,7 +9006,7 @@
 
     var startHandler = function startHandler() {
       $(".hp-input-transvault-message").text("Connected (listening)...").css("color", "#F4854A");
-      hp.Utils.log("Your connection ID: " + $this.transvaultHub.connection.id);
+      //hp.Utils.log("Your connection ID: " + $this.transvaultHub.connection.id);
       $this.browserId = $this.transvaultHub.connection.id;
 
       if ($this.isMobile && ($this.terminalId === undefined || $this.terminalId === null || $this.terminalId === "")) {
@@ -9054,7 +9044,7 @@
     };
 
     $message.off("click").removeClass("hp-input-transvault-message-btn").text("Connecting");
-    hp.Utils.log("Transvault: Addding events...");
+    //hp.Utils.log("Transvault: Addding events...");
     $this.transvaultHub.off("onMessage").on("onMessage", messageHandler);
 
     try {
@@ -9066,12 +9056,12 @@
       };
       $this.transvaultHub.connection.start(socketOptions).done(startHandler).fail(errorHandler);
       $this.transvaultHub.off("error").on("error", function (err) {
-        hp.Utils.log("Transvault error: ", err);
+        //hp.Utils.log("Transvault error: ", err);
         reconnectHandler();
       });
       $this.transvaultHub.off("disconnected").on("disconnected", function (err) {
-        hp.Utils.log("Transvault disconnected: ", err);
-        hp.Utils.log("Transvault attempting reconnection... ");
+        //hp.Utils.log("Transvault disconnected: ", err);
+        //hp.Utils.log("Transvault attempting reconnection... ");
         setTimeout(function () {
           $this.transvaultHub.connection.start(socketOptions).done(startHandler).fail(errorHandler);
         }, 2500);
@@ -10119,14 +10109,14 @@
   };
 })(jQuery, window, document);
 
-/* jQuery.HostedPayments - v5.1.1 */
+/* jQuery.HostedPayments - v5.1.2 */
 // Copyright (c) Elavon Inc. All rights reserved.
 // Licensed under the MIT License
 (function ($, window, document, undefined) {
   var pluginName = "hp";
   var defaults = {};
 
-  defaults.version = "v5.1.1";
+  defaults.version = "v5.1.2";
   defaults.amount = 0;
   defaults.currencyLocale = "en-US";
   defaults.currencyCode = "USD";
@@ -10201,6 +10191,8 @@
   defaults.captchaVerificationToken = null;
   defaults.captchaKey = null;
   defaults.captchaVendor = null;
+  defaults.ccDisclosure = null;
+  defaults.achDisclosure = null;
 
   function Plugin(element, options) {
     this._name = pluginName;
