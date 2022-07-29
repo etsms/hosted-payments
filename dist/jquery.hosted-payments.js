@@ -4909,22 +4909,21 @@
 
       var isAlphaNumeric = function isAlphaNumeric(e) {
         if (e === undefined) {
-          return true;
-        }
-
-        if (e.type !== "keyup") {
-          return true;
-        }
-
-        console.log("in isAlphaNumeric", e);
-        console.log("in isAlphaNumeric key value", e.key);
-
-        const regex = /^[0-9a-zA-Z]+$/g;
-        if (!e.key.match(regex)) {
           return false;
         }
 
-        return true;
+        if (e.key === undefined) {
+          console.log("return false if e.key is undefined");
+          return false;
+        }
+
+        const regex = /^[0-9a-zA-Z]+$/g;
+        if (e.key.match(regex)) {
+          console.log("inside key match regex condition");
+          return true;
+        }
+
+        return false;
       }
 
       $avsPrompt.find(".hp-input-avs input").on("focus blur keyup", function (e) {
@@ -4946,6 +4945,9 @@
             if (lastDigit == null) {
               val = val.substring(0, val.length - 1);
             }
+            val = val.replace(/[a-zA-Z0-9]/gi, "");
+            
+            console.log("val before this", val);
             
             $this.val(val);
           }
@@ -4956,6 +4958,7 @@
         $submitAvs.attr("disabled", "disabled");
         if (avsZipValue.length && avsZipValue.length >= 5 && avsStreetValue.length && avsStreetValue.length >= 3) {
           $submitAvs.removeAttr("disabled");
+          console.log("removing disable attr from submit button");
         }
 
         hp.Utils.defaults.eventCallback(e);
