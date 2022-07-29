@@ -4912,12 +4912,8 @@
           return false;
         }
 
-        if (e.key === undefined) {
-          console.log("return false if e.key is undefined");
-          return false;
-        }
-
         const regex = /^[0-9a-zA-Z]+$/g;
+        
         if (e.key.match(regex)) {
           console.log("inside key match regex condition");
           return true;
@@ -4954,11 +4950,11 @@
 
           avsZipValue = val;
         }
-
+        console.log("before disable submit button", avsZipValue, avsZipValue.length);
         $submitAvs.attr("disabled", "disabled");
         if (avsZipValue.length && avsZipValue.length >= 5 && avsStreetValue.length && avsStreetValue.length >= 3) {
           $submitAvs.removeAttr("disabled");
-          console.log("removing disable attr from submit button");
+          console.log("removing disable attr from submit button", avsZipValue, avsZipValue.length);
         }
 
         hp.Utils.defaults.eventCallback(e);
