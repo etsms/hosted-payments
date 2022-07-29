@@ -4912,6 +4912,9 @@
           return false;
         }
 
+        hp.Utils.log("in isAlphaNumeric", e);
+        hp.Utils.log("in isAlphaNumeric key", e.key);
+
         const regex = /^[0-9a-zA-Z]+$/g;
         if (e.key.match(regex)) {
           return true;
@@ -4933,6 +4936,7 @@
         if ($this.attr("name") === "avsZip") {
 
           if (!isAlphaNumeric(e.originalEvent)) {
+            hp.Utils.log("inside if condition");
             var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]/);
 
             if (lastDigit == null) {
