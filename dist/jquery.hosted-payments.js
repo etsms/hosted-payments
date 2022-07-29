@@ -4909,18 +4909,22 @@
 
       var isAlphaNumeric = function isAlphaNumeric(e) {
         if (e === undefined) {
-          return false;
-        }
-
-        hp.Utils.log("in isAlphaNumeric", e);
-        hp.Utils.log("in isAlphaNumeric key", e.key);
-
-        const regex = /^[0-9a-zA-Z]+$/g;
-        if (e.key.match(regex)) {
           return true;
         }
 
-        return false;
+        if (e.type !== "keyup") {
+          return true;
+        }
+
+        console.log("in isAlphaNumeric", e);
+        console.log("in isAlphaNumeric key value", e.key);
+
+        const regex = /^[0-9a-zA-Z]+$/g;
+        if (!e.key.match(regex)) {
+          return false;
+        }
+
+        return true;
       }
 
       $avsPrompt.find(".hp-input-avs input").on("focus blur keyup", function (e) {
@@ -4936,13 +4940,12 @@
         if ($this.attr("name") === "avsZip") {
 
           if (!isAlphaNumeric(e.originalEvent)) {
-            hp.Utils.log("inside if condition");
+            console.log("inside if condition");
             var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]/);
 
             if (lastDigit == null) {
               val = val.substring(0, val.length - 1);
             }
-            val = val.replace(/[a-zA-Z0-9]/gi, "");
             
             $this.val(val);
           }
