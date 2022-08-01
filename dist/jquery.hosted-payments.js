@@ -3782,10 +3782,8 @@
     }
 
     const regex = /^[0-9a-zA-Z]+$/g;
-    console.log(avsZip);
     if (!avsZip.match(regex)) {
       avsZip = "";
-      console.log(avsZip);
     }
 
     if (typeof avsStreet === "undefined") {
@@ -4909,9 +4907,7 @@
         }
 
         const regex = /^[0-9a-zA-Z]+$/g;
-        
         if (e.key.match(regex)) {
-          console.log("inside key match regex condition");
           return true;
         }
 
@@ -4931,7 +4927,6 @@
         if ($this.attr("name") === "avsZip") {
 
           if (!isAlphaNumeric(e.originalEvent)) {
-            console.log("inside if condition");
             var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]/);
 
             if (lastDigit == null) {
@@ -4939,18 +4934,15 @@
             }
             val = val.replace(/[a-zA-Z0-9]/gi, "");
             
-            console.log("val before this", val);
-            
             $this.val(val);
           }
 
           avsZipValue = val;
         }
-        console.log("before disable submit button", avsZipValue, avsZipValue.length);
+
         $submitAvs.attr("disabled", "disabled");
         if (avsZipValue.length && avsZipValue.length >= 5 && avsStreetValue.length && avsStreetValue.length >= 3) {
           $submitAvs.removeAttr("disabled");
-          console.log("removing disable attr from submit button", avsZipValue, avsZipValue.length);
         }
 
         hp.Utils.defaults.eventCallback(e);
@@ -6086,7 +6078,7 @@
          * Make sure Transvault is disconnected
          */
         if (typeof hp.Utils.plugins.Transvault !== "undefined" && hp.Utils.plugins.Transvault.browserId !== null) {
-          hp.Utils.log("Cancelling transvault instance.");
+          //hp.Utils.log("Cancelling transvault instance.");
           hp.Utils.plugins.Transvault.cancelTransactionWithoutError();
         }
         
