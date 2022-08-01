@@ -3544,9 +3544,9 @@
             errorMessage.push("Zipcode must be 5 characters long.");
           }
 
-          if (!/^\d+$/.test(digit)) {
-            return;
-          }
+          // if (!/^\d+$/.test(digit)) {
+          //   return;
+          // }
 
           if (avsStreet === undefined || avsStreet.length < 3 || avsStreet.length > 60) {
             errorMessage.push("Enter a valid street address.");
@@ -3785,12 +3785,12 @@
       avsZip = "";
     }
 
-    // const regex = /^[0-9a-zA-Z]+$/g;
-    // console.log(avsZip);
-    // if (!avsZip.match(regex)) {
-    //   avsZip = "";
-    //   console.log(avsZip);
-    // }
+    const regex = /^[0-9a-zA-Z]+$/g;
+    console.log(avsZip);
+    if (!avsZip.match(regex)) {
+      avsZip = "";
+      console.log(avsZip);
+    }
 
     if (typeof avsStreet === "undefined") {
       avsStreet = "";
@@ -4934,13 +4934,16 @@
 
         if ($this.attr("name") === "avsZip") {
 
-          if (!onlyNumberKey(e.originalEvent)) {
+          if (!isAlphaNumeric(e.originalEvent)) {
             console.log("inside if condition");
-            var lastDigit = val[val.length - 1].match(/\d/);
+            var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]/);
 
             if (lastDigit == null) {
               val = val.substring(0, val.length - 1);
             }
+            val = val.replace(/[a-zA-Z0-9]/gi, "");
+            
+            console.log("val before this", val);
             
             $this.val(val);
           }
