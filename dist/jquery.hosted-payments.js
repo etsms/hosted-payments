@@ -3540,13 +3540,9 @@
         var avsStreet = hp.Utils.plugins.CreditCard.$element.find(".hp-input-avs-street > input").val();
 
         if (hp.Utils.defaults.promptForAvs && !hp.Utils.defaults.allowAvsSkip) {
-          if (avsZip === undefined || avsZip.length !== 5) {
+          if (avsZip === undefined || avsZip.length < 5) {
             errorMessage.push("Zipcode must be 5 characters long.");
           }
-
-          // if (!/^\d+$/.test(digit)) {
-          //   return;
-          // }
 
           if (avsStreet === undefined || avsStreet.length < 3 || avsStreet.length > 60) {
             errorMessage.push("Enter a valid street address.");
