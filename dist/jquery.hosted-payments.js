@@ -3544,7 +3544,8 @@
             errorMessage.push("Zipcode must be 5 characters long.");
           }
 
-          if (!/^\d+$/.test(digit)) {
+          if (!/^[0-9a-zA-Z]+$/.test(digit)) {
+            console.log("in here")
             return;
           }
 
