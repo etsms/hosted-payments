@@ -3544,8 +3544,7 @@
             errorMessage.push("Zipcode must be 5 characters long.");
           }
 
-          if (!/^[0-9a-zA-Z]+$/.test(digit)) {
-            console.log("in here")
+          if (!/^\d+$/.test(digit)) {
             return;
           }
 
@@ -3786,12 +3785,12 @@
       avsZip = "";
     }
 
-    const regex = /^[0-9a-zA-Z]+$/g;
-    console.log(avsZip);
-    if (!avsZip.match(regex)) {
-      avsZip = "";
-      console.log(avsZip);
-    }
+    // const regex = /^[0-9a-zA-Z]+$/g;
+    // console.log(avsZip);
+    // if (!avsZip.match(regex)) {
+    //   avsZip = "";
+    //   console.log(avsZip);
+    // }
 
     if (typeof avsStreet === "undefined") {
       avsStreet = "";
@@ -4935,16 +4934,13 @@
 
         if ($this.attr("name") === "avsZip") {
 
-          if (!isAlphaNumeric(e.originalEvent)) {
+          if (!onlyNumberKey(e.originalEvent)) {
             console.log("inside if condition");
-            var lastDigit = val[val.length - 1].match(/[a-zA-Z0-9]/);
+            var lastDigit = val[val.length - 1].match(/\d/);
 
             if (lastDigit == null) {
               val = val.substring(0, val.length - 1);
             }
-            val = val.replace(/[a-zA-Z0-9]/gi, "");
-            
-            console.log("val before this", val);
             
             $this.val(val);
           }
